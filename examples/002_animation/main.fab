@@ -29,17 +29,25 @@ data /sprites
             Ms(-8,  0, $02, $00),
             Ms( 0,  0, $03, $00))))
 
-    [] my_animation
+    [] animation_rest
         (make_anim(Fs{}(
             // First parameter of Fs is the duration. Second is the metasprite.
             Fs(60,   @frame_0),
             Fs(120,  @frame_1),
             Fs(30,   @frame_2))))
 
+    [] animation_right
+        (make_anim(Fs{}(
+            Fs(60,   @frame_0))))
+
+    [] animation_left
+        (make_anim(Fs{}(
+            Fs(60,  @frame_1))))
+
 vars
     // Player variables:
-    SS px = 128
-    SS py = 120
+    U px = 128
+    U py = 120
     AnimState anim_state = AnimState()
 
 nmi game_nmi()
@@ -56,7 +64,7 @@ mode main()
 : nmi game_nmi
     palette = example_palette
     ppu_upload_palette()
-    anim_state = make_anim_state(@my_animation)
+    anim_state = make_anim_state(@animation_rest)
     {PPUCTRL}(PPUCTRL_NMI_ON)
 
     while true
@@ -69,17 +77,28 @@ fn move_player()
     ct Int SPEED = 2
 
     if pads[0].held & BUTTON_LEFT
+        anim_state = make_anim_state(@animation_left)
         px -= SPEED
+        if px == 0
+            px = 255
     else if pads[0].held & BUTTON_RIGHT
+        anim_state = make_anim_state(@animation_right)
         px += SPEED
+        if px == 255
+            px = 0
 
     if pads[0].held & BUTTON_UP
         py -= SPEED
+        if py == 0
+            py = 240
     else if pads[0].held & BUTTON_DOWN
         py += SPEED
+        if py == 240
+            py = 0
 
-    anim_state = tick_anim(anim_state, true)
-
+    // if !pads[0].held && !pads[1].held
+    //     anim_state = make_anim_state(@animation_rest)
+    
 fn update_sprites()
     // Our stack index into OAM:
     U o = 0
@@ -88,6 +107,10 @@ fn update_sprites()
 
     // Clear the remainder of OAM
     hide_oam(o)
+
+    //
+    anim_state = tick_anim(anim_state, true)
+
 
 chrrom
     file(fmt, "sprite.png")
