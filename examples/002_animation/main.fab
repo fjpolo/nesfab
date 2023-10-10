@@ -8,47 +8,54 @@
 
 data /sprites
     // Here's where we define our metasprite, comprised of four 8x8 tiles:
-    [] frame_0
+    [] frame_right
         (make_metasprite(0, Ms{}(
             Ms(-8, -8, $00, $00),
             Ms( 0, -8, $01, $00),
             Ms(-8,  0, $02, $00),
             Ms( 0,  0, $03, $00))))
 
-    [] frame_1
+    [] frame_left
         (make_metasprite(ATTR_H_FLIP, Ms{}(
             Ms(-8, -8, $00, $00),
             Ms( 0, -8, $01, $00),
             Ms(-8,  0, $02, $00),
             Ms( 0,  0, $03, $00))))
 
-    [] frame_2
+    [] frame_right_up
         (make_metasprite(ATTR_V_FLIP, Ms{}(
             Ms(-8, -8, $00, $00),
             Ms( 0, -8, $01, $00),
             Ms(-8,  0, $02, $00),
             Ms( 0,  0, $03, $00))))
 
-    [] animation_rest
-        (make_anim(Fs{}(
-            // First parameter of Fs is the duration. Second is the metasprite.
-            Fs(60,   @frame_0),
-            Fs(120,  @frame_1),
-            Fs(30,   @frame_2))))
+    [] frame_left_up
+        (make_metasprite((ATTR_V_FLIP | ATTR_V_FLIP), Ms{}(
+            Ms(-8, -8, $00, $00),
+            Ms( 0, -8, $01, $00),
+            Ms(-8,  0, $02, $00),
+            Ms( 0,  0, $03, $00))))
 
     [] animation_right
         (make_anim(Fs{}(
-            Fs(60,   @frame_0))))
+            Fs(60,   @frame_right))))
 
     [] animation_left
         (make_anim(Fs{}(
-            Fs(60,  @frame_1))))
+            Fs(60,  @frame_left))))
 
+    [] animation_rest
+        (make_anim(Fs{}(
+            Fs(60,   @frame_right),
+            Fs(60,  @frame_left)
+        )))
 vars
     // Player variables:
     U px = 128
     U py = 120
     AnimState anim_state = AnimState()
+    U rest_counter = 0
+    Bool resting = true
 
 nmi game_nmi()
     // Update OAM and poll the pads:
@@ -95,9 +102,13 @@ fn move_player()
         py += SPEED
         if py == 240
             py = 0
-
-    // if !pads[0].held && !pads[1].held
-    //     anim_state = make_anim_state(@animation_rest)
+    if !resting && !pads[0].held && !pads[1].held
+         rest_counter += 1
+         if rest_counter == 255
+            resting = true
+    else
+        rest_counter = 0
+        resting = false
     
 fn update_sprites()
     // Our stack index into OAM:
@@ -109,6 +120,9 @@ fn update_sprites()
     hide_oam(o)
 
     //
+    if rest_counter == 255 && resting
+        rest_counter = 0
+        anim_state = make_anim_state(@animation_rest)
     anim_state = tick_anim(anim_state, true)
 
 
