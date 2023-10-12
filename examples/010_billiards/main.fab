@@ -66,6 +66,7 @@ fn update_sprites()
         hide_oam(o)
 
 fn update_balls()
+    // Check collissions against balls
     for U i = 0; i < len(balls); i += 1
         for U j = i + 1; j < len(balls); j += 1
             collide_balls(j, i)
@@ -90,7 +91,7 @@ fn collide_balls(U a, U b)
         return
 
     // Normal vectorl:
-    SSFF nx = SSFF(dx) >> 5 // Divide by the diameter.
+    SSFF nx = SSFF(dx) >> 5 // Divide by the diameter. 32 = 0010 0000
     SSFF ny = SSFF(dy) >> 5
 
     // Calculate dot products:
