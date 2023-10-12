@@ -30,7 +30,7 @@ data /sprites
             Ms( 0,  0, $03, $00))))
 
     [] frame_left_up
-        (make_metasprite((ATTR_V_FLIP | ATTR_V_FLIP), Ms{}(
+        (make_metasprite((ATTR_V_FLIP | ATTR_H_FLIP), Ms{}(
             Ms(-8, -8, $00, $00),
             Ms( 0, -8, $01, $00),
             Ms(-8,  0, $02, $00),
