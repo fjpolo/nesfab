@@ -8,9 +8,132 @@ ct Int PLAYER_MOVING_REST = 0
 ct Int PLAYER_MOVING_RIGHT = 1
 ct Int PLAYER_MOVING_LEFT = 2
 ct Int PLAYER_SPEED = 2
+ct Int GROUND_SPEED = -5
+ct Int SELECT_BUTTON_DEBOUNCE_FRAMES = 7
+ct Int START_BUTTON_DEBOUNCE_FRAMES = 7
+ct Int LUCI_INITIAL_X = 128
+ct Int LUCI_INITIAL_Y = 128
+ct Int FER_INITIAL_X = 128
+ct Int FER_INITIAL_Y = 128
+// Player character
+ct Int CURRENT_PLAYER_LUCI = 0
+ct Int CURRENT_PLAYER_FER = 1
+ct Int CURRENT_PLAYER_LUCIFER = 2
+
+// Game states
+ct Int GAME_STATE_START = 0
+ct Int GAME_STATE_STORY = 1
+ct Int GAME_STATE_PLAY = 2
+ct Int GAME_STATE_PAUSE = 3
+ct Int GAME_STATE_WIN = 4
+ct Int GAME_STATE_GAME_OVER = 5
+
 
 data /sprites
-    // Here's where we define our metasprite, comprised of four 8x8 tiles:
+    // luci metasprites
+    [] sprite_luci_rest
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $54, $00),
+            Ms( 0,-8, $55, $00),
+            Ms(-8, 0, $64, $00),
+            Ms( 0, 0, $65, $00)
+        )))
+    [] sprite_luci_right_1
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $54, $00),
+            Ms( 0,-8, $55, $00),
+            Ms(-8, 0, $64, $00),
+            Ms( 0, 0, $65, $00)
+        )))
+    [] sprite_luci_right_2
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $56, $00),
+            Ms( 0,-8, $57, $00),
+            Ms(-8, 0, $66, $00),
+            Ms( 0, 0, $67, $00)
+        )))
+    [] sprite_luci_left_1
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $54, $00),
+            Ms( 0,-8, $55, $00),
+            Ms(-8, 0, $64, $00),
+            Ms( 0, 0, $65, $00)
+        )))
+    [] sprite_luci_left_2
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $56, $00),
+            Ms( 0,-8, $57, $00),
+            Ms(-8, 0, $66, $00),
+            Ms( 0, 0, $67, $00)
+        )))
+    // luci animations
+    [] luci_animation_rest
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_luci_rest)
+        )))
+    [] luci_animation_right
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_luci_right_1),
+            Fs(20,   @sprite_luci_right_2)
+        )))
+    [] luci_animation_left
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_luci_left_1),
+            Fs(20,   @sprite_luci_left_2)
+        )))
+
+    // fer metasprites
+    [] sprite_fer_rest
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $60, $01),
+            Ms( 0,-8, $61, $01),
+            Ms(-8, 0, $62, $01),
+            Ms( 0, 0, $63, $01)
+        )))
+    [] sprite_fer_right_1
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $60, $01),
+            Ms( 0,-8, $61, $01),
+            Ms(-8, 0, $62, $01),
+            Ms( 0, 0, $63, $01)
+        )))
+    [] sprite_fer_right_2
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $60, $01),
+            Ms( 0,-8, $61, $01),
+            Ms(-8, 0, $72, $01),
+            Ms( 0, 0, $73, $01)
+        )))
+    [] sprite_fer_left_1
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $60, $01),
+            Ms( 0,-8, $61, $01),
+            Ms(-8, 0, $62, $01),
+            Ms( 0, 0, $63, $01)
+        )))
+    [] sprite_fer_left_2
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $60, $01),
+            Ms( 0,-8, $61, $01),
+            Ms(-8, 0, $72, $01),
+            Ms( 0, 0, $73, $01)
+        )))
+    // fer animations
+    [] fer_animation_rest
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_fer_rest)
+        )))
+    [] fer_animation_right
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_fer_right_1),
+            Fs(20,   @sprite_fer_right_2)
+        )))
+    [] fer_animation_left
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_fer_left_1),
+            Fs(20,   @sprite_fer_left_2)
+        )))
+    // lucifer metasprites
     [] sprite_lucifer_rest
         (make_metasprite(0, Ms{}(
             Ms(-8,-8, $00, $00),
@@ -75,9 +198,19 @@ data /sprites
 
 // Player width and height:
 ct Int pw = 15
-ct Int ph = 23
+ct Int ph = 15
 ct Int rw = pw - 1
 ct Int rh = ph - 1
+
+// Controller data
+vars /controller
+    Bool is_start_pressed_past = false
+    Bool is_start_pressed = false
+    U start_counter = 0
+    Bool is_select_pressed_past = false
+    Bool is_select_pressed = false
+    U select_counter = 0
+
 
 // Player data:
 struct Player
@@ -85,43 +218,218 @@ struct Player
     SSF y
     SF xspeed
     SF yspeed
-    U attr
-    U movemenent
+    U movement
+    U this_player
     AnimState anim_state
+
+// vars /players
+//     Player luci = make_player(LUCI_INITIAL_X, LUCI_INITIAL_Y)
+//     Player fer = make_player(FER_INITIAL_X, FER_INITIAL_Y)
 
 vars /game
     // Game variables
-    Player p = make_player(64, 64)
+    Player p =  Player()
     SS camera_x = 0
+    U current_player = CURRENT_PLAYER_LUCI
+    U game_state = GAME_STATE_STORY
+
+
+
+ct U WRITING_DONE  = 0
+ct U WRITING_WAIT  = 1
+ct U WRITING_READY = 2
+ct U FONT_BASE_NUMBER = $80
+
+vars /story
+    U writing = WRITING_WAIT
+    U char
+    UU row_addr = $2106
+    UU cur_addr = $2106
+
+// chrrom $4000
+//     file(fmt, "font.png")
+
+charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\0", '\0')
+: stows /strings
+data /strings
+    [] story_string
+        (
+            `Born Luci\n`
+            `Born Fer\n`
+            `One with G\n`
+            `One with TD\n`
+            `Help them be together...\n`
+            `\n`
+            `\n`
+            `PRESS START TO PLAY\n`
+        )
+
+
 
 fn make_player(SS x, SS y) Player
     Player p = Player()
     p.x = x
     p.y = SSF(y)
-    p.movemenent = PLAYER_MOVING_REST
+    p.movement = PLAYER_MOVING_REST
     p.anim_state = AnimState()
     return p
 
+fn make_player_luci() Player
+    Player p = make_player(LUCI_INITIAL_X, LUCI_INITIAL_Y)
+    p.this_player = CURRENT_PLAYER_LUCI
+    p.anim_state = make_anim_state(@luci_animation_rest)
+    return p
+
+fn make_player_fer() Player
+    Player p = make_player(FER_INITIAL_X, FER_INITIAL_Y)
+    p.this_player = CURRENT_PLAYER_FER
+    p.anim_state = make_anim_state(@fer_animation_rest)
+    return p
+
 nmi game_nmi()
+
+    if game_state == GAME_STATE_STORY
+        if ready && writing == WRITING_READY
+            // Upload the decompressed character:
+            {PPUSTATUS}()
+            {PPUADDR}(cur_addr.b)
+            {PPUADDR}(cur_addr.a)
+            {PPUDATA}(char + FONT_BASE_NUMBER)
+            cur_addr += 1
+            writing = WRITING_WAIT
+            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+
+
+        {PPUSCROLL}(0)
+        {PPUSCROLL}(0)
+        {PPUMASK}(PPUMASK_BG_ON)
+
     ppu_upload_scroll()
     ppu_reset_scroll(camera_x.a, 0)
     {PPUCTRL}(PPUCTRL_NMI_ON | (camera_x.b & 1))
     {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
     ppu_upload_oam_poll_pads(0)
 
+    if pads[0].held & BUTTON_SELECT
+        is_select_pressed_past = true
+        select_counter += 1
+        if select_counter == SELECT_BUTTON_DEBOUNCE_FRAMES
+            select_counter = 0
+            is_select_pressed = true
+    else
+        select_counter = 0
+
+    // Start pressed?
+    if pads[0].held & BUTTON_START
+        is_start_pressed_past = true
+        start_counter += 1
+        if start_counter == START_BUTTON_DEBOUNCE_FRAMES
+            start_counter = 0
+            is_start_pressed = true
+    else
+        start_counter = 0
+
+
 mode main()
-    p.anim_state = make_anim_state(@lucifer_animation_rest)
-    goto mode play_level(current_level_index)
-    : preserves
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)    
+
+    load_level(levels[current_level_index]) 
+    
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+
+    while true
+        switch game_state
+            case GAME_STATE_START
+                goto mode start(current_level_index)
+                : preserves
+                break
+            case GAME_STATE_STORY
+                goto mode story(current_level_index)
+                : preserves
+                break
+            default
+                goto mode play_level(current_level_index)
+                : preserves
+                break
+
+mode start(U level_index)
+: nmi game_nmi
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    current_level_index = 0
+    load_level(levels[current_level_index]) 
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+    while true
+        nmi
+        if is_start_pressed
+            game_state = GAME_STATE_STORY
+            current_level_index += 1
+            is_start_pressed = false
+            goto mode story(current_level_index)
+            : preserves
+        update_pads()
+
+mode story(U level_index)
+: nmi game_nmi
+    current_level_index = 1
+
+    palette = example_palette
+    ppu_upload_palette()
+
+    // Prepare the decompressor
+    decompress_string_init(@story_string)
+
+    // Load level
+    load_level(levels[current_level_index]) 
+
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+    while true
+        nmi
+        // Decompress one character
+        if writing == WRITING_WAIT
+            char = decompress_string()
+            if char == charmap.sentinel
+                writing = WRITING_DONE
+            else if char == '\n'
+                row_addr += 32
+                cur_addr = row_addr
+            else
+                writing = WRITING_READY
+        nmi
+        nmi
+        nmi
+
+        if is_start_pressed
+            game_state = GAME_STATE_PLAY
+            current_level_index += 1    
+            goto mode play_level(current_level_index)
+            : preserves
+        update_pads()
 
 mode play_level(U level_index)
 : nmi game_nmi
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)
-    load_level(levels[level_index])
-    {PPUCTRL}(PPUCTRL_NMI_ON)
+    // Avoid START and STORY levels
+    if current_level_index== 0 || current_level_index == 1
+        current_level_index = 2
+    load_level(levels[level_index]) 
 
+    // Animation -  Rest state
+    switch current_player
+        case CURRENT_PLAYER_LUCI
+            p = make_player_luci()
+            break
+        case CURRENT_PLAYER_FER
+            p = make_player_fer()
+            break
+
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+    
     while true
         nmi
         update_pads()
@@ -130,73 +438,107 @@ mode play_level(U level_index)
         update_scroll()
 
 fn update_player()
+    // Select
+    if is_select_pressed && current_player != CURRENT_PLAYER_LUCIFER
+        is_select_pressed = false
+        current_level_index += 1
+        // Change level
+        if current_level_index >= len(levels)
+            current_level_index = 2
+        // Change player
+        if current_player == CURRENT_PLAYER_LUCI
+            current_player = CURRENT_PLAYER_FER
+        else if current_player == CURRENT_PLAYER_FER
+            current_player = CURRENT_PLAYER_LUCI
+        nmi
+        goto mode play_level(current_level_index)
+        : preserves /game
+
     // Update x-position:
     if pads[0].held & BUTTON_LEFT
-        if collision_at(UU(p.x - 2), UU(p.y)) != C_WALL && collision_at(UU(p.x - PLAYER_SPEED), UU(p.y + rh)) != C_WALL
-            if p.movemenent != PLAYER_MOVING_LEFT
-                p.movemenent = PLAYER_MOVING_LEFT
-                p.anim_state = make_anim_state(@lucifer_animation_left)
+        if collision_at(UU(p.x - PLAYER_SPEED), UU(p.y)) != C_WALL && collision_at(UU(p.x - PLAYER_SPEED), UU(p.y + rh)) != C_WALL
+            if p.movement != PLAYER_MOVING_LEFT
+                p.movement = PLAYER_MOVING_LEFT
+                switch p.this_player 
+                    case CURRENT_PLAYER_LUCI
+                        p.anim_state = make_anim_state(@luci_animation_left)
+                        break
+                    case CURRENT_PLAYER_FER
+                        p.anim_state = make_anim_state(@fer_animation_left)
+                        break
             p.x -= PLAYER_SPEED
-            if pads[0].held & BUTTON_B
-                p.x -= PLAYER_SPEED
 
     if pads[0].held & BUTTON_RIGHT
-        if collision_at(UU(p.x + rw + 2), UU(p.y)) != C_WALL && collision_at(UU(p.x + rw + PLAYER_SPEED), UU(p.y + rh)) != C_WALL
-            if p.movemenent != BUTTON_RIGHT
-                p.movemenent = BUTTON_RIGHT
-                p.anim_state = make_anim_state(@lucifer_animation_right)
+        if collision_at(UU(p.x + rw + PLAYER_SPEED), UU(p.y)) != C_WALL && collision_at(UU(p.x + rw + PLAYER_SPEED), UU(p.y + rh)) != C_WALL
+            if p.movement != BUTTON_RIGHT
+                p.movement = BUTTON_RIGHT
+                switch p.this_player
+                    case CURRENT_PLAYER_LUCI
+                        p.anim_state = make_anim_state(@luci_animation_right)
+                        break
+                    case CURRENT_PLAYER_FER
+                        p.anim_state = make_anim_state(@fer_animation_right)
+                        break
             p.x += PLAYER_SPEED
-            if pads[0].held & BUTTON_B
-                p.x += PLAYER_SPEED
     
-    // Ground
-    if collision_at(UU(p.x + 0), UU(p.y + ph)) == C_WALL || collision_at(UU(p.x + rw), UU(p.y + ph)) == C_WALL
-        if pads[0].pressed & BUTTON_A
-            p.yspeed = -5
-
-    // Update y-position:
-    SSF new_y = p.y + SSF(p.yspeed)
-    p.yspeed += 0.25
-    if p.yspeed > 0
-        if collision_at(UU(p.x + 0), UU(new_y + rh)) == C_WALL || collision_at(UU(p.x + rw), UU(new_y + rh)) == C_WALL
-            p.yspeed = 0
-            p.y = ((new_y + rh) & SSF(~%1111)) - ph
-        else
-            p.y = new_y
-    else
-        if collision_at(UU(p.x + 0), UU(new_y)) == C_WALL || collision_at(UU(p.x + rw), UU(new_y)) == C_WALL
-            p.yspeed = 0
-            p.y = (p.y & SSF(~%1111))
-        else
-            p.y = new_y
-
-    // // Resting
-    // if !pads[0].held && p.movemenent != PLAYER_MOVING_REST
-    //     p.movemenent = PLAYER_MOVING_REST
-    //     p.anim_state = make_anim_state(@lucifer_animation_rest)
-
-    // Check for coin collisions:
+    // Ground and Ladder
     SS center_x = SS(p.x) + (pw >> 1)
     SS center_y = SS(p.y) + (ph >> 1)
+    // Ground
+    if current_player == CURRENT_PLAYER_FER || (collision_at(UU(center_x), UU(center_y + PLAYER_SPEED)) != C_LADDER && collision_at(UU(center_x), UU(center_y + ph - PLAYER_SPEED)) != C_LADDER)
+        if collision_at(UU(p.x + 0), UU(p.y + ph)) == C_WALL || collision_at(UU(p.x + rw), UU(p.y + ph)) == C_WALL
+            if pads[0].pressed & BUTTON_A
+                if current_player != CURRENT_PLAYER_LUCI
+                    p.yspeed = GROUND_SPEED
+
+        // Update y-position:
+        SSF new_y = p.y + SSF(p.yspeed)
+        p.yspeed += 0.25
+        if p.yspeed > 0
+            if collision_at(UU(p.x + 0), UU(new_y + rh)) == C_WALL || collision_at(UU(p.x + rw), UU(new_y + rh)) == C_WALL
+                p.yspeed = 0
+                p.y = ((new_y + rh) & SSF(~%1111)) - ph
+            else
+                p.y = new_y
+        else
+            if collision_at(UU(p.x + 0), UU(new_y)) == C_WALL || collision_at(UU(p.x + rw), UU(new_y)) == C_WALL
+                p.yspeed = 0
+                p.y = (p.y & SSF(~%1111))
+            else
+                p.y = new_y
+    // Ladder
+    else
+        if pads[0].held & BUTTON_UP
+            if collision_at(UU(p.x), UU(p.y - ph - PLAYER_SPEED)) != C_WALL
+                p.y += GROUND_SPEED + PLAYER_SPEED
+        if pads[0].held & BUTTON_DOWN
+            if collision_at(UU(p.x), UU(p.y + ph + PLAYER_SPEED)) != C_WALL
+                p.y -= GROUND_SPEED + PLAYER_SPEED
+
+    // Resting
+    if !pads[0].held && p.movement != PLAYER_MOVING_REST
+        p.movement = PLAYER_MOVING_REST
+        switch p.this_player
+            case CURRENT_PLAYER_LUCI
+                p.anim_state = make_anim_state(@luci_animation_rest)
+                break
+            case CURRENT_PLAYER_FER
+                p.anim_state = make_anim_state(@fer_animation_rest)
+                break
+
+    // Check for coin/exit collisions:
     switch collision_at(UU(center_x), UU(center_y)) 
         case C_COIN
             destroy(UU(center_x), UU(center_y))
             break
-        // case C_EXIT
-        //     current_level_index += 1
-        //     if current_level_index >= len(levels)
-        //         current_level_index = 0
-        //     nmi
-        //     goto mode play_level(current_level_index)
-        //     : preserves /game
-    // Select
-    if pads[0].held & BUTTON_SELECT
-        current_level_index += 1
-        if current_level_index >= len(levels)
-            current_level_index = 0
-        nmi
-        goto mode play_level(current_level_index)
-        : preserves /game
+        case C_EXIT
+            current_level_index += 1
+            if current_level_index >= len(levels)
+                current_level_index = 2
+            nmi
+            goto mode play_level(current_level_index)
+            : preserves /game
+
 
     // Update camera:
     ct Int window = 112
@@ -217,4 +559,3 @@ fn update_sprites()
 
     // Tick animation
     p.anim_state = tick_anim(p.anim_state, true)
-
