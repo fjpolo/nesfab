@@ -13,6 +13,7 @@ ToDo:
 
 [17.102023]
 ✔ Add ladder for Luci (Not Fer)
+  ✔ Luci move ↕
 ✔ Add story
 - Add states
   - Start
