@@ -8,7 +8,7 @@ ct U WRITING_DONE  = 0
 ct U WRITING_WAIT  = 1
 ct U WRITING_READY = 2
 
-vars
+vars /story
     U writing = WRITING_WAIT
     U char
     UU row_addr = $2106
