@@ -73,7 +73,7 @@ fn load_level(CCC/levels level)
 
     // Set the scroll off-screen, then run the scroll code several times
     // to fill the screen with tiles.
-    camera_x = 0
+    p.camera_x = 0
     scroll_x = calc_shifted_camera_x() + 32 + 4
     while scroll_x != calc_shifted_camera_x()
         update_scroll()

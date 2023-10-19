@@ -5,10 +5,9 @@ ct Int PLAYER_MOVING_LEFT = 2
 ct Int PLAYER_SPEED_WALK = 2
 ct Int PLAYER_SPEED_RUN = 4
 ct Int GROUND_SPEED = -5
-ct Int LUCI_INITIAL_X = 128
-ct Int LUCI_INITIAL_Y = 128
-ct Int FER_INITIAL_X = 128
-ct Int FER_INITIAL_Y = 128
+ct Int PLAYER_INITIAL_X = 128
+ct Int PLAYER_INITIAL_Y = 128
+
 // Player width and height
 ct Int pw = 15
 ct Int ph = 15
@@ -28,6 +27,9 @@ struct Player
     U movement
     U this_player
     AnimState anim_state
+    U level_index
+    Bool is_initialised
+    SS camera_x
 
 // Sprites and animations
 data /sprites
@@ -203,34 +205,67 @@ fn make_player(SS x, SS y) Player
     p.y = SSF(y)
     p.movement = PLAYER_MOVING_REST
     p.anim_state = AnimState()
+    p.camera_x = 0
     return p
 
 fn make_player_luci() Player
-    Player p = make_player(LUCI_INITIAL_X, LUCI_INITIAL_Y)
+    Player p = make_player(PLAYER_INITIAL_X, PLAYER_INITIAL_Y)
     p.this_player = CURRENT_PLAYER_LUCI
     p.anim_state = make_anim_state(@luci_animation_rest)
+    p.level_index = 2
+    p.is_initialised = true
     return p
 
 fn make_player_fer() Player
-    Player p = make_player(FER_INITIAL_X, FER_INITIAL_Y)
+    Player p = make_player(PLAYER_INITIAL_X, PLAYER_INITIAL_Y)
     p.this_player = CURRENT_PLAYER_FER
     p.anim_state = make_anim_state(@fer_animation_rest)
+    p.level_index = 3
+    p.is_initialised = true
+    return p
+
+fn save_player(Player a) Player
+    Player p = Player()
+    p.x = a.x
+    p.y = a.y
+    p.xspeed = a.xspeed
+    p.yspeed = a.yspeed
+    p.movement = a.movement
+    p.anim_state = a.anim_state
+    p.level_index = a.level_index
+    p.is_initialised = a.is_initialised
+    p.camera_x = a.camera_x
+    return p
+
+fn restore_player(Player a) Player
+    Player p = Player()
+    p.x = a.x
+    p.y = a.y
+    p.xspeed = a.xspeed
+    p.yspeed = a.yspeed
+    p.movement = a.movement
+    p.anim_state = a.anim_state
+    p.level_index = a.level_index
+    p.this_player = a.this_player
+    p.is_initialised = a.is_initialised
+    p.camera_x = a.camera_x
     return p
 
 fn update_player()
-    // Select
+    // Select - Change player
     if is_select_pressed && current_player != CURRENT_PLAYER_LUCIFER
         is_select_pressed = false
-        current_level_index += 1
-        // Change level
-        if current_level_index >= len(levels)
-            current_level_index = 2
         // Change player
         if current_player == CURRENT_PLAYER_LUCI
             current_player = CURRENT_PLAYER_FER
+            luci = save_player(p)
+            p = restore_player(fer)
         else if current_player == CURRENT_PLAYER_FER
             current_player = CURRENT_PLAYER_LUCI
-        nmi
+            fer = save_player(p)
+            p = restore_player(luci)
+        // Change level
+        current_level_index = p.level_index
         goto mode play_level(current_level_index)
         : preserves /game
 
@@ -242,7 +277,7 @@ fn update_player()
         if collision_at(UU(p.x - speed), UU(p.y)) != C_WALL && collision_at(UU(p.x - speed), UU(p.y + rh)) != C_WALL
             if p.movement != PLAYER_MOVING_LEFT
                 p.movement = PLAYER_MOVING_LEFT
-                switch p.this_player 
+                switch current_player 
                     case CURRENT_PLAYER_LUCI
                         p.anim_state = make_anim_state(@luci_animation_left)
                         break
@@ -254,7 +289,7 @@ fn update_player()
         if collision_at(UU(p.x + rw + speed), UU(p.y)) != C_WALL && collision_at(UU(p.x + rw + speed), UU(p.y + rh)) != C_WALL
             if p.movement != BUTTON_RIGHT
                 p.movement = BUTTON_RIGHT
-                switch p.this_player
+                switch current_player
                     case CURRENT_PLAYER_LUCI
                         p.anim_state = make_anim_state(@luci_animation_right)
                         break
@@ -300,7 +335,7 @@ fn update_player()
     // Resting
     if !pads[0].held && p.movement != PLAYER_MOVING_REST
         p.movement = PLAYER_MOVING_REST
-        switch p.this_player
+        switch current_player
             case CURRENT_PLAYER_LUCI
                 p.anim_state = make_anim_state(@luci_animation_rest)
                 break
@@ -317,6 +352,20 @@ fn update_player()
             current_level_index += 1
             if current_level_index >= len(levels)
                 current_level_index = 2
+            // Update player
+            p.level_index = current_level_index
+            p.x = PLAYER_INITIAL_X
+            p.y = PLAYER_INITIAL_Y
+            switch current_player
+                case CURRENT_PLAYER_LUCI
+                    luci = save_player(p)
+                    break
+                case CURRENT_PLAYER_FER
+                    fer = save_player(p)
+                    break
+            
+            if current_level_index >= len(levels)
+                current_level_index = 2
             nmi
             goto mode play_level(current_level_index)
             : preserves /game
@@ -324,8 +373,8 @@ fn update_player()
 
     // Update camera:
     ct Int window = 112
-    if center_x - camera_x < window
-        camera_x = center_x - window
-    else if center_x - camera_x > 256 - window
-        camera_x = center_x - (256 - window)
-    camera_x = min(max(0, camera_x), (SS(current_level_width) << 4) - 256)
+    if center_x - p.camera_x < window
+        p.camera_x = center_x - window
+    else if center_x - p.camera_x > 256 - window
+        p.camera_x = center_x - (256 - window)
+    p.camera_x = min(max(0, p.camera_x), (SS(current_level_width) << 4) - 256)

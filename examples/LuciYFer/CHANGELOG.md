@@ -16,8 +16,6 @@
     - Don't scroll
     - Make Arcade screens and map
   - Improve animations
-- Data handling
-  - Store Player data somewhere, instead of creating them all the time
 - Game experience
   - Improve story
   - Add enemies
@@ -26,6 +24,12 @@
   - Add doors/keys/buttons
 
 # Changes
+
+## [19.10.2023]
+- Store Player data somewhere, instead of creating them all the time
+  - level index
+  - current x,y
+  - camera_x
 
 ## [18.10.2023]
 - Cleaning:
