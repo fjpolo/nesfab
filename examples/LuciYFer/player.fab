@@ -44,7 +44,8 @@ struct Player
 vars /player_globals
     U flying_counter = 0
     Bool flying_enabled = true
-ct U LUCIFER_FLYING_COOLDOWN = 102 // (256 ~5[s] -> 2[s] ~102)
+ct U LUCIFER_FLYING_LIMIT = 51 // (256 ~5[s] -> 1[s] ~51)
+ct U LUCIFER_FLYING_COOLDOWN = 153 // (256 ~5[s] -> 3[s] ~153)
 
 // Sprites and animations
 data /sprites
@@ -448,7 +449,7 @@ fn update_player()
     if is_lucifer_flying && flying_enabled
         // Countdown of flying capacity
         flying_counter += 1
-        if flying_counter == LUCIFER_FLYING_COOLDOWN
+        if flying_counter == LUCIFER_FLYING_LIMIT
             flying_counter = 0
             flying_enabled = false
         SS speed = PLAYER_SPEED_WALK
@@ -488,24 +489,29 @@ fn update_player()
                 p.y += speed
         // Get tired of flying
         //p.y += 0.1 * flying_counter
-
+    // Flying enabled but not flying
+    if !is_lucifer_flying && flying_enabled
+        if flying_counter > 0 && flying_counter < 153
+            flying_counter -= 1
+        else
+            flying_enabled = true
+    
     // No flying baby
     if !flying_enabled
         is_lucifer_flying = false
         flying_counter += 1
-        if flying_counter == 0
+        if flying_counter == LUCIFER_FLYING_COOLDOWN
             flying_enabled = true
-    //logf(@"fly?: %d"l, is_lucifer_flying)
-    // is_lucifer_flying = is_lucifer_flying
+            flying_counter = 0
+    logf(@"%d"l, flying_counter)
 
     // Luci Y Fer, Lucifer not flying
     if !is_lucifer_flying
         // Update x-position:
         SS speed = PLAYER_SPEED_WALK
         if pads[0].held & BUTTON_B 
-            speed = PLAYER_SPEED_RUN
-            if current_player == CURRENT_PLAYER_LUCIFER
-                speed += 1
+            if current_player == CURRENT_PLAYER_FER
+                speed = PLAYER_SPEED_RUN
         if pads[0].held & BUTTON_LEFT
             if collision_at(UU(p.x - speed), UU(p.y)) != C_WALL && collision_at(UU(p.x - speed), UU(p.y + p.rh)) != C_WALL
                 if p.movement != PLAYER_MOVING_LEFT
@@ -541,7 +547,7 @@ fn update_player()
         if current_player != CURRENT_PLAYER_LUCI || (collision_at(UU(center_x), UU(center_y + PLAYER_SPEED_WALK)) != C_LADDER && collision_at(UU(center_x), UU(center_y + SS(p.h) - PLAYER_SPEED_WALK)) != C_LADDER)
             if collision_at(UU(p.x + 0), UU(p.y + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(p.y + p.h)) == C_WALL
                 if pads[0].pressed & BUTTON_A
-                    if current_player != CURRENT_PLAYER_LUCI
+                    if current_player == CURRENT_PLAYER_FER
                         p.yspeed = GROUND_SPEED
 
             // Update y-position:

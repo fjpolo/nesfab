@@ -16,6 +16,10 @@
   - Lucifer glitches when changing direction
   - Lucifer collision is not working properly
     - Mostly flying upwards
+  - Convert to Lucifer and then split
+    - There are two Lucifer sprites instead of one for Luci and one for Fer
+    - Convert again
+      - Flying is glitched
 - Graphs
   - Make tiles according to game
   - Make proper maps
@@ -61,6 +65,15 @@
 - Improved LuciYFer fusion to Lucifer
 - Lucifer flies
   - Doesn't fly over the top limit
+- Unique abilities
+  - Luci climbs
+  - Fer jumps and runs
+  - Lucifer flies
+- Fixed Lucifer flying timer
+  - Can fly up to 1[S]
+    - If the whole 1[s] isn't wasted, a counter decrements
+      - When 0, can fly again
+    - If whole 1[s] is used, punishment is 3[s] not flying
 
 ## [18.10.2023]
 - Cleaning:
