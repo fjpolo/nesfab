@@ -1,0 +1,17 @@
+mode start_screen(U level_index)
+: nmi game_nmi
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    current_level_index = 0
+    load_level(levels[current_level_index]) 
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+    while true
+        nmi
+        if is_start_pressed
+            game_state = GAME_STATE_STORY
+            current_level_index += 1
+            is_start_pressed = false
+            goto mode story_screen(current_level_index)
+            : preserves
+        update_pads()
