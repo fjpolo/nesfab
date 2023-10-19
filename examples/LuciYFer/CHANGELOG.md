@@ -30,6 +30,7 @@
   - level index
   - current x,y
   - camera_x
+- Change Fer back to palette 0
 
 ## [18.10.2023]
 - Cleaning:
