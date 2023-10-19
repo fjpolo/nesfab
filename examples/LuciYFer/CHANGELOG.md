@@ -74,6 +74,7 @@
     - If the whole 1[s] isn't wasted, a counter decrements
       - When 0, can fly again
     - If whole 1[s] is used, punishment is 3[s] not flying
+- Luci now climbs ladder with animation
 
 ## [18.10.2023]
 - Cleaning:
@@ -82,9 +83,6 @@
   - Move start screen function to start_screen.fab
 - Use CHR bank switching for `bg.png` and `font.png` (with `MapFab`)
 - Fer can run
-- Lucifer can run for certain amount of time 
-  - Flies ~2,5s
-  - After that, ~5
 
 ## [17.102023]
 - Add ladder for Luci (Not Fer)

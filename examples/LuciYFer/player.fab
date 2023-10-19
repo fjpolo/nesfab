@@ -4,6 +4,7 @@ ct Int PLAYER_MOVING_RIGHT = 1
 ct Int PLAYER_MOVING_LEFT = 2
 ct Int PLAYER_MOVING_UP = 2
 ct Int PLAYER_MOVING_DOWN = 2
+ct Int PLAYER_SPEED_CLIMB_LADDER = 1
 ct Int PLAYER_SPEED_WALK = 2
 ct Int PLAYER_SPEED_RUN = 3
 ct Int GROUND_SPEED = -5
@@ -127,6 +128,20 @@ data /sprites
             Ms(-8, 0, $93, $00),
             Ms( 0, 0, $94, $00)
         )))
+    [] sprite_luci_climb_ladder_1
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $a0, $00),
+            Ms( 0,-8, $a1, $00),
+            Ms(-8, 0, $b0, $00),
+            Ms( 0, 0, $b1, $00),
+        )))
+    [] sprite_luci_climb_ladder_2
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $a0, $00),
+            Ms( 0,-8, $a1, $00),
+            Ms(-8, 0, $b0, $00),
+            Ms( 0, 0, $b1, $00),
+        )))
     // luci animations
     [] luci_animation_rest
         (make_anim(Fs{}(
@@ -148,7 +163,11 @@ data /sprites
             Fs(10,   @sprite_luci_left_4),
             Fs(10,   @sprite_luci_left_5)
         )))
-
+    [] luci_animation_climb_ladder
+        (make_anim(Fs{}(
+            Fs(10,   @sprite_luci_climb_ladder_1),
+            Fs(10,   @sprite_luci_climb_ladder_2)
+        )))
     // fer metasprites
     [] sprite_fer_rest
         (make_metasprite(0, Ms{}(
@@ -334,7 +353,6 @@ data /sprites
             Ms(8,  8, $92, $01)
 
         )))
-
     // Animations
     [] lucifer_animation_rest_right
         (make_anim(Fs{}(
@@ -356,6 +374,7 @@ data /sprites
             Fs(10,   @sprite_lucifer_left_2),
             Fs(10,   @sprite_lucifer_left_3)
         )))
+
 
 fn make_player(SS x, SS y) Player
     Player p = Player()
@@ -568,11 +587,13 @@ fn update_player()
         // Ladder
         else
             if pads[0].held & BUTTON_UP
-                if collision_at(UU(p.x), UU(p.y - p.h - PLAYER_SPEED_WALK)) != C_WALL
-                    p.y += GROUND_SPEED + PLAYER_SPEED_WALK
+                if collision_at(UU(p.x), UU(p.y - p.h - PLAYER_SPEED_CLIMB_LADDER)) != C_WALL
+                    p.y -= PLAYER_SPEED_CLIMB_LADDER
+                    p.anim_state = make_anim_state(@luci_animation_climb_ladder)
             if pads[0].held & BUTTON_DOWN
-                if collision_at(UU(p.x), UU(p.y + p.h + PLAYER_SPEED_WALK)) != C_WALL
-                    p.y -= GROUND_SPEED + PLAYER_SPEED_WALK      
+                if collision_at(UU(p.x), UU(p.y + p.h + PLAYER_SPEED_CLIMB_LADDER)) != C_WALL
+                    p.y += PLAYER_SPEED_CLIMB_LADDER
+                    p.anim_state = make_anim_state(@luci_animation_climb_ladder)
 
     // Luci Y Fer same level?
     if luci.level_index == fer.level_index && current_player != CURRENT_PLAYER_LUCIFER
