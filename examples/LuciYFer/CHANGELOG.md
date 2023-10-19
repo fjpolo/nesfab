@@ -1,4 +1,6 @@
 # ToDo:
+- Change name to Luz y Fer
+  - Luci -> Luz
 - System
   - Add states and screens
     - Start
@@ -22,6 +24,22 @@
   - Add bosses
   - Add secrets
   - Add doors/keys/buttons
+  - Characters
+    - Luci
+      - Improve climbing
+        - Animation
+        - Climbing up it's a few pixels too high when reaching solid
+      - Make it climb horizontally
+        - If surface allows
+    - Fer
+      - Maybe fly a bit?
+    - Lucifer
+      - Flies
+      - Summons something?
+  - Enemies
+    - God?
+      - Gods?
+    - Devil?
 
 # Changes
 
@@ -31,6 +49,7 @@
   - current x,y
   - camera_x
 - Change Fer back to palette 0
+- - Improve Luci and Fer's walk/run animation
 
 ## [18.10.2023]
 - Cleaning:
