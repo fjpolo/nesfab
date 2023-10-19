@@ -8,8 +8,8 @@
 - Bugs
   - Fix START state
     - Fix transition to STORY
-- Fix transition from STORY to PLAY
-  - Only when starting at START
+  - Fix transition from STORY to PLAY
+    - Only when starting at START
 - Graphs
   - Make tiles according to game
   - Make proper maps
@@ -22,14 +22,18 @@
   - Improve story
   - Add enemies
   - Add bosses
+  - Add secrets
+  - Add doors/keys/buttons
 
 # Changes
 
 ## [18.10.2023]
-- Move player variables and functions to player.fab
-- Move story screen variables and functions to story_screen.fab
-- Move start screen function to start_screen.fab
-- Use bank switching for bg.png and font.png (with MapFab)
+- Cleaning:
+  - Move player variables and functions to player.fab
+  - Move story screen variables and functions to story_screen.fab
+  - Move start screen function to start_screen.fab
+- Use CHR bank switching for `bg.png` and `font.png` (with `MapFab`)
+- Fer can run
 
 ## [17.102023]
 - Add ladder for Luci (Not Fer)
