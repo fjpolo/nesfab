@@ -1,0 +1,1 @@
+cls && nesfab .\LuciYFer.cfg

@@ -36,38 +36,80 @@ data /sprites
     // luci metasprites
     [] sprite_luci_rest
         (make_metasprite(0, Ms{}(
-            Ms(-8,-8, $54, $00),
-            Ms( 0,-8, $55, $00),
-            Ms(-8, 0, $64, $00),
-            Ms( 0, 0, $65, $00)
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $53, $00),
+            Ms( 0, 0, $54, $00)
         )))
     [] sprite_luci_right_1
         (make_metasprite(0, Ms{}(
-            Ms(-8,-8, $54, $00),
-            Ms( 0,-8, $55, $00),
-            Ms(-8, 0, $64, $00),
-            Ms( 0, 0, $65, $00)
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $53, $00),
+            Ms( 0, 0, $54, $00)
         )))
     [] sprite_luci_right_2
         (make_metasprite(0, Ms{}(
-            Ms(-8,-8, $56, $00),
-            Ms( 0,-8, $57, $00),
-            Ms(-8, 0, $66, $00),
-            Ms( 0, 0, $67, $00)
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $63, $00),
+            Ms( 0, 0, $64, $00)
+        )))
+    [] sprite_luci_right_3
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $73, $00),
+            Ms( 0, 0, $74, $00)
+        )))
+    [] sprite_luci_right_4
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $83, $00),
+            Ms( 0, 0, $84, $00)
+        )))
+    [] sprite_luci_right_5
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $93, $00),
+            Ms( 0, 0, $94, $00)
         )))
     [] sprite_luci_left_1
         (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8,-8, $54, $00),
-            Ms( 0,-8, $55, $00),
-            Ms(-8, 0, $64, $00),
-            Ms( 0, 0, $65, $00)
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $53, $00),
+            Ms( 0, 0, $54, $00)
         )))
     [] sprite_luci_left_2
         (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8,-8, $56, $00),
-            Ms( 0,-8, $57, $00),
-            Ms(-8, 0, $66, $00),
-            Ms( 0, 0, $67, $00)
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $63, $00),
+            Ms( 0, 0, $64, $00)
+        )))
+    [] sprite_luci_left_3
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $73, $00),
+            Ms( 0, 0, $74, $00)
+        )))
+    [] sprite_luci_left_4
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $83, $00),
+            Ms( 0, 0, $84, $00)
+        )))
+    [] sprite_luci_left_5
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $43, $00),
+            Ms( 0,-8, $44, $00),
+            Ms(-8, 0, $93, $00),
+            Ms( 0, 0, $94, $00)
         )))
     // luci animations
     [] luci_animation_rest
@@ -76,50 +118,98 @@ data /sprites
         )))
     [] luci_animation_right
         (make_anim(Fs{}(
-            Fs(20,   @sprite_luci_right_1),
-            Fs(20,   @sprite_luci_right_2)
+            Fs(10,   @sprite_luci_right_1),
+            Fs(10,   @sprite_luci_right_2),
+            Fs(10,   @sprite_luci_right_3),
+            Fs(10,   @sprite_luci_right_4),
+            Fs(10,   @sprite_luci_right_5)
         )))
     [] luci_animation_left
         (make_anim(Fs{}(
-            Fs(20,   @sprite_luci_left_1),
-            Fs(20,   @sprite_luci_left_2)
+            Fs(10,   @sprite_luci_left_1),
+            Fs(10,   @sprite_luci_left_2),
+            Fs(10,   @sprite_luci_left_3),
+            Fs(10,   @sprite_luci_left_4),
+            Fs(10,   @sprite_luci_left_5)
         )))
 
     // fer metasprites
     [] sprite_fer_rest
         (make_metasprite(0, Ms{}(
-            Ms(-8,-8, $60, $00),
-            Ms( 0,-8, $61, $00),
-            Ms(-8, 0, $62, $00),
-            Ms( 0, 0, $63, $00)
+            Ms(-8,-8, $45, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $55, $00),
+            Ms( 0, 0, $56, $00)
         )))
     [] sprite_fer_right_1
         (make_metasprite(0, Ms{}(
-            Ms(-8,-8, $60, $00),
-            Ms( 0,-8, $61, $00),
-            Ms(-8, 0, $62, $00),
-            Ms( 0, 0, $63, $00)
+            Ms(-8,-8, $45, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $55, $00),
+            Ms( 0, 0, $56, $00)
         )))
     [] sprite_fer_right_2
         (make_metasprite(0, Ms{}(
-            Ms(-8,-8, $60, $00),
-            Ms( 0,-8, $61, $00),
-            Ms(-8, 0, $72, $00),
-            Ms( 0, 0, $73, $00)
+            Ms(-8,-8, $A5, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $65, $00),
+            Ms( 0, 0, $66, $00)
+        )))
+    [] sprite_fer_right_3
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $A5, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $75, $00),
+            Ms( 0, 0, $76, $00)
+        )))
+    [] sprite_fer_right_4
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $A5, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $85, $00),
+            Ms( 0, 0, $86, $00)
+        )))
+    [] sprite_fer_right_5
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-8, $A5, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $95, $00),
+            Ms( 0, 0, $96, $00)
         )))
     [] sprite_fer_left_1
         (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8,-8, $60, $00),
-            Ms( 0,-8, $61, $00),
-            Ms(-8, 0, $62, $00),
-            Ms( 0, 0, $63, $00)
+            Ms(-8,-8, $45, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $55, $00),
+            Ms( 0, 0, $56, $00)
         )))
     [] sprite_fer_left_2
         (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8,-8, $60, $00),
-            Ms( 0,-8, $61, $00),
-            Ms(-8, 0, $72, $00),
-            Ms( 0, 0, $73, $00)
+            Ms(-8,-8, $A5, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $65, $00),
+            Ms( 0, 0, $66, $00)
+        )))
+    [] sprite_fer_left_3
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $A5, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $75, $00),
+            Ms( 0, 0, $76, $00)
+        )))
+    [] sprite_fer_left_4
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $A5, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $85, $00),
+            Ms( 0, 0, $86, $00)
+        )))
+    [] sprite_fer_left_5
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-8, $A5, $00),
+            Ms( 0,-8, $46, $00),
+            Ms(-8, 0, $95, $00),
+            Ms( 0, 0, $96, $00)
         )))
     // fer animations
     [] fer_animation_rest
@@ -128,13 +218,25 @@ data /sprites
         )))
     [] fer_animation_right
         (make_anim(Fs{}(
-            Fs(20,   @sprite_fer_right_1),
-            Fs(20,   @sprite_fer_right_2)
+            Fs(10,   @sprite_fer_right_1),
+            Fs(10,   @sprite_fer_right_5),
+            Fs(10,   @sprite_fer_right_4),
+            Fs(10,   @sprite_fer_right_5),
+            Fs(10,   @sprite_fer_right_1),
+            Fs(10,   @sprite_fer_right_2),
+            Fs(10,   @sprite_fer_right_3),
+            Fs(10,   @sprite_fer_right_2)
         )))
     [] fer_animation_left
         (make_anim(Fs{}(
-            Fs(20,   @sprite_fer_left_1),
-            Fs(20,   @sprite_fer_left_2)
+            Fs(10,   @sprite_fer_left_1),
+            Fs(10,   @sprite_fer_left_5),
+            Fs(10,   @sprite_fer_left_4),
+            Fs(10,   @sprite_fer_left_5),
+            Fs(10,   @sprite_fer_left_1),
+            Fs(10,   @sprite_fer_left_2),
+            Fs(10,   @sprite_fer_left_3),
+            Fs(10,   @sprite_fer_left_2)
         )))
     // lucifer metasprites
     [] sprite_lucifer_rest

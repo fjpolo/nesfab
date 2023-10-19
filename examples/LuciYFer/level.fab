@@ -5,7 +5,7 @@
  */
 
 // Load the .mapfab file, calling the macros for each definition.
-mapfab(raw, "project.mapfab", "chr", "palette", "metatiles", "level")
+mapfab(raw, "LuciYFer.mapfab", "chr", "palette", "metatiles", "level")
 
 // Tile collision values:
 ct U C_OPEN     = 0
