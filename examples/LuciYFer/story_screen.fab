@@ -1,0 +1,64 @@
+// Story screen cons
+ct U WRITING_DONE  = 0
+ct U WRITING_WAIT  = 1
+ct U WRITING_READY = 2
+ct U FONT_BASE_NUMBER = $80
+
+// Stroy screen data
+vars /story
+    U writing = WRITING_WAIT
+    U char
+    UU row_addr = $2106
+    UU cur_addr = $2106
+
+charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\0", '\0')
+: stows /strings
+data /strings
+    [] story_string
+        (
+            `Born Luci\n`
+            `Born Fer\n`
+            `One with G\n`
+            `One with TD\n`
+            `Help them be together...\n`
+            `\n`
+            `\n`
+            `PRESS START TO PLAY\n`
+        )
+
+mode story_screen(U level_index)
+: nmi game_nmi
+    current_level_index = 1
+
+    palette = example_palette
+    ppu_upload_palette()
+
+    // Prepare the decompressor
+    decompress_string_init(@story_string)
+
+    // Load level
+    load_level(levels[current_level_index]) 
+
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+    while true
+        nmi
+        // Decompress one character
+        if writing == WRITING_WAIT
+            char = decompress_string()
+            if char == charmap.sentinel
+                writing = WRITING_DONE
+            else if char == '\n'
+                row_addr += 32
+                cur_addr = row_addr
+            else
+                writing = WRITING_READY
+        nmi
+        nmi
+        nmi
+
+        if is_start_pressed
+            game_state = GAME_STATE_PLAY
+            current_level_index += 1    
+            goto mode play_level(current_level_index)
+            : preserves
+        update_pads()
