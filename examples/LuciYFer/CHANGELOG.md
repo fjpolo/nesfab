@@ -8,6 +8,7 @@
     - Win
     - Game Over
 - Bugs
+  - Lucifer animation bugs with height = 23px
   - Fix START state
     - Fix transition to STORY
   - Fix transition from STORY to PLAY
@@ -49,7 +50,9 @@
   - current x,y
   - camera_x
 - Change Fer back to palette 0
-- - Improve Luci and Fer's walk/run animation
+- Improve Luci and Fer's walk/run animation
+- Add LuciFer fusion to Lucifer
+  - Added animation
 
 ## [18.10.2023]
 - Cleaning:
