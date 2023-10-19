@@ -2,7 +2,8 @@
 ct Int PLAYER_MOVING_REST = 0
 ct Int PLAYER_MOVING_RIGHT = 1
 ct Int PLAYER_MOVING_LEFT = 2
-ct Int PLAYER_SPEED = 2
+ct Int PLAYER_SPEED_WALK = 2
+ct Int PLAYER_SPEED_RUN = 4
 ct Int GROUND_SPEED = -5
 ct Int LUCI_INITIAL_X = 128
 ct Int LUCI_INITIAL_Y = 128
@@ -234,8 +235,11 @@ fn update_player()
         : preserves /game
 
     // Update x-position:
+    SS speed = PLAYER_SPEED_WALK
+    if pads[0].held & BUTTON_B && current_player != CURRENT_PLAYER_LUCIFER
+        speed = PLAYER_SPEED_RUN
     if pads[0].held & BUTTON_LEFT
-        if collision_at(UU(p.x - PLAYER_SPEED), UU(p.y)) != C_WALL && collision_at(UU(p.x - PLAYER_SPEED), UU(p.y + rh)) != C_WALL
+        if collision_at(UU(p.x - speed), UU(p.y)) != C_WALL && collision_at(UU(p.x - speed), UU(p.y + rh)) != C_WALL
             if p.movement != PLAYER_MOVING_LEFT
                 p.movement = PLAYER_MOVING_LEFT
                 switch p.this_player 
@@ -245,10 +249,9 @@ fn update_player()
                     case CURRENT_PLAYER_FER
                         p.anim_state = make_anim_state(@fer_animation_left)
                         break
-            p.x -= PLAYER_SPEED
-
+            p.x -= speed
     if pads[0].held & BUTTON_RIGHT
-        if collision_at(UU(p.x + rw + PLAYER_SPEED), UU(p.y)) != C_WALL && collision_at(UU(p.x + rw + PLAYER_SPEED), UU(p.y + rh)) != C_WALL
+        if collision_at(UU(p.x + rw + speed), UU(p.y)) != C_WALL && collision_at(UU(p.x + rw + speed), UU(p.y + rh)) != C_WALL
             if p.movement != BUTTON_RIGHT
                 p.movement = BUTTON_RIGHT
                 switch p.this_player
@@ -258,13 +261,13 @@ fn update_player()
                     case CURRENT_PLAYER_FER
                         p.anim_state = make_anim_state(@fer_animation_right)
                         break
-            p.x += PLAYER_SPEED
+            p.x += speed
     
     // Ground and Ladder
     SS center_x = SS(p.x) + (pw >> 1)
     SS center_y = SS(p.y) + (ph >> 1)
     // Ground
-    if current_player == CURRENT_PLAYER_FER || (collision_at(UU(center_x), UU(center_y + PLAYER_SPEED)) != C_LADDER && collision_at(UU(center_x), UU(center_y + ph - PLAYER_SPEED)) != C_LADDER)
+    if current_player == CURRENT_PLAYER_FER || (collision_at(UU(center_x), UU(center_y + PLAYER_SPEED_WALK)) != C_LADDER && collision_at(UU(center_x), UU(center_y + ph - PLAYER_SPEED_WALK)) != C_LADDER)
         if collision_at(UU(p.x + 0), UU(p.y + ph)) == C_WALL || collision_at(UU(p.x + rw), UU(p.y + ph)) == C_WALL
             if pads[0].pressed & BUTTON_A
                 if current_player != CURRENT_PLAYER_LUCI
@@ -288,11 +291,11 @@ fn update_player()
     // Ladder
     else
         if pads[0].held & BUTTON_UP
-            if collision_at(UU(p.x), UU(p.y - ph - PLAYER_SPEED)) != C_WALL
-                p.y += GROUND_SPEED + PLAYER_SPEED
+            if collision_at(UU(p.x), UU(p.y - ph - PLAYER_SPEED_WALK)) != C_WALL
+                p.y += GROUND_SPEED + PLAYER_SPEED_WALK
         if pads[0].held & BUTTON_DOWN
-            if collision_at(UU(p.x), UU(p.y + ph + PLAYER_SPEED)) != C_WALL
-                p.y -= GROUND_SPEED + PLAYER_SPEED
+            if collision_at(UU(p.x), UU(p.y + ph + PLAYER_SPEED_WALK)) != C_WALL
+                p.y -= GROUND_SPEED + PLAYER_SPEED_WALK
 
     // Resting
     if !pads[0].held && p.movement != PLAYER_MOVING_REST
