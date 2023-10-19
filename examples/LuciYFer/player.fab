@@ -13,6 +13,10 @@ ct Int pw = 15
 ct Int ph = 15
 ct Int rw = pw - 1
 ct Int rh = ph - 1
+ct Int lucifer_pw = 15
+ct Int lucifer_ph = 15
+ct Int lucifer_rw = pw - 1
+ct Int lucifer_rh = ph - 1
 // Player characters
 ct Int CURRENT_PLAYER_LUCI = 0
 ct Int CURRENT_PLAYER_FER = 1
@@ -22,6 +26,10 @@ ct Int CURRENT_PLAYER_LUCIFER = 2
 struct Player
     SS x
     SSF y
+    SS w
+    SSF h
+    SS rw
+    SSF rh
     SF xspeed
     SF yspeed
     U movement
@@ -241,48 +249,53 @@ data /sprites
     // lucifer metasprites
     [] sprite_lucifer_rest
         (make_metasprite(0, Ms{}(
-            Ms(-8,-8, $00, $01),
-            Ms(0, -8, $00, $01),
-            Ms(-8, 0, $50, $01),
-            Ms( 0, 0, $51, $01),
-            Ms(-8, 8, $52, $01),
-            Ms( 0, 8, $53, $01)
+            Ms(0, -8, $41, $01),
+            Ms(8, -8, $42, $01),
+            Ms(0,  0, $51, $01),
+            Ms(8,  0, $52, $01),
+            Ms(0,  8, $61, $01),
+            Ms(8,  8, $62, $01)
+
         )))
     [] sprite_lucifer_right_1
         (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $41, $01),
-            Ms( 0, -8, $42, $01),
-            Ms(-8,  0, $43, $01),
-            Ms( 0,  0, $44, $01),
-            Ms(-8,  8, $45, $01),
-            Ms( 0,  8, $46, $01)
+            Ms(0, -8, $41, $01),
+            Ms(8, -8, $42, $01),
+            Ms(0,  0, $51, $01),
+            Ms(8,  0, $52, $01),
+            Ms(0,  8, $61, $01),
+            Ms(8,  8, $62, $01)
+
         )))
     [] sprite_lucifer_right_2
         (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $41, $01),
-            Ms( 0, -8, $47, $01),
-            Ms(-8,  0, $43, $01),
-            Ms( 0,  0, $44, $01),
-            Ms(-8,  8, $45, $01),
-            Ms( 0,  8, $46, $01)
+            Ms(0, -8, $41, $01),
+            Ms(8, -8, $42, $01),
+            Ms(0,  0, $51, $01),
+            Ms(8,  0, $52, $01),
+            Ms(0,  8, $61, $01),
+            Ms(8,  8, $62, $01)
+
         )))
     [] sprite_lucifer_left_1
         (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8, -8, $41, $01),
-            Ms( 0, -8, $42, $01),
-            Ms(-8,  0, $43, $01),
-            Ms( 0,  0, $44, $01),
-            Ms(-8,  8, $45, $01),
-            Ms( 0,  8, $46, $01)
+            Ms(0, -8, $41, $01),
+            Ms(8, -8, $42, $01),
+            Ms(0,  0, $51, $01),
+            Ms(8,  0, $52, $01),
+            Ms(0,  8, $61, $01),
+            Ms(8,  8, $62, $01)
+
         )))
     [] sprite_lucifer_left_2
         (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8, -8, $41, $01),
-            Ms( 0, -8, $47, $01),
-            Ms(-8,  0, $43, $01),
-            Ms( 0,  0, $44, $01),
-            Ms(-8,  8, $45, $01),
-            Ms( 0,  8, $46, $01)
+            Ms(0, -8, $41, $01),
+            Ms(8, -8, $42, $01),
+            Ms(0,  0, $51, $01),
+            Ms(8,  0, $52, $01),
+            Ms(0,  8, $61, $01),
+            Ms(8,  8, $62, $01)
+
         )))
 
     // Animations
@@ -292,19 +305,23 @@ data /sprites
         )))
     [] lucifer_animation_right
         (make_anim(Fs{}(
-            Fs(20,   @sprite_lucifer_right_1),
-            Fs(20,   @sprite_lucifer_right_2)
+            Fs(20,   @sprite_lucifer_rest),
+            Fs(20,   @sprite_lucifer_rest)
         )))
     [] lucifer_animation_left
         (make_anim(Fs{}(
-            Fs(20,   @sprite_lucifer_left_1),
-            Fs(20,   @sprite_lucifer_left_2)
+            Fs(20,   @sprite_lucifer_rest),
+            Fs(20,   @sprite_lucifer_rest)
         )))
 
 fn make_player(SS x, SS y) Player
     Player p = Player()
     p.x = x
     p.y = SSF(y)
+    p.w = pw
+    p.h = ph
+    p.rw = rw
+    p.rh = rh
     p.movement = PLAYER_MOVING_REST
     p.anim_state = AnimState()
     p.camera_x = 0
@@ -322,7 +339,22 @@ fn make_player_fer() Player
     Player p = make_player(PLAYER_INITIAL_X, PLAYER_INITIAL_Y)
     p.this_player = CURRENT_PLAYER_FER
     p.anim_state = make_anim_state(@fer_animation_rest)
-    p.level_index = 3
+    p.level_index = 4
+    p.is_initialised = true
+    return p
+
+fn make_player_lucifer(Player a) Player
+    Player p = Player()
+    p.x = a.x
+    p.y = a.y
+    p.w = lucifer_pw
+    p.h = lucifer_ph
+    p.rw = lucifer_rw
+    p.rh = lucifer_rh
+    p.this_player = CURRENT_PLAYER_LUCIFER
+    p.movement = PLAYER_MOVING_REST
+    p.anim_state = make_anim_state(@lucifer_animation_rest)
+    p.level_index = a.level_index
     p.is_initialised = true
     return p
 
@@ -330,6 +362,10 @@ fn save_player(Player a) Player
     Player p = Player()
     p.x = a.x
     p.y = a.y
+    p.w = a.w
+    p.h = a.h
+    p.rw = a.rw
+    p.rh = a.rh
     p.xspeed = a.xspeed
     p.yspeed = a.yspeed
     p.movement = a.movement
@@ -343,6 +379,10 @@ fn restore_player(Player a) Player
     Player p = Player()
     p.x = a.x
     p.y = a.y
+    p.w = a.w
+    p.h = a.h
+    p.rw = a.rw
+    p.rh = a.rh
     p.xspeed = a.xspeed
     p.yspeed = a.yspeed
     p.movement = a.movement
@@ -354,6 +394,22 @@ fn restore_player(Player a) Player
     return p
 
 fn update_player()
+    // Luci Y Fer in the same level?
+    if luci.level_index == fer.level_index && current_player != CURRENT_PLAYER_LUCIFER
+        switch current_player
+            case CURRENT_PLAYER_LUCI
+                if p.x == fer.x
+                    p = make_player_lucifer(p)
+                    current_player = CURRENT_PLAYER_LUCIFER
+                break
+            case CURRENT_PLAYER_FER
+                if p.x == luci.x
+                    p = make_player_lucifer(p)
+                    current_player = CURRENT_PLAYER_LUCIFER
+                break
+
+
+
     // Select - Change player
     if is_select_pressed && current_player != CURRENT_PLAYER_LUCIFER
         is_select_pressed = false
@@ -376,7 +432,7 @@ fn update_player()
     if pads[0].held & BUTTON_B && current_player != CURRENT_PLAYER_LUCIFER
         speed = PLAYER_SPEED_RUN
     if pads[0].held & BUTTON_LEFT
-        if collision_at(UU(p.x - speed), UU(p.y)) != C_WALL && collision_at(UU(p.x - speed), UU(p.y + rh)) != C_WALL
+        if collision_at(UU(p.x - speed), UU(p.y)) != C_WALL && collision_at(UU(p.x - speed), UU(p.y + p.rh)) != C_WALL
             if p.movement != PLAYER_MOVING_LEFT
                 p.movement = PLAYER_MOVING_LEFT
                 switch current_player 
@@ -388,7 +444,7 @@ fn update_player()
                         break
             p.x -= speed
     if pads[0].held & BUTTON_RIGHT
-        if collision_at(UU(p.x + rw + speed), UU(p.y)) != C_WALL && collision_at(UU(p.x + rw + speed), UU(p.y + rh)) != C_WALL
+        if collision_at(UU(p.x + p.rw + speed), UU(p.y)) != C_WALL && collision_at(UU(p.x + p.rw + speed), UU(p.y + p.rh)) != C_WALL
             if p.movement != BUTTON_RIGHT
                 p.movement = BUTTON_RIGHT
                 switch current_player
@@ -401,37 +457,54 @@ fn update_player()
             p.x += speed
     
     // Ground and Ladder
-    SS center_x = SS(p.x) + (pw >> 1)
-    SS center_y = SS(p.y) + (ph >> 1)
+    SS center_x = SS(p.x) + (p.w >> 1)
+    SS center_y = SS(p.y) + SS(p.h >> 1)
+    logf(@"p.y: %d"l, U(p.y))
+    logf(@"p.h: %d"l, U(p.h >> 1))
+    logf(@"center_y: %d"l, U(center_y))
     // Ground
-    if current_player == CURRENT_PLAYER_FER || (collision_at(UU(center_x), UU(center_y + PLAYER_SPEED_WALK)) != C_LADDER && collision_at(UU(center_x), UU(center_y + ph - PLAYER_SPEED_WALK)) != C_LADDER)
-        if collision_at(UU(p.x + 0), UU(p.y + ph)) == C_WALL || collision_at(UU(p.x + rw), UU(p.y + ph)) == C_WALL
+    logf(@"p.y_0: %d"l, U(p.y))
+    logf(@"p.h: %d"l, U(p.h))
+    logf(@"p.h: %d"l, U(p.rh))
+    if current_player == CURRENT_PLAYER_FER || (collision_at(UU(center_x), UU(center_y + PLAYER_SPEED_WALK)) != C_LADDER && collision_at(UU(center_x), UU(center_y + SS(p.h) - PLAYER_SPEED_WALK)) != C_LADDER)
+        if collision_at(UU(p.x + 0), UU(p.y + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(p.y + p.h)) == C_WALL
             if pads[0].pressed & BUTTON_A
                 if current_player != CURRENT_PLAYER_LUCI
                     p.yspeed = GROUND_SPEED
 
         // Update y-position:
+        logf(@"p.y_1: %d"l, U(p.y))
+        logf(@"p.yspeed: %d"l, U(p.yspeed))
         SSF new_y = p.y + SSF(p.yspeed)
+        logf(@"new_y: %d"l, U(new_y))
         p.yspeed += 0.25
         if p.yspeed > 0
-            if collision_at(UU(p.x + 0), UU(new_y + rh)) == C_WALL || collision_at(UU(p.x + rw), UU(new_y + rh)) == C_WALL
+            if collision_at(UU(p.x + 0), UU(new_y + p.rh)) == C_WALL || collision_at(UU(p.x + p.rw), UU(new_y + p.rh)) == C_WALL
                 p.yspeed = 0
-                p.y = ((new_y + rh) & SSF(~%1111)) - ph
+                // logf(@"p.y_1: %d"l, U(p.y))
+                p.y = ((new_y + p.rh) & SSF(~%1111)) - SSF(p.h)
+                // logf(@"p.y_2: %d"l, U(p.y))
             else
+                // logf(@"p.y_1: %d"l, U(p.y))
                 p.y = new_y
+                // logf(@"p.y_2: %d"l, U(p.y))
         else
-            if collision_at(UU(p.x + 0), UU(new_y)) == C_WALL || collision_at(UU(p.x + rw), UU(new_y)) == C_WALL
+            if collision_at(UU(p.x + 0), UU(new_y)) == C_WALL || collision_at(UU(p.x + p.rw), UU(new_y)) == C_WALL
                 p.yspeed = 0
+                // logf(@"p.y_1: %d"l, U(p.y))
                 p.y = (p.y & SSF(~%1111))
+                // logf(@"p.y_2: %d"l, U(p.y))
             else
+                // logf(@"p.y_1: %d"l, U(p.y))
                 p.y = new_y
+                // logf(@"p.y_2: %d"l, U(p.y))
     // Ladder
     else
         if pads[0].held & BUTTON_UP
-            if collision_at(UU(p.x), UU(p.y - ph - PLAYER_SPEED_WALK)) != C_WALL
+            if collision_at(UU(p.x), UU(p.y - p.h - PLAYER_SPEED_WALK)) != C_WALL
                 p.y += GROUND_SPEED + PLAYER_SPEED_WALK
         if pads[0].held & BUTTON_DOWN
-            if collision_at(UU(p.x), UU(p.y + ph + PLAYER_SPEED_WALK)) != C_WALL
+            if collision_at(UU(p.x), UU(p.y + p.h + PLAYER_SPEED_WALK)) != C_WALL
                 p.y -= GROUND_SPEED + PLAYER_SPEED_WALK
 
     // Resting
