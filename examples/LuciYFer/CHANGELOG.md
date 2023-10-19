@@ -13,6 +13,9 @@
     - Fix transition to STORY
   - Fix transition from STORY to PLAY
     - Only when starting at START
+  - Lucifer glitches when changing direction
+  - Lucifer collision is not working properly
+    - Mostly flying upwards
 - Graphs
   - Make tiles according to game
   - Make proper maps
@@ -20,6 +23,7 @@
     - Make Arcade screens and map
   - Improve animations
 - Game experience
+  - Lucifer should get tired of flying
   - Improve story
   - Add enemies
   - Add bosses
@@ -53,6 +57,10 @@
 - Improve Luci and Fer's walk/run animation
 - Add LuciFer fusion to Lucifer
   - Added animation
+    - Improved animations
+- Improved LuciYFer fusion to Lucifer
+- Lucifer flies
+  - Doesn't fly over the top limit
 
 ## [18.10.2023]
 - Cleaning:
@@ -61,6 +69,9 @@
   - Move start screen function to start_screen.fab
 - Use CHR bank switching for `bg.png` and `font.png` (with `MapFab`)
 - Fer can run
+- Lucifer can run for certain amount of time 
+  - Flies ~2,5s
+  - After that, ~5
 
 ## [17.102023]
 - Add ladder for Luci (Not Fer)
