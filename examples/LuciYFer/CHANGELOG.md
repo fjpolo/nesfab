@@ -18,15 +18,12 @@
     - Fix transition to STORY
   - Fix transition from STORY to PLAY
     - Only when starting at START
-  - Convert to Lucifer and then split
-    - There are two Lucifer sprites instead of one for Luci and one for Fer
 - Graphs
   - Add stamina bar
   - Make tiles according to game
   - Make proper maps
-    - Don't scroll
-    - Make Arcade screens and map
-  - Improve animations
+    - Don't scroll?
+    - Make Arcade screens and map?
   - Make a copy of CHR with some tiles changed  
     - Change every X frames to give movement to background
 - Game experience
@@ -36,21 +33,17 @@
   - Add secrets
   - Add doors/keys/buttons
   - Characters
-    - Luci
-      - Improve climbing
-        - Animation
-        - Climbing up it's a few pixels too high when reaching solid
-      - Make it climb horizontally
-        - If surface allows
     - Fer
       - Maybe fly a bit?
     - Lucifer
-      - Flies
       - Summons something?
   - Enemies
     - God?
       - Gods?
     - Devil?
+    - Demons?
+    - Eyes and ears
+      - Act as guards
   - Stamina
     - Luci should get tired of climbing
     - Fer should jump less when tired
@@ -58,10 +51,11 @@
 # Changes
 
 ## [20.10.2023]
-- Fix Luci's height
-- Fix Luci's animations
-- Fix Luci's collitions going up
-- Fix Luci's collitions going down
+- Fixed Luci's height
+- Fixed Luci's animations
+- Fixed Luci's collitions going up
+- Fixed Luci's collitions going down
+- Fixed animations when Lucifer splits
 - Tested CHR ROM Bank swap every 30 frames
   - Not working correctly on tile collisions
   - Might be too slow
