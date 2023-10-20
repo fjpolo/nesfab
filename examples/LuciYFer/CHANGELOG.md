@@ -8,20 +8,20 @@
     - Win
     - Game Over
 - Bugs
-  - Lucifer animation bugs when changing directions
-  - Lucifer animation bugs with height = 23px
+  - Lucifer fly breaks sometimes after splitting to Luci Y Fer
+  - Luci climbing ceiling thingies
+    - Animation not working
+  - Being Lucifer and changing to Luci Y Fer in the air
+    - 2nd sprite not affected by gravity
+      - Bug or feature?
   - Fix START state
     - Fix transition to STORY
   - Fix transition from STORY to PLAY
     - Only when starting at START
-  - Lucifer glitches when changing direction
-  - Lucifer collision is not working properly
-    - Mostly flying upwards
   - Convert to Lucifer and then split
     - There are two Lucifer sprites instead of one for Luci and one for Fer
-    - Convert again
-      - Flying is glitched
 - Graphs
+  - Add stamina bar
   - Make tiles according to game
   - Make proper maps
     - Don't scroll
@@ -30,7 +30,6 @@
   - Make a copy of CHR with some tiles changed  
     - Change every X frames to give movement to background
 - Game experience
-  - Lucifer should get tired of flying
   - Improve story
   - Add enemies
   - Add bosses
@@ -52,6 +51,9 @@
     - God?
       - Gods?
     - Devil?
+  - Stamina
+    - Luci should get tired of climbing
+    - Fer should jump less when tired
 
 # Changes
 
@@ -60,6 +62,11 @@
 - Fix Luci's animations
 - Fix Luci's collitions going up
 - Fix Luci's collitions going down
+- Tested CHR ROM Bank swap every 30 frames
+  - Not working correctly on tile collisions
+  - Might be too slow
+- Luci can climb ceiling thingies
+
 
 ## [19.10.2023]
 - Store Player data somewhere, instead of creating them all the time

@@ -38,17 +38,11 @@ vars /game
 
 // NMI
 nmi game_nmi()
-
-    // // Switch CHR ROM banks for animated tiles
-    // chr_counter += 1
-    // if chr_counter == 5
-    //     chr_counter = 0
-    //     if chr_bank == 0
-    //         chr_bank = 1
-    //     else
-    //         chr_bank = 0
-    //     load_chrrom_bank(levels[current_level_index], chr_bank)
-
+    // Switch CHR ROM banks for animated tiles
+    if current_level_index > 1
+        chr_counter += 1
+        if chr_counter == 30
+            chr_counter = 0
     if game_state == GAME_STATE_STORY
         if ready && writing == WRITING_READY
             // Upload the decompressed character:
@@ -150,6 +144,18 @@ mode play_level(U level_index)
         update_sprites()
         update_scroll()
 
+        if chr_counter == 0
+            if chr_bank == 0
+                chr_bank = 1
+            else
+                chr_bank = 0
+            // Change CHR ROM Bank on the fly
+            // // {PPUCTRL}(0)
+            // // {PPUMASK}(0)
+            // // hide_oam(0)
+            // load_chrrom_bank(levels[current_level_index], chr_bank)
+            // // {PPUCTRL}(PPUCTRL_NMI_ON)
+
 fn update_sprites()
     // Our stack index into OAM:
     U o = 0
@@ -170,3 +176,5 @@ fn update_sprites()
 
     // Tick animation
     p.anim_state = tick_anim(p.anim_state, true)
+
+fn update_chrrom_bank()

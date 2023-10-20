@@ -1,13 +1,16 @@
-// Player constants
+// Player movements
 ct Int PLAYER_MOVING_REST = 0
 ct Int PLAYER_MOVING_RIGHT = 1
 ct Int PLAYER_MOVING_LEFT = 2
-ct Int PLAYER_MOVING_UP = 2
-ct Int PLAYER_MOVING_DOWN = 2
+ct Int PLAYER_MOVING_UP = 3
+ct Int PLAYER_MOVING_DOWN = 4
+ct Int PLAYER_CLIMBING = 5 
+// Player speeds
 ct Int PLAYER_SPEED_CLIMB_LADDER = 1
 ct Int PLAYER_SPEED_WALK = 2
 ct Int PLAYER_SPEED_RUN = 3
 ct Int GROUND_SPEED = -5
+// Player initial [x, y]
 ct Int PLAYER_INITIAL_X = 128
 ct Int PLAYER_INITIAL_Y = 128
 // Player width and height
@@ -456,13 +459,15 @@ fn restore_player(Player a) Player
 fn update_player()
     SS center_x = SS(p.x) + (p.w >> 1)
     SS center_y = SS(p.y) + SS(p.h >> 1)
-    // Luci Y Fer in the same level?
+    Bool player_climbing = false
     Bool is_lucifer_flying = false
+    
+    // Can player fly?
     if current_player == CURRENT_PLAYER_LUCIFER
         is_lucifer_flying = false
         if pads[0].held & BUTTON_B
             is_lucifer_flying = true
-    // Fly baby
+    // Fly baby!
     if is_lucifer_flying && flying_enabled
         // Countdown of flying capacity
         flying_counter += 1
@@ -484,9 +489,7 @@ fn update_player()
                 p.x -= speed
         if pads[0].held & BUTTON_UP
             if p.y >= 0
-                U collision = collision_at(UU(p.x), UU(p.y))
-                if collision != C_WALL
-                    logf(@"collision: %d"l, U(collision))
+                if collision_at(UU(p.x), UU(p.y)) != C_WALL
                     if p.movement == PLAYER_MOVING_RIGHT
                         p.anim_state = make_anim_state(@lucifer_animation_right)
                     if p.movement == PLAYER_MOVING_LEFT
@@ -516,8 +519,8 @@ fn update_player()
         if flying_counter == LUCIFER_FLYING_COOLDOWN
             flying_enabled = true
             flying_counter = 0
-    logf(@"%d"l, flying_counter)
-    // Luci Y Fer, Lucifer not flying
+    // logf(@"%d"l, flying_counter)
+    // Luci Y Fer, Lucifer not flying - Normal movement
     if !is_lucifer_flying
         // Update x-position:
         SS speed = PLAYER_SPEED_WALK
@@ -525,6 +528,13 @@ fn update_player()
             if current_player == CURRENT_PLAYER_FER
                 speed = PLAYER_SPEED_RUN
         if pads[0].held & BUTTON_LEFT
+            // Luci can climb ceilings
+            if current_player == CURRENT_PLAYER_LUCI
+                if collision_at(UU(p.x - SS(p.h)), UU(p.y)) == C_CEILING_SCALE
+                    p.x -= PLAYER_SPEED_CLIMB_LADDER
+                    if p.movement != PLAYER_CLIMBING
+                        p.movement = PLAYER_CLIMBING
+                        p.anim_state = make_anim_state(@luci_animation_climb_ladder)
             if collision_at(UU(p.x - speed), UU(p.y)) != C_WALL && collision_at(UU(p.x - speed), UU(p.y + p.rh)) != C_WALL
                 if p.movement != PLAYER_MOVING_LEFT
                     p.movement = PLAYER_MOVING_LEFT
@@ -540,8 +550,14 @@ fn update_player()
                             break
                 p.x -= speed
         if pads[0].held & BUTTON_RIGHT
-            // logf(@"p.x: %d"l, U(p.x))
-            // logf(@"p.y: %d"l, U(p.y))
+            // Luci can climb ceilings
+            if current_player == CURRENT_PLAYER_LUCI
+                if collision_at(UU(p.x + SS(p.h)), UU(p.y)) == C_CEILING_SCALE
+                    p.x += PLAYER_SPEED_CLIMB_LADDER
+                    if p.movement != PLAYER_CLIMBING
+                        log(@"climbing"l)
+                        p.movement = PLAYER_CLIMBING
+                        p.anim_state = make_anim_state(@luci_animation_climb_ladder)
             if collision_at(UU(p.x + p.rw + speed), UU(p.y)) != C_WALL && collision_at(UU(p.x + p.rw + speed), UU(p.y + p.rh)) != C_WALL
                 if p.movement != PLAYER_MOVING_RIGHT
                     p.movement = PLAYER_MOVING_RIGHT
@@ -564,21 +580,31 @@ fn update_player()
                     if current_player == CURRENT_PLAYER_FER
                         p.yspeed = GROUND_SPEED
 
+            
             // Update y-position:
-            SSF new_y = p.y + SSF(p.yspeed)
-            p.yspeed += 0.25
-            if p.yspeed > 0
-                if collision_at(UU(p.x + 0), UU(new_y + p.rh)) == C_WALL || collision_at(UU(p.x + p.rw), UU(new_y + p.rh)) == C_WALL
-                    p.yspeed = 0
-                    p.y = ((new_y + p.rh) & SSF(~%1111)) - SSF(p.h)
+            // Climbing horizontally, no gravity
+            if current_player == CURRENT_PLAYER_LUCI
+                U collision = collision_at(UU(p.x), UU(p.y))
+                if collision == C_CEILING_SCALE || collision == C_LADDER
+                    player_climbing = true
                 else
-                    p.y = new_y
-            else
-                if collision_at(UU(p.x + 0), UU(new_y)) == C_WALL || collision_at(UU(p.x + p.rw), UU(new_y)) == C_WALL
-                    p.yspeed = 0
-                    p.y = (p.y & SSF(~%1111))
+                    player_climbing = false
+            // Normal horizontal movement
+            if !player_climbing
+                SSF new_y = p.y + SSF(p.yspeed)
+                p.yspeed += 0.25
+                if p.yspeed > 0
+                    if collision_at(UU(p.x + 0), UU(new_y + p.rh)) == C_WALL || collision_at(UU(p.x + p.rw), UU(new_y + p.rh)) == C_WALL
+                        p.yspeed = 0
+                        p.y = ((new_y + p.rh) & SSF(~%1111)) - SSF(p.h)
+                    else
+                        p.y = new_y
                 else
-                    p.y = new_y
+                    if collision_at(UU(p.x + 0), UU(new_y)) == C_WALL || collision_at(UU(p.x + p.rw), UU(new_y)) == C_WALL
+                        p.yspeed = 0
+                        p.y = (p.y & SSF(~%1111))
+                    else
+                        p.y = new_y
         // Ladder
         else
             if pads[0].held & BUTTON_UP
@@ -626,9 +652,17 @@ fn update_player()
         : preserves /game
     if is_select_pressed && current_player == CURRENT_PLAYER_LUCIFER
         // separete
+        fer.movement = PLAYER_MOVING_REST
         fer.x = fer.x - 16
+        fer.h = ph
+        fer.rh = rh
+        fer.anim_state = make_anim_state(@fer_animation_rest)
+        fer.movement = PLAYER_MOVING_REST
+        luci.x = luci.x
+        luci.h = ph
+        luci.rh = rh
+        luci.anim_state = make_anim_state(@luci_animation_rest)
         p = restore_player(luci)
-        luci.x = luci.x + 16
         current_player = CURRENT_PLAYER_LUCI
         //luci.camera_x = p.camera_x
 

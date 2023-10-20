@@ -8,11 +8,12 @@
 mapfab(raw, "LuciYFer.mapfab", "chr", "palette", "metatiles", "level")
 
 // Tile collision values:
-ct U C_OPEN     = 0
-ct U C_WALL     = 1
-ct U C_COIN     = 2
-ct U C_EXIT     = 3
-ct U C_LADDER   = 4
+ct U C_OPEN             = 0
+ct U C_WALL             = 1
+ct U C_COIN             = 2
+ct U C_EXIT             = 3
+ct U C_LADDER           = 4
+ct U C_CEILING_SCALE    = 5
 
 vars /metatiles
     // Pointers to our metatile data.
@@ -56,6 +57,7 @@ fn load_metatiles(CC/metatiles mt)
 fn load_level(CCC/levels level)
     // CHR:
     U chr_bank = read U(level)
+    logf(@"chr_bank: %d"l, U(chr_bank))
     {$8000}(chr_bank)
 
     // Palette:
@@ -77,19 +79,17 @@ fn load_level(CCC/levels level)
         ppu_upload_scroll()
 
 fn load_chrrom_bank(CCC/levels level, U bank)
-    // p = make_player(64, 90)
-
     // CHR:
     {$8000}(bank)
 
     // Palette:
-    load_palette(read CCC/palettes(level))
-    ppu_upload_palette()
+    // load_palette(read CCC/palettes(level))
+    // ppu_upload_palette()
 
     // Metatiles:
     load_metatiles(read CC/metatiles(level))
 
-    // // Level tiles:
+    // Level tiles:
     // current_level_width = read U(level)
     // current_level = level
 
