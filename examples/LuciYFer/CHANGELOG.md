@@ -8,6 +8,7 @@
     - Win
     - Game Over
 - Bugs
+  - Lucifer animation bugs when changing directions
   - Lucifer animation bugs with height = 23px
   - Fix START state
     - Fix transition to STORY
@@ -26,6 +27,8 @@
     - Don't scroll
     - Make Arcade screens and map
   - Improve animations
+  - Make a copy of CHR with some tiles changed  
+    - Change every X frames to give movement to background
 - Game experience
   - Lucifer should get tired of flying
   - Improve story
@@ -51,6 +54,12 @@
     - Devil?
 
 # Changes
+
+## [20.10.2023]
+- Fix Luci's height
+- Fix Luci's animations
+- Fix Luci's collitions going up
+- Fix Luci's collitions going down
 
 ## [19.10.2023]
 - Store Player data somewhere, instead of creating them all the time

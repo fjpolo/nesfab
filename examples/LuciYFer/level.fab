@@ -54,8 +54,6 @@ fn load_metatiles(CC/metatiles mt)
     mt_ca = mt
 
 fn load_level(CCC/levels level)
-    p = make_player(64, 90)
-
     // CHR:
     U chr_bank = read U(level)
     {$8000}(chr_bank)
@@ -73,11 +71,35 @@ fn load_level(CCC/levels level)
 
     // Set the scroll off-screen, then run the scroll code several times
     // to fill the screen with tiles.
-    p.camera_x = 0
     scroll_x = calc_shifted_camera_x() + 32 + 4
     while scroll_x != calc_shifted_camera_x()
         update_scroll()
         ppu_upload_scroll()
+
+fn load_chrrom_bank(CCC/levels level, U bank)
+    // p = make_player(64, 90)
+
+    // CHR:
+    {$8000}(bank)
+
+    // Palette:
+    load_palette(read CCC/palettes(level))
+    ppu_upload_palette()
+
+    // Metatiles:
+    load_metatiles(read CC/metatiles(level))
+
+    // // Level tiles:
+    // current_level_width = read U(level)
+    // current_level = level
+
+    // // Set the scroll off-screen, then run the scroll code several times
+    // // to fill the screen with tiles.
+    // // p.camera_x = 0
+    // scroll_x = calc_shifted_camera_x() + 32 + 4
+    // while scroll_x != calc_shifted_camera_x()
+    //     update_scroll()
+    //     ppu_upload_scroll()
 
 // Returns the tile at a pixel position:
 fn tile_at(UU pixel_x, UU pixel_y) U

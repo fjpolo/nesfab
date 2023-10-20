@@ -33,9 +33,21 @@ vars /game
     Player p =  Player()
     U current_player = CURRENT_PLAYER_LUCI
     U game_state = GAME_STATE_STORY
+    U chr_counter = 0
+    U chr_bank = 0
 
 // NMI
 nmi game_nmi()
+
+    // // Switch CHR ROM banks for animated tiles
+    // chr_counter += 1
+    // if chr_counter == 5
+    //     chr_counter = 0
+    //     if chr_bank == 0
+    //         chr_bank = 1
+    //     else
+    //         chr_bank = 0
+    //     load_chrrom_bank(levels[current_level_index], chr_bank)
 
     if game_state == GAME_STATE_STORY
         if ready && writing == WRITING_READY

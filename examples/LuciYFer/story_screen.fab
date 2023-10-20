@@ -24,6 +24,11 @@ data /strings
             `\n`
             `\n`
             `PRESS START TO PLAY\n`
+            `\n`
+            `\n`
+            `\n`
+            `(please experiment\n`
+            `with the gamepad)`
         )
 
 mode story_screen(U level_index)
