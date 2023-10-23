@@ -27,6 +27,7 @@
   - Make a copy of CHR with some tiles changed  
     - Change every X frames to give movement to background
 - Game experience
+  - Add status bar
   - Improve story
   - Add enemies
   - Add bosses
@@ -61,6 +62,8 @@
   - Might be too slow
 - Luci can climb ceiling thingies
 
+## [23.10.2023]
+- Add NESDev Compo support (Multicart Action23 mapper)
 
 ## [19.10.2023]
 - Store Player data somewhere, instead of creating them all the time

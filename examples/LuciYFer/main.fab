@@ -43,6 +43,9 @@ nmi game_nmi()
         chr_counter += 1
         if chr_counter == 30
             chr_counter = 0
+            // Change CHR ROM Bank on the fly
+            // load_chrrom_bank(levels[current_level_index], chr_bank)
+    // Story screen
     if game_state == GAME_STATE_STORY
         if ready && writing == WRITING_READY
             // Upload the decompressed character:
