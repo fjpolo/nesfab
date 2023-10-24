@@ -11,10 +11,11 @@ ct Int START_BUTTON_DEBOUNCE_FRAMES = 7
 // Game states
 ct Int GAME_STATE_START = 0
 ct Int GAME_STATE_STORY = 1
-ct Int GAME_STATE_PLAY = 2
-ct Int GAME_STATE_PAUSE = 3
-ct Int GAME_STATE_WIN = 4
-ct Int GAME_STATE_GAME_OVER = 5
+ct Int GAME_STATE_TPS = 2
+ct Int GAME_STATE_PLAY = 3
+ct Int GAME_STATE_PAUSE = 4
+ct Int GAME_STATE_WIN = 5
+ct Int GAME_STATE_GAME_OVER =65
 
 // Controller data
 vars /controller
@@ -122,7 +123,7 @@ mode play_level(U level_index)
     hide_oam(0)
     // Avoid START and STORY levels
     if current_level_index== 0 || current_level_index == 1
-        current_level_index = 2
+        current_level_index = FIRST_LEVEL_INDEX
     load_level(levels[level_index]) 
 
     // Animation -  Rest state

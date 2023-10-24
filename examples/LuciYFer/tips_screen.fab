@@ -1,35 +1,32 @@
-// Story screen cons
-ct U WRITING_DONE  = 0
-ct U WRITING_WAIT  = 1
-ct U WRITING_READY = 2
-ct U FONT_BASE_NUMBER = $80
-
-// Stroy screen data
-vars /story
-    U writing = WRITING_WAIT
-    U char
-    UU row_addr = $2106
-    UU cur_addr = $2106
-
-charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}@\0", '\0')
-: stows /strings
+// charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\0", '\0')
+// : stows /strings
 data /strings
-    [] story_string
+    [] tips_string
         (
-            `Born Luci\n`
-            `Born Fer\n`
-            `One with G\n`
-            `One with TD\n`
-            `Help them be together...\n`
+            `TIPS:\n`
+            `\n`
+            `- Have fun\n`
+            `- Found a bug?\n`
+            `      Report it :)\n`
+            `- Found a glitch?\n`
+            `      Maybe intentional ;)\n`
+            `- Try all buttons\n`
+            `- Explore\n`
+            `- Look at the details\n`
+            `- Stuck?\n`
+            `      Contact us :)\n`
+            `fjpolo@gmail.com\n`
             `\n`
             `\n`
-            `PRESS SELECT FOR TIPS\n`
             `PRESS START TO PLAY\n`
         )
 
-mode story_screen(U level_index)
+mode tips_screen(U level_index)
 : nmi game_nmi
-    current_level_index = 1
+    current_level_index = 2
+    writing = WRITING_WAIT
+    row_addr = $2106
+    cur_addr = $2106
 
     palette = example_palette
     ppu_upload_palette()
@@ -40,9 +37,8 @@ mode story_screen(U level_index)
     {PPUADDR}($00)
     for UU i = 0; i != 1024; i += 1
         {PPUDATA}(0)
-
     // Prepare the decompressor
-    decompress_string_init(@story_string)
+    decompress_string_init(@tips_string)
     // Load level
     {PPUCTRL}(0)
     {PPUMASK}(0)
@@ -65,16 +61,10 @@ mode story_screen(U level_index)
         nmi
         nmi
         nmi
-
-        if is_select_pressed
-            game_state = GAME_STATE_TPS
-            current_level_index += 1    
-            goto mode tips_screen(current_level_index)
-            : preserves
-
+    
         if is_start_pressed
             game_state = GAME_STATE_PLAY
-            current_level_index += 2    
+            current_level_index += 1    
             goto mode play_level(current_level_index)
             : preserves
         update_pads()
