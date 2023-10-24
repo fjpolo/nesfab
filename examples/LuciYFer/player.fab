@@ -394,7 +394,7 @@ fn make_player_luci() Player
     Player p = make_player(PLAYER_INITIAL_X, PLAYER_INITIAL_Y)
     p.this_player = CURRENT_PLAYER_LUCI
     p.anim_state = make_anim_state(@luci_animation_rest)
-    p.level_index = 2
+    p.level_index = FIRST_LEVEL_INDEX
     p.is_initialised = true
     return p
 
@@ -402,7 +402,7 @@ fn make_player_fer() Player
     Player p = make_player(PLAYER_INITIAL_X, PLAYER_INITIAL_Y)
     p.this_player = CURRENT_PLAYER_FER
     p.anim_state = make_anim_state(@fer_animation_rest)
-    p.level_index = 4
+    p.level_index = 5
     p.is_initialised = true
     return p
 
@@ -694,7 +694,7 @@ fn update_player()
             if current_player != CURRENT_PLAYER_LUCIFER
                 current_level_index += 1
                 if current_level_index >= len(levels)
-                    current_level_index = 2
+                    current_level_index =FIRST_LEVEL_INDEX
                 // Update player
                 p.level_index = current_level_index
                 p.x = PLAYER_INITIAL_X
@@ -708,7 +708,7 @@ fn update_player()
                         break
             
                 if current_level_index >= len(levels)
-                    current_level_index = 2
+                    current_level_index = FIRST_LEVEL_INDEX
                 nmi
                 goto mode play_level(current_level_index)
                 : preserves /game

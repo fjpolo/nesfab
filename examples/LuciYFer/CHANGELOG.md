@@ -7,6 +7,7 @@
     - Pause
     - Win
     - Game Over
+  - Remove all magic numbers
 - Bugs
   - Lucifer fly breaks sometimes after splitting to Luci Y Fer
   - Luci climbing ceiling thingies
@@ -26,9 +27,10 @@
     - Make Arcade screens and map?
   - Make a copy of CHR with some tiles changed  
     - Change every X frames to give movement to background
+- Game story
+  - Add more context
 - Game experience
   - Add status bar
-  - Improve story
   - Add enemies
   - Add bosses
   - Add secrets
@@ -51,6 +53,12 @@
 
 # Changes
 
+## [23.10.2023]
+- Add NESDev Compo support (Multicart Action53 mapper)
+- Update magic number to FIRST_LEVEL_INDEX
+- Add Tips screen after story (if SELECT is pressed)
+- 
+
 ## [20.10.2023]
 - Fixed Luci's height
 - Fixed Luci's animations
@@ -61,9 +69,6 @@
   - Not working correctly on tile collisions
   - Might be too slow
 - Luci can climb ceiling thingies
-
-## [23.10.2023]
-- Add NESDev Compo support (Multicart Action23 mapper)
 
 ## [19.10.2023]
 - Store Player data somewhere, instead of creating them all the time
