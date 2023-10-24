@@ -19,6 +19,7 @@
     - Fix transition to STORY
   - Fix transition from STORY to PLAY
     - Only when starting at START
+  - Fix transition from L2 to L3
 - Graphs
   - Add stamina bar
   - Make tiles according to game
@@ -35,11 +36,6 @@
   - Add bosses
   - Add secrets
   - Add doors/keys/buttons
-  - Characters
-    - Fer
-      - Maybe fly a bit?
-    - Lucifer
-      - Summons something?
   - Enemies
     - God?
       - Gods?
@@ -48,10 +44,14 @@
     - Eyes and ears
       - Act as guards
   - Stamina
-    - Luci should get tired of climbing
-    - Fer should jump less when tired
+    - Luci should get tired of climbing?
+    - Fer should jump less when tired?
 
 # Changes
+
+## [24.10.2023]
+- Lucifer can split ⬅⬇➡
+- Improve start screen
 
 ## [23.10.2023]
 - Add NESDev Compo support (Multicart Action53 mapper)

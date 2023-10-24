@@ -651,11 +651,25 @@ fn update_player()
         goto mode play_level(current_level_index)
         : preserves /game
     if is_select_pressed && current_player == CURRENT_PLAYER_LUCIFER
-        // separete
-        fer.movement = PLAYER_MOVING_REST
-        fer.x = fer.x - 16
+        // Split
+        fer.x = p.x - 16
+        fer.y = p.x
+        if pads[0].held & BUTTON_LEFT
+            fer.x = p.x - 32
+        if pads[0].held & BUTTON_RIGHT
+            fer.x = p.x + 32
+            
+        fer.y = p.y
+        if pads[0].held & BUTTON_DOWN
+            fer.x = p.x
+            if p.y + 32 + p.h < 240 
+                fer.y = p.y + 32
+        fer.w = pw
+        fer.rw = rw
         fer.h = ph
         fer.rh = rh
+        //
+        fer.movement = PLAYER_MOVING_REST
         fer.anim_state = make_anim_state(@fer_animation_rest)
         fer.movement = PLAYER_MOVING_REST
         luci.x = luci.x
