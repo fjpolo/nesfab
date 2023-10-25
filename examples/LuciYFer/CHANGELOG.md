@@ -15,10 +15,6 @@
   - Being Lucifer and changing to Luci Y Fer in the air
     - 2nd sprite not affected by gravity
       - Bug or feature?
-  - Fix START state
-    - Fix transition to STORY
-  - Fix transition from STORY to PLAY
-    - Only when starting at START
   - Fix transition from L2 to L3
 - Graphs
   - Add stamina bar
@@ -49,6 +45,11 @@
 
 # Changes
 
+## [25.10.2023]
+- Fix START state
+    - Fix transition to STORY
+- Fix transition from STORY to PLAY
+    - Only when starting at START
 ## [24.10.2023]
 - Lucifer can split ⬅⬇➡
 - Improve start screen

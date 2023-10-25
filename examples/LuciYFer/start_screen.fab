@@ -14,5 +14,5 @@ mode start_screen(U level_index)
             is_start_pressed = false
 
             goto mode story_screen(current_level_index)
-            : preserves
+            : preserves /game
         update_pads()
