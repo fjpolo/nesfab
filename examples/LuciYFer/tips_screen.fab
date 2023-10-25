@@ -28,15 +28,15 @@ mode tips_screen(U level_index)
     row_addr = $2106
     cur_addr = $2106
 
-    palette = example_palette
-    ppu_upload_palette()
+    // palette = example_palette
+    // ppu_upload_palette()
 
-    // Clear the screen
-    {PPUSTATUS}()
-    {PPUADDR}($20)
-    {PPUADDR}($00)
-    for UU i = 0; i != 1024; i += 1
-        {PPUDATA}(0)
+    // // Clear the screen
+    // {PPUSTATUS}()
+    // {PPUADDR}($20)
+    // {PPUADDR}($00)
+    // for UU i = 0; i != 1024; i += 1
+    //     {PPUDATA}(0)
     // Prepare the decompressor
     decompress_string_init(@tips_string)
     // Load level
@@ -46,6 +46,7 @@ mode tips_screen(U level_index)
     load_level(levels[current_level_index]) 
     // NMI ON
     {PPUCTRL}(PPUCTRL_NMI_ON)
+    
     while true
         nmi
         // Decompress one character
@@ -66,5 +67,5 @@ mode tips_screen(U level_index)
             game_state = GAME_STATE_PLAY
             current_level_index += 1    
             goto mode play_level(current_level_index)
-            : preserves
+            : preserves /game
         update_pads()

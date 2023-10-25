@@ -30,7 +30,7 @@ data /strings
 mode story_screen(U level_index)
 : nmi game_nmi
     current_level_index = 1
-
+    
     palette = example_palette
     ppu_upload_palette()
 
@@ -43,13 +43,16 @@ mode story_screen(U level_index)
 
     // Prepare the decompressor
     decompress_string_init(@story_string)
+
     // Load level
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)
     load_level(levels[current_level_index]) 
+
     // NMI ON
     {PPUCTRL}(PPUCTRL_NMI_ON)
+
     while true
         nmi
         // Decompress one character
@@ -67,14 +70,14 @@ mode story_screen(U level_index)
         nmi
 
         if is_select_pressed
-            game_state = GAME_STATE_TPS
+            game_state = GAME_STATE_TIPS
             current_level_index += 1    
             goto mode tips_screen(current_level_index)
-            : preserves
+            : preserves /game
 
         if is_start_pressed
             game_state = GAME_STATE_PLAY
             current_level_index += 2    
             goto mode play_level(current_level_index)
-            : preserves
+            : preserves /game
         update_pads()

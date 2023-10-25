@@ -11,11 +11,11 @@ ct Int START_BUTTON_DEBOUNCE_FRAMES = 7
 // Game states
 ct Int GAME_STATE_START = 0
 ct Int GAME_STATE_STORY = 1
-ct Int GAME_STATE_TPS = 2
+ct Int GAME_STATE_TIPS = 2
 ct Int GAME_STATE_PLAY = 3
 ct Int GAME_STATE_PAUSE = 4
 ct Int GAME_STATE_WIN = 5
-ct Int GAME_STATE_GAME_OVER =65
+ct Int GAME_STATE_GAME_OVER = 63
 
 // Controller data
 vars /controller
@@ -33,7 +33,7 @@ vars /game
     Player fer =  Player()
     Player p =  Player()
     U current_player = CURRENT_PLAYER_LUCI
-    U game_state = GAME_STATE_STORY
+    U game_state = GAME_STATE_START
     U chr_counter = 0
     U chr_bank = 0
 
@@ -47,7 +47,7 @@ nmi game_nmi()
             // Change CHR ROM Bank on the fly
             // load_chrrom_bank(levels[current_level_index], chr_bank)
     // Story screen
-    if game_state == GAME_STATE_STORY
+    if game_state == GAME_STATE_STORY || game_state == GAME_STATE_TIPS
         if ready && writing == WRITING_READY
             // Upload the decompressed character:
             {PPUSTATUS}()
@@ -65,6 +65,7 @@ nmi game_nmi()
     ppu_reset_scroll(p.camera_x.a, 0)
     {PPUCTRL}(PPUCTRL_NMI_ON | (p.camera_x.b & 1))
     {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+    
     ppu_upload_oam_poll_pads(0)
 
     // Select pressed?
@@ -92,25 +93,27 @@ mode main()
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)    
-
     // Load level
     load_level(levels[current_level_index]) 
-    
     {PPUCTRL}(PPUCTRL_NMI_ON)
 
     while true
         switch game_state
             case GAME_STATE_START
                 goto mode start_screen(current_level_index)
-                : preserves
+                : preserves /game
                 break
             case GAME_STATE_STORY
                 goto mode story_screen(current_level_index)
-                : preserves
+                : preserves /game
+                break
+            case GAME_STATE_TIPS
+                goto mode tips_screen(current_level_index)
+                : preserves /game
                 break
             default
                 goto mode play_level(current_level_index)
-                : preserves
+                : preserves /game
                 break
 
 
