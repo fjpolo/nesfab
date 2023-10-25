@@ -30,16 +30,6 @@ data /strings
 mode story_screen(U level_index)
 : nmi game_nmi
     current_level_index = 1
-    
-    palette = example_palette
-    ppu_upload_palette()
-
-    // Clear the screen
-    {PPUSTATUS}()
-    {PPUADDR}($20)
-    {PPUADDR}($00)
-    for UU i = 0; i != 1024; i += 1
-        {PPUDATA}(0)
 
     // Prepare the decompressor
     decompress_string_init(@story_string)
