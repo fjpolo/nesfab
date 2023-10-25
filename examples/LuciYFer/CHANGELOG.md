@@ -3,15 +3,11 @@
   - Luci -> Luz
 - System
   - Add states and screens
-    - Start
     - Pause
     - Win
     - Game Over
   - Remove all magic numbers
 - Bugs
-  - Lucifer fly breaks sometimes after splitting to Luci Y Fer
-  - Luci climbing ceiling thingies
-    - Animation not working
   - Being Lucifer and changing to Luci Y Fer in the air
     - 2nd sprite not affected by gravity
       - Bug or feature?
@@ -46,10 +42,18 @@
 # Changes
 
 ## [25.10.2023]
+- Add states and screens
+  - Start
 - Fix START state
     - Fix transition to STORY
 - Fix transition from STORY to PLAY
     - Only when starting at START
+- Clean NMI code
+- [BugFix] Lucifer fly breaks sometimes after splitting to Luci Y Fer
+- [BugFix] Luci climbing animation works
+- Clean story and tips screen code
+
+
 ## [24.10.2023]
 - Lucifer can split ⬅⬇➡
 - Improve start screen

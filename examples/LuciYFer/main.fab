@@ -60,11 +60,11 @@ nmi game_nmi()
         {PPUSCROLL}(0)
         {PPUSCROLL}(0)
         {PPUMASK}(PPUMASK_BG_ON)
-
-    ppu_upload_scroll()
-    ppu_reset_scroll(p.camera_x.a, 0)
-    {PPUCTRL}(PPUCTRL_NMI_ON | (p.camera_x.b & 1))
-    {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+    else
+        ppu_upload_scroll()
+        ppu_reset_scroll(p.camera_x.a, 0)
+        {PPUCTRL}(PPUCTRL_NMI_ON | (p.camera_x.b & 1))
+        {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
     
     ppu_upload_oam_poll_pads(0)
 

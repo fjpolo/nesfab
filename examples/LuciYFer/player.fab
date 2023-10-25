@@ -528,49 +528,55 @@ fn update_player()
             if current_player == CURRENT_PLAYER_FER
                 speed = PLAYER_SPEED_RUN
         if pads[0].held & BUTTON_LEFT
-            // Luci can climb ceilings
-            if current_player == CURRENT_PLAYER_LUCI
-                if collision_at(UU(p.x - SS(p.h)), UU(p.y)) == C_CEILING_SCALE
-                    p.x -= PLAYER_SPEED_CLIMB_LADDER
-                    if p.movement != PLAYER_CLIMBING
-                        p.movement = PLAYER_CLIMBING
-                        p.anim_state = make_anim_state(@luci_animation_climb_ladder)
             if collision_at(UU(p.x - speed), UU(p.y)) != C_WALL && collision_at(UU(p.x - speed), UU(p.y + p.rh)) != C_WALL
-                if p.movement != PLAYER_MOVING_LEFT
-                    p.movement = PLAYER_MOVING_LEFT
-                    switch current_player 
-                        case CURRENT_PLAYER_LUCI
-                            p.anim_state = make_anim_state(@luci_animation_left)
-                            break
-                        case CURRENT_PLAYER_FER
+                switch current_player 
+                    case CURRENT_PLAYER_LUCI
+                        if collision_at(UU(p.x - SS(p.h)), UU(p.y)) == C_CEILING_SCALE
+                            p.x -= PLAYER_SPEED_CLIMB_LADDER
+                            if p.movement != PLAYER_CLIMBING
+                                p.movement = PLAYER_CLIMBING
+                                p.anim_state = make_anim_state(@luci_animation_climb_ladder)
+                        else
+                            if p.movement != PLAYER_MOVING_LEFT
+                                p.movement = PLAYER_MOVING_LEFT     
+                                p.anim_state = make_anim_state(@luci_animation_left)
+                        break
+                    case CURRENT_PLAYER_FER
+                        if p.movement != PLAYER_MOVING_LEFT
+                            p.movement = PLAYER_MOVING_LEFT
                             p.anim_state = make_anim_state(@fer_animation_left)
-                            break
-                        case CURRENT_PLAYER_LUCIFER
+                        break
+                    case CURRENT_PLAYER_LUCIFER
+                        if p.movement != PLAYER_MOVING_LEFT
+                            p.movement = PLAYER_MOVING_LEFT
                             p.anim_state = make_anim_state(@lucifer_animation_left)
-                            break
+                        break
                 p.x -= speed
         if pads[0].held & BUTTON_RIGHT
-            // Luci can climb ceilings
-            if current_player == CURRENT_PLAYER_LUCI
-                if collision_at(UU(p.x + SS(p.h)), UU(p.y)) == C_CEILING_SCALE
-                    p.x += PLAYER_SPEED_CLIMB_LADDER
-                    if p.movement != PLAYER_CLIMBING
-                        log(@"climbing"l)
-                        p.movement = PLAYER_CLIMBING
-                        p.anim_state = make_anim_state(@luci_animation_climb_ladder)
             if collision_at(UU(p.x + p.rw + speed), UU(p.y)) != C_WALL && collision_at(UU(p.x + p.rw + speed), UU(p.y + p.rh)) != C_WALL
-                if p.movement != PLAYER_MOVING_RIGHT
-                    p.movement = PLAYER_MOVING_RIGHT
-                    switch current_player
-                        case CURRENT_PLAYER_LUCI
-                            p.anim_state = make_anim_state(@luci_animation_right)
-                            break
-                        case CURRENT_PLAYER_FER
-                            p.anim_state = make_anim_state(@fer_animation_right)
-                            break
-                        case CURRENT_PLAYER_LUCIFER
-                            p.anim_state = make_anim_state(@lucifer_animation_right)
-                            break
+                switch current_player
+                    case CURRENT_PLAYER_LUCI
+                        if collision_at(UU(p.x + SS(p.h)), UU(p.y)) == C_CEILING_SCALE
+                            p.x += PLAYER_SPEED_CLIMB_LADDER
+                            if p.movement != PLAYER_CLIMBING
+                                log(@"climbing"l)
+                                p.movement = PLAYER_CLIMBING
+                                p.anim_state = make_anim_state(@luci_animation_climb_ladder)
+                        else
+                            if p.movement != PLAYER_MOVING_RIGHT
+                                p.movement = PLAYER_MOVING_RIGHT
+                                p.anim_state = make_anim_state(@luci_animation_right)
+                        break
+                    case CURRENT_PLAYER_FER
+                        if p.movement != PLAYER_MOVING_RIGHT
+                                p.movement = PLAYER_MOVING_RIGHT
+                                p.anim_state = make_anim_state(@fer_animation_right)
+                        break
+                    case CURRENT_PLAYER_LUCIFER
+                        if p.movement != PLAYER_MOVING_RIGHT
+                                p.movement = PLAYER_MOVING_RIGHT
+                                p.anim_state = make_anim_state(@lucifer_animation_right)
+                        break
                 p.x += speed
         
         // Ground
@@ -608,10 +614,14 @@ fn update_player()
         // Ladder
         else
             if pads[0].held & BUTTON_UP
+                if p.movement != PLAYER_CLIMBING
+                    p.movement = PLAYER_CLIMBING
                 if collision_at(UU(p.x), UU(p.y - p.h - PLAYER_SPEED_CLIMB_LADDER)) != C_WALL
                     p.y -= PLAYER_SPEED_CLIMB_LADDER
                     p.anim_state = make_anim_state(@luci_animation_climb_ladder)
             if pads[0].held & BUTTON_DOWN
+                if p.movement != PLAYER_CLIMBING
+                    p.movement = PLAYER_CLIMBING
                 if collision_at(UU(p.x), UU(p.y + p.h + PLAYER_SPEED_CLIMB_LADDER)) != C_WALL
                     p.y += PLAYER_SPEED_CLIMB_LADDER
                     p.anim_state = make_anim_state(@luci_animation_climb_ladder)
