@@ -15,6 +15,7 @@ ct U C_EXIT             = 3
 ct U C_LADDER           = 4
 ct U C_CEILING_SCALE    = 5
 ct U C_KEY              = 6
+ct U C_JAIL             = 7
 
 vars /metatiles
     // Pointers to our metatile data.
@@ -81,6 +82,34 @@ fn load_level(CCC/levels level)
     if !show_key[current_level_index]
         if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
             destroy(key_x[current_level_index], key_y[current_level_index])
+
+    switch current_level_index
+        case 0
+             if keys[current_level_index]
+                // remove door
+                if collision_at(LEVEL_0_DOOR_0_X, LEVEL_0_DOOR_0_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_0_X, LEVEL_0_DOOR_0_Y)
+                if collision_at(LEVEL_0_DOOR_1_X, LEVEL_0_DOOR_1_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_1_X, LEVEL_0_DOOR_2_Y)
+                if collision_at(LEVEL_0_DOOR_2_X, LEVEL_0_DOOR_1_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_2_X, LEVEL_0_DOOR_2_Y)
+                if collision_at(LEVEL_0_DOOR_3_X, LEVEL_0_DOOR_3_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_3_X, LEVEL_0_DOOR_3_Y)
+                if collision_at(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y)
+        case 2
+             if keys[current_level_index]
+                // remove door
+                if collision_at(LEVEL_2_DOOR_0_X, LEVEL_2_DOOR_0_Y) == C_JAIL
+                    destroy(LEVEL_2_DOOR_0_X, LEVEL_2_DOOR_0_Y)
+                if collision_at(LEVEL_2_DOOR_1_X, LEVEL_2_DOOR_1_Y) == C_JAIL
+                    destroy(LEVEL_2_DOOR_1_X, LEVEL_2_DOOR_1_Y)
+        break
+
+    // // Check if door must be opened
+    // if key[current_level_index]
+    //     if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
+    //         destroy(key_x[current_level_index], key_y[current_level_index])
 
     // Set the scroll off-screen, then run the scroll code several times
     // to fill the screen with tiles.
@@ -150,3 +179,9 @@ fn destroy(UU pixel_x, UU pixel_y)
 
     if collision_at(pixel_x, pixel_y) == C_KEY
         show_key[current_level_index]  = false
+
+fn door_collision_at(UU level_index, UU pixel_x, UU pixel_y) Bool
+    if !keys[U(level_index)]
+       return C_JAIL == collision_at(pixel_x, pixel_y)
+    else
+        return false
