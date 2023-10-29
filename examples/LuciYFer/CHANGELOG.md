@@ -46,6 +46,8 @@
 - Don't render key when collected
 - Add door sprite, collision and functionality
 - Don't render door when key was collected
+- Key [x,y] saved from player's [x,y]
+- Added tutorial
 
 ## [25.10.2023]
 - Add states and screens

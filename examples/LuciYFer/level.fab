@@ -98,7 +98,13 @@ fn load_level(CCC/levels level)
                 if collision_at(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y) == C_JAIL
                     destroy(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y)
         case 2
-             if keys[current_level_index]
+            logf(@"level %d"l, current_level_index)
+            logf(@"key %d"l, keys[current_level_index])
+            logf(@"door_x %d"l, LEVEL_2_DOOR_0_X)
+            logf(@"door_y %d"l, LEVEL_2_DOOR_0_Y)
+            logf(@"door_x %d"l, LEVEL_2_DOOR_1_X)
+            logf(@"door_y %d"l, LEVEL_2_DOOR_1_Y)
+            if keys[current_level_index]
                 // remove door
                 if collision_at(LEVEL_2_DOOR_0_X, LEVEL_2_DOOR_0_Y) == C_JAIL
                     destroy(LEVEL_2_DOOR_0_X, LEVEL_2_DOOR_0_Y)
@@ -178,6 +184,7 @@ fn destroy(UU pixel_x, UU pixel_y)
     scroll_coin_ppuaddr = calc_scroll_coin_ppuaddr(UU(pixel_x), UU(pixel_y))
 
     if collision_at(pixel_x, pixel_y) == C_KEY
+        log(@"Key destroyed"l)
         show_key[current_level_index]  = false
 
 fn door_collision_at(UU level_index, UU pixel_x, UU pixel_y) Bool

@@ -810,7 +810,12 @@ fn update_player()
                 goto mode play_level(current_level_index)
                 : preserves /game
         case C_KEY
+                log(@"Key collected"l)
                 keys[level_to_key_mapping[current_level_index]] = true
+                key_x[current_level_index] = U(center_x)
+                logf(@"key_x %d"l, U(center_x))
+                key_y[current_level_index] = U(center_y)
+                logf(@"key_y %d"l, U(center_y))
                 destroy(UU(center_x), UU(center_y))
                 break
 
