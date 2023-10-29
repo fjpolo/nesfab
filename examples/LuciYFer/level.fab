@@ -14,6 +14,7 @@ ct U C_COIN             = 2
 ct U C_EXIT             = 3
 ct U C_LADDER           = 4
 ct U C_CEILING_SCALE    = 5
+ct U C_KEY              = 6
 
 vars /metatiles
     // Pointers to our metatile data.
@@ -25,7 +26,7 @@ vars /metatiles
     CC/metatiles mt_ca
 
 vars /game
-    U current_level_index = 0
+    U current_level_index = FIRST_LEVEL_INDEX
 
 vars /levels
     CCC/levels current_level
@@ -33,13 +34,15 @@ vars /levels
     U[256] destroyed = U[256](0)
 
 ct CCC/levels[] levels = CCC/levels[](
-    @lev_start,
-    @lev_story,
-    @lev_tips,
-    @lev_l1,
-    @lev_l2,
-    @lev_l3)
-ct U FIRST_LEVEL_INDEX =  3
+                                        @lev_l0,
+                                        @lev_l1,
+                                        @lev_l2,
+                                        @lev_start,
+                                        @lev_story,
+                                        @lev_tips,
+                                    )
+ct U FIRST_LEVEL_INDEX =  0
+ct U LAST_LEVEL_INDEX =  2
 
 // Sets the 'mt_' pointers to offsets of 'mt'.
 fn load_metatiles(CC/metatiles mt)
@@ -61,7 +64,6 @@ fn disable_nmi()
 fn load_level(CCC/levels level)
     // CHR:
     U chr_bank = read U(level)
-    logf(@"chr_bank: %d"l, U(chr_bank))
     {$8000}(chr_bank)
 
     // Palette:
@@ -74,6 +76,11 @@ fn load_level(CCC/levels level)
     // Level tiles:
     current_level_width = read U(level)
     current_level = level
+
+    // Check if key was grabbed
+    if !show_key[current_level_index]
+        if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
+            destroy(key_x[current_level_index], key_y[current_level_index])
 
     // Set the scroll off-screen, then run the scroll code several times
     // to fill the screen with tiles.
@@ -113,9 +120,7 @@ fn tile_at(UU pixel_x, UU pixel_y) U
 
 // Returns the collision at a pixel position:
 fn collision_at(UU pixel_x, UU pixel_y) U
-: +inline
     return mt_ca[tile_at(pixel_x, pixel_y)] >> 2
-
 ct fn _destroyed_masks() U[128]
     U[128] masks
     for U i = 0; i < 128; i += 1
@@ -143,3 +148,5 @@ fn destroy(UU pixel_x, UU pixel_y)
     destroyed[ux + uy] |= mask
     scroll_coin_ppuaddr = calc_scroll_coin_ppuaddr(UU(pixel_x), UU(pixel_y))
 
+    if collision_at(pixel_x, pixel_y) == C_KEY
+        show_key[current_level_index]  = false

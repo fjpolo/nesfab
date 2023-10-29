@@ -31,6 +31,8 @@ ct Int PLAYER_STARTING_STAMINA = 3
 ct Int STAMINA_X = 8
 ct Int STAMINA_Y = 24
 
+
+
 // Player data struct
 struct Player
     SS x
@@ -457,7 +459,7 @@ fn make_player_fer() Player
     Player p = make_player(PLAYER_INITIAL_X, PLAYER_INITIAL_Y)
     p.this_player = CURRENT_PLAYER_FER
     p.anim_state = make_anim_state(@fer_animation_rest)
-    p.level_index = 5
+    p.level_index = LAST_LEVEL_INDEX
     p.is_initialised = true
     return p
 
@@ -474,6 +476,8 @@ fn make_player_lucifer(Player a) Player
     p.anim_state = make_anim_state(@lucifer_animation_rest_right)
     p.level_index = a.level_index
     p.is_initialised = true
+    p.stamina = PLAYER_STARTING_STAMINA
+    p.stamina_anim_state = make_anim_state(@stamina_animation_full)
     return p
 
 fn save_player(Player a) Player
@@ -520,7 +524,7 @@ fn update_player()
     SS center_y = SS(p.y) + SS(p.h >> 1)
     Bool player_climbing = false
     Bool is_lucifer_flying = false
-    
+
     // Can player fly?
     if current_player == CURRENT_PLAYER_LUCIFER
         is_lucifer_flying = false
@@ -633,7 +637,6 @@ fn update_player()
                         if collision_at(UU(p.x + SS(p.h)), UU(p.y)) == C_CEILING_SCALE
                             p.x += PLAYER_SPEED_CLIMB_LADDER
                             if p.movement != PLAYER_CLIMBING
-                                log(@"climbing"l)
                                 p.movement = PLAYER_CLIMBING
                                 p.anim_state = make_anim_state(@luci_animation_climb_ladder)
                         else
@@ -718,8 +721,6 @@ fn update_player()
 
     // Select - Change player
     if is_select_pressed && current_player != CURRENT_PLAYER_LUCIFER
-        log(@"SELECT"l)
-        logf(@"player: %d"l, U(current_player))
         is_select_pressed = false
         // Change player
         if current_player == CURRENT_PLAYER_LUCI
@@ -791,8 +792,8 @@ fn update_player()
         case C_EXIT
             if current_player != CURRENT_PLAYER_LUCIFER
                 current_level_index += 1
-                if current_level_index >= len(levels)
-                    current_level_index =FIRST_LEVEL_INDEX
+                if current_level_index > LAST_LEVEL_INDEX
+                    current_level_index = FIRST_LEVEL_INDEX
                 // Update player
                 p.level_index = current_level_index
                 p.x = PLAYER_INITIAL_X
@@ -805,11 +806,13 @@ fn update_player()
                         fer = save_player(p)
                         break
             
-                if current_level_index >= len(levels)
-                    current_level_index = FIRST_LEVEL_INDEX
                 nmi
                 goto mode play_level(current_level_index)
                 : preserves /game
+        case C_KEY
+                keys[level_to_key_mapping[current_level_index]] = true
+                destroy(UU(center_x), UU(center_y))
+                break
 
 
     // Update camera:
