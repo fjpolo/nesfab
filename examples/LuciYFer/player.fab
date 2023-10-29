@@ -26,6 +26,10 @@ ct Int lucifer_rh = lucifer_ph - 1
 ct Int CURRENT_PLAYER_LUCI = 0
 ct Int CURRENT_PLAYER_FER = 1
 ct Int CURRENT_PLAYER_LUCIFER = 2
+// Stamina
+ct Int PLAYER_STARTING_STAMINA = 3
+ct Int STAMINA_X = 8
+ct Int STAMINA_Y = 24
 
 // Player data struct
 struct Player
@@ -43,13 +47,20 @@ struct Player
     U level_index
     Bool is_initialised
     SS camera_x
+    U stamina
+    AnimState stamina_anim_state
+
 
 // Flying
 vars /player_globals
     U flying_counter = 0
     Bool flying_enabled = true
 ct U LUCIFER_FLYING_LIMIT = 51 // (256 ~5[s] -> 1[s] ~51)
+ct U LUCIFER_FLYING_1_3_LIMIT = 17
+ct U LUCIFER_FLYING_2_3_LIMIT = 34
 ct U LUCIFER_FLYING_COOLDOWN = 153 // (256 ~5[s] -> 3[s] ~153)
+ct U LUCIFER_FLYING_1_3_COOLDOWN = 51
+ct U LUCIFER_FLYING_2_3_COOLDOWN = 102
 
 // Sprites and animations
 data /sprites
@@ -375,6 +386,48 @@ data /sprites
             Fs(10,   @sprite_lucifer_left_2),
             Fs(10,   @sprite_lucifer_left_3)
         )))
+    // Stamina sprites
+    [] sprite_stamina_full
+        (make_metasprite(0, Ms{}(
+                Ms(-8,  0, $5D, $00),
+                Ms( 0,  0, $5E, $00),
+                Ms( 8,  0, $5F, $00)
+        )))
+    [] sprite_stamina_2_3
+        (make_metasprite(0, Ms{}(
+                Ms(-8,  0, $5D, $00),
+                Ms( 0,  0, $5E, $00),
+                Ms( 8,  0, $4F, $00)
+        )))
+    [] sprite_stamina_1_3
+        (make_metasprite(0, Ms{}(
+                Ms(-8,  0, $5D, $00),
+                Ms( 0,  0, $4E, $00),
+                Ms( 8,  0, $4F, $00)
+        )))
+    [] sprite_stamina_empty
+        (make_metasprite(0, Ms{}(
+                Ms(-8,  0, $4D, $00),
+                Ms( 0,  0, $4E, $00),
+                Ms( 8,  0, $4F, $00)
+        )))
+    // Stamina animations
+    [] stamina_animation_full
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_stamina_full)
+        )))
+    [] stamina_animation_2_3
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_stamina_2_3)
+        )))
+    [] stamina_animation_1_3
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_stamina_1_3)
+        )))
+    [] stamina_animation_empty
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_stamina_empty)
+        )))
 
 
 fn make_player(SS x, SS y) Player
@@ -388,6 +441,8 @@ fn make_player(SS x, SS y) Player
     p.movement = PLAYER_MOVING_REST
     p.anim_state = AnimState()
     p.camera_x = 0
+    p.stamina = PLAYER_STARTING_STAMINA
+    p.stamina_anim_state = make_anim_state(@stamina_animation_full)
     return p
 
 fn make_player_luci() Player
@@ -436,6 +491,8 @@ fn save_player(Player a) Player
     p.level_index = a.level_index
     p.is_initialised = a.is_initialised
     p.camera_x = a.camera_x
+    p.stamina = a.stamina
+    p.stamina_anim_state = a.stamina_anim_state
     return p
 
 fn restore_player(Player a) Player
@@ -454,6 +511,8 @@ fn restore_player(Player a) Player
     p.this_player = a.this_player
     p.is_initialised = a.is_initialised
     p.camera_x = a.camera_x
+    p.stamina = a.stamina
+    p.stamina_anim_state = a.stamina_anim_state
     return p
 
 fn update_player()
@@ -471,7 +530,15 @@ fn update_player()
     if is_lucifer_flying && flying_enabled
         // Countdown of flying capacity
         flying_counter += 1
+        if flying_counter == LUCIFER_FLYING_1_3_LIMIT
+            p.stamina = 2
+            p.stamina_anim_state = make_anim_state(@stamina_animation_2_3)
+        if flying_counter == LUCIFER_FLYING_2_3_LIMIT
+            p.stamina_anim_state = make_anim_state(@stamina_animation_1_3)
+            p.stamina = 1
         if flying_counter == LUCIFER_FLYING_LIMIT
+            p.stamina_anim_state = make_anim_state(@stamina_animation_empty)
+            p.stamina = 0
             flying_counter = 0
             flying_enabled = false
         SS speed = PLAYER_SPEED_WALK
@@ -516,10 +583,17 @@ fn update_player()
     if !flying_enabled
         is_lucifer_flying = false
         flying_counter += 1
+        if flying_counter == LUCIFER_FLYING_1_3_COOLDOWN
+            p.stamina_anim_state = make_anim_state(@stamina_animation_1_3)
+            p.stamina = 1
+        if flying_counter == LUCIFER_FLYING_2_3_COOLDOWN
+            p.stamina_anim_state = make_anim_state(@stamina_animation_2_3)
+            p.stamina = 2
         if flying_counter == LUCIFER_FLYING_COOLDOWN
+            p.stamina_anim_state = make_anim_state(@stamina_animation_full)
+            p.stamina = 3
             flying_enabled = true
             flying_counter = 0
-    // logf(@"%d"l, flying_counter)
     // Luci Y Fer, Lucifer not flying - Normal movement
     if !is_lucifer_flying
         // Update x-position:

@@ -168,7 +168,20 @@ fn update_sprites()
     U o = 0
 
     o = push_oam_anim(o, SS(p.x) - p.camera_x + 8, SS(p.y) + 6, p.anim_state)
-    // Luci Y Fer?
+    switch p.stamina
+        case 3
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, p.stamina_anim_state)
+            break
+        case 2
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, p.stamina_anim_state)
+            break
+        case 1
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, p.stamina_anim_state)
+            break
+        case 0
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, make_anim_state(@stamina_animation_empty))
+            break
+
     if luci.level_index == fer.level_index && current_player != CURRENT_PLAYER_LUCIFER
         // Draw also second character
         switch current_player
