@@ -26,7 +26,6 @@
   - Add enemies
   - Add bosses
   - Add secrets
-  - Add doors/keys/buttons
   - Enemies
     - God?
       - Gods?
@@ -43,8 +42,10 @@
 ## [29.10.2023]
 - Add stamina bar graphs and functionality
 - Level0...15 makes more sense than start being 0
-- Add key sprite, collision
-- Hide key when collected
+- Add key sprite, collision and functionality
+- Don't render key when collected
+- Add door sprite, collision and functionality
+- Don't render door when key was collected
 
 ## [25.10.2023]
 - Add states and screens
