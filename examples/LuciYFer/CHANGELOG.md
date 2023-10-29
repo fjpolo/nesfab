@@ -8,12 +8,12 @@
     - Game Over
   - Remove all magic numbers
 - Bugs
+  - Stamina bar starts as empty instead of full 
   - Being Lucifer and changing to Luci Y Fer in the air
     - 2nd sprite not affected by gravity
       - Bug or feature?
   - Fix transition from L2 to L3
 - Graphs
-  - Add stamina bar
   - Make tiles according to game
   - Make proper maps
     - Don't scroll?
@@ -40,6 +40,9 @@
     - Fer should jump less when tired?
 
 # Changes
+
+## [29.10.2023]
+- Add stamina bar graphs and functionality
 
 ## [25.10.2023]
 - Add states and screens
