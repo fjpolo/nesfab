@@ -29,7 +29,7 @@ data /strings
 
 mode story_screen(U level_index)
 : nmi game_nmi
-    current_level_index = 1
+    current_level_index = LAST_LEVEL_INDEX + 2
 
     // Prepare the decompressor
     decompress_string_init(@story_string)
@@ -61,13 +61,13 @@ mode story_screen(U level_index)
 
         if is_select_pressed
             game_state = GAME_STATE_TIPS
-            current_level_index += 1    
+            current_level_index = LAST_LEVEL_INDEX + 3
             goto mode tips_screen(current_level_index)
             : preserves /game
 
         if is_start_pressed
             game_state = GAME_STATE_PLAY
-            current_level_index += 2    
+            current_level_index = FIRST_LEVEL_INDEX   
             goto mode play_level(current_level_index)
             : preserves /game
         update_pads()

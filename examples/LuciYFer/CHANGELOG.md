@@ -8,7 +8,6 @@
     - Game Over
   - Remove all magic numbers
 - Bugs
-  - Stamina bar starts as empty instead of full 
   - Being Lucifer and changing to Luci Y Fer in the air
     - 2nd sprite not affected by gravity
       - Bug or feature?
@@ -43,6 +42,9 @@
 
 ## [29.10.2023]
 - Add stamina bar graphs and functionality
+- Level0...15 makes more sense than start being 0
+- Add key sprite, collision
+- Hide key when collected
 
 ## [25.10.2023]
 - Add states and screens
