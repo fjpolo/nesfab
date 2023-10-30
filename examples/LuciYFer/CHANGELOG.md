@@ -8,6 +8,7 @@
     - Game Over
   - Remove all magic numbers
 - Bugs
+  - enemies objects not loading properly from level.macrofab
   - Being Lucifer and changing to Luci Y Fer in the air
     - 2nd sprite not affected by gravity
       - Bug or feature?
@@ -19,8 +20,6 @@
     - Make Arcade screens and map?
   - Make a copy of CHR with some tiles changed  
     - Change every X frames to give movement to background
-- Game story
-  - Add more context
 - Game experience
   - Add status bar
   - Add enemies
@@ -38,6 +37,8 @@
     - Fer should jump less when tired?
 
 # Changes
+## [30.10.2023]
+- Start working on enemy eye
 
 ## [29.10.2023]
 - Add stamina bar graphs and functionality
