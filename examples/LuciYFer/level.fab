@@ -7,6 +7,19 @@
 // Load the .mapfab file, calling the macros for each definition.
 mapfab(raw, "LuciYFer.mapfab", "chr", "palette", "metatiles", "level")
 
+struct Enemy
+    U x
+    U y
+
+macro("pool_contiguous", "Enemy", "16", "enemies", "/game")
+
+// Used in level.macrofab to format the enemies:
+ct fn enemies_vec(Int{} x, Int{} y) Enemy{}
+    Enemy{} out = Enemy{}()
+    for U i = 0; i < len(x); i += 1
+        push(out, Enemy(U(x{i}), U(y{i})))
+    return out
+
 // Tile collision values:
 ct U C_OPEN             = 0
 ct U C_WALL             = 1
@@ -38,12 +51,13 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l0,
                                         @lev_l1,
                                         @lev_l2,
+                                        @lev_l3,
                                         @lev_start,
                                         @lev_story,
                                         @lev_tips,
                                     )
 ct U FIRST_LEVEL_INDEX =  0
-ct U LAST_LEVEL_INDEX =  2
+ct U LAST_LEVEL_INDEX =  3
 
 // Sets the 'mt_' pointers to offsets of 'mt'.
 fn load_metatiles(CC/metatiles mt)
@@ -82,6 +96,10 @@ fn load_level(CCC/levels level)
     if !show_key[current_level_index]
         if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
             destroy(key_x[current_level_index], key_y[current_level_index])
+        // if collision_at(key_x[current_level_index] + U(16*8), key_y[current_level_index]) == C_KEY
+        //     destroy(key_x[current_level_index] + U(16*8), key_y[current_level_index])
+        // if collision_at(key_x[current_level_index] + U(2*16*8), key_y[current_level_index]) == C_KEY
+        //     destroy(key_x[current_level_index] + U(2*16*8), key_y[current_level_index])
 
     switch current_level_index
         case 0
@@ -98,12 +116,6 @@ fn load_level(CCC/levels level)
                 if collision_at(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y) == C_JAIL
                     destroy(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y)
         case 2
-            logf(@"level %d"l, current_level_index)
-            logf(@"key %d"l, keys[current_level_index])
-            logf(@"door_x %d"l, LEVEL_2_DOOR_0_X)
-            logf(@"door_y %d"l, LEVEL_2_DOOR_0_Y)
-            logf(@"door_x %d"l, LEVEL_2_DOOR_1_X)
-            logf(@"door_y %d"l, LEVEL_2_DOOR_1_Y)
             if keys[current_level_index]
                 // remove door
                 if collision_at(LEVEL_2_DOOR_0_X, LEVEL_2_DOOR_0_Y) == C_JAIL
@@ -116,6 +128,13 @@ fn load_level(CCC/levels level)
     // if key[current_level_index]
     //     if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
     //         destroy(key_x[current_level_index], key_y[current_level_index])
+
+    // Enemies:
+    enemies_clear()
+    U num = read U(level)
+    for U i = 0; i < num; i += 1
+        enemies_new(read Enemy(level))
+        enemies_anim_state[i] = make_anim_state(@eye_animation)
 
     // Set the scroll off-screen, then run the scroll code several times
     // to fill the screen with tiles.
@@ -146,6 +165,12 @@ fn load_chrrom_bank(CCC/levels level, U bank)
     // while scroll_x != calc_shifted_camera_x()
     //     update_scroll()
     //     ppu_upload_scroll()
+
+    // // Enemies:
+    // enemies_clear()
+    // U num = read U(level)
+    // for U i = 0; i < num; i += 1
+    //     enemies_new(read Enemy(level))
 
 // Returns the tile at a pixel position:
 fn tile_at(UU pixel_x, UU pixel_y) U
