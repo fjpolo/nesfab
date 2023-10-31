@@ -8,7 +8,6 @@
     - Game Over
   - Remove all magic numbers
 - Bugs
-  - enemies objects not loading properly from level.macrofab
   - Being Lucifer and changing to Luci Y Fer in the air
     - 2nd sprite not affected by gravity
       - Bug or feature?
@@ -37,6 +36,9 @@
     - Fer should jump less when tired?
 
 # Changes
+## [31.10.2023]
+- Add enemies as objects
+
 ## [30.10.2023]
 - Start working on enemy eye
 

@@ -4,6 +4,7 @@ mode start_screen(U level_index)
     // {PPUMASK}(0)
     // hide_oam(0)
     current_level_index = LAST_LEVEL_INDEX + 1
+    {PPUMASK}(0) // Turn off rendering while loading
     load_level(levels[current_level_index]) 
     {PPUCTRL}(PPUCTRL_NMI_ON)
     while true

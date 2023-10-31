@@ -170,10 +170,10 @@ fn update_sprites()
     // Our stack index into OAM:
     U o = 0
 
-    for U i = 0; i < enemies_num; i += 1
-        set_oam(o, enemies[i].x, enemies[i].y, $7B, 0)
+    for U i = 0; i < enemies_eye_num; i += 1
+        set_oam(o, enemies_eye[i].x, enemies_eye[i].y, $7B, 0)
         // o = push_oam_metasprite(o, 128, 128, @sprite_eye_1)
-        o = push_oam_anim(o, STAMINA_X, STAMINA_Y, enemies_anim_state[i])
+        o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
         o += 4
 
 
@@ -206,8 +206,8 @@ fn update_sprites()
 
     // Tick animation
     p.anim_state = tick_anim(p.anim_state, true)
-    for U i = 0; i < enemies_num; i += 1
-        enemies_anim_state[i] = tick_anim(enemies_anim_state[i], true)
+    for U i = 0; i < enemies_eye_num; i += 1
+        enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
 
 fn update_chrrom_bank()
 fn player_has_key(U level_index) Bool

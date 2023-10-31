@@ -1,4 +1,4 @@
-ct U NUMBER_OF_ENEMIES_PER_LEVEL = 16
+ct U NUMBER_OF_EYE_ENEMIES_PER_LEVEL = 16
 
 // Sprites and animations
 data /sprites
@@ -129,4 +129,4 @@ data /sprites
         )))
 
 vars/enemies
-    AnimState[NUMBER_OF_ENEMIES_PER_LEVEL] enemies_anim_state
+    AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_eye_anim_state
