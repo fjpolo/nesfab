@@ -11,10 +11,10 @@ struct Enemy
     U x
     U y
 
-macro("pool_contiguous", "Enemy", "16", "enemies", "/game")
+macro("pool_contiguous", "Enemy", "16", "enemies_eye", "/game")
 
 // Used in level.macrofab to format the enemies:
-ct fn enemies_vec(Int{} x, Int{} y) Enemy{}
+ct fn enemies_eye_vec(Int{} x, Int{} y) Enemy{}
     Enemy{} out = Enemy{}()
     for U i = 0; i < len(x); i += 1
         push(out, Enemy(U(x{i}), U(y{i})))
@@ -45,7 +45,9 @@ vars /game
 vars /levels
     CCC/levels current_level
     U current_level_width
+    U current_level_height
     U[256] destroyed = U[256](0)
+    
 
 ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l0,
@@ -58,6 +60,10 @@ ct CCC/levels[] levels = CCC/levels[](
                                     )
 ct U FIRST_LEVEL_INDEX =  0
 ct U LAST_LEVEL_INDEX =  3
+
+vars /level_vars
+    U test_x
+    U test_y
 
 // Sets the 'mt_' pointers to offsets of 'mt'.
 fn load_metatiles(CC/metatiles mt)
@@ -90,17 +96,24 @@ fn load_level(CCC/levels level)
 
     // Level tiles:
     current_level_width = read U(level)
-    current_level = level
+    logf(@"width: %d"l, current_level_width)
+    current_level_height = read U(level)
+    logf(@"height: %d"l, current_level_height)
+    current_level = read CCC/levels(level)
+
+    // Enemies: Eye
+    enemies_eye_clear()
+    U num = read U(level)
+    for U i = 0; i < num; i += 1
+        enemies_eye_new(read Enemy(level))
+        enemies_eye_anim_state[i] = make_anim_state(@eye_animation)
+        
+    
 
     // Check if key was grabbed
     if !show_key[current_level_index]
         if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
             destroy(key_x[current_level_index], key_y[current_level_index])
-        // if collision_at(key_x[current_level_index] + U(16*8), key_y[current_level_index]) == C_KEY
-        //     destroy(key_x[current_level_index] + U(16*8), key_y[current_level_index])
-        // if collision_at(key_x[current_level_index] + U(2*16*8), key_y[current_level_index]) == C_KEY
-        //     destroy(key_x[current_level_index] + U(2*16*8), key_y[current_level_index])
-
     switch current_level_index
         case 0
              if keys[current_level_index]
@@ -124,17 +137,11 @@ fn load_level(CCC/levels level)
                     destroy(LEVEL_2_DOOR_1_X, LEVEL_2_DOOR_1_Y)
         break
 
-    // // Check if door must be opened
-    // if key[current_level_index]
-    //     if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
-    //         destroy(key_x[current_level_index], key_y[current_level_index])
+    
+    
+    
 
-    // Enemies:
-    enemies_clear()
-    U num = read U(level)
-    for U i = 0; i < num; i += 1
-        enemies_new(read Enemy(level))
-        enemies_anim_state[i] = make_anim_state(@eye_animation)
+
 
     // Set the scroll off-screen, then run the scroll code several times
     // to fill the screen with tiles.
