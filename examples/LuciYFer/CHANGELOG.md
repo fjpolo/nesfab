@@ -6,12 +6,10 @@
     - Pause
     - Win
     - Game Over
-  - Remove all magic numbers
 - Bugs
   - Being Lucifer and changing to Luci Y Fer in the air
     - 2nd sprite not affected by gravity
       - Bug or feature?
-  - Fix transition from L2 to L3
 - Graphs
   - Make tiles according to game
   - Make proper maps
@@ -19,23 +17,37 @@
     - Make Arcade screens and map?
   - Make a copy of CHR with some tiles changed  
     - Change every X frames to give movement to background
+  - Add a HUB eventually?
 - Game experience
   - Add status bar
-  - Add enemies
   - Add bosses
   - Add secrets
   - Enemies
+    - When player is defeated
+      - Split lucifer
+        - Take both back randomly
+      - Take away keys randomly?
     - God?
       - Gods?
     - Devil?
     - Demons?
     - Eyes and ears
       - Act as guards
+        - Take player some levels back (random maybe?)
+    - Bouncing balls/eyes
+    - 
   - Stamina
     - Luci should get tired of climbing?
     - Fer should jump less when tired?
+  - No dying, no health. Just ways of losing time or going back in levels
+  - Random places for some keys, also randomly appear
 
 # Changes
+## [7.11.2023]
+- Clean player.fab
+  - Add more functions
+  - Move center_x, center_y to player struct
+
 ## [31.10.2023]
 - Add enemies as objects
 
