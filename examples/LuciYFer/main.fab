@@ -185,6 +185,9 @@ fn update_sprites()
         set_oam(o, enemies_following_eye[i].x, enemies_following_eye[i].y, $7B, 0)
         // o = push_oam_metasprite(o, 128, 128, @sprite_eye_1)
         o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
+        if following_eye_state[i] == FOLLOWING_EYE_STATE_SHOOT
+            o = push_oam_anim(o, following_eye_pupil_s[i].x, following_eye_pupil_s[i].y, following_eye_pupil_s[i].anim_state)
+
         o += 4
 
 
@@ -224,6 +227,12 @@ fn update_sprites()
     p.anim_state = tick_anim(p.anim_state, true)
     for U i = 0; i < enemies_following_eye_num; i += 1
         enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
+
+    // Tick animation - Enemies: Following Eye projectile pupil
+    p.anim_state = tick_anim(p.anim_state, true)
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        if following_eye_state[i] == FOLLOWING_EYE_STATE_SHOOT
+            following_eye_pupil_s[i].anim_state = tick_anim(following_eye_pupil_s[i].anim_state, true)
 
 fn update_chrrom_bank()
 fn player_has_key(U level_index) Bool

@@ -54,6 +54,7 @@
     - Add logic to `level.fab`
     - Add logic to `main.fab`
   - Make following_eye initial state seudo-random
+  - Start working on following_eye proyectile (pupil)
 
 ## [7.11.2023]
 - Clean player.fab
