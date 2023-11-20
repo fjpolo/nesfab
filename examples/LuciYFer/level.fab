@@ -125,7 +125,7 @@ fn load_level(CCC/levels level)
     U following_eye_num = read U(level)
     for U i = 0; i < following_eye_num; i += 1
         enemies_following_eye_new(read Enemy_following_eye(level))
-        enemies_following_eye_anim_state[i] = make_anim_state(@eye_animation_sleeping)
+        following_eye_set_initial_state(i, enemies_following_eye[i].x, enemies_following_eye[i].y)
 
     // Check if key was grabbed
     if !show_key[current_level_index]

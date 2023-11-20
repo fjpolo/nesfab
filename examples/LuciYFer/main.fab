@@ -37,6 +37,7 @@ vars /game
     U game_state = GAME_STATE_START
     U chr_counter = 0
     U chr_bank = 0
+    U frame_counter = 0
     Bool[NUMBER_OF_KEYS] keys
     Bool[NUMBER_OF_KEYS] show_key = Bool[NUMBER_OF_KEYS](true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true)
     // keys x values
@@ -45,6 +46,9 @@ vars /game
     U[NUMBER_OF_KEYS] key_y
 // NMI
 nmi game_nmi()
+
+    frame_counter = frame_counter + 1
+
     // Story screen
     if game_state == GAME_STATE_STORY || game_state == GAME_STATE_TIPS
         if ready && writing == WRITING_READY
