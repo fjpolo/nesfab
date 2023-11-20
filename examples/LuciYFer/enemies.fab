@@ -1,100 +1,102 @@
 ct U NUMBER_OF_EYE_ENEMIES_PER_LEVEL = 16
+ct U ENEMY_EYE_SIGHT_TOLERANCE_2_X = 50
+ct U ENEMY_EYE_SIGHT_TOLERANCE_X = 25
 
 // Sprites and animations
 data /sprites
     // eye metasprites
-    [] sprite_eye_1 // closed eye
+    [] sprite_eye_closed                    // closed eye
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $6E, $02),    // Top left
             Ms( 0, 0, $6E, $82),    // Bottom left
             Ms( 8,-8, $6E, $42),    // Top right
             Ms( 8, 0, $6E, $C2)     // Bottom right
         )))
-    [] sprite_eye_2 // 1/3 opened eye
+    [] sprite_eye_one_third_opened          // 1/3 opened eye
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $6E, $02),    // Top left
             Ms( 0, 0, $6F, $02),    // Bottom left
             Ms( 8,-8, $6E, $42),    // Top right
             Ms( 8, 0, $6F, $42)     // Bottom right
         )))
-    [] sprite_eye_3 // 2/3 opened eye -> Look down
+    [] sprite_eye_two_thirds_opened         // 2/3 opened eye -> Look down
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $6D, $02),    // Top left
             Ms( 0, 0, $7E, $02),    // Bottom left
             Ms( 8,-8, $6D, $42),    // Top right
             Ms( 8, 0, $7E, $42)     // Bottom right
         )))
-    [] sprite_eye_4 // 2/3 opened eye -> Look left
+    [] sprite_eye_two_thirds_opened_left    // 2/3 opened eye -> Look left
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $6D, $02),    // Top left
             Ms( 0, 0, $7F, $02),    // Bottom left
             Ms( 8,-8, $6D, $42),    // Top right
             Ms( 8, 0, $7C, $42)     // Bottom right
         )))
-    [] sprite_eye_5 // 2/3 opened eye -> Look right
+    [] sprite_eye_two_thirds_opened_right   // 2/3 opened eye -> Look right
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $6D, $02),    // Top left
             Ms( 0, 0, $7C, $02),    // Bottom left
             Ms( 8,-8, $6D, $42),    // Top right
             Ms( 8, 0, $7F, $42)     // Bottom right
         )))
-    [] sprite_eye_6 // opened - eye center
+    [] sprite_eye_opened_center             // opened - eye center
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $6B, $02),    // Top left
             Ms( 0, 0, $6B, $82),    // Bottom left
             Ms( 8,-8, $6B, $42),    // Top right
             Ms( 8, 0, $6B, $C2)     // Bottom right
         )))
-    [] sprite_eye_7 // opened - eye center up
+    [] sprite_eye_opened_center_up          // opened - eye center up
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $7A, $02),    // Top left
             Ms( 0, 0, $7C, $02),    // Bottom left
             Ms( 8,-8, $7A, $42),    // Top right
             Ms( 8, 0, $7C, $42)     // Bottom right
         )))
-    [] sprite_eye_8 // opened - eye up left
+    [] sprite_eye_opened_up_left            // opened - eye up left
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $7B, $02),    // Top left
             Ms( 0, 0, $7C, $02),    // Bottom left
             Ms( 8,-8, $7C, $C2),    // Top right
             Ms( 8, 0, $7C, $42)     // Bottom right
         )))
-    [] sprite_eye_9 // opened - eye center left
+    [] sprite_eye_opened_center_left        // opened - eye center left
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $6A, $82),    // Top left
             Ms( 0, 0, $6A, $02),    // Bottom left
             Ms( 8,-8, $7C, $C2),    // Top right
             Ms( 8, 0, $7C, $42)     // Bottom right
         )))
-    [] sprite_eye_10 // opened - eye down left
+    [] sprite_eye_opened_down_left          // opened - eye down left
         (make_metasprite(ATTR_V_FLIP, Ms{}(
             Ms( 0,-8, $7B, $02),    // Top left
             Ms( 0, 0, $7C, $02),    // Bottom left
             Ms( 8,-8, $7C, $C2),    // Top right
             Ms( 8, 0, $7C, $42)     // Bottom right
         )))
-    [] sprite_eye_11 // opened - eye center down
+    [] sprite_eye_opened_center_down        // opened - eye center down
         (make_metasprite(ATTR_V_FLIP, Ms{}(
             Ms( 0,-8, $7A, $02),    // Top left
             Ms( 0, 0, $7C, $02),    // Bottom left
             Ms( 8,-8, $7A, $42),    // Top right
             Ms( 8, 0, $7C, $42)     // Bottom right
         )))
-    [] sprite_eye_12 // opened - eye down right
+    [] sprite_eye_opened_down_right         // opened - eye down right
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $7C, $82),    // Top left
             Ms( 0, 0, $7C, $02),    // Bottom left
             Ms( 8,-8, $7C, $C2),    // Top right
             Ms( 8, 0, $69, $02)     // Bottom right
         )))
-    [] sprite_eye_13 // opened - eye center right
+    [] sprite_eye_opened_center_right       // opened - eye center right
         (make_metasprite(0, Ms{}(
             Ms( 0,-8, $7C, $82),    // Top left
             Ms( 0, 0, $7C, $02),    // Bottom left
             Ms( 8,-8, $6A, $C2),    // Top right
             Ms( 8, 0, $6A, $42)     // Bottom right
         )))
-    [] sprite_eye_14 // opened - eye up right
+    [] sprite_eye_opened_up_right           // opened - eye up right
         (make_metasprite(ATTR_V_FLIP, Ms{}(
             Ms( 0,-8, $7C, $82),    // Top left
             Ms( 0, 0, $7C, $02),    // Bottom left
@@ -102,31 +104,106 @@ data /sprites
             Ms( 8, 0, $69, $02)     // Bottom right
         )))
     // eye animation
+    [] eye_animation_sleeping
+        (make_anim(Fs{}(
+            Fs(120, @sprite_eye_closed)
+        )))
+    // [] eye_animation_opening
+    //     (make_anim(Fs{}(
+    //         Fs(40, @sprite_eye_one_third_opened ),
+    //         Fs(40, @sprite_eye_two_thirds_opened ),
+    //         Fs(40, @sprite_eye_one_third_opened ),
+    //         Fs(40, @sprite_eye_two_thirds_opened ),
+    //         Fs(40, @sprite_eye_opened_center),
+    //     )))
+    // [] eye_animation_closing
+    //     (make_anim(Fs{}(
+    //         Fs(40, @sprite_eye_two_thirds_opened ),
+    //         Fs(40, @sprite_eye_one_third_opened ),
+    //     )))
+    [] eye_animation_center_left
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_center_left)
+        ))) 
+    [] eye_animation_center_right
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_center_right)
+        ))) 
+    [] eye_animation_center_up
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_center_right)
+        ))) 
+    [] eye_animation_center_down
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_center_down)
+        ))) 
+    // [] eye_animation_up_left
+    //     (make_anim(Fs{}(
+    //         Fs(60, @sprite_eye_opened_up_left)
+    //     ))) 
+    // [] eye_animation_up_right
+    //     (make_anim(Fs{}(
+    //         Fs(60, @sprite_eye_opened_up_right)
+    //     ))) 
+    [] eye_animation_down_left
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_down_left)
+        ))) 
+    [] eye_animation_down_right
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_down_right)
+        ))) 
     [] eye_animation
         (make_anim(Fs{}(
-            Fs(120, @sprite_eye_1),
-            Fs(40, @sprite_eye_2),
-            Fs(40, @sprite_eye_3),
-            Fs(40, @sprite_eye_2),
-            Fs(40, @sprite_eye_3),
-            Fs(40, @sprite_eye_4),
-            Fs(40, @sprite_eye_3),
-            Fs(50, @sprite_eye_5),
-            Fs(40, @sprite_eye_3),
-            Fs(60, @sprite_eye_6),
-            Fs(60, @sprite_eye_7),
-            Fs(60, @sprite_eye_8),
-            Fs(60, @sprite_eye_9),
-            Fs(60, @sprite_eye_10),
-            Fs(60, @sprite_eye_11),
-            Fs(60, @sprite_eye_12),
-            Fs(60, @sprite_eye_13),
-            Fs(60, @sprite_eye_14),
-            Fs(60, @sprite_eye_7),
-            Fs(60, @sprite_eye_6),
-            Fs(40, @sprite_eye_3),
-            Fs(40, @sprite_eye_2),
+            Fs(120, @sprite_eye_closed),
+            Fs(40, @sprite_eye_one_third_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_one_third_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened_left ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(50, @sprite_eye_two_thirds_opened_right ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(60, @sprite_eye_opened_center),
+            Fs(60, @sprite_eye_opened_center_up),
+            Fs(60, @sprite_eye_opened_up_left),
+            Fs(60, @sprite_eye_opened_center_left),
+            Fs(60, @sprite_eye_opened_down_left),
+            Fs(60, @sprite_eye_opened_center_down),
+            Fs(60, @sprite_eye_opened_down_right),
+            Fs(60, @sprite_eye_opened_center_right),
+            Fs(60, @sprite_eye_opened_up_right),
+            Fs(60, @sprite_eye_opened_center_up),
+            Fs(60, @sprite_eye_opened_center),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_one_third_opened ),
         )))
 
-vars/enemies
+vars /enemies
     AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_eye_anim_state
+    AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_following_eye_anim_state
+
+ct U FOLLOWING_EYE_STATE_SLEEP = 0
+ct U FOLLOWING_EYE_STATE_OPENING = 1
+ct U FOLLOWING_EYE_STATE_WATCH = 2
+ct U FOLLOWING_EYE_STATE_PREPARE = 3
+ct U FOLLOWING_EYE_STATE_SHOOT = 4
+ct U FOLLOWING_EYE_STATE_MISS = 5
+ct U FOLLOWING_EYE_STATE_HIT = 6
+ct U FOLLOWING_EYE_STATE_CLOSING = 7
+
+vars /following_eye
+    U enemies_eye_state = FOLLOWING_EYE_STATE_SLEEP
+
+
+fn following_eye_set_sprite(U ix, U enemy_x, U enemy_y) 
+    // Eye sight
+    if((p.x < (enemy_x - ENEMY_EYE_SIGHT_TOLERANCE_X)))
+        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_left)
+    else if(p.x > (enemy_x + ENEMY_EYE_SIGHT_TOLERANCE_X))
+        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_right)
+    else
+        if (p.y > enemy_y)
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_down)
+        else
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_up)

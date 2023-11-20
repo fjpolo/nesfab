@@ -7,17 +7,29 @@
 // Load the .mapfab file, calling the macros for each definition.
 mapfab(raw, "LuciYFer.mapfab", "chr", "palette", "metatiles", "level")
 
-struct Enemy
+struct Enemy_eye
     U x
     U y
 
-macro("pool_contiguous", "Enemy", "16", "enemies_eye", "/game")
+struct Enemy_following_eye
+    U x
+    U y
+
+macro("pool_contiguous", "Enemy_eye", "16", "enemies_eye", "/game")
+macro("pool_contiguous", "Enemy_following_eye", "16", "enemies_following_eye", "/game")
 
 // Used in level.macrofab to format the enemies:
-ct fn enemies_eye_vec(Int{} x, Int{} y) Enemy{}
-    Enemy{} out = Enemy{}()
+ct fn enemies_eye_vec(Int{} x, Int{} y) Enemy_eye{}
+    Enemy_eye{} out = Enemy_eye{}()
     for U i = 0; i < len(x); i += 1
-        push(out, Enemy(U(x{i}), U(y{i})))
+        push(out, Enemy_eye(U(x{i}), U(y{i})))
+    return out
+
+// Used in level.macrofab to format the enemies:
+ct fn enemies_following_eye_vec(Int{} x, Int{} y) Enemy_following_eye{}
+    Enemy_following_eye{} out = Enemy_following_eye{}()
+    for U i = 0; i < len(x); i += 1
+        push(out, Enemy_following_eye(U(x{i}), U(y{i})))
     return out
 
 // Tile collision values:
@@ -103,12 +115,17 @@ fn load_level(CCC/levels level)
 
     // Enemies: Eye
     enemies_eye_clear()
-    U num = read U(level)
-    for U i = 0; i < num; i += 1
-        enemies_eye_new(read Enemy(level))
+    U eye_num = read U(level)
+    for U i = 0; i < eye_num; i += 1
+        enemies_eye_new(read Enemy_eye(level))
         enemies_eye_anim_state[i] = make_anim_state(@eye_animation)
         
-    
+    // Enemies: Following Eye
+    enemies_following_eye_clear()
+    U following_eye_num = read U(level)
+    for U i = 0; i < following_eye_num; i += 1
+        enemies_following_eye_new(read Enemy_following_eye(level))
+        enemies_following_eye_anim_state[i] = make_anim_state(@eye_animation_sleeping)
 
     // Check if key was grabbed
     if !show_key[current_level_index]
@@ -177,7 +194,7 @@ fn load_chrrom_bank(CCC/levels level, U bank)
     // enemies_clear()
     // U num = read U(level)
     // for U i = 0; i < num; i += 1
-    //     enemies_new(read Enemy(level))
+    //     enemies_new(read Enemy_eye(level))
 
 // Returns the tile at a pixel position:
 fn tile_at(UU pixel_x, UU pixel_y) U

@@ -176,6 +176,13 @@ fn update_sprites()
         o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
         o += 4
 
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        following_eye_set_sprite(i, enemies_following_eye[i].x, enemies_following_eye[i].y)
+        set_oam(o, enemies_following_eye[i].x, enemies_following_eye[i].y, $7B, 0)
+        // o = push_oam_metasprite(o, 128, 128, @sprite_eye_1)
+        o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
+        o += 4
+
 
     o = push_oam_anim(o, SS(p.x) - p.camera_x + 8, SS(p.y) + 6, p.anim_state)
     switch p.stamina
@@ -204,9 +211,14 @@ fn update_sprites()
 
     hide_oam(o)
 
-    // Tick animation
+    // Tick animation - Enemies: Eye
     p.anim_state = tick_anim(p.anim_state, true)
     for U i = 0; i < enemies_eye_num; i += 1
+        enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
+
+    // Tick animation - Enemies: Following Eye
+    p.anim_state = tick_anim(p.anim_state, true)
+    for U i = 0; i < enemies_following_eye_num; i += 1
         enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
 
 fn update_chrrom_bank()

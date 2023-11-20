@@ -43,6 +43,17 @@
   - Random places for some keys, also randomly appear
 
 # Changes
+## [20.11.2023]
+- Add enemy_following_eye
+  - Add Object Class logic
+    - Add enemies_following_Eye
+    - Add logic to `enemies.fab`
+      - Add animations
+        - Add logic to change sprite
+    - Add logic to `level.macrofab`
+    - Add logic to `level.fab`
+    - Add logic to `main.fab`
+
 ## [7.11.2023]
 - Clean player.fab
   - Add more functions
@@ -130,7 +141,7 @@
 - Use CHR bank switching for `bg.png` and `font.png` (with `MapFab`)
 - Fer can run
 
-## [17.102023]
+## [17.10.2023]
 - Add ladder for Luci (Not Fer)
   - Luci move ↕
 - Add story screen
@@ -139,7 +150,7 @@
   - Play
 - START 🔘 skips STORY screen
 
-## [12.102023]
+## [12.10.2023]
 - Prepare code skeleton based on "animation" and "platformer"
 - Prepare some test levels
 - Create Luci, Fer and Lucifer sprites
