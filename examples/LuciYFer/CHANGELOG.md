@@ -53,6 +53,7 @@
     - Add logic to `level.macrofab`
     - Add logic to `level.fab`
     - Add logic to `main.fab`
+  - Make following_eye initial state seudo-random
 
 ## [7.11.2023]
 - Clean player.fab

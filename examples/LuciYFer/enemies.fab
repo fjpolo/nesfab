@@ -1,6 +1,4 @@
 ct U NUMBER_OF_EYE_ENEMIES_PER_LEVEL = 16
-ct U ENEMY_EYE_SIGHT_TOLERANCE_2_X = 50
-ct U ENEMY_EYE_SIGHT_TOLERANCE_X = 25
 
 // Sprites and animations
 data /sprites
@@ -103,24 +101,31 @@ data /sprites
             Ms( 8,-8, $7C, $C2),    // Top right
             Ms( 8, 0, $69, $02)     // Bottom right
         )))
+    [] sprite_eye_shoot                   // shooting eye
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $6D, $02),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $6D, $42),    // Top right
+            Ms( 8, 0, $7C, $42)     // Bottom right
+        )))
     // eye animation
     [] eye_animation_sleeping
         (make_anim(Fs{}(
             Fs(120, @sprite_eye_closed)
         )))
-    // [] eye_animation_opening
-    //     (make_anim(Fs{}(
-    //         Fs(40, @sprite_eye_one_third_opened ),
-    //         Fs(40, @sprite_eye_two_thirds_opened ),
-    //         Fs(40, @sprite_eye_one_third_opened ),
-    //         Fs(40, @sprite_eye_two_thirds_opened ),
-    //         Fs(40, @sprite_eye_opened_center),
-    //     )))
-    // [] eye_animation_closing
-    //     (make_anim(Fs{}(
-    //         Fs(40, @sprite_eye_two_thirds_opened ),
-    //         Fs(40, @sprite_eye_one_third_opened ),
-    //     )))
+    [] eye_animation_opening
+        (make_anim(Fs{}(
+            Fs(40, @sprite_eye_one_third_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_one_third_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_opened_center),
+        )))
+    [] eye_animation_closing
+        (make_anim(Fs{}(
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_one_third_opened ),
+        )))
     [] eye_animation_center_left
         (make_anim(Fs{}(
             Fs(60, @sprite_eye_opened_center_left)
@@ -137,14 +142,14 @@ data /sprites
         (make_anim(Fs{}(
             Fs(60, @sprite_eye_opened_center_down)
         ))) 
-    // [] eye_animation_up_left
-    //     (make_anim(Fs{}(
-    //         Fs(60, @sprite_eye_opened_up_left)
-    //     ))) 
-    // [] eye_animation_up_right
-    //     (make_anim(Fs{}(
-    //         Fs(60, @sprite_eye_opened_up_right)
-    //     ))) 
+    [] eye_animation_up_left
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_up_left)
+        ))) 
+    [] eye_animation_up_right
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_up_right)
+        ))) 
     [] eye_animation_down_left
         (make_anim(Fs{}(
             Fs(60, @sprite_eye_opened_down_left)
@@ -153,6 +158,18 @@ data /sprites
         (make_anim(Fs{}(
             Fs(60, @sprite_eye_opened_down_right)
         ))) 
+    [] eye_animation_prepare
+        (make_anim(Fs{}(
+            Fs(120, @sprite_eye_one_third_opened)
+        )))
+    [] eye_animation_shoot
+        (make_anim(Fs{}(
+            Fs(120, @sprite_eye_shoot)
+        )))
+    [] eye_animation_result
+        (make_anim(Fs{}(
+            Fs(120, @sprite_eye_opened_center)
+        )))
     [] eye_animation
         (make_anim(Fs{}(
             Fs(120, @sprite_eye_closed),
@@ -183,27 +200,124 @@ vars /enemies
     AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_eye_anim_state
     AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_following_eye_anim_state
 
+// Enemy: Following Eye - States
+ct U FOLLOWING_EYE_STATE_NOT_ASSIGNED = $FF
 ct U FOLLOWING_EYE_STATE_SLEEP = 0
 ct U FOLLOWING_EYE_STATE_OPENING = 1
 ct U FOLLOWING_EYE_STATE_WATCH = 2
 ct U FOLLOWING_EYE_STATE_PREPARE = 3
 ct U FOLLOWING_EYE_STATE_SHOOT = 4
-ct U FOLLOWING_EYE_STATE_MISS = 5
-ct U FOLLOWING_EYE_STATE_HIT = 6
-ct U FOLLOWING_EYE_STATE_CLOSING = 7
+ct U FOLLOWING_EYE_STATE_SHOOT_RESULT = 5
+ct U FOLLOWING_EYE_STATE_CLOSING = 6
+ct U FOLLOWING_EYE_STATE_MAX = 9
+// Enemy: Following Eye - State counter
+ct U FOLLOWING_EYE_STATE_COUNTER_MAX = 120
+// Enemy: Following Eye - X Tolerance
+ct U ENEMY_EYE_SIGHT_TOLERANCE_2_X = 50
+ct U ENEMY_EYE_SIGHT_TOLERANCE_X = 25
+// Enemy: Following Eye - Pupil 
+ct U ENEMY_EYE_SIGHT_PUPIL_SPRITE = $79
+ct U ENEMY_EYE_SIGHT_PUPIL_LIFE_IN_FRAMES = 180
 
+
+
+// Enemy: Following Eye - Variables
 vars /following_eye
-    U enemies_eye_state = FOLLOWING_EYE_STATE_SLEEP
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_state = U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, )
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_state_counter = U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, )
+
+fn following_eye_set_initial_state(U ix, U enemy_x, U enemy_y)
+        following_eye_state[ix] = U( UU( UU(frame_counter) * UU(ix) * UU(ix) ) )
+        // following_eye_state[ix] = ix
+        while following_eye_state[ix] > FOLLOWING_EYE_STATE_MAX
+            following_eye_state[ix] = following_eye_state[ix] >> 1
+        following_eye_state_counter[ix] = U( UU( UU(frame_counter) * UU(ix) ) )
+        while following_eye_state_counter[ix] > FOLLOWING_EYE_STATE_COUNTER_MAX
+            following_eye_state_counter[ix] = following_eye_state_counter[ix] >> 1
+        logf(@"state: %d"l, following_eye_state[ix])
+        switch following_eye_state[ix]
+            case FOLLOWING_EYE_STATE_SLEEP
+                enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_sleeping)
+                break
+            case FOLLOWING_EYE_STATE_OPENING
+                enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_opening)
+                break
+            case FOLLOWING_EYE_STATE_WATCH
+                if((p.x < (enemy_x - ENEMY_EYE_SIGHT_TOLERANCE_X)))
+                    if (p.y > enemy_y)
+                        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_left)
+                    else
+                        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_left)
+                else if(p.x > (enemy_x + ENEMY_EYE_SIGHT_TOLERANCE_X))
+                    if (p.y > enemy_y)
+                        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_right)
+                    else
+                        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_right)
+                else
+                    if (p.y > enemy_y)
+                        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_down)
+                    else
+                        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_up)
+                break
+            case FOLLOWING_EYE_STATE_PREPARE
+                enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_prepare)
+                break
+            case FOLLOWING_EYE_STATE_SHOOT
+                enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_shoot)
+                break    
+            case FOLLOWING_EYE_STATE_SHOOT_RESULT
+                enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_result)
+                break        
+            case FOLLOWING_EYE_STATE_CLOSING
+                enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_closing)
+                break 
 
 
-fn following_eye_set_sprite(U ix, U enemy_x, U enemy_y) 
-    // Eye sight
-    if((p.x < (enemy_x - ENEMY_EYE_SIGHT_TOLERANCE_X)))
-        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_left)
-    else if(p.x > (enemy_x + ENEMY_EYE_SIGHT_TOLERANCE_X))
-        enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_right)
-    else
-        if (p.y > enemy_y)
-            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_down)
-        else
-            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_up)
+// Enemy: Following Eye - fn following_eye_set_sprite
+fn following_eye_set_sprite(U ix, U enemy_x, U enemy_y)
+    // State counter
+    following_eye_state_counter[ix] = following_eye_state_counter[ix] + 1
+    if (following_eye_state_counter[ix] == FOLLOWING_EYE_STATE_COUNTER_MAX)
+        following_eye_state_counter[ix] = 0
+        following_eye_state[ix] = following_eye_state[ix] + 1
+        if (following_eye_state[ix] == FOLLOWING_EYE_STATE_MAX)
+            following_eye_state[ix] = FOLLOWING_EYE_STATE_SLEEP
+
+    // State Machine
+    switch following_eye_state[ix]
+        case FOLLOWING_EYE_STATE_SLEEP
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_sleeping)
+            break
+        case FOLLOWING_EYE_STATE_OPENING
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_opening)
+            break
+        case FOLLOWING_EYE_STATE_WATCH
+            // Eye sight
+            if((p.x < (enemy_x - ENEMY_EYE_SIGHT_TOLERANCE_X)))
+                if (p.y > enemy_y)
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_left)
+                else
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_left)
+            else if(p.x > (enemy_x + ENEMY_EYE_SIGHT_TOLERANCE_X))
+                if (p.y > enemy_y)
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_right)
+                else
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_right)
+            else
+                if (p.y > enemy_y)
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_down)
+                else
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_up)
+            break
+        case FOLLOWING_EYE_STATE_PREPARE
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_prepare)
+            break
+        case FOLLOWING_EYE_STATE_SHOOT
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_shoot)
+            break    
+        case FOLLOWING_EYE_STATE_SHOOT_RESULT
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_result)
+            break        
+        case FOLLOWING_EYE_STATE_CLOSING
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_closing)
+            break
