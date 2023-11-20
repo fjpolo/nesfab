@@ -464,7 +464,8 @@ fn make_player_fer() Player
     Player p = make_player(PLAYER_INITIAL_X, PLAYER_INITIAL_Y)
     p.this_player = CURRENT_PLAYER_FER
     p.anim_state = make_anim_state(@fer_animation_rest)
-    p.level_index = LAST_LEVEL_INDEX - 1
+    // p.level_index = LAST_LEVEL_INDEX - 1
+    p.level_index = LAST_LEVEL_INDEX
     p.is_initialised = true
     return p
 
