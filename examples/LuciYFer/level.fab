@@ -7,16 +7,8 @@
 // Load the .mapfab file, calling the macros for each definition.
 mapfab(raw, "LuciYFer.mapfab", "chr", "palette", "metatiles", "level")
 
-struct Enemy_eye
-    U x
-    U y
-
-struct Enemy_following_eye
-    U x
-    U y
-
-macro("pool_contiguous", "Enemy_eye", "16", "enemies_eye", "/game")
-macro("pool_contiguous", "Enemy_following_eye", "16", "enemies_following_eye", "/game")
+macro("pool_contiguous", "Enemy_eye", "8", "enemies_eye", "/game")
+macro("pool_contiguous", "Enemy_following_eye", "8", "enemies_following_eye", "/game")
 
 // Used in level.macrofab to format the enemies:
 ct fn enemies_eye_vec(Int{} x, Int{} y) Enemy_eye{}
@@ -108,9 +100,7 @@ fn load_level(CCC/levels level)
 
     // Level tiles:
     current_level_width = read U(level)
-    logf(@"width: %d"l, current_level_width)
     current_level_height = read U(level)
-    logf(@"height: %d"l, current_level_height)
     current_level = read CCC/levels(level)
 
     // Enemies: Eye

@@ -561,12 +561,9 @@ fn handle_collisions()
                 goto mode play_level(current_level_index)
                 : preserves /game
         case C_KEY
-                log(@"Key collected"l)
                 keys[level_to_key_mapping[current_level_index]] = true
                 key_x[current_level_index] = U(p.center_x)
-                logf(@"key_x %d"l, U(p.center_x))
                 key_y[current_level_index] = U(p.center_y)
-                logf(@"key_y %d"l, U(p.center_y))
                 destroy(UU(p.center_x), UU(p.center_y))
                 break
 
