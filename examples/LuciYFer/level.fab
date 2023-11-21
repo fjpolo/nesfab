@@ -65,10 +65,6 @@ ct CCC/levels[] levels = CCC/levels[](
 ct U FIRST_LEVEL_INDEX =  0
 ct U LAST_LEVEL_INDEX =  3
 
-vars /level_vars
-    U test_x
-    U test_y
-
 // Sets the 'mt_' pointers to offsets of 'mt'.
 fn load_metatiles(CC/metatiles mt)
     UU size = UU(read U(mt))
