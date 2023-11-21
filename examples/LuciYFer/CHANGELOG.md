@@ -43,6 +43,9 @@
   - Random places for some keys, also randomly appear
 
 # Changes
+## [21.11.2023]
+- Fix compiler warnings
+
 ## [20.11.2023]
 - Add enemy_following_eye
   - Add Object Class logic
