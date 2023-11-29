@@ -851,12 +851,14 @@ fn move_player()
 
 // Main function to call
 fn update_player()
-    move_player()
-    player_fusion()
-    change_player()
-    player_resting()
-    handle_collisions()
-    update_camera()
-    save_player_data()
+
+    if !is_game_paused
+        move_player()
+        player_fusion()
+        change_player()
+        player_resting()
+        handle_collisions()
+        update_camera()
+        save_player_data()
 
     

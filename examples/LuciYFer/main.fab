@@ -13,8 +13,7 @@ ct Int GAME_STATE_START = 0
 ct Int GAME_STATE_STORY = 1
 ct Int GAME_STATE_TIPS = 2
 ct Int GAME_STATE_PLAY = 3
-ct Int GAME_STATE_PAUSE = 4
-ct Int GAME_STATE_WIN = 5
+ct Int GAME_STATE_WIN = 4
 ct Int GAME_STATE_GAME_OVER = 63
 
 
@@ -44,6 +43,9 @@ vars /game
     U[NUMBER_OF_KEYS] key_x
     // keys y values
     U[NUMBER_OF_KEYS] key_y
+    // PAUSE
+    Bool is_game_paused = false
+
 // NMI
 nmi game_nmi()
 
@@ -154,10 +156,14 @@ mode play_level(U level_index)
     while true
         nmi
         update_pads()
-        update_player()
-        update_sprites()
-        update_scroll()
-
+        check_pause()
+        if !is_game_paused
+            update_player()
+            update_sprites()
+            update_scroll()
+        else
+            update_pause_sprites()
+        
         if chr_counter == 0
             if chr_bank == 0
                 chr_bank = 1
@@ -234,8 +240,16 @@ fn update_sprites()
         if following_eye_state[i] == FOLLOWING_EYE_STATE_SHOOT
             following_eye_pupil_s[i].anim_state = tick_anim(following_eye_pupil_s[i].anim_state, true)
 
+fn update_pause_sprites()
+    {PPUMASK}(PPUMASK_GRAYSCALE | PPUMASK_ON | PPUMASK_NO_CLIP)
+
 fn update_chrrom_bank()
 fn player_has_key(U level_index) Bool
     switch level_index    
         default
             return false
+
+fn check_pause()
+    if is_start_pressed 
+        is_game_paused = !is_game_paused
+        is_start_pressed = false
