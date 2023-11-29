@@ -3,9 +3,13 @@
   - Luci -> Luz
 - System
   - Add states and screens
-    - Pause
     - Win
     - Game Over
+  - Add functionalities
+    - Pause
+      - Don't update
+        - X, Y
+        - Sprites
 - Bugs
   - Being Lucifer and changing to Luci Y Fer in the air
     - 2nd sprite not affected by gravity
@@ -20,6 +24,7 @@
   - Add a HUB eventually?
 - Game experience
   - Add status bar
+    - Sofar Stamina works fine
   - Add bosses
   - Add secrets
   - Enemies
@@ -33,6 +38,7 @@
     - Demons?
     - Eyes and ears
       - Act as guards
+        - Shoot something?
         - Take player some levels back (random maybe?)
     - Bouncing balls/eyes
     - 
@@ -43,6 +49,11 @@
   - Random places for some keys, also randomly appear
 
 # Changes
+
+## [29.11.2023]
+- Add PAUSE with Start button
+  - make it grayscale!!!! 😍
+
 ## [21.11.2023]
 - Fix compiler warnings
 
