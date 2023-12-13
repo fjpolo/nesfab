@@ -5,11 +5,6 @@
   - Add states and screens
     - Win
     - Game Over
-  - Add functionalities
-    - Pause
-      - Don't update
-        - X, Y
-        - Sprites
 - Bugs
   - Being Lucifer and changing to Luci Y Fer in the air
     - 2nd sprite not affected by gravity
@@ -23,8 +18,6 @@
     - Change every X frames to give movement to background
   - Add a HUB eventually?
 - Game experience
-  - Add status bar
-    - Sofar Stamina works fine
   - Add bosses
   - Add secrets
   - Enemies
@@ -52,7 +45,7 @@
 
 ## [29.11.2023]
 - Add PAUSE with Start button
-  - make it grayscale!!!! 😍
+  - Make it grayscale!!!! 😍
 
 ## [21.11.2023]
 - Fix compiler warnings
