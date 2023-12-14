@@ -47,7 +47,7 @@ fn calc_scroll_attrs_ppuaddr(UU scroll_x) UU
     return addr
 
 fn calc_shifted_camera_x() UU
-    return UU(camera_x) >> 3
+    return UU(p.camera_x) >> 3
 
 fn update_scroll()
     CCC/levels ptr = current_level

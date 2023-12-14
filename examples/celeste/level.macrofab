@@ -9,5 +9,11 @@ data /levels
         (@pal_#palette_name#)   // Pointer to the palette
         (@mt_#metatiles_name#)  // Pointer to the metatiles
         U(_width)               // The width, in tiles.
-        (_column_major)         // The actual level tiles
-        
+        U(_height)              // The height, in tiles.
+        (@tiles_#name#)         // Pointer to the level tiles
+        U(_enemies_eye_num)         // Number of "enemies_eye" objects
+        (enemies_eye_vec(_enemies_eye_x, _enemies_eye_y))
+        U(_enemies_following_eye_num)         // Number of "enemies_following_eye" objects
+        (enemies_following_eye_vec(_enemies_following_eye_x, _enemies_following_eye_y))
+    [] tiles_#name#
+            (_column_major)

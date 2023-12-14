@@ -1,261 +1,231 @@
 /*
- * Copyright (c) 2023, Patrick Bene
+ * Copyright (c) 2023, fjpolo@gmail.com
  * This file is distributed under the Boost Software License, Version 1.0.
  * See LICENSE_1_0.txt or https://www.boost.org/LICENSE_1_0.txt 
  */
 
-// This example shows a basic platformer game.
+// Button constants
+ct Int SELECT_BUTTON_DEBOUNCE_FRAMES = 5
+ct Int START_BUTTON_DEBOUNCE_FRAMES = 5
 
-// Player width and height:
-ct Int pw = 15
-ct Int ph = 15
-ct Int rw = pw - 1
-ct Int rh = ph - 1
+// Game states
+ct Int GAME_STATE_START = 0
+ct Int GAME_STATE_STORY = 1
+ct Int GAME_STATE_TIPS = 2
+ct Int GAME_STATE_PLAY = 3
+ct Int GAME_STATE_WIN = 4
+ct Int GAME_STATE_GAME_OVER = 63
 
-// Player data:
-struct Player
-    SS x
-    SSF y
-    SF xspeed
-    SF yspeed
-    U attr
-    AnimState anim_state
 
-fn make_player(SS x, SS y) Player
-    Player p = Player()
-    p.x = x
-    p.y = SSF(y)
-    return p
+// Controller data
+vars /controller
+    Bool is_start_pressed_past = false
+    Bool is_start_pressed = false
+    U start_counter = 0
+    Bool is_select_pressed_past = false
+    Bool is_select_pressed = false
+    U select_counter = 0
 
+
+// Game data
 vars /game
-    Player p = make_player(64, 64)
-    SS camera_x = 0
+    Player p =  Player()
+    U game_state = GAME_STATE_PLAY
+    U chr_counter = 0
+    U chr_bank = 0
+    U frame_counter = 0
+    Bool[NUMBER_OF_KEYS] keys
+    Bool[NUMBER_OF_KEYS] show_key = Bool[NUMBER_OF_KEYS](true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true)
+    // keys x values
+    U[NUMBER_OF_KEYS] key_x
+    // keys y values
+    U[NUMBER_OF_KEYS] key_y
+    // PAUSE
+    Bool is_game_paused = false
 
-data /sprites
-    // Here's where we define our metasprite, comprised of four 8x8 tiles:
-    
-    // Rest right
-    [] player_metasprite_resting_right
-        (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $20, $00),
-            Ms( 0, -8, $21, $00),
-            Ms(-8,  0, $30, $00),
-            Ms( 0,  0, $31, $00))))   
-    // Rest left
-    [] player_metasprite_resting_left
-        (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8, -8, $20, $00),
-            Ms( 0, -8, $21, $00),
-            Ms(-8,  0, $30, $00),
-            Ms( 0,  0, $31, $00)))) 
-    // Walk right
-    [] player_metasprite_walk00_right
-        (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $40, $00),
-            Ms( 0, -8, $41, $00),
-            Ms(-8,  0, $50, $00),
-            Ms( 0,  0, $51, $00))))
-    [] player_metasprite_walk01_right
-        (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $42, $00),
-            Ms( 0, -8, $43, $00),
-            Ms(-8,  0, $52, $00),
-            Ms( 0,  0, $53, $00))))
-    [] player_metasprite_walk02_right
-        (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $44, $00),
-            Ms( 0, -8, $45, $00),
-            Ms(-8,  0, $54, $00),
-            Ms( 0,  0, $55, $00))))
-    [] player_metasprite_walk03_right
-        (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $46, $00),
-            Ms( 0, -8, $47, $00),
-            Ms(-8,  0, $56, $00),
-            Ms( 0,  0, $57, $00))))
-    [] player_metasprite_walk04_right
-        (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $48, $00),
-            Ms( 0, -8, $49, $00),
-            Ms(-8,  0, $58, $00),
-            Ms( 0,  0, $59, $00))))
-    [] player_metasprite_walk05_right
-        (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $4A, $00),
-            Ms( 0, -8, $4B, $00),
-            Ms(-8,  0, $5A, $00),
-            Ms( 0,  0, $5B, $00))))
-    [] player_metasprite_walk06_right
-        (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $4C, $00),
-            Ms( 0, -8, $4D, $00),
-            Ms(-8,  0, $5C, $00),
-            Ms( 0,  0, $5D, $00))))
-    // Walk left
-    [] player_metasprite_walk00_left
-        (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8, -8, $40, $00),
-            Ms( 0, -8, $41, $00),
-            Ms(-8,  0, $50, $00),
-            Ms( 0,  0, $51, $00))))
-    [] player_metasprite_walk01_left
-        (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8, -8, $42, $00),
-            Ms( 0, -8, $43, $00),
-            Ms(-8,  0, $52, $00),
-            Ms( 0,  0, $53, $00))))
-    [] player_metasprite_walk02_left
-        (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8, -8, $44, $00),
-            Ms( 0, -8, $45, $00),
-            Ms(-8,  0, $54, $00),
-            Ms( 0,  0, $55, $00))))
-    [] player_metasprite_walk03_left
-        (make_metasprite(0, Ms{}(
-            Ms(-8, -8, $46, $00),
-            Ms( 0, -8, $47, $00),
-            Ms(-8,  0, $56, $00),
-            Ms( 0,  0, $57, $00))))
-    [] player_metasprite_walk04_left
-        (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8, -8, $48, $00),
-            Ms( 0, -8, $49, $00),
-            Ms(-8,  0, $58, $00),
-            Ms( 0,  0, $59, $00))))
-    [] player_metasprite_walk05_left
-        (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8, -8, $4A, $00),
-            Ms( 0, -8, $4B, $00),
-            Ms(-8,  0, $5A, $00),
-            Ms( 0,  0, $5B, $00))))
-    [] player_metasprite_walk06_left
-        (make_metasprite(ATTR_H_FLIP, Ms{}(
-            Ms(-8, -8, $4C, $00),
-            Ms( 0, -8, $4D, $00),
-            Ms(-8,  0, $5C, $00),
-            Ms( 0,  0, $5D, $00))))
-    //
-    // Animations
-    // 
-    // Rest
-    [] player_animation_rest_right
-        (make_anim(Fs{}(
-            Fs(20, @player_metasprite_resting_right)
-        )))
-    [] player_animation_rest_left
-        (make_anim(Fs{}(
-            Fs(20, @player_metasprite_resting_left)
-        )))
-    // Walk
-    [] player_animation_walk_right
-        (make_anim(Fs{}(
-            Fs(10,   @player_metasprite_walk00_right),
-            Fs(10,   @player_metasprite_walk01_right),
-            Fs(10,   @player_metasprite_walk02_right),
-            Fs(10,   @player_metasprite_walk03_right),
-            Fs(10,   @player_metasprite_walk04_right),
-            Fs(10,   @player_metasprite_walk05_right),
-            Fs(10,   @player_metasprite_walk06_right),
-        )))
-    [] player_animation_walk_left
-        (make_anim(Fs{}(
-            Fs(10,   @player_metasprite_walk00_left),
-            Fs(10,   @player_metasprite_walk01_left),
-            Fs(10,   @player_metasprite_walk02_left),
-            Fs(10,   @player_metasprite_walk03_left),
-            Fs(10,   @player_metasprite_walk04_left),
-            Fs(10,   @player_metasprite_walk05_left),
-            Fs(10,   @player_metasprite_walk06_left),
-        )))
-
-// Sets the OAM buffer in RAM (but doesn't upload to PPU):
-fn update_sprites()
-    // Our stack index into OAM:
-    U o = 0
-
-    // Player sprite:
-    o = push_oam_metasprite_a(o, SS(p.x) - camera_x + 8, SS(p.y) + 6, @player_metasprite_resting, p.attr)
-
-    // Clear the remainder of OAM
-    hide_oam(o)
-
-fn update_player()
-    // Update x-position:
-    if pads[0].held & BUTTON_LEFT
-        if collision_at(UU(p.x - 2), UU(p.y)) != C_WALL && collision_at(UU(p.x - 2), UU(p.y + rh)) != C_WALL
-            p.x -= 2
-            p.attr |= ATTR_H_FLIP 
-    if pads[0].held & BUTTON_RIGHT
-        if collision_at(UU(p.x + rw + 2), UU(p.y)) != C_WALL && collision_at(UU(p.x + rw + 2), UU(p.y + rh)) != C_WALL
-            p.x += 2
-            p.attr &= ~ATTR_H_FLIP 
-            
-    // If on the ground:
-    if collision_at(UU(p.x + 0), UU(p.y + ph)) == C_WALL || collision_at(UU(p.x + rw), UU(p.y + ph)) == C_WALL
-        if pads[0].pressed & BUTTON_A
-            p.yspeed = -5
-
-    // Update y-position:
-    SSF new_y = p.y + SSF(p.yspeed)
-    p.yspeed += 0.25
-    if p.yspeed > 0
-        if collision_at(UU(p.x + 0), UU(new_y + rh)) == C_WALL || collision_at(UU(p.x + rw), UU(new_y + rh)) == C_WALL
-            p.yspeed = 0
-            p.y = ((new_y + rh) & SSF(~%1111)) - ph
-        else
-            p.y = new_y
-    else
-        if collision_at(UU(p.x + 0), UU(new_y)) == C_WALL || collision_at(UU(p.x + rw), UU(new_y)) == C_WALL
-            p.yspeed = 0
-            p.y = (p.y & SSF(~%1111))
-        else
-            p.y = new_y
-
-    // Check for coin collisions:
-    SS center_x = SS(p.x) + (pw >> 1)
-    SS center_y = SS(p.y) + (ph >> 1)
-    switch collision_at(UU(center_x), UU(center_y)) 
-        case C_COIN
-            destroy(UU(center_x), UU(center_y))
-            break
-        case C_EXIT
-            current_level_index += 1
-            if current_level_index >= len(levels)
-                current_level_index = 0
-            nmi
-            goto mode play_level(current_level_index)
-            : preserves /game
-
-    // Update camera:
-    ct Int window = 112
-    if center_x - camera_x < window
-        camera_x = center_x - window
-    else if center_x - camera_x > 256 - window
-        camera_x = center_x - (256 - window)
-    camera_x = min(max(0, camera_x), (SS(current_level_width) << 4) - 256)
-
+// NMI
 nmi game_nmi()
-    ppu_upload_scroll()
-    ppu_reset_scroll(camera_x.a, 0)
-    {PPUCTRL}(PPUCTRL_NMI_ON | (camera_x.b & 1))
-    {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+
+    frame_counter = frame_counter + 1
+
+    // Story screen
+    if game_state == GAME_STATE_STORY || game_state == GAME_STATE_TIPS
+        if ready && writing == WRITING_READY
+            // Upload the decompressed character:
+            {PPUSTATUS}()
+            {PPUADDR}(cur_addr.b)
+            {PPUADDR}(cur_addr.a)
+            {PPUDATA}(char)
+            cur_addr += 1
+            writing = WRITING_WAIT
+            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+        {PPUSCROLL}(0)
+        {PPUSCROLL}(0)
+        {PPUMASK}(PPUMASK_BG_ON)
+    else
+        ppu_upload_scroll()
+        ppu_reset_scroll(p.camera_x.a, 0)
+        {PPUCTRL}(PPUCTRL_NMI_ON | (p.camera_x.b & 1))
+        {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+    
     ppu_upload_oam_poll_pads(0)
 
-mode main()
-    goto mode play_level(current_level_index)
-    : preserves
-    
+    // Select pressed?
+    if pads[0].held & BUTTON_SELECT
+        is_select_pressed_past = true
+        select_counter += 1
+        if select_counter == SELECT_BUTTON_DEBOUNCE_FRAMES
+            select_counter = 0
+            is_select_pressed = true
+    else
+        select_counter = 0
+
+    // Start pressed?
+    if pads[0].held & BUTTON_START
+        is_start_pressed_past = true
+        start_counter += 1
+        if start_counter == START_BUTTON_DEBOUNCE_FRAMES
+            start_counter = 0
+            is_start_pressed = true
+    else
+        start_counter = 0
+
+// MAIN
+mode main()  
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)    
+    // Load level
+    load_level(levels[current_level_index]) 
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+
+    while true
+        switch game_state
+            case GAME_STATE_START
+                current_level_index = LAST_LEVEL_INDEX + 1
+                goto mode start_screen(current_level_index)
+                : preserves /game
+                break
+            case GAME_STATE_STORY
+                current_level_index = LAST_LEVEL_INDEX + 2
+                goto mode story_screen(current_level_index)
+                : preserves /game
+                break
+            case GAME_STATE_TIPS
+                current_level_index = LAST_LEVEL_INDEX + 3
+                goto mode tips_screen(current_level_index)
+                : preserves /game
+                break
+            default
+                current_level_index = p.level_index
+                goto mode play_level(current_level_index)
+                : preserves /game
+                break
+
+
+
+
 mode play_level(U level_index)
 : nmi game_nmi
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)
-    load_level(levels[level_index])
+    // Avoid START and STORY levels
+    if current_level_index >= LAST_LEVEL_INDEX + 1
+        current_level_index = FIRST_LEVEL_INDEX
+    load_level(levels[level_index]) 
+
+    p = make_player()
+
     {PPUCTRL}(PPUCTRL_NMI_ON)
+    
     while true
         nmi
         update_pads()
-        update_player()
-        update_sprites()
-        update_scroll()
+        check_pause()
+        if !is_game_paused
+            update_player()
+            update_sprites()
+            update_scroll()
+        else
+            update_pause_sprites()
+        
+        if chr_counter == 0
+            if chr_bank == 0
+                chr_bank = 1
+            else
+                chr_bank = 0
+            // Change CHR ROM Bank on the fly
+            // // {PPUCTRL}(0)
+            // // {PPUMASK}(0)
+            // // hide_oam(0)
+            // load_chrrom_bank(levels[current_level_index], chr_bank)
+            // // {PPUCTRL}(PPUCTRL_NMI_ON)
 
+fn update_sprites()
+    // Our stack index into OAM:
+    U o = 0
+
+    for U i = 0; i < enemies_eye_num; i += 1
+        set_oam(o, enemies_eye[i].x, enemies_eye[i].y, $7B, 0)
+        // o = push_oam_metasprite(o, 128, 128, @sprite_eye_1)
+        o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
+        o += 4
+
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        following_eye_set_sprite(i, enemies_following_eye[i].x, enemies_following_eye[i].y)
+        set_oam(o, enemies_following_eye[i].x, enemies_following_eye[i].y, $7B, 0)
+        // o = push_oam_metasprite(o, 128, 128, @sprite_eye_1)
+        o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
+        if following_eye_state[i] == FOLLOWING_EYE_STATE_SHOOT
+            o = push_oam_anim(o, following_eye_pupil_s[i].x, following_eye_pupil_s[i].y, following_eye_pupil_s[i].anim_state)
+
+        o += 4
+
+
+    o = push_oam_anim(o, SS(p.x) - p.camera_x + 8, SS(p.y) + 6, p.anim_state)
+    switch p.stamina
+        case 3
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, p.stamina_anim_state)
+            break
+        case 2
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, p.stamina_anim_state)
+            break
+        case 1
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, p.stamina_anim_state)
+            break
+        case 0
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, make_anim_state(@stamina_animation_empty))
+            break
+
+    hide_oam(o)
+
+    // Tick animation - Enemies: Eye
+    p.anim_state = tick_anim(p.anim_state, true)
+    for U i = 0; i < enemies_eye_num; i += 1
+        enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
+
+    // Tick animation - Enemies: Following Eye
+    p.anim_state = tick_anim(p.anim_state, true)
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
+
+    // Tick animation - Enemies: Following Eye projectile pupil
+    p.anim_state = tick_anim(p.anim_state, true)
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        if following_eye_state[i] == FOLLOWING_EYE_STATE_SHOOT
+            following_eye_pupil_s[i].anim_state = tick_anim(following_eye_pupil_s[i].anim_state, true)
+
+fn update_pause_sprites()
+    {PPUMASK}(PPUMASK_GRAYSCALE | PPUMASK_ON | PPUMASK_NO_CLIP)
+
+fn update_chrrom_bank()
+fn player_has_key(U level_index) Bool
+    switch level_index    
+        default
+            return false
+
+fn check_pause()
+    if is_start_pressed 
+        is_game_paused = !is_game_paused
+        is_start_pressed = false
