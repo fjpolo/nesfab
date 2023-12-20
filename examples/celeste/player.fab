@@ -26,6 +26,8 @@ ct Int rw = pw - 1
 ct Int rh = ph - 1
 ct Int player_pw = 15
 ct Int player_ph = 18
+ct Int player_half_w = 8
+ct Int player_half_h = 9
 ct Int player_rw = player_pw - 1
 ct Int player_rh = player_ph - 1
 // Stamina
@@ -43,6 +45,8 @@ struct Player
     SSF h
     SS rw
     SSF rh
+    SS half_w
+    SSF half_h
     SS center_x 
     SS center_y
     SF xspeed
@@ -63,7 +67,7 @@ struct Player
 
 // Flying
 vars /player_globals
-    U flying_counter = 0
+    U stamina_counter = 0
     Bool flying_enabled = true
 ct U FLYING_LIMIT = 51 // (256 ~5[s] -> 1[s] ~51)
 ct U FLYING_1_3_LIMIT = 17
@@ -226,6 +230,8 @@ fn make_player() Player
     p.h = player_ph
     p.rw = player_rw
     p.rh = player_rh
+    p.half_w = player_half_w
+    p.half_h = player_half_h
     p.movement = PLAYER_MOVING_REST
     p.anim_state = make_anim_state(@player_animation_rest_right)
     p.level_index = FIRST_LEVEL_INDEX
@@ -290,12 +296,35 @@ fn player_resting()
         p.movement = PLAYER_MOVING_REST
 
 fn slide()
-    logf(@"p.yspeed: %d"l, U(p.yspeed))
-    logf(@"p.y: %d"l, U(p.y))
-    if collision_at(UU(p.x + 4), UU(p.y)) == C_SOLID_WALL_LEFT && (pads[0].held & BUTTON_LEFT)
+    // logf(@"p.yspeed: %d"l, U(p.yspeed))
+    // logf(@"p.y: %d"l, U(p.y))
+    // Sliding - Left
+    if (collision_at(UU(p.x + 4), UU(p.y)) == C_SOLID_WALL_LEFT || collision_at(UU(p.x + 4), UU(p.y + p.h)) == C_SOLID_WALL_LEFT) && (pads[0].held & BUTTON_LEFT)
+        logf(@"x: %d"l, U(p.x))
+        logf(@"y: %d"l, U(p.y))
+        p.sliding = true
+        p.yspeed = 0
+
+        // Tile is below us
+        if collision_at(UU(p.x), UU(p.y + p.half_h)) != C_SOLID_WALL_LEFT && collision_at(UU(p.x), UU(p.y + p.half_h)) != C_SOLID_WALL_RIGHT
             p.sliding = true
-    else if collision_at(UU(p.x + 12), UU(p.y)) == C_SOLID_WALL_RIGHT && (pads[0].held & BUTTON_RIGHT)
+            p.yspeed = 0
+        else
+            p.sliding = false
+
+    // Sliding - Right
+    else if (collision_at(UU(p.x + 12), UU(p.y)) == C_SOLID_WALL_RIGHT || collision_at(UU(p.x + 12), UU(p.y + p.h)) == C_SOLID_WALL_RIGHT) && (pads[0].held & BUTTON_RIGHT)
+        logf(@"x: %d"l, U(p.x))
+        logf(@"y: %d"l, U(p.y))
+
+        // Tile is below us
+        if collision_at(UU(p.x), UU(p.y + p.half_h)) != C_SOLID_WALL_LEFT && collision_at(UU(p.x), UU(p.y + p.half_h)) != C_SOLID_WALL_RIGHT
             p.sliding = true
+            p.yspeed = 0
+        else
+            p.sliding = false
+
+    // Not Sliding
     else 
         p.sliding = false
 
@@ -323,39 +352,35 @@ fn slide()
                         p.anim_state = make_anim_state(@player_animation_left)        // ToDo: create animation
 
 fn gravity()
-    logf(@"p.yspeed: %d"l, U(p.yspeed))
-    logf(@"p.y: %d"l, U(p.y))
+
     // Ground
-    if (collision_at(UU(p.center_x), UU(p.center_y + PLAYER_SPEED_WALK)) != C_LADDER && collision_at(UU(p.center_x), UU(p.center_y + SS(p.h) - PLAYER_SPEED_WALK)) != C_LADDER)
-        if collision_at(UU(p.x + 0), UU(p.y + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(p.y + p.h)) == C_WALL  || door_collision_at(current_level_index, UU(p.x + 0), UU(p.y + p.h)) || door_collision_at(current_level_index, UU(p.x + p.rw), UU(p.y + p.h))
-            if pads[0].pressed & BUTTON_A
-                p.yspeed = GROUND_SPEED
-        // Update y-position:
-        // Climbing horizontally, no gravity
-        U collision = collision_at(UU(p.x), UU(p.y))
-        if collision == C_CEILING_SCALE || collision == C_LADDER
-            p.climbing = true
-        else
-            p.climbing = false
-        // Normal horizontal movement
-        if !p.climbing
-            SSF new_y = p.y + SSF(p.yspeed)
-            p.yspeed += 0.25
-            if p.yspeed > 0
-                if collision_at(UU(p.x + 0), UU(new_y + p.rh)) == C_WALL || collision_at(UU(p.x + p.rw), UU(new_y + p.rh)) == C_WALL || door_collision_at(current_level_index, UU(p.x + 0), UU(new_y + p.rh)) ||door_collision_at(current_level_index, UU(p.x + p.rw), UU(new_y + p.rh))
-                    p.yspeed = 0
-                    p.y = ((new_y + p.rh) & SSF(~%1111)) - SSF(p.h)
-                else
-                    p.y = new_y
-            else
-                if collision_at(UU(p.x + 0), UU(new_y)) == C_WALL || collision_at(UU(p.x + p.rw), UU(new_y)) == C_WALL || door_collision_at(current_level_index, UU(p.x + 0), UU(new_y)) ||door_collision_at(current_level_index, UU(p.x + p.rw), UU(new_y))
-                    p.yspeed = 0
-                    p.y = (p.y & SSF(~%1111))
-                else
-                    p.y = new_y
-    // Ladder
+    if collision_at(UU(p.x), UU(p.y + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(p.y + p.h)) == C_WALL  || collision_at(UU(p.x + 0), UU(p.y + p.h)) == C_SOLID_WALL_LEFT || collision_at(UU(p.x + p.rw), UU(p.y + p.h)) == C_SOLID_WALL_LEFT || collision_at(UU(p.x + 0), UU(p.y + p.h)) == C_SOLID_WALL_RIGHT || collision_at(UU(p.x + p.rw), UU(p.y + p.h)) == C_SOLID_WALL_RIGHT || door_collision_at(current_level_index, UU(p.x + 0), UU(p.y + p.h)) || door_collision_at(current_level_index, UU(p.x + p.rw), UU(p.y + p.h))
+        if pads[0].pressed & BUTTON_A
+            p.yspeed = GROUND_SPEED
+    // Update y-position:
+    // Climbing horizontally, no gravity
+    U collision = collision_at(UU(p.x), UU(p.y))
+    if collision == C_CEILING_SCALE || collision == C_LADDER
+        p.climbing = true
     else
-        climb()
+        p.climbing = false
+    // Normal horizontal movement
+    if !p.climbing
+        SSF new_y = p.y + SSF(p.yspeed)
+        p.yspeed += 0.25
+        if p.yspeed > 0
+            // Falling down
+            if collision_at(UU(p.x), UU(new_y + p.rh)) == C_WALL || collision_at(UU(p.x), UU(new_y + p.rh)) == C_SOLID_WALL_LEFT || collision_at(UU(p.x), UU(new_y + p.rh)) == C_SOLID_WALL_RIGHT || collision_at(UU(p.x + p.rw), UU(new_y + p.rh)) == C_WALL || collision_at(UU(p.x), UU(new_y + p.rh)) == C_SOLID_WALL_LEFT || collision_at(UU(p.x), UU(new_y + p.rh)) == C_SOLID_WALL_RIGHT || door_collision_at(current_level_index, UU(p.x + 0), UU(new_y + p.rh)) || door_collision_at(current_level_index, UU(p.x + p.rw), UU(new_y + p.rh))
+                p.yspeed = 0
+                p.y = ((new_y + p.rh) & SSF(~%1111)) - SSF(p.h)
+            else
+                p.y = new_y
+        else
+            if collision_at(UU(p.x + 0), UU(new_y)) == C_WALL || collision_at(UU(p.x + 0), UU(new_y)) == C_SOLID_WALL_LEFT || collision_at(UU(p.x + 0), UU(new_y)) == C_SOLID_WALL_RIGHT || collision_at(UU(p.x + p.rw), UU(new_y)) == C_WALL || collision_at(UU(p.x + p.rw), UU(new_y)) == C_SOLID_WALL_LEFT || collision_at(UU(p.x + p.rw), UU(new_y)) == C_SOLID_WALL_RIGHT || door_collision_at(current_level_index, UU(p.x + 0), UU(new_y)) ||door_collision_at(current_level_index, UU(p.x + p.rw), UU(new_y))
+                p.yspeed = 0
+                p.y = (p.y & SSF(~%1111))
+            else
+                p.y = new_y
 
 fn walk()
     // Update x-position:
@@ -408,17 +433,17 @@ fn climb()
 
 fn fly()
     // Countdown of flying capacity
-    flying_counter += 1
-    if flying_counter == FLYING_1_3_LIMIT
+    stamina_counter += 1
+    if stamina_counter == FLYING_1_3_LIMIT
         p.stamina = 2
         p.stamina_anim_state = make_anim_state(@stamina_animation_2_3)
-    if flying_counter == FLYING_2_3_LIMIT
+    if stamina_counter == FLYING_2_3_LIMIT
         p.stamina_anim_state = make_anim_state(@stamina_animation_1_3)
         p.stamina = 1
-    if flying_counter == FLYING_LIMIT
+    if stamina_counter == FLYING_LIMIT
         p.stamina_anim_state = make_anim_state(@stamina_animation_empty)
         p.stamina = 0
-        flying_counter = 0
+        stamina_counter = 0
         flying_enabled = false
     SS speed = PLAYER_SPEED_WALK
     if pads[0].held & BUTTON_RIGHT
@@ -450,45 +475,14 @@ fn fly()
                 p.anim_state = make_anim_state(@player_animation_left)
             p.y += speed
     // Get tired of flying
-    //p.y += 0.1 * flying_counter
+    //p.y += 0.1 * stamina_counter
 
 fn move_player()
     p.center_x = SS(p.x) + (p.w >> 1)
     p.center_y = SS(p.y) + SS(p.h >> 1)
     p.climbing = false
-    p.flying = false
-
-    // Can player fly?
-    p.flying = false
-    if pads[0].held & BUTTON_B
-        p.flying = true
+    p.flying = false    
     
-    
-    // Fly baby!
-    if p.flying && flying_enabled
-        fly()
-    // Flying enabled but not flying
-    if !p.flying && flying_enabled
-        if flying_counter > 0 && flying_counter < 153
-            flying_counter -= 1
-        else
-            flying_enabled = true
-    
-    // No flying baby
-    if !flying_enabled
-        p.flying = false
-        flying_counter += 1
-        if flying_counter == FLYING_1_3_COOLDOWN
-            p.stamina_anim_state = make_anim_state(@stamina_animation_1_3)
-            p.stamina = 1
-        if flying_counter == FLYING_2_3_COOLDOWN
-            p.stamina_anim_state = make_anim_state(@stamina_animation_2_3)
-            p.stamina = 2
-        if flying_counter == FLYING_COOLDOWN
-            p.stamina_anim_state = make_anim_state(@stamina_animation_full)
-            p.stamina = 3
-            flying_enabled = true
-            flying_counter = 0
     // Normal movement
     if !p.flying
         slide()
