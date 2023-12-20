@@ -33,6 +33,9 @@ ct U C_LADDER           = 4
 ct U C_CEILING_SCALE    = 5
 ct U C_KEY              = 6
 ct U C_JAIL             = 7
+ct U C_SOLID_WALL_RIGHT = 8
+ct U C_SOLID_WALL_LEFT  = 9
+
 
 vars /metatiles
     // Pointers to our metatile data.
@@ -219,7 +222,6 @@ fn destroy(UU pixel_x, UU pixel_y)
     scroll_coin_ppuaddr = calc_scroll_coin_ppuaddr(UU(pixel_x), UU(pixel_y))
 
     if collision_at(pixel_x, pixel_y) == C_KEY
-        log(@"Key destroyed"l)
         show_key[current_level_index]  = false
 
 fn door_collision_at(UU level_index, UU pixel_x, UU pixel_y) Bool

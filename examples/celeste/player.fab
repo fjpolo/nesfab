@@ -5,10 +5,16 @@ ct Int PLAYER_MOVING_LEFT = 2
 ct Int PLAYER_MOVING_UP = 3
 ct Int PLAYER_MOVING_DOWN = 4
 ct Int PLAYER_CLIMBING = 5 
+ct Int PLAYER_SLIDING = 6
 // Player speeds
 ct Int PLAYER_SPEED_CLIMB_LADDER = 1
 ct Int PLAYER_SPEED_WALK = 2
+ct Int PLAYER_SPEED_SLIDE = 1
+ct Int PLAYER_SPEED_CLIMB = 1
 ct Int PLAYER_SPEED_RUN = 3
+ct Int PLAYER_SPEED_DASH_PHASE_1 = 3
+ct Int PLAYER_SPEED_DASH_PHASE_2 = 5
+ct Int PLAYER_SPEED_DASH_PHASE_3 = 3
 ct Int GROUND_SPEED = -5
 // Player initial [x, y]
 ct Int PLAYER_INITIAL_X = 32
@@ -49,8 +55,11 @@ struct Player
     U stamina
     AnimState stamina_anim_state
     Bool climbing
-    Bool flying 
-
+    Bool flying
+    Bool sliding
+    Bool can_double_jump
+    Bool can_climb
+    Bool double_jumping
 
 // Flying
 vars /player_globals
@@ -236,7 +245,9 @@ fn update_camera()
 
 fn handle_collisions()
     // Check for coin/exit collisions:
-    switch collision_at(UU(p.center_x), UU(p.center_y)) 
+    switch collision_at(UU(p.center_x), UU(p.center_y))
+        p.can_climb = false
+        p.can_double_jump = false
         case C_COIN
             destroy(UU(p.center_x), UU(p.center_y))
             break
@@ -257,6 +268,14 @@ fn handle_collisions()
                 key_y[current_level_index] = U(p.center_y)
                 destroy(UU(p.center_x), UU(p.center_y))
                 break
+        case C_SOLID_WALL_LEFT:
+        case C_SOLID_WALL_RIGHT:
+            // ToDo: 
+            //      - can double jump
+            //      - invert x
+            p.can_climb = true
+            p.can_double_jump = true
+            break
 
 fn player_resting()
     // Resting
@@ -270,45 +289,47 @@ fn player_resting()
                 break
         p.movement = PLAYER_MOVING_REST
 
-fn walk()
-    // Update x-position:
-    SS speed = PLAYER_SPEED_WALK
-    if pads[0].held & BUTTON_B 
-        speed = PLAYER_SPEED_RUN
-    if pads[0].held & BUTTON_LEFT
-        if collision_at(UU(p.x - speed), UU(p.y)) != C_WALL && collision_at(UU(p.x - speed), UU(p.y + p.rh)) != C_WALL && !door_collision_at(current_level_index, UU(p.x - speed), UU(p.y)) && !door_collision_at(current_level_index, UU(p.x - speed), UU(p.y + p.rh))
-            if collision_at(UU(p.x - SS(p.h)), UU(p.y)) == C_CEILING_SCALE
-                p.x -= PLAYER_SPEED_CLIMB_LADDER
-                if p.movement != PLAYER_CLIMBING
-                    p.movement = PLAYER_CLIMBING
-                    // p.anim_state = make_anim_state(@player_animation_climb_ladder)
-                    p.anim_state = make_anim_state(@player_animation_left)        // ToDo: create animation
+fn slide()
+    logf(@"p.yspeed: %d"l, U(p.yspeed))
+    logf(@"p.y: %d"l, U(p.y))
+    if collision_at(UU(p.x + 4), UU(p.y)) == C_SOLID_WALL_LEFT && (pads[0].held & BUTTON_LEFT)
+            p.sliding = true
+    else if collision_at(UU(p.x + 12), UU(p.y)) == C_SOLID_WALL_RIGHT && (pads[0].held & BUTTON_RIGHT)
+            p.sliding = true
+    else 
+        p.sliding = false
+
+    // Slide down
+    if p.sliding
+        // Touch ground
+        if collision_at(UU(p.x), UU(p.y + player_ph)) == C_WALL
+            // p.sliding = false
+        else
+            // double jump
+            if (pads[0].held & BUTTON_A) && p.can_double_jump
+                p.sliding = false
+                p.double_jumping= true
+                p.yspeed = GROUND_SPEED
+            if(pads[0].held & BUTTON_UP)
+                p.y -= PLAYER_SPEED_CLIMB
             else
-                if p.movement != PLAYER_MOVING_LEFT
-                    p.movement = PLAYER_MOVING_LEFT     
-                    p.anim_state = make_anim_state(@player_animation_left)
-            p.x -= speed
-    if pads[0].held & BUTTON_RIGHT
-        if collision_at(UU(p.x + p.rw + speed), UU(p.y)) != C_WALL && collision_at(UU(p.x + p.rw + speed), UU(p.y + p.rh)) != C_WALL && !door_collision_at(current_level_index, UU(p.x + p.rw + speed), UU(p.y)) && !door_collision_at(current_level_index, UU(p.x + p.rw + speed), UU(p.y + p.rh))
-            if collision_at(UU(p.x + SS(p.h)), UU(p.y)) == C_CEILING_SCALE
-                p.x += PLAYER_SPEED_CLIMB_LADDER
-                if p.movement != PLAYER_CLIMBING
-                    p.movement = PLAYER_CLIMBING
+                p.y += PLAYER_SPEED_SLIDE
+                if p.movement != PLAYER_SLIDING
+                    p.movement = PLAYER_SLIDING
                     // p.anim_state = make_anim_state(@player_animation_climb_ladder)
-                    p.anim_state = make_anim_state(@player_animation_right)     // ToDo: create animation
-            else
-                if p.movement != PLAYER_MOVING_RIGHT
-                    p.movement = PLAYER_MOVING_RIGHT
-                    p.anim_state = make_anim_state(@player_animation_right)
-            p.x += speed
-    
+                    if pads[0].held & BUTTON_RIGHT
+                        p.anim_state = make_anim_state(@player_animation_right)        // ToDo: create animation
+                    if pads[0].held & BUTTON_LEFT
+                        p.anim_state = make_anim_state(@player_animation_left)        // ToDo: create animation
+
+fn gravity()
+    logf(@"p.yspeed: %d"l, U(p.yspeed))
+    logf(@"p.y: %d"l, U(p.y))
     // Ground
     if (collision_at(UU(p.center_x), UU(p.center_y + PLAYER_SPEED_WALK)) != C_LADDER && collision_at(UU(p.center_x), UU(p.center_y + SS(p.h) - PLAYER_SPEED_WALK)) != C_LADDER)
         if collision_at(UU(p.x + 0), UU(p.y + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(p.y + p.h)) == C_WALL  || door_collision_at(current_level_index, UU(p.x + 0), UU(p.y + p.h)) || door_collision_at(current_level_index, UU(p.x + p.rw), UU(p.y + p.h))
             if pads[0].pressed & BUTTON_A
                 p.yspeed = GROUND_SPEED
-
-        
         // Update y-position:
         // Climbing horizontally, no gravity
         U collision = collision_at(UU(p.x), UU(p.y))
@@ -335,6 +356,39 @@ fn walk()
     // Ladder
     else
         climb()
+
+fn walk()
+    // Update x-position:
+    SS speed = PLAYER_SPEED_WALK
+    if pads[0].held & BUTTON_B 
+        speed = PLAYER_SPEED_RUN
+    if pads[0].held & BUTTON_LEFT
+        if collision_at(UU(p.x - speed), UU(p.y)) != C_WALL && collision_at(UU(p.x - speed), UU(p.y)) != C_SOLID_WALL_RIGHT && collision_at(UU(p.x - speed), UU(p.y + p.rh)) != C_WALL && !door_collision_at(current_level_index, UU(p.x - speed), UU(p.y)) && !door_collision_at(current_level_index, UU(p.x - speed), UU(p.y + p.rh))
+            if collision_at(UU(p.x - SS(p.h)), UU(p.y)) == C_CEILING_SCALE
+                p.x -= PLAYER_SPEED_CLIMB_LADDER
+                if p.movement != PLAYER_CLIMBING
+                    p.movement = PLAYER_CLIMBING
+                    // p.anim_state = make_anim_state(@player_animation_climb_ladder)
+                    p.anim_state = make_anim_state(@player_animation_left)        // ToDo: create animation
+            else
+                if p.movement != PLAYER_MOVING_LEFT
+                    p.movement = PLAYER_MOVING_LEFT     
+                    p.anim_state = make_anim_state(@player_animation_left)
+            p.x -= speed
+    if pads[0].held & BUTTON_RIGHT
+        if collision_at(UU(p.x + p.rw + speed), UU(p.y)) != C_WALL && collision_at(UU(p.x + p.rw + speed), UU(p.y)) != C_SOLID_WALL_LEFT && collision_at(UU(p.x + p.rw + speed), UU(p.y + p.rh)) != C_WALL && !door_collision_at(current_level_index, UU(p.x + p.rw + speed), UU(p.y)) && !door_collision_at(current_level_index, UU(p.x + p.rw + speed), UU(p.y + p.rh))
+            if collision_at(UU(p.x + SS(p.h)), UU(p.y)) == C_CEILING_SCALE
+                p.x += PLAYER_SPEED_CLIMB_LADDER
+                if p.movement != PLAYER_CLIMBING
+                    p.movement = PLAYER_CLIMBING
+                    // p.anim_state = make_anim_state(@player_animation_climb_ladder)
+                    p.anim_state = make_anim_state(@player_animation_right)     // ToDo: create animation
+            else
+                if p.movement != PLAYER_MOVING_RIGHT
+                    p.movement = PLAYER_MOVING_RIGHT
+                    p.anim_state = make_anim_state(@player_animation_right)
+            p.x += speed
+
 
 fn climb()
         if pads[0].held & BUTTON_UP
@@ -437,7 +491,12 @@ fn move_player()
             flying_counter = 0
     // Normal movement
     if !p.flying
-        walk()
+        slide()
+        if !p.sliding 
+            walk()
+        if !p.sliding || p.double_jumping
+            gravity()
+
 
 // Main function to call
 fn update_player()
