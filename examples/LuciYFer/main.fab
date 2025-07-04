@@ -1,0 +1,255 @@
+/*
+ * Copyright (c) 2023, fjpolo@gmail.com
+ * This file is distributed under the Boost Software License, Version 1.0.
+ * See LICENSE_1_0.txt or https://www.boost.org/LICENSE_1_0.txt 
+ */
+
+// Button constants
+ct Int SELECT_BUTTON_DEBOUNCE_FRAMES = 5
+ct Int START_BUTTON_DEBOUNCE_FRAMES = 5
+
+// Game states
+ct Int GAME_STATE_START = 0
+ct Int GAME_STATE_STORY = 1
+ct Int GAME_STATE_TIPS = 2
+ct Int GAME_STATE_PLAY = 3
+ct Int GAME_STATE_WIN = 4
+ct Int GAME_STATE_GAME_OVER = 63
+
+
+// Controller data
+vars /controller
+    Bool is_start_pressed_past = false
+    Bool is_start_pressed = false
+    U start_counter = 0
+    Bool is_select_pressed_past = false
+    Bool is_select_pressed = false
+    U select_counter = 0
+
+
+// Game data
+vars /game
+    Player luci =  Player()
+    Player fer =  Player()
+    Player p =  Player()
+    U current_player = CURRENT_PLAYER_LUCI
+    U game_state = GAME_STATE_START
+    U chr_counter = 0
+    U chr_bank = 0
+    U frame_counter = 0
+    Bool[NUMBER_OF_KEYS] keys
+    Bool[NUMBER_OF_KEYS] show_key = Bool[NUMBER_OF_KEYS](true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true)
+    // keys x values
+    U[NUMBER_OF_KEYS] key_x
+    // keys y values
+    U[NUMBER_OF_KEYS] key_y
+    // PAUSE
+    Bool is_game_paused = false
+
+// NMI
+nmi game_nmi()
+
+    frame_counter = frame_counter + 1
+
+    // Story screen
+    if game_state == GAME_STATE_STORY || game_state == GAME_STATE_TIPS
+        if ready && writing == WRITING_READY
+            // Upload the decompressed character:
+            {PPUSTATUS}()
+            {PPUADDR}(cur_addr.b)
+            {PPUADDR}(cur_addr.a)
+            {PPUDATA}(char)
+            cur_addr += 1
+            writing = WRITING_WAIT
+            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+        {PPUSCROLL}(0)
+        {PPUSCROLL}(0)
+        {PPUMASK}(PPUMASK_BG_ON)
+    else
+        ppu_upload_scroll()
+        ppu_reset_scroll(p.camera_x.a, 0)
+        {PPUCTRL}(PPUCTRL_NMI_ON | (p.camera_x.b & 1))
+        {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+    
+    ppu_upload_oam_poll_pads(0)
+
+    // Select pressed?
+    if pads[0].held & BUTTON_SELECT
+        is_select_pressed_past = true
+        select_counter += 1
+        if select_counter == SELECT_BUTTON_DEBOUNCE_FRAMES
+            select_counter = 0
+            is_select_pressed = true
+    else
+        select_counter = 0
+
+    // Start pressed?
+    if pads[0].held & BUTTON_START
+        is_start_pressed_past = true
+        start_counter += 1
+        if start_counter == START_BUTTON_DEBOUNCE_FRAMES
+            start_counter = 0
+            is_start_pressed = true
+    else
+        start_counter = 0
+
+// MAIN
+mode main()  
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)    
+    // Load level
+    load_level(levels[current_level_index]) 
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+
+    while true
+        switch game_state
+            case GAME_STATE_START
+                current_level_index = LAST_LEVEL_INDEX + 1
+                goto mode start_screen(current_level_index)
+                : preserves /game
+                break
+            case GAME_STATE_STORY
+                current_level_index = LAST_LEVEL_INDEX + 2
+                goto mode story_screen(current_level_index)
+                : preserves /game
+                break
+            case GAME_STATE_TIPS
+                current_level_index = LAST_LEVEL_INDEX + 3
+                goto mode tips_screen(current_level_index)
+                : preserves /game
+                break
+            default
+                current_level_index = p.level_index
+                goto mode play_level(current_level_index)
+                : preserves /game
+                break
+
+
+
+
+mode play_level(U level_index)
+: nmi game_nmi
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    // Avoid START and STORY levels
+    if current_level_index >= LAST_LEVEL_INDEX + 1
+        current_level_index = FIRST_LEVEL_INDEX
+    load_level(levels[level_index]) 
+
+    // Animation -  Rest state
+    if !luci.is_initialised
+        luci = make_player_luci()
+    if !fer.is_initialised
+        fer = make_player_fer()
+    switch current_player
+        case CURRENT_PLAYER_LUCI
+            p = restore_player(luci)
+            break
+        case CURRENT_PLAYER_FER
+            p = restore_player(fer)
+            break
+
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+    
+    while true
+        nmi
+        update_pads()
+        check_pause()
+        if !is_game_paused
+            update_player()
+            update_sprites()
+            update_scroll()
+        else
+            update_pause_sprites()
+        
+        if chr_counter == 0
+            if chr_bank == 0
+                chr_bank = 1
+            else
+                chr_bank = 0
+            // Change CHR ROM Bank on the fly
+            // // {PPUCTRL}(0)
+            // // {PPUMASK}(0)
+            // // hide_oam(0)
+            // load_chrrom_bank(levels[current_level_index], chr_bank)
+            // // {PPUCTRL}(PPUCTRL_NMI_ON)
+
+fn update_sprites()
+    // Our stack index into OAM:
+    U o = 0
+
+    for U i = 0; i < enemies_eye_num; i += 1
+        set_oam(o, enemies_eye[i].x, enemies_eye[i].y, $7B, 0)
+        // o = push_oam_metasprite(o, 128, 128, @sprite_eye_1)
+        o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
+        o += 4
+
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        following_eye_set_sprite(i, enemies_following_eye[i].x, enemies_following_eye[i].y)
+        set_oam(o, enemies_following_eye[i].x, enemies_following_eye[i].y, $7B, 0)
+        // o = push_oam_metasprite(o, 128, 128, @sprite_eye_1)
+        o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
+        if following_eye_state[i] == FOLLOWING_EYE_STATE_SHOOT
+            o = push_oam_anim(o, following_eye_pupil_s[i].x, following_eye_pupil_s[i].y, following_eye_pupil_s[i].anim_state)
+
+        o += 4
+
+
+    o = push_oam_anim(o, SS(p.x) - p.camera_x + 8, SS(p.y) + 6, p.anim_state)
+    switch p.stamina
+        case 3
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, p.stamina_anim_state)
+            break
+        case 2
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, p.stamina_anim_state)
+            break
+        case 1
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, p.stamina_anim_state)
+            break
+        case 0
+            o = push_oam_anim(o, STAMINA_X, STAMINA_Y, make_anim_state(@stamina_animation_empty))
+            break
+
+    if luci.level_index == fer.level_index && current_player != CURRENT_PLAYER_LUCIFER
+        // Draw also second character
+        switch current_player
+            case CURRENT_PLAYER_LUCI
+                o = push_oam_anim(o, SS(fer.x) - p.camera_x + 8, SS(fer.y) + 6, fer.anim_state)
+                break
+            case CURRENT_PLAYER_FER
+                o = push_oam_anim(o, SS(luci.x) - p.camera_x + 8, SS(luci.y) + 6, luci.anim_state)
+                break
+
+    hide_oam(o)
+
+    // Tick animation - Enemies: Eye
+    p.anim_state = tick_anim(p.anim_state, true)
+    for U i = 0; i < enemies_eye_num; i += 1
+        enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
+
+    // Tick animation - Enemies: Following Eye
+    p.anim_state = tick_anim(p.anim_state, true)
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
+
+    // Tick animation - Enemies: Following Eye projectile pupil
+    p.anim_state = tick_anim(p.anim_state, true)
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        if following_eye_state[i] == FOLLOWING_EYE_STATE_SHOOT
+            following_eye_pupil_s[i].anim_state = tick_anim(following_eye_pupil_s[i].anim_state, true)
+
+fn update_pause_sprites()
+    {PPUMASK}(PPUMASK_GRAYSCALE | PPUMASK_ON | PPUMASK_NO_CLIP)
+
+fn update_chrrom_bank()
+fn player_has_key(U level_index) Bool
+    switch level_index    
+        default
+            return false
+
+fn check_pause()
+    if is_start_pressed 
+        is_game_paused = !is_game_paused
+        is_start_pressed = false

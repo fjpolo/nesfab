@@ -1,0 +1,62 @@
+// charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\0", '\0')
+// : stows /strings
+data /strings
+    [] tips_string
+        (
+            `TIPS:\n`
+            `\n`
+            `- Have fun\n`
+            `- Found a bug?\n`
+            `      Report it :)\n`
+            `- Found a glitch?\n`
+            `      Maybe intentional ;)\n`
+            `- Try all buttons\n`
+            `- Explore\n`
+            `- Look at the details\n`
+            `- Stuck?\n`
+            `      Contact us :)\n`
+            `fjpolo@gmail.com\n`
+            `\n`
+            `\n`
+            `PRESS START TO PLAY\n`
+        )
+
+mode tips_screen(U level_index)
+: nmi game_nmi
+    current_level_index = LAST_LEVEL_INDEX + 3
+    writing = WRITING_WAIT
+    row_addr = $2106
+    cur_addr = $2106
+    
+    // Prepare the decompressor
+    decompress_string_init(@tips_string)
+    // Load level
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    load_level(levels[current_level_index]) 
+    // NMI ON
+    {PPUCTRL}(PPUCTRL_NMI_ON)
+    
+    while true
+        nmi
+        // Decompress one character
+        if writing == WRITING_WAIT
+            char = decompress_string()
+            if char == charmap.sentinel
+                writing = WRITING_DONE
+            else if char == '\n'
+                row_addr += 32
+                cur_addr = row_addr
+            else
+                writing = WRITING_READY
+        nmi
+        nmi
+        nmi
+    
+        if is_start_pressed
+            game_state = GAME_STATE_PLAY
+            current_level_index = FIRST_LEVEL_INDEX   
+            goto mode play_level(current_level_index)
+            : preserves /game
+        update_pads()
