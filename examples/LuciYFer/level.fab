@@ -1,0 +1,229 @@
+/*
+ * Copyright (c) 2023, Patrick Bene
+ * This file is distributed under the Boost Software License, Version 1.0.
+ * See LICENSE_1_0.txt or https://www.boost.org/LICENSE_1_0.txt 
+ */
+
+// Load the .mapfab file, calling the macros for each definition.
+mapfab(raw, "LuciYFer.mapfab", "chr", "palette", "metatiles", "level")
+
+macro("pool_contiguous", "Enemy_eye", "8", "enemies_eye", "/game")
+macro("pool_contiguous", "Enemy_following_eye", "8", "enemies_following_eye", "/game")
+
+// Used in level.macrofab to format the enemies:
+ct fn enemies_eye_vec(Int{} x, Int{} y) Enemy_eye{}
+    Enemy_eye{} out = Enemy_eye{}()
+    for U i = 0; i < len(x); i += 1
+        push(out, Enemy_eye(U(x{i}), U(y{i})))
+    return out
+
+// Used in level.macrofab to format the enemies:
+ct fn enemies_following_eye_vec(Int{} x, Int{} y) Enemy_following_eye{}
+    Enemy_following_eye{} out = Enemy_following_eye{}()
+    for U i = 0; i < len(x); i += 1
+        push(out, Enemy_following_eye(U(x{i}), U(y{i})))
+    return out
+
+// Tile collision values:
+ct U C_OPEN             = 0
+ct U C_WALL             = 1
+ct U C_COIN             = 2
+ct U C_EXIT             = 3
+ct U C_LADDER           = 4
+ct U C_CEILING_SCALE    = 5
+ct U C_KEY              = 6
+ct U C_JAIL             = 7
+
+vars /metatiles
+    // Pointers to our metatile data.
+    // (This is more useful if we have multiple metatile sets.)
+    CC/metatiles mt_nw
+    CC/metatiles mt_ne
+    CC/metatiles mt_sw
+    CC/metatiles mt_se
+    CC/metatiles mt_ca
+
+vars /game
+    U current_level_index = FIRST_LEVEL_INDEX
+
+vars /levels
+    CCC/levels current_level
+    U current_level_width
+    U current_level_height
+    U[256] destroyed = U[256](0)
+    
+
+ct CCC/levels[] levels = CCC/levels[](
+                                        @lev_l0,
+                                        @lev_l1,
+                                        @lev_l2,
+                                        @lev_l3,
+                                        @lev_start,
+                                        @lev_story,
+                                        @lev_tips,
+                                    )
+ct U FIRST_LEVEL_INDEX =  0
+ct U LAST_LEVEL_INDEX =  3
+
+// Sets the 'mt_' pointers to offsets of 'mt'.
+fn load_metatiles(CC/metatiles mt)
+    UU size = UU(read U(mt))
+    if size == 0
+        size = 256
+    mt_nw = mt
+    mt += size
+    mt_ne = mt
+    mt += size
+    mt_sw = mt
+    mt += size
+    mt_se = mt
+    mt += size
+    mt_ca = mt
+
+fn disable_nmi()
+    
+fn load_level(CCC/levels level)
+    // CHR:
+    U chr_bank = read U(level)
+    {$8000}(chr_bank)
+
+    // Palette:
+    load_palette(read CCC/palettes(level))
+    ppu_upload_palette()
+
+    // Metatiles:
+    load_metatiles(read CC/metatiles(level))
+
+    // Level tiles:
+    current_level_width = read U(level)
+    current_level_height = read U(level)
+    current_level = read CCC/levels(level)
+
+    // Enemies: Eye
+    enemies_eye_clear()
+    U eye_num = read U(level)
+    for U i = 0; i < eye_num; i += 1
+        enemies_eye_new(read Enemy_eye(level))
+        enemies_eye_anim_state[i] = make_anim_state(@eye_animation)
+        
+    // Enemies: Following Eye
+    enemies_following_eye_clear()
+    U following_eye_num = read U(level)
+    for U i = 0; i < following_eye_num; i += 1
+        enemies_following_eye_new(read Enemy_following_eye(level))
+        following_eye_set_initial_state(i, enemies_following_eye[i].x, enemies_following_eye[i].y)
+
+    // Check if key was grabbed
+    if !show_key[current_level_index]
+        if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
+            destroy(key_x[current_level_index], key_y[current_level_index])
+    switch current_level_index
+        case 0
+             if keys[current_level_index]
+                // remove door
+                if collision_at(LEVEL_0_DOOR_0_X, LEVEL_0_DOOR_0_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_0_X, LEVEL_0_DOOR_0_Y)
+                if collision_at(LEVEL_0_DOOR_1_X, LEVEL_0_DOOR_1_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_1_X, LEVEL_0_DOOR_2_Y)
+                if collision_at(LEVEL_0_DOOR_2_X, LEVEL_0_DOOR_1_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_2_X, LEVEL_0_DOOR_2_Y)
+                if collision_at(LEVEL_0_DOOR_3_X, LEVEL_0_DOOR_3_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_3_X, LEVEL_0_DOOR_3_Y)
+                if collision_at(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y) == C_JAIL
+                    destroy(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y)
+        case 2
+            if keys[current_level_index]
+                // remove door
+                if collision_at(LEVEL_2_DOOR_0_X, LEVEL_2_DOOR_0_Y) == C_JAIL
+                    destroy(LEVEL_2_DOOR_0_X, LEVEL_2_DOOR_0_Y)
+                if collision_at(LEVEL_2_DOOR_1_X, LEVEL_2_DOOR_1_Y) == C_JAIL
+                    destroy(LEVEL_2_DOOR_1_X, LEVEL_2_DOOR_1_Y)
+        break
+
+    
+    
+    
+
+
+
+    // Set the scroll off-screen, then run the scroll code several times
+    // to fill the screen with tiles.
+    scroll_x = calc_shifted_camera_x() + 32 + 4
+    while scroll_x != calc_shifted_camera_x()
+        update_scroll()
+        ppu_upload_scroll()
+
+fn load_chrrom_bank(CCC/levels level, U bank)
+    // CHR:
+    {$8000}(bank)
+
+    // Palette:
+    // load_palette(read CCC/palettes(level))
+    // ppu_upload_palette()
+
+    // Metatiles:
+    load_metatiles(read CC/metatiles(level))
+
+    // Level tiles:
+    // current_level_width = read U(level)
+    // current_level = level
+
+    // // Set the scroll off-screen, then run the scroll code several times
+    // // to fill the screen with tiles.
+    // // p.camera_x = 0
+    // scroll_x = calc_shifted_camera_x() + 32 + 4
+    // while scroll_x != calc_shifted_camera_x()
+    //     update_scroll()
+    //     ppu_upload_scroll()
+
+    // // Enemies:
+    // enemies_clear()
+    // U num = read U(level)
+    // for U i = 0; i < num; i += 1
+    //     enemies_new(read Enemy_eye(level))
+
+// Returns the tile at a pixel position:
+fn tile_at(UU pixel_x, UU pixel_y) U
+    if pixel_y.b
+        return 0
+    return (current_level + (pixel_x & $FFF0))[pixel_y.a >> 4]
+
+// Returns the collision at a pixel position:
+fn collision_at(UU pixel_x, UU pixel_y) U
+    return mt_ca[tile_at(pixel_x, pixel_y)] >> 2
+ct fn _destroyed_masks() U[128]
+    U[128] masks
+    for U i = 0; i < 128; i += 1
+        masks[i] = 1 << (i >> 4)
+    return masks
+
+// Converts x-positions to bit masks usable with the 'destroyed' bitset array.
+ct U[128] destroyed_masks = _destroyed_masks()
+
+// If the tile at a specific position was destroyed or not.
+fn destroyed_at(UU pixel_x, UU pixel_y) Bool
+    if pixel_y.b
+        return true
+    U ux = (pixel_x << 1).b & %1111
+    U uy = pixel_y.a & %11110000
+    U mask = destroyed_masks[pixel_x.a & %1111111]
+    return destroyed[ux + uy] & mask
+
+fn destroy(UU pixel_x, UU pixel_y)
+    if pixel_y.b
+        return
+    U ux = (pixel_x << 1).b & %1111
+    U uy = pixel_y.a & %11110000
+    U mask = destroyed_masks[pixel_x.a & %1111111]
+    destroyed[ux + uy] |= mask
+    scroll_coin_ppuaddr = calc_scroll_coin_ppuaddr(UU(pixel_x), UU(pixel_y))
+
+    if collision_at(pixel_x, pixel_y) == C_KEY
+        log(@"Key destroyed"l)
+        show_key[current_level_index]  = false
+
+fn door_collision_at(UU level_index, UU pixel_x, UU pixel_y) Bool
+    if !keys[U(level_index)]
+       return C_JAIL == collision_at(pixel_x, pixel_y)
+    else
+        return false

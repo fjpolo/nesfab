@@ -1,0 +1,362 @@
+ct U NUMBER_OF_EYE_ENEMIES_PER_LEVEL = 8
+
+struct Enemy_eye
+    U x
+    U y
+
+struct Enemy_following_eye
+    U x
+    U y
+
+struct Enemy_following_eye_pupil
+    U x
+    U y
+    AnimState anim_state
+
+
+// Sprites and animations
+data /sprites
+    // eye metasprites
+    [] sprite_eye_closed                    // closed eye
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $6E, $02),    // Top left
+            Ms( 0, 0, $6E, $82),    // Bottom left
+            Ms( 8,-8, $6E, $42),    // Top right
+            Ms( 8, 0, $6E, $C2)     // Bottom right
+        )))
+    [] sprite_eye_one_third_opened          // 1/3 opened eye
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $6E, $02),    // Top left
+            Ms( 0, 0, $6F, $02),    // Bottom left
+            Ms( 8,-8, $6E, $42),    // Top right
+            Ms( 8, 0, $6F, $42)     // Bottom right
+        )))
+    [] sprite_eye_two_thirds_opened         // 2/3 opened eye -> Look down
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $6D, $02),    // Top left
+            Ms( 0, 0, $7E, $02),    // Bottom left
+            Ms( 8,-8, $6D, $42),    // Top right
+            Ms( 8, 0, $7E, $42)     // Bottom right
+        )))
+    [] sprite_eye_two_thirds_opened_left    // 2/3 opened eye -> Look left
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $6D, $02),    // Top left
+            Ms( 0, 0, $7F, $02),    // Bottom left
+            Ms( 8,-8, $6D, $42),    // Top right
+            Ms( 8, 0, $7C, $42)     // Bottom right
+        )))
+    [] sprite_eye_two_thirds_opened_right   // 2/3 opened eye -> Look right
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $6D, $02),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $6D, $42),    // Top right
+            Ms( 8, 0, $7F, $42)     // Bottom right
+        )))
+    [] sprite_eye_opened_center             // opened - eye center
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $6B, $02),    // Top left
+            Ms( 0, 0, $6B, $82),    // Bottom left
+            Ms( 8,-8, $6B, $42),    // Top right
+            Ms( 8, 0, $6B, $C2)     // Bottom right
+        )))
+    [] sprite_eye_opened_center_up          // opened - eye center up
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $7A, $02),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $7A, $42),    // Top right
+            Ms( 8, 0, $7C, $42)     // Bottom right
+        )))
+    [] sprite_eye_opened_up_left            // opened - eye up left
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $7B, $02),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $7C, $C2),    // Top right
+            Ms( 8, 0, $7C, $42)     // Bottom right
+        )))
+    [] sprite_eye_opened_center_left        // opened - eye center left
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $6A, $82),    // Top left
+            Ms( 0, 0, $6A, $02),    // Bottom left
+            Ms( 8,-8, $7C, $C2),    // Top right
+            Ms( 8, 0, $7C, $42)     // Bottom right
+        )))
+    [] sprite_eye_opened_down_left          // opened - eye down left
+        (make_metasprite(ATTR_V_FLIP, Ms{}(
+            Ms( 0,-8, $7B, $02),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $7C, $C2),    // Top right
+            Ms( 8, 0, $7C, $42)     // Bottom right
+        )))
+    [] sprite_eye_opened_center_down        // opened - eye center down
+        (make_metasprite(ATTR_V_FLIP, Ms{}(
+            Ms( 0,-8, $7A, $02),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $7A, $42),    // Top right
+            Ms( 8, 0, $7C, $42)     // Bottom right
+        )))
+    [] sprite_eye_opened_down_right         // opened - eye down right
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $7C, $82),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $7C, $C2),    // Top right
+            Ms( 8, 0, $69, $02)     // Bottom right
+        )))
+    [] sprite_eye_opened_center_right       // opened - eye center right
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $7C, $82),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $6A, $C2),    // Top right
+            Ms( 8, 0, $6A, $42)     // Bottom right
+        )))
+    [] sprite_eye_opened_up_right           // opened - eye up right
+        (make_metasprite(ATTR_V_FLIP, Ms{}(
+            Ms( 0,-8, $7C, $82),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $7C, $C2),    // Top right
+            Ms( 8, 0, $69, $02)     // Bottom right
+        )))
+    [] sprite_eye_shoot                   // shooting eye
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $6D, $02),    // Top left
+            Ms( 0, 0, $7C, $02),    // Bottom left
+            Ms( 8,-8, $6D, $42),    // Top right
+            Ms( 8, 0, $7C, $42)     // Bottom right
+        )))
+    [] sprite_eye_pupil
+        (make_metasprite(0, Ms{}(
+            Ms( 0,0, $79, $02)
+        )))
+    // eye animation
+    [] eye_animation_sleeping
+        (make_anim(Fs{}(
+            Fs(120, @sprite_eye_closed)
+        )))
+    [] eye_animation_opening
+        (make_anim(Fs{}(
+            Fs(40, @sprite_eye_one_third_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_one_third_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_opened_center),
+        )))
+    [] eye_animation_closing
+        (make_anim(Fs{}(
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_one_third_opened ),
+        )))
+    [] eye_animation_center_left
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_center_left)
+        ))) 
+    [] eye_animation_center_right
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_center_right)
+        ))) 
+    [] eye_animation_center_up
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_center_right)
+        ))) 
+    [] eye_animation_center_down
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_center_down)
+        ))) 
+    [] eye_animation_up_left
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_up_left)
+        ))) 
+    [] eye_animation_up_right
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_up_right)
+        ))) 
+    [] eye_animation_down_left
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_down_left)
+        ))) 
+    [] eye_animation_down_right
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_opened_down_right)
+        ))) 
+    [] eye_animation_prepare
+        (make_anim(Fs{}(
+            Fs(120, @sprite_eye_one_third_opened)
+        )))
+    [] eye_animation_shoot
+        (make_anim(Fs{}(
+            Fs(120, @sprite_eye_shoot)
+        )))
+    [] eye_animation_result
+        (make_anim(Fs{}(
+            Fs(120, @sprite_eye_opened_center)
+        )))
+    [] eye_pupil_animation
+        (make_anim(Fs{}(
+            Fs(60, @sprite_eye_pupil)
+        )))
+    [] eye_animation
+        (make_anim(Fs{}(
+            Fs(120, @sprite_eye_closed),
+            Fs(40, @sprite_eye_one_third_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_one_third_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_two_thirds_opened_left ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(50, @sprite_eye_two_thirds_opened_right ),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(60, @sprite_eye_opened_center),
+            Fs(60, @sprite_eye_opened_center_up),
+            Fs(60, @sprite_eye_opened_up_left),
+            Fs(60, @sprite_eye_opened_center_left),
+            Fs(60, @sprite_eye_opened_down_left),
+            Fs(60, @sprite_eye_opened_center_down),
+            Fs(60, @sprite_eye_opened_down_right),
+            Fs(60, @sprite_eye_opened_center_right),
+            Fs(60, @sprite_eye_opened_up_right),
+            Fs(60, @sprite_eye_opened_center_up),
+            Fs(60, @sprite_eye_opened_center),
+            Fs(40, @sprite_eye_two_thirds_opened ),
+            Fs(40, @sprite_eye_one_third_opened ),
+        )))
+
+vars /enemies
+    AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_eye_anim_state
+    AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_following_eye_anim_state
+
+// Enemy: Following Eye - States
+ct U FOLLOWING_EYE_STATE_NOT_ASSIGNED = $FF
+ct U FOLLOWING_EYE_STATE_SLEEP = 0
+ct U FOLLOWING_EYE_STATE_OPENING = 1
+ct U FOLLOWING_EYE_STATE_WATCH = 2
+ct U FOLLOWING_EYE_STATE_PREPARE = 3
+ct U FOLLOWING_EYE_STATE_SHOOT = 4
+ct U FOLLOWING_EYE_STATE_SHOOT_RESULT = 5
+ct U FOLLOWING_EYE_STATE_CLOSING = 6
+ct U FOLLOWING_EYE_STATE_MAX = 9
+// Enemy: Following Eye - State counter
+ct U FOLLOWING_EYE_STATE_COUNTER_MAX = 120
+// Enemy: Following Eye - X Tolerance
+ct U ENEMY_EYE_SIGHT_TOLERANCE_2_X = 50
+ct U ENEMY_EYE_SIGHT_TOLERANCE_X = 25
+// Enemy: Following Eye - Pupil 
+ct U ENEMY_EYE_SIGHT_PUPIL_SPRITE = $79
+ct U ENEMY_EYE_SIGHT_PUPIL_LIFE_IN_FRAMES = 180
+ct U ENEMY_EYE_SIGHT_PUPIL_LUT = 30
+ct U ENEMY_EYE_SIGHT_PUPIL_SUBLUT = 10
+
+
+
+// Enemy: Following Eye - Variables
+vars /following_eye
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_state = U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](0, 0, 0, 0, 0, 0, 0, 0, )
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_state_counter = U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](0, 0, 0, 0, 0, 0, 0, 0, )
+    Enemy_following_eye_pupil[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_pupil_s
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_projectile_frame_counter = U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0
+                                                                                                                  )
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_projectile_subframe_counter = U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0, 
+                                                                                                                    0
+                                                                                                                  )
+    FFF[ENEMY_EYE_SIGHT_PUPIL_LUT] following_eye_pupil_lut_x = FFF[ENEMY_EYE_SIGHT_PUPIL_LUT]( 
+                                                                                                0.00000000, 0.02586207, 0.05172414, 0.07758621, 0.10344828, 0.12931034,
+                                                                                                0.15517241, 0.18103448, 0.20689655, 0.23275862, 0.25862069, 0.28448276,
+                                                                                                0.31034483, 0.33620690, 0.36206897, 0.38793103, 0.41379310, 0.43965517,
+                                                                                                0.46551724, 0.49137931, 0.51724138, 0.54310345, 0.56896552, 0.59482759,
+                                                                                                0.62068966, 0.64655172, 0.67241379, 0.69827586, 0.72413793, 0.75000000,
+                                                                                            )
+    FFF[ENEMY_EYE_SIGHT_PUPIL_LUT] following_eye_pupil_lut_y = FFF[ENEMY_EYE_SIGHT_PUPIL_LUT](      
+                                                                                                1.00000000, 0.92427797, 0.74562161, 0.5098962 , 0.27364843, 0.09069347,
+                                                                                                0.00000000, 0.01756626, 0.13393547, 0.31763216, 0.52343837, 0.70338170, 
+                                                                                                0.81779641, 0.84393584, 0.78029847, 0.64589881, 0.47490400, 0.30809084,   
+                                                                                                0.18322850, 0.12663090, 0.14774299, 0.23784069, 0.37293308, 0.51999421,  
+                                                                                                0.64493790, 0.72043193, 0.73178057, 0.67963347, 0.57906425, 0.45541139,
+                                                                                            )
+fn following_eye_set_initial_state(U ix, U enemy_x, U enemy_y)
+        following_eye_state[ix] = ix
+        // following_eye_state[ix] = U( UU( UU(frame_counter) * UU(ix) * UU(ix) ) )
+        while following_eye_state[ix] > FOLLOWING_EYE_STATE_MAX
+            following_eye_state[ix] = following_eye_state[ix] >> 1
+        following_eye_state_counter[ix] = U( UU( UU(frame_counter) * UU(ix) * UU(ix) ) )
+        while following_eye_state_counter[ix] > FOLLOWING_EYE_STATE_COUNTER_MAX
+            following_eye_state_counter[ix] = following_eye_state_counter[ix] >> 1
+
+// Enemy: Following Eye - fn following_eye_set_sprite
+fn following_eye_shoot_pupil(U ix)
+    if following_eye_projectile_frame_counter[ix] < ENEMY_EYE_SIGHT_PUPIL_LUT
+        following_eye_pupil_s[ix].x = U( 255 * FFF(following_eye_pupil_lut_x[following_eye_projectile_frame_counter[ix]] + FFF(following_eye_pupil_s[ix].x ) ) )
+        following_eye_pupil_s[ix].y = U( 239 * FFF(following_eye_pupil_lut_y[following_eye_projectile_frame_counter[ix]] - FFF(following_eye_pupil_s[ix].y ) ) )
+        // logf3(@"ix: %d | LUT_x: %d | LUT_y: %d"l, ix, U(100 * following_eye_pupil_lut_x[following_eye_projectile_frame_counter[ix]]), U(100 * following_eye_pupil_lut_y[following_eye_projectile_frame_counter[ix]]))
+        // logf3(@"ix: %d | x: %d | y: %d"l, following_eye_projectile_frame_counter[ix], following_eye_pupil_s[ix].x, following_eye_pupil_s[ix].y)
+    else
+        following_eye_projectile_frame_counter[ix] = 0
+    following_eye_projectile_subframe_counter[ix] = following_eye_projectile_subframe_counter[ix] + 1
+    if (following_eye_projectile_subframe_counter[ix] == ENEMY_EYE_SIGHT_PUPIL_SUBLUT)
+        following_eye_projectile_frame_counter[ix] = following_eye_projectile_frame_counter[ix] + 1
+        following_eye_projectile_subframe_counter[ix] = 0
+
+// Enemy: Following Eye - fn following_eye_set_sprite
+fn following_eye_set_sprite(U ix, U enemy_x, U enemy_y)
+    // State counter
+    following_eye_state_counter[ix] = following_eye_state_counter[ix] + 1
+    if (following_eye_state_counter[ix] == FOLLOWING_EYE_STATE_COUNTER_MAX)
+        following_eye_state_counter[ix] = 0
+        following_eye_state[ix] = following_eye_state[ix] + 1
+        if (following_eye_state[ix] == FOLLOWING_EYE_STATE_MAX)
+            following_eye_state[ix] = FOLLOWING_EYE_STATE_SLEEP
+    // Pupil projectile
+    following_eye_pupil_s[ix].x = enemy_x
+    following_eye_pupil_s[ix].y = enemy_y
+    following_eye_pupil_s[ix].anim_state = make_anim_state(@eye_pupil_animation)
+
+    // State Machine
+    switch following_eye_state[ix]
+        case FOLLOWING_EYE_STATE_SLEEP
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_sleeping)
+            break
+        case FOLLOWING_EYE_STATE_OPENING
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_opening)
+            break
+        case FOLLOWING_EYE_STATE_WATCH
+            // Eye sight
+            if((p.x < (enemy_x - ENEMY_EYE_SIGHT_TOLERANCE_X)))
+                if (p.y > enemy_y)
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_left)
+                else
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_left)
+            else if(p.x > (enemy_x + ENEMY_EYE_SIGHT_TOLERANCE_X))
+                if (p.y > enemy_y)
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_right)
+                else
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_right)
+            else
+                if (p.y > enemy_y)
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_down)
+                else
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_up)
+            break
+        case FOLLOWING_EYE_STATE_PREPARE
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_prepare)
+            break
+        case FOLLOWING_EYE_STATE_SHOOT
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_shoot)
+            following_eye_shoot_pupil(ix)
+            break    
+        case FOLLOWING_EYE_STATE_SHOOT_RESULT
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_result)
+            break        
+        case FOLLOWING_EYE_STATE_CLOSING
+            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_closing)
+            break
