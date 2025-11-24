@@ -21,7 +21,7 @@ ct U[25] luigi_palette = U[25](
 
 data /sprites
     // Here's where we define our metasprite, comprised of four 8x8 tiles:
-    [] frame_0
+    [] frame_000
         (make_metasprite(0, Ms{}(
                 Ms(-8, -8, $00, $00),
                 Ms(0,  -8, $01, $00),
@@ -36,7 +36,37 @@ data /sprites
                 Ms(8,  8, $22, $00),
 
             )))
-    [] frame_1
+    [] frame_001
+        (make_metasprite(0, Ms{}(
+                Ms(-8, -8, $00, $00),
+                Ms(0,  -8, $01, $00),
+                Ms(-8,  0, $10, $00),
+                Ms(0,   0, $11, $00),
+                Ms(-8,  8, $20, $00),
+                Ms(0,   8, $21, $00),
+                Ms(-8, 16, $40, $00),
+                Ms(0,  16, $41, $00),
+                // Bag
+                Ms(8,  0, $12, $00),
+                Ms(8,  8, $22, $00),
+
+            )))
+    [] frame_002
+        (make_metasprite(0, Ms{}(
+                Ms(-8, -8, $00, $00),
+                Ms(0,  -8, $01, $00),
+                Ms(-8,  0, $10, $00),
+                Ms(0,   0, $11, $00),
+                Ms(-8,  8, $20, $00),
+                Ms(0,   8, $21, $00),
+                Ms(-8, 16, $50, $00),
+                Ms(0,  16, $51, $00),
+                // Bag
+                Ms(8,  0, $12, $00),
+                Ms(8,  8, $22, $00),
+
+            )))
+    [] frame_010
         (make_metasprite(0, Ms{}(
                 Ms(0, -8, $04, $00),
                 Ms(8,  -8, $05, $00),
@@ -52,12 +82,33 @@ data /sprites
 
             )))
 
+    [] frame_011
+        (make_metasprite(0, Ms{}(
+                Ms(0, -8, $04, $00),
+                Ms(8,  -8, $05, $00),
+                Ms(0,  0, $14, $00),
+                Ms(8,   0, $15, $00),
+                Ms(0,  8, $24, $00),
+                Ms(8,   8, $25, $00),
+                Ms(0, 16, $44, $00),
+                Ms(8,  16, $45, $00),
+                // Bag
+                Ms(-8,  0, $13, $00),
+                Ms(-8,  8, $23, $00),
+
+            )))
+
     [] my_animation
         (make_anim(Fs{}(
             // First parameter of Fs is the duration. Second is the metasprite.
-            Fs(60,   @frame_0),
-            Fs(120,  @frame_1),
-            // Fs(30,   @frame_2)
+            // L
+            Fs(30,   @frame_000),
+            Fs(30,   @frame_001),
+            Fs(30,   @frame_000),
+            Fs(30,   @frame_002),
+            // // R
+            // Fs(30,  @frame_010),
+            // Fs(30,   @frame_011)
             )))
 
 vars
@@ -112,6 +163,19 @@ fn update_sprites()
 
     // Clear the remainder of OAM
     hide_oam(o)
+
+fn poltergust_particles(U player_x, U player_y, U enemy_x, U enemy_y)
+    // Create particles here
+
+    //                       ..  ___
+    //                      ... /. .\
+    //                   .......|____\__
+    //               ...........       
+    //        O D . .....
+    //        |/
+    //       /\
+
+    // End particles
 
 chrrom
     file(fmt, "sprite.png")

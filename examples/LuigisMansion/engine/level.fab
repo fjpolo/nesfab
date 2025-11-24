@@ -5,7 +5,7 @@
  */
 
 // Load the .mapfab file, calling the macros for each definition.
-mapfab(raw, "LuciYFer.mapfab", "chr", "palette", "metatiles", "level")
+mapfab(raw, "LuigisMansion.mapfab", "chr", "palette", "metatiles", "level")
 
 macro("pool_contiguous", "Enemy_eye", "8", "enemies_eye", "/game")
 macro("pool_contiguous", "Enemy_following_eye", "8", "enemies_following_eye", "/game")

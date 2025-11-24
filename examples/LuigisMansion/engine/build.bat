@@ -1,0 +1,1 @@
+cls && C:\Workspace\NES\nesfab\tools\windows_amd64_nesfab_1_8\nesfab.exe .\LuigisMansion.cfg

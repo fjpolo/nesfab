@@ -128,7 +128,7 @@
 - Add LuciFer fusion to Lucifer
   - Added animation
     - Improved animations
-- Improved LuciYFer fusion to Lucifer
+- Improved LuigisMansion fusion to Lucifer
 - Lucifer flies
   - Doesn't fly over the top limit
 - Unique abilities
