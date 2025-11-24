@@ -33,7 +33,8 @@ vars /game
     Player fer =  Player()
     Player p =  Player()
     U current_player = CURRENT_PLAYER_LUCI
-    U game_state = GAME_STATE_START
+    // U game_state = GAME_STATE_START
+    U game_state = GAME_STATE_PLAY
     U chr_counter = 0
     U chr_bank = 0
     U frame_counter = 0
