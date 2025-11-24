@@ -13,14 +13,14 @@ macro("pool_contiguous", "Enemy_following_eye", "8", "enemies_following_eye", "/
 // Used in level.macrofab to format the enemies:
 ct fn enemies_eye_vec(Int{} x, Int{} y) Enemy_eye{}
     Enemy_eye{} out = Enemy_eye{}()
-    for U i = 0; i < len(x); i += 1
+    for UU i = 0; i < len(x); i += 1
         push(out, Enemy_eye(U(x{i}), U(y{i})))
     return out
 
 // Used in level.macrofab to format the enemies:
 ct fn enemies_following_eye_vec(Int{} x, Int{} y) Enemy_following_eye{}
     Enemy_following_eye{} out = Enemy_following_eye{}()
-    for U i = 0; i < len(x); i += 1
+    for UU i = 0; i < len(x); i += 1
         push(out, Enemy_following_eye(U(x{i}), U(y{i})))
     return out
 
