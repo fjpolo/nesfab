@@ -245,7 +245,7 @@ fn update_pause_sprites()
 
 fn update_chrrom_bank()
 fn player_has_key(U level_index) Bool
-    switch level_index    
+    switch level_index           
         default
             return false
 
