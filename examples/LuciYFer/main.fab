@@ -16,7 +16,6 @@ ct Int GAME_STATE_PLAY = 3
 ct Int GAME_STATE_WIN = 4
 ct Int GAME_STATE_GAME_OVER = 63
 
-
 // Controller data
 vars /controller
     Bool is_start_pressed_past = false
@@ -45,9 +44,69 @@ vars /game
     U[NUMBER_OF_KEYS] key_y
     // PAUSE
     Bool is_game_paused = false
+    U counter = 0
+    U palette_cycler = 0
 
 // NMI
+// An example palette, to modify:
+ct U[25] palette001 = U[25](
+    $05, $15, $01,
+    $05, $15, $01,
+    $05, $15, $01,
+    $05, $15, $01,
+
+    $05, $15, $01,
+    $05, $15, $01,
+    $05, $15, $01,
+    $05, $15, $01,
+
+    $0F)
+ct U[25] palette002 = U[25](
+    $31, $19, $05, 
+    $31, $19, $05,
+    $31, $19, $05,
+    $31, $19, $05,
+
+    $31, $19, $05,
+    $31, $19, $05,
+    $31, $19, $05,
+    $31, $19, $05,
+
+    $0F)
+data /palettes
+    [] my_palette001
+        (palette001)
+data /palettes
+    [] my_palette002
+        (palette002)
 nmi game_nmi()
+    // Palette cycling
+    // counter += 1
+    // if counter < 0
+    //     counter = 0
+    // if counter >= 60
+    //     counter = 0
+    // if counter < 31
+    //     load_level_palette(levels[current_level_index], levels[current_level_index])
+    // if counter >= 31 && counter < 60
+    //     load_level_palette(levels[current_level_index+1], levels[current_level_index])
+
+    //
+    if current_level_index <= LAST_LEVEL_INDEX
+        if counter != 1
+            counter = 0
+        else
+            counter = 1
+        if counter == 0
+            load_palette(@my_palette001)
+        if counter == 1
+            load_palette(@my_palette002)
+        counter += 1
+        // load_palette(@my_palette001)
+        // log_set_arg(0, counter)
+        // log(@"%u"l)
+        ppu_upload_palette()
+
 
     frame_counter = frame_counter + 1
 
