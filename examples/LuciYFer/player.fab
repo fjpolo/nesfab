@@ -670,12 +670,14 @@ fn player_fusion()
         if luci.y < fer.y
             switch current_player
                 case CURRENT_PLAYER_LUCI
-                    if abs(abs(p.x) - abs(fer.x)) < 8 && abs(abs(p.y) - abs(fer.y)) < 8 
+                    // Check if Luci's bottom touches Fer's top
+                    if abs(abs(p.x) - abs(fer.x)) < 8 && abs(abs(p.y + p.h) - abs(fer.y)) < 4 
                         p = make_player_lucifer(p)
                         current_player = CURRENT_PLAYER_LUCIFER
                     break
                 case CURRENT_PLAYER_FER
-                    if abs(abs(p.x) - abs(luci.x)) < 8 && abs(abs(p.y) - abs(luci.y)) < 8 
+                    // Check if Luci's bottom touches Fer's top
+                    if abs(abs(luci.x) - abs(p.x)) < 8 && abs(abs(luci.y + luci.h) - abs(p.y)) < 4 
                         p = make_player_lucifer(p)
                         current_player = CURRENT_PLAYER_LUCIFER
                     break
@@ -686,6 +688,12 @@ fn save_player_data()
         fer = save_player(p)
 
 fn climb()
+        // Pressing B while climbing makes Luci drop
+        if pads[0].held & BUTTON_B
+            p.climbing = false
+            p.movement = PLAYER_MOVING_REST
+            p.yspeed = 1  // Start falling
+            return
         if pads[0].held & BUTTON_UP
             if p.movement != PLAYER_CLIMBING
                 p.movement = PLAYER_CLIMBING
@@ -769,7 +777,9 @@ fn walk()
         if current_player == CURRENT_PLAYER_LUCI
             U collision = collision_at(UU(p.x), UU(p.y))
             if collision == C_CEILING_SCALE || collision == C_LADDER
-                p.climbing = true
+                // Don't re-enable climbing if B button is held (player wants to drop)
+                if !(pads[0].held & BUTTON_B)
+                    p.climbing = true
             else
                 p.climbing = false
         // Normal horizontal movement
