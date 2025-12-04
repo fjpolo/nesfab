@@ -7,6 +7,8 @@ mode start_screen(U level_index)
     {PPUMASK}(0) // Turn off rendering while loading
     load_level(levels[current_level_index]) 
     {PPUCTRL}(PPUCTRL_NMI_ON)
+    log_set_arg(0, current_level_index)
+    log(@"level: %d"l)
     while true
         nmi
         if is_start_pressed

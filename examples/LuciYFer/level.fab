@@ -219,7 +219,7 @@ fn destroy(UU pixel_x, UU pixel_y)
     scroll_coin_ppuaddr = calc_scroll_coin_ppuaddr(UU(pixel_x), UU(pixel_y))
 
     if collision_at(pixel_x, pixel_y) == C_KEY
-        log(@"Key destroyed"l)
+        // log(@"Key destroyed"l)
         show_key[current_level_index]  = false
 
 fn door_collision_at(UU level_index, UU pixel_x, UU pixel_y) Bool

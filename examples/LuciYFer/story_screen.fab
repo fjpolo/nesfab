@@ -38,7 +38,9 @@ mode story_screen(U level_index)
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)
-    load_level(levels[current_level_index]) 
+    load_level(levels[current_level_index])
+    log_set_arg(0, current_level_index)
+    log(@"level: %d"l) 
 
     // NMI ON
     {PPUCTRL}(PPUCTRL_NMI_ON)

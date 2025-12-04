@@ -37,6 +37,8 @@ mode tips_screen(U level_index)
     load_level(levels[current_level_index]) 
     // NMI ON
     {PPUCTRL}(PPUCTRL_NMI_ON)
+    log_set_arg(0, current_level_index)
+    log(@"level: %d"l)
     
     while true
         nmi
