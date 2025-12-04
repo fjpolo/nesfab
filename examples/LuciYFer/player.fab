@@ -550,6 +550,9 @@ fn handle_collisions()
                 switch current_player
                     case CURRENT_PLAYER_LUCI
                         current_level_index += 1
+                        // Bypass Level 1
+                        if current_level_index == 1
+                            current_level_index = 2
                         if current_level_index > LAST_LEVEL_INDEX
                             current_level_index = FIRST_LEVEL_INDEX
                         break
@@ -558,6 +561,9 @@ fn handle_collisions()
                             current_level_index = LAST_LEVEL_INDEX
                         else
                             current_level_index -= 1
+                        // Bypass Level 1
+                        if current_level_index == 1
+                            current_level_index = 0
                         break
                 
                 // Update player
