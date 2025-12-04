@@ -61,6 +61,12 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_start,
                                         @lev_story,
                                         @lev_tips,
+                                        @lev_l10,
+                                        @lev_l11,
+                                        @lev_l12,
+                                        @lev_l13,
+                                        @lev_l14,
+                                        @lev_l15,
                                     )
 ct U FIRST_LEVEL_INDEX =  0
 ct U LAST_LEVEL_INDEX =  3
