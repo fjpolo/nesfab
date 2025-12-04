@@ -815,18 +815,10 @@ fn fly()
     if pads[0].held & BUTTON_UP
         if p.y >= 0
             if collision_at(UU(p.x), UU(p.y)) != C_WALL && !door_collision_at(current_level_index, UU(p.x), UU(p.y))
-                if p.movement == PLAYER_MOVING_RIGHT
-                    p.anim_state = make_anim_state(@lucifer_animation_right)
-                if p.movement == PLAYER_MOVING_LEFT
-                    p.anim_state = make_anim_state(@lucifer_animation_left)
                 p.y -= speed
     if pads[0].held & BUTTON_DOWN
         SSF half_ph = p.h >> 1
         if collision_at(UU(p.x), UU(p.y)) != C_WALL && !door_collision_at(current_level_index, UU(p.x), UU(p.y))
-            if p.movement == PLAYER_MOVING_RIGHT
-                p.anim_state = make_anim_state(@lucifer_animation_right)
-            if p.movement == PLAYER_MOVING_LEFT
-                p.anim_state = make_anim_state(@lucifer_animation_left)
             p.y += speed
     // Get tired of flying
     //p.y += 0.1 * flying_counter
