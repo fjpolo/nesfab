@@ -187,7 +187,7 @@ fn update_sprites()
         o += 4
 
     for U i = 0; i < enemies_following_eye_num; i += 1
-        following_eye_set_sprite(i, enemies_following_eye[i].x, enemies_following_eye[i].y)
+        following_eye_update(i)
         set_oam(o, enemies_following_eye[i].x, enemies_following_eye[i].y, $7B, 0)
         // o = push_oam_metasprite(o, 128, 128, @sprite_eye_1)
         o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])

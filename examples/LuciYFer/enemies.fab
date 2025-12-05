@@ -308,7 +308,7 @@ fn following_eye_shoot_pupil(U ix)
         following_eye_projectile_subframe_counter[ix] = 0
 
 // Enemy: Following Eye - fn following_eye_set_sprite
-fn following_eye_set_sprite(U ix, U enemy_x, U enemy_y)
+fn following_eye_update(U ix)
     // State counter
     following_eye_state_counter[ix] = following_eye_state_counter[ix] + 1
     if (following_eye_state_counter[ix] == FOLLOWING_EYE_STATE_COUNTER_MAX)
@@ -316,6 +316,11 @@ fn following_eye_set_sprite(U ix, U enemy_x, U enemy_y)
         following_eye_state[ix] = following_eye_state[ix] + 1
         if (following_eye_state[ix] == FOLLOWING_EYE_STATE_MAX)
             following_eye_state[ix] = FOLLOWING_EYE_STATE_SLEEP
+    
+    // Use global array for position
+    U enemy_x = enemies_following_eye[ix].x
+    U enemy_y = enemies_following_eye[ix].y
+
     // Pupil projectile
     following_eye_pupil_s[ix].x = enemy_x
     following_eye_pupil_s[ix].y = enemy_y
@@ -330,23 +335,41 @@ fn following_eye_set_sprite(U ix, U enemy_x, U enemy_y)
             enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_opening)
             break
         case FOLLOWING_EYE_STATE_WATCH
+            // Move towards player (every other frame to control speed)
+            if (frame_counter & 1) == 0
+                if p.x > SS(enemy_x)
+                    enemy_x += 1
+                else if p.x < SS(enemy_x)
+                    enemy_x -= 1
+                
+                if p.y > SSF(enemy_y)
+                    enemy_y += 1
+                else if p.y < SSF(enemy_y)
+                    enemy_y -= 1
+                
+                // Update global position
+                enemies_following_eye[ix].x = enemy_x
+                enemies_following_eye[ix].y = enemy_y
+
             // Eye sight
-            if((p.x < (enemy_x - ENEMY_EYE_SIGHT_TOLERANCE_X)))
-                if (p.y > enemy_y)
+            if((p.x < SS(enemy_x - ENEMY_EYE_SIGHT_TOLERANCE_X)))
+                if (p.y > SSF(enemy_y))
                     enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_left)
                 else
                     enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_left)
-            else if(p.x > (enemy_x + ENEMY_EYE_SIGHT_TOLERANCE_X))
-                if (p.y > enemy_y)
+            else if(p.x > SS(enemy_x + ENEMY_EYE_SIGHT_TOLERANCE_X))
+                if (p.y > SSF(enemy_y))
                     enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_right)
                 else
                     enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_right)
             else
-                if (p.y > enemy_y)
+                if (p.y > SSF(enemy_y))
                     enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_down)
                 else
                     enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_up)
             break
+    
+
         case FOLLOWING_EYE_STATE_PREPARE
             enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_prepare)
             break
@@ -360,3 +383,8 @@ fn following_eye_set_sprite(U ix, U enemy_x, U enemy_y)
         case FOLLOWING_EYE_STATE_CLOSING
             enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_closing)
             break
+    
+    // Collision with Lucifer
+    if current_player == CURRENT_PLAYER_LUCIFER
+        if p.x < SS(enemy_x + 16) && SS(p.x + p.w) > SS(enemy_x) && p.y < SSF(enemy_y + 16) && SSF(p.y + p.h) > SSF(enemy_y)
+            log(@"collision"l)

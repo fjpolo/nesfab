@@ -24,5 +24,4 @@
 - [ ] Fix bug: Being Lucifer and changing to Luci Y Fer in mid-air (2nd sprite not affected by gravity)
 
 ## Future Considerations
-- [ ] Rename to "Luz y Fer" (Luci → Luz)
 - [ ] Transition to CHR RAM mapper for dynamic graphics

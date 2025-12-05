@@ -43,17 +43,6 @@
 
 # Changes
 
-## [4.12.2023]
-- Add Stage 2 levels (l10-l15)
-- Lucifer transitions to Level 10 when touching exit at Level 0
-- Bypass Level 1 (long 3-screen level) for both Luci and Fer
-- Fix Luci's climbing animation (was stuck on first frame)
-- Fix Lucifer's flying animation (was stuck on first frame)
-- Improve fusion mechanic: Luci must land on Fer from above to fuse
-- Add B button drop from climbing/hanging
-- Integrate Mesen emulator with buildAndRun.bat script
-
-
 ## [29.11.2023]
 - Add PAUSE with Start button
   - Make it grayscale!!!! 😍
