@@ -97,6 +97,41 @@ fn load_level(CCC/levels level)
     load_palette(read CCC/palettes(level))
     ppu_upload_palette()
 
+    // Override Background Palettes for Hell Theme (Red/Black/Lava)
+    {PPUADDR}($3F)
+    {PPUADDR}($00)
+    {PPUDATA}($0F) // Universal Background: Black
+
+    // BG Palette 0 (Ground/Walls)
+    {PPUADDR}($3F)
+    {PPUADDR}($01)
+    {PPUDATA}($06) // Dark Red
+    {PPUDATA}($16) // Red
+    {PPUDATA}($30) // Bone White
+
+    // BG Palette 1 (Lava/Fire)
+    {PPUADDR}($3F)
+    {PPUADDR}($05)
+    {PPUDATA}($16) // Red
+    {PPUDATA}($27) // Orange
+    {PPUDATA}($37) // Yellow
+
+    // BG Palette 2 (Details/Background)
+    {PPUADDR}($3F)
+    {PPUADDR}($09)
+    {PPUDATA}($0F) // Black
+    {PPUDATA}($16) // Red
+    {PPUDATA}($26) // Pinkish Red
+
+    // BG Palette 3 (Alternative)
+    {PPUADDR}($3F)
+    {PPUADDR}($0D)
+    {PPUDATA}($08) // Dark Brown/Red
+    {PPUDATA}($16) // Red
+    {PPUDATA}($21) // Desaturated Blue (for contrast or metal) -> Changed to Red/Grey: $00
+    // Actually keep $00 (Grey) for metal bars
+
+
     // Metatiles:
     load_metatiles(read CC/metatiles(level))
 
