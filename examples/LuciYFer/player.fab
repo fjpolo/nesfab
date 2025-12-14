@@ -547,12 +547,17 @@ fn handle_collisions()
             if current_player == CURRENT_PLAYER_LUCIFER
                 if current_level_index == 0
                     current_level_index = 7
-                    p.level_index = current_level_index
-                    p.x = PLAYER_INITIAL_X
-                    p.y = PLAYER_INITIAL_Y
-                    nmi
-                    goto mode play_level(current_level_index)
-                    : preserves /game
+                else
+                    current_level_index += 1
+                    if current_level_index > 12 // Last real level
+                        current_level_index = FIRST_LEVEL_INDEX
+                
+                p.level_index = current_level_index
+                p.x = PLAYER_INITIAL_X
+                p.y = PLAYER_INITIAL_Y
+                nmi
+                goto mode play_level(current_level_index)
+                : preserves /game
             // Lucifer not allowed to go through
             if current_player != CURRENT_PLAYER_LUCIFER
                 switch current_player

@@ -135,7 +135,7 @@ mode play_level(U level_index)
     {PPUMASK}(0)
     hide_oam(0)
     // Avoid START and STORY levels
-    if current_level_index >= LAST_LEVEL_INDEX + 1
+    if current_level_index >= LAST_LEVEL_INDEX + 1 && current_level_index <= LAST_LEVEL_INDEX + 3
         current_level_index = FIRST_LEVEL_INDEX
     load_level(levels[level_index])
 
