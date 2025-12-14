@@ -327,64 +327,64 @@ fn following_eye_update(U ix)
     following_eye_pupil_s[ix].anim_state = make_anim_state(@eye_pupil_animation)
 
     // State Machine
-    switch following_eye_state[ix]
-        case FOLLOWING_EYE_STATE_SLEEP
-            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_sleeping)
-            break
-        case FOLLOWING_EYE_STATE_OPENING
-            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_opening)
-            break
-        case FOLLOWING_EYE_STATE_WATCH
-            // Move towards player (every other frame to control speed)
-            if (frame_counter & 1) == 0
-                if p.x > SS(enemy_x)
-                    enemy_x += 1
-                else if p.x < SS(enemy_x)
-                    enemy_x -= 1
-                
-                if p.y > SSF(enemy_y)
-                    enemy_y += 1
-                else if p.y < SSF(enemy_y)
-                    enemy_y -= 1
-                
-                // Update global position
-                enemies_following_eye[ix].x = enemy_x
-                enemies_following_eye[ix].y = enemy_y
-
-            // Eye sight
-            if((p.x < SS(enemy_x - ENEMY_EYE_SIGHT_TOLERANCE_X)))
-                if (p.y > SSF(enemy_y))
-                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_left)
-                else
-                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_left)
-            else if(p.x > SS(enemy_x + ENEMY_EYE_SIGHT_TOLERANCE_X))
-                if (p.y > SSF(enemy_y))
-                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_right)
-                else
-                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_right)
-            else
-                if (p.y > SSF(enemy_y))
-                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_down)
-                else
-                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_up)
-            break
-    
-
-        case FOLLOWING_EYE_STATE_PREPARE
-            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_prepare)
-            break
-        case FOLLOWING_EYE_STATE_SHOOT
-            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_shoot)
-            following_eye_shoot_pupil(ix)
-            break    
-        case FOLLOWING_EYE_STATE_SHOOT_RESULT
-            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_result)
-            break        
-        case FOLLOWING_EYE_STATE_CLOSING
-            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_closing)
-            break
-    
     // Collision with Lucifer
     if current_player == CURRENT_PLAYER_LUCIFER
         if p.x < SS(enemy_x + 16) && SS(p.x + p.w) > SS(enemy_x) && p.y < SSF(enemy_y + 16) && SSF(p.y + p.h) > SSF(enemy_y)
             log(@"collision"l)
+        else
+            switch following_eye_state[ix]
+                case FOLLOWING_EYE_STATE_SLEEP
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_sleeping)
+                    break
+                case FOLLOWING_EYE_STATE_OPENING
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_opening)
+                    break
+                case FOLLOWING_EYE_STATE_WATCH
+                    // Move towards player (every other frame to control speed)
+                    if (frame_counter & 1) == 0
+                        if p.x > SS(enemy_x)
+                            enemy_x += 1
+                        else if p.x < SS(enemy_x)
+                            enemy_x -= 1
+                        
+                        if p.y > SSF(enemy_y)
+                            enemy_y += 1
+                        else if p.y < SSF(enemy_y)
+                            enemy_y -= 1
+                        
+                        // Update global position
+                        enemies_following_eye[ix].x = enemy_x
+                        enemies_following_eye[ix].y = enemy_y
+
+                    // Eye sight
+                    if((p.x < SS(enemy_x - ENEMY_EYE_SIGHT_TOLERANCE_X)))
+                        if (p.y > SSF(enemy_y))
+                            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_left)
+                        else
+                            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_left)
+                    else if(p.x > SS(enemy_x + ENEMY_EYE_SIGHT_TOLERANCE_X))
+                        if (p.y > SSF(enemy_y))
+                            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_down_right)
+                        else
+                            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_up_right)
+                    else
+                        if (p.y > SSF(enemy_y))
+                            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_down)
+                        else
+                            enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_center_up)
+                    break
+            
+
+                case FOLLOWING_EYE_STATE_PREPARE
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_prepare)
+                    break
+                case FOLLOWING_EYE_STATE_SHOOT
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_shoot)
+                    // following_eye_shoot_pupil(ix)
+                    break    
+                case FOLLOWING_EYE_STATE_SHOOT_RESULT
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_result)
+                    break        
+                case FOLLOWING_EYE_STATE_CLOSING
+                    enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_closing)
+                    break
