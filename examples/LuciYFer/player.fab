@@ -566,7 +566,7 @@ fn handle_collisions()
                         break
                     case CURRENT_PLAYER_FER
                         if current_level_index == FIRST_LEVEL_INDEX
-                            current_level_index = LAST_LEVEL_INDEX
+                            current_level_index = luci.level_index
                         else
                             current_level_index -= 1
                         // Bypass Level 1
