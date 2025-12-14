@@ -345,7 +345,7 @@ fn following_eye_update(U ix)
     // Collision with Lucifer
     if current_player == CURRENT_PLAYER_LUCIFER
         if p.x < SS(enemy_x + 16) && SS(p.x + p.w) > SS(enemy_x) && p.y < SSF(enemy_y + 16) && SSF(p.y + p.h) > SSF(enemy_y)
-            log(@"collision"l)
+            player_split()
         else
             switch following_eye_state[ix]
                 case FOLLOWING_EYE_STATE_SLEEP

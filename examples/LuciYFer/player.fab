@@ -635,34 +635,38 @@ fn change_player()
         : preserves /game
     if is_select_pressed && current_player == CURRENT_PLAYER_LUCIFER
         // Split
-        fer.x = p.x - 16
-        fer.y = p.x
-        if pads[0].held & BUTTON_LEFT
-            fer.x = p.x - 32
-        if pads[0].held & BUTTON_RIGHT
-            fer.x = p.x + 32
-            
-        fer.y = p.y
-        if pads[0].held & BUTTON_DOWN
-            fer.x = p.x
-            if p.y + 32 + p.h < 240 
-                fer.y = p.y + 32
-        fer.w = pw
-        fer.rw = rw
-        fer.h = ph
-        fer.rh = rh
-        //
-        fer.movement = PLAYER_MOVING_REST
-        fer.anim_state = make_anim_state(@fer_animation_rest)
-        fer.movement = PLAYER_MOVING_REST
-        luci.x = luci.x
-        luci.h = ph
-        luci.rh = rh
-        luci.anim_state = make_anim_state(@luci_animation_rest)
-        p = restore_player(luci)
-        current_player = CURRENT_PLAYER_LUCI
-        //luci.camera_x = p.camera_x
+        player_split()
+        
 
+// Split Lucifer into Luci and Fer
+fn player_split()
+    fer.x = p.x - 16
+    fer.y = p.x
+    if pads[0].held & BUTTON_LEFT
+        fer.x = p.x - 32
+    if pads[0].held & BUTTON_RIGHT
+        fer.x = p.x + 32
+        
+    fer.y = p.y
+    if pads[0].held & BUTTON_DOWN
+        fer.x = p.x
+        if p.y + 32 + p.h < 240 
+            fer.y = p.y + 32
+    fer.w = pw
+    fer.rw = rw
+    fer.h = ph
+    fer.rh = rh
+    //
+    fer.movement = PLAYER_MOVING_REST
+    fer.anim_state = make_anim_state(@fer_animation_rest)
+    fer.movement = PLAYER_MOVING_REST
+    luci.x = luci.x
+    luci.h = ph
+    luci.rh = rh
+    luci.anim_state = make_anim_state(@luci_animation_rest)
+    p = restore_player(luci)
+    current_player = CURRENT_PLAYER_LUCI
+    //luci.camera_x = p.camera_x
 // Merge into Lucifer
 fn player_fusion()
     // Luci Y Fer same level?
