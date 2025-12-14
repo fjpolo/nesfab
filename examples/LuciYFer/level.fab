@@ -56,19 +56,19 @@ vars /levels
     
 
 ct CCC/levels[] levels = CCC/levels[](
-                                        @lev_l0,
-                                        @lev_l1,
-                                        @lev_l2,
-                                        @lev_l3,
-                                        @lev_start,
-                                        @lev_story,
-                                        @lev_tips,
-                                        @lev_l10,
-                                        @lev_l11,
-                                        @lev_l12,
-                                        @lev_l13,
-                                        @lev_l14,
-                                        @lev_l15,
+                                        @lev_l0,    // 0
+                                        @lev_l1,    // 1
+                                        @lev_l2,    // 2
+                                        @lev_l3,    // 3
+                                        @lev_start, // 4
+                                        @lev_story, // 5
+                                        @lev_tips,  // 6
+                                        @lev_l10,   // 7
+                                        @lev_l11,   // 8
+                                        @lev_l12,   // 9
+                                        @lev_l13,   // 10
+                                        @lev_l14,   // 11
+                                        @lev_l15,   // 12
                                     )
 ct U FIRST_LEVEL_INDEX =  0
 ct U LAST_LEVEL_INDEX =  3

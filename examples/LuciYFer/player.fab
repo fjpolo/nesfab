@@ -545,7 +545,9 @@ fn handle_collisions()
             log_set_arg(0, current_player)
             log(@"player: %d"l)
             if current_player == CURRENT_PLAYER_LUCIFER
-                if current_level_index == 0
+                if current_level_index == 9 // lev_l12
+                    current_level_index = 9
+                else if current_level_index == 0
                     current_level_index = 7
                 else
                     current_level_index += 1
