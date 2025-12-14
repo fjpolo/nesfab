@@ -342,8 +342,8 @@ fn following_eye_update(U ix)
     following_eye_pupil_s[ix].anim_state = make_anim_state(@eye_pupil_animation)
 
     // State Machine
-    // Collision with Lucifer
     if current_player == CURRENT_PLAYER_LUCIFER
+        // Collision with Lucifer
         if p.x < SS(enemy_x + 16) && SS(p.x + p.w) > SS(enemy_x) && p.y < SSF(enemy_y + 16) && SSF(p.y + p.h) > SSF(enemy_y)
             player_split()
         else
