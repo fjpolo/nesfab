@@ -51,6 +51,7 @@
 - Following eye enemy now saves its state
 - Luci can drop when climbing
 - Fixed Lucifer flying animation
+- Fix l10 infinite loop @C_EXIT
 
 ## [29.11.2023]
 - Add PAUSE with Start button
