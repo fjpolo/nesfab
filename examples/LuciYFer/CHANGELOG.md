@@ -43,6 +43,15 @@
 
 # Changes
 
+## [14.12.2025]
+- Player splits when colliding with following_eye
+- Update some tiles
+- Fer doesn't loop into an infinite loop of C_EXIT
+- Following exe actually follows Lucifer!
+- Following eye enemy now saves its state
+- Luci can drop when climbing
+- Fixed Lucifer flying animation
+
 ## [29.11.2023]
 - Add PAUSE with Start button
   - Make it grayscale!!!! 😍
