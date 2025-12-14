@@ -16,7 +16,6 @@ ct Int GAME_STATE_PLAY = 3
 ct Int GAME_STATE_WIN = 4
 ct Int GAME_STATE_GAME_OVER = 63
 
-
 // Controller data
 vars /controller
     Bool is_start_pressed_past = false
@@ -45,6 +44,8 @@ vars /game
     U[NUMBER_OF_KEYS] key_y
     // PAUSE
     Bool is_game_paused = false
+    // Load Level counter to keep trace of load_level()
+    U load_level_counter = 0
 
 // NMI
 nmi game_nmi()

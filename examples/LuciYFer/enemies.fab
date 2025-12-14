@@ -1,4 +1,13 @@
 ct U NUMBER_OF_EYE_ENEMIES_PER_LEVEL = 8
+// Saved following eye state
+vars /enemies
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] saved_following_eye__x
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] saved_following_eye__y
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] saved_following_eye__state
+    Bool following_eye_set_initial_state_current_level_flag = false
+    Bool[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_set_initial_state_level_flag = Bool[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](false, false, false, false, false, false, false, false)
+    AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_eye_anim_state
+    AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_following_eye_anim_state
 
 struct Enemy_eye
     U x
@@ -218,9 +227,6 @@ data /sprites
             Fs(40, @sprite_eye_one_third_opened ),
         )))
 
-vars /enemies
-    AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_eye_anim_state
-    AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_following_eye_anim_state
 
 // Enemy: Following Eye - States
 ct U FOLLOWING_EYE_STATE_NOT_ASSIGNED = $FF
@@ -246,6 +252,10 @@ ct U ENEMY_EYE_SIGHT_PUPIL_SUBLUT = 10
 
 
 // Enemy: Following Eye - Variables
+fn clear_following_eye_set_initial_state_level_flag()
+    for U i = 0; i < NUMBER_OF_EYE_ENEMIES_PER_LEVEL; i += 1
+        following_eye_set_initial_state_level_flag[i] = false
+
 vars /following_eye
     U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_state = U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](0, 0, 0, 0, 0, 0, 0, 0, )
     U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_state_counter = U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](0, 0, 0, 0, 0, 0, 0, 0, )
@@ -285,13 +295,17 @@ vars /following_eye
                                                                                                 0.64493790, 0.72043193, 0.73178057, 0.67963347, 0.57906425, 0.45541139,
                                                                                             )
 fn following_eye_set_initial_state(U ix, U enemy_x, U enemy_y)
-        following_eye_state[ix] = ix
-        // following_eye_state[ix] = U( UU( UU(frame_counter) * UU(ix) * UU(ix) ) )
-        while following_eye_state[ix] > FOLLOWING_EYE_STATE_MAX
-            following_eye_state[ix] = following_eye_state[ix] >> 1
-        following_eye_state_counter[ix] = U( UU( UU(frame_counter) * UU(ix) * UU(ix) ) )
-        while following_eye_state_counter[ix] > FOLLOWING_EYE_STATE_COUNTER_MAX
-            following_eye_state_counter[ix] = following_eye_state_counter[ix] >> 1
+    following_eye_state[ix] = ix
+    // following_eye_state[ix] = U( UU( UU(frame_counter) * UU(ix) * UU(ix) ) )
+    while following_eye_state[ix] > FOLLOWING_EYE_STATE_MAX
+        following_eye_state[ix] = following_eye_state[ix] >> 1
+    following_eye_state_counter[ix] = U( UU( UU(frame_counter) * UU(ix) * UU(ix) ) )
+    while following_eye_state_counter[ix] > FOLLOWING_EYE_STATE_COUNTER_MAX
+        following_eye_state_counter[ix] = following_eye_state_counter[ix] >> 1
+    if(!following_eye_set_initial_state_level_flag[ix] && load_level_counter == 0)
+        save_enemies_following_eye(ix)
+        following_eye_set_initial_state_level_flag[ix] = true
+
 
 // Enemy: Following Eye - fn following_eye_set_sprite
 fn following_eye_shoot_pupil(U ix)
@@ -309,6 +323,7 @@ fn following_eye_shoot_pupil(U ix)
 
 // Enemy: Following Eye - fn following_eye_set_sprite
 fn following_eye_update(U ix)
+    load_enemies_following_eye(ix)
     // State counter
     following_eye_state_counter[ix] = following_eye_state_counter[ix] + 1
     if (following_eye_state_counter[ix] == FOLLOWING_EYE_STATE_COUNTER_MAX)
@@ -388,3 +403,15 @@ fn following_eye_update(U ix)
                 case FOLLOWING_EYE_STATE_CLOSING
                     enemies_following_eye_anim_state[ix] = make_anim_state(@eye_animation_closing)
                     break
+        // Save enemies states
+        save_enemies_following_eye(ix)
+        
+fn save_enemies_following_eye(U ix)
+    saved_following_eye__x[ix] = enemies_following_eye[ix].x
+    saved_following_eye__y[ix] = enemies_following_eye[ix].y
+    saved_following_eye__state[ix] = following_eye_state[ix]
+
+fn load_enemies_following_eye(U ix)
+    enemies_following_eye[ix].x = saved_following_eye__x[ix]
+    enemies_following_eye[ix].y = saved_following_eye__y[ix]
+    following_eye_state[ix] = saved_following_eye__state[ix]

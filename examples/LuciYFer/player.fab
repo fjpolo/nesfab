@@ -539,6 +539,7 @@ fn handle_collisions()
             destroy(UU(p.center_x), UU(p.center_y))
             break
         case C_EXIT
+            load_level_counter = 0
             log(@"C_EXIT"l)
             // Lucifer
             log_set_arg(0, current_player)

@@ -46,8 +46,10 @@ vars /metatiles
 vars /game
     U current_level_index = FIRST_LEVEL_INDEX
 
+
 vars /levels
     CCC/levels current_level
+    CCC/levels current_level_enemies
     U current_level_width
     U current_level_height
     U[256] destroyed = U[256](0)
@@ -148,10 +150,14 @@ fn load_level(CCC/levels level)
         enemies_eye_anim_state[i] = make_anim_state(@eye_animation)
         
     // Enemies: Following Eye
+    // clear_following_eye_set_initial_state_level_flag()
     enemies_following_eye_clear()
     U following_eye_num = read U(level)
     for U i = 0; i < following_eye_num; i += 1
         enemies_following_eye_new(read Enemy_following_eye(level))
+        if current_level_enemies != current_level
+            current_level_enemies = current_level
+            following_eye_set_initial_state_current_level_flag = true
         following_eye_set_initial_state(i, enemies_following_eye[i].x, enemies_following_eye[i].y)
 
     // Check if key was grabbed
@@ -181,18 +187,14 @@ fn load_level(CCC/levels level)
                     destroy(LEVEL_2_DOOR_1_X, LEVEL_2_DOOR_1_Y)
         break
 
-    
-    
-    
-
-
-
     // Set the scroll off-screen, then run the scroll code several times
     // to fill the screen with tiles.
     scroll_x = calc_shifted_camera_x() + 32 + 4
     while scroll_x != calc_shifted_camera_x()
         update_scroll()
         ppu_upload_scroll()
+
+    load_level_counter += 1
 
 fn load_chrrom_bank(CCC/levels level, U bank)
     // CHR:
