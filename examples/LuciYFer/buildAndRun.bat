@@ -1,1 +1,1 @@
-cls && ..\..\tools\windows_amd64_nesfab_1_8\nesfab.exe .\LuciYFer.cfg && ..\..\tools\Mesen_2.1.1_Windows\Mesen.exe LuciYFer.nes
+cls && ..\..\tools\windows_amd64_nesfab_1_8\nesfab.exe .\LuciYFer.cfg && && python analyzeROM.py && ..\..\tools\Mesen_2.1.1_Windows\Mesen.exe LuciYFer.nes
