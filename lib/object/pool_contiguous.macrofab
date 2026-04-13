@@ -29,14 +29,14 @@ fn #name#_clear()
 // Removes the object at position 'index'.
 // Invalidates the last object's index.
 // When calling this while iterating, 'index' should not be incremented.
-fn #name#_delete(I.#name# index)
+fn #name#_delete(U index)
 : +inline
     #name#_num -= 1
-    index[] = #name#[#name#_num]
+    #name#[index] = #name#[#name#_num]
 
 // Creates an object, returning its index but not assigning to it.
 // If no more objects can be created, returns BAD_OBJECT.
-fn #name#_alloc() I.#name#
+fn #name#_alloc() U
 : -inline
     if #name#_num == #name#_max
         return BAD_OBJECT
@@ -56,26 +56,29 @@ fn #name#_new(#type# value) U
     return index
 
 // Returns true if the object at position 'index' is allocated:
-fn #name#_exists(I.#name# index) Bool
+fn #name#_exists(U index) Bool
 : +inline
     return index < #name#_num
 
+/* Commented out for 1.3 compatibility
 // Returns the number of objects matching 'value':
 fn #name#_count(#type# value) U
     U count = 0
-    for I.#name# i = 0; i < #name#_num; i += 1
-        if i[] == value
+    for U i = 0; i < #name#_num; i += 1
+        if #name#[i] == value
             count += 1
     return count
 
 // Returns the index of the first object equal to 'value',
 // or BAD_OBJECT if one doesn't exist:
-fn #name#_find(#type# value) I.#name#
-    for I.#name# i = 0; i < #name#_num; i += 1
-        if i[] == value
+fn #name#_find(#type# value) U
+    for U i = 0; i < #name#_num; i += 1
+        if #name#[i] == value
             return i
     return BAD_OBJECT
+*/
 
+/* Commented out for 1.3 compatibility
 // Removes all objects equal to 'value':
 // Invalidates object indexes (when deleting).
 fn #name#_cull(#type# value)
@@ -90,3 +93,4 @@ fn #name#_replace(#type# from, #type# to)
     for U i = 0; i < #name#_num; i += 1
         if #name#[i] == from
             #name#[i] = to
+*/

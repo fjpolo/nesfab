@@ -1,0 +1,180 @@
+/*
+ * Blasphemos - The Penitent One
+ * Based on LuciYFer engine
+ */
+
+// Player movements
+ct Int PLAYER_MOVING_REST = 0
+ct Int PLAYER_MOVING_RIGHT = 1
+ct Int PLAYER_MOVING_LEFT = 2
+ct Int PLAYER_MOVING_ATTACK = 3
+
+// Player speeds
+ct Int PLAYER_SPEED_WALK = 1
+ct Int PLAYER_SPEED_RUN = 2
+ct Int JUMP_SPEED = -4
+
+// Player initial [x, y]
+ct Int PLAYER_INITIAL_X = 32
+ct Int PLAYER_INITIAL_Y = 160
+
+// Player width and height (32x32 metasprite)
+ct Int pw = 16 // Collision width (tighter than visual)
+ct Int ph = 30 // Collision height
+ct Int rw = pw - 1
+ct Int rh = ph - 1
+
+// Player data struct
+struct Player
+    SS x
+    SSF y
+    SS w
+    SS h
+    SS rw
+    SS rh
+    SS center_x 
+    SS center_y
+    SF xspeed
+    SF yspeed
+    U movement
+    AnimState anim_state
+    U level_index
+    Bool is_initialised
+    SS camera_x
+    U health
+    U attack_timer
+
+// Sprites and animations
+data /sprites
+    // THE PENITENT ONE metasprites (32x32)
+    // Using the first 32x32 pixels of CHR (16 tiles in a 4x4 grid)
+    // Tiles: $00-$03, $10-$13, $20-$23, $30-$33
+    // Attribute $00 uses Sprite Palette 0 (White, Cyan, Orange)
+    [] sprite_penitent_rest_right
+        (make_metasprite(0, Ms{}(
+            // Row 0
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            // Row 1
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            // Row 2
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            // Row 3
+            Ms(-16, -8, $30, $00), Ms(-8, -8, $31, $00), Ms( 0, -8, $32, $00), Ms( 8, -8, $33, $00)
+        )))
+
+    [] sprite_penitent_rest_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            // Row 0
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            Ms(-16, -8, $30, $00), Ms(-8, -8, $31, $00), Ms( 0, -8, $32, $00), Ms( 8, -8, $33, $00)
+        )))
+
+    [] penitent_animation_rest
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_penitent_rest_right)
+        )))
+    
+    [] penitent_animation_walk_right
+        (make_anim(Fs{}(
+            Fs(10,   @sprite_penitent_rest_right)
+        )))
+    
+    [] penitent_animation_walk_left
+        (make_anim(Fs{}(
+            Fs(10,   @sprite_penitent_rest_left)
+        )))
+
+fn make_player_penitent() Player
+    Player p = Player()
+    p.x = PLAYER_INITIAL_X
+    p.y = SSF(PLAYER_INITIAL_Y)
+    p.w = pw
+    p.h = ph
+    p.rw = rw
+    p.rh = rh
+    p.movement = PLAYER_MOVING_REST
+    p.anim_state = make_anim_state(@penitent_animation_rest)
+    p.level_index = FIRST_LEVEL_INDEX
+    p.is_initialised = true
+    p.health = 3
+    return p
+
+fn update_player()
+    if !p.is_initialised
+        p = make_player_penitent()
+    
+    p.center_x = p.x + (p.w >> 1)
+    p.center_y = SS(p.y) + (p.h >> 1)
+
+    handle_input()
+    handle_physics()
+    handle_collisions()
+    update_camera()
+
+fn handle_input()
+    // Horizontal movement
+    Bool moving = false
+    SS speed = PLAYER_SPEED_WALK
+    if pads[0].held & BUTTON_B
+        speed = PLAYER_SPEED_RUN
+    
+    if pads[0].held & BUTTON_LEFT
+        p.x -= speed
+        if p.movement != PLAYER_MOVING_LEFT
+            p.movement = PLAYER_MOVING_LEFT
+            p.anim_state = make_anim_state(@penitent_animation_walk_left)
+        moving = true
+    else if pads[0].held & BUTTON_RIGHT
+        p.x += speed
+        if p.movement != PLAYER_MOVING_RIGHT
+            p.movement = PLAYER_MOVING_RIGHT
+            p.anim_state = make_anim_state(@penitent_animation_walk_right)
+        moving = true
+    
+    // Jump
+    if pads[0].pressed & BUTTON_A
+        if is_on_ground()
+            p.yspeed = JUMP_SPEED
+
+    if !moving
+        if p.movement != PLAYER_MOVING_REST
+            p.movement = PLAYER_MOVING_REST
+            p.anim_state = make_anim_state(@penitent_animation_rest)
+
+fn is_on_ground() Bool
+    return collision_at(UU(p.x), UU(SS(p.y) + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(SS(p.y) + p.h)) == C_WALL
+
+fn handle_physics()
+    // Gravity
+    if !is_on_ground()
+        p.y += SSF(p.yspeed)
+        p.yspeed += 0.25
+        if p.yspeed > 4
+            p.yspeed = 4
+    else
+        p.yspeed = 0
+
+fn handle_collisions()
+    if collision_at(UU(p.center_x), UU(p.center_y)) == C_EXIT
+        current_level_index += 1
+        p.level_index = current_level_index
+        p.x = PLAYER_INITIAL_X
+        p.y = SSF(PLAYER_INITIAL_Y)
+        goto mode play_level(current_level_index)
+        : preserves /game
+
+fn update_camera()
+    ct Int window = 112
+    if p.center_x - p.camera_x < window
+        p.camera_x = p.center_x - window
+    else if p.center_x - p.camera_x > 256 - window
+        p.camera_x = p.center_x - (256 - window)
+    p.camera_x = min(max(0, p.camera_x), (SS(current_level_width) << 4) - 256)
+
+fn restore_player(Player a) Player
+    return a
+
+fn save_player(Player a) Player
+    return a

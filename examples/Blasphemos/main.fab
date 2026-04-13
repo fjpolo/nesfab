@@ -1,0 +1,172 @@
+/*
+ * Blasphemos - Main
+ * Based on LuciYFer engine
+ */
+
+// Button constants
+ct Int SELECT_BUTTON_DEBOUNCE_FRAMES = 5
+ct Int START_BUTTON_DEBOUNCE_FRAMES = 5
+
+// Game states
+ct Int GAME_STATE_START = 0
+ct Int GAME_STATE_STORY = 1
+ct Int GAME_STATE_TIPS = 2
+ct Int GAME_STATE_PLAY = 3
+ct Int GAME_STATE_WIN = 4
+ct Int GAME_STATE_GAME_OVER = 63
+
+// Controller data
+vars /controller
+    Bool is_start_pressed = false
+    U start_counter = 0
+    Bool is_select_pressed = false
+    U select_counter = 0
+
+// Game data
+vars /game
+    Player p = Player()
+    U game_state = GAME_STATE_STORY
+    U frame_counter = 0
+    Bool[NUMBER_OF_KEYS] keys
+    Bool[NUMBER_OF_KEYS] show_key = Bool[NUMBER_OF_KEYS](true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true)
+    U[NUMBER_OF_KEYS] key_x
+    U[NUMBER_OF_KEYS] key_y
+    Bool is_game_paused = false
+    U load_level_counter = 0
+
+// NMI
+nmi game_nmi()
+    frame_counter = frame_counter + 1
+
+    if game_state == GAME_STATE_STORY || game_state == GAME_STATE_TIPS
+        if ready && writing == WRITING_READY
+            {PPUSTATUS}()
+            {PPUADDR}(cur_addr.b)
+            {PPUADDR}(cur_addr.a)
+            {PPUDATA}(char)
+            cur_addr += 1
+            writing = WRITING_WAIT
+            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+        {PPUSCROLL}(0)
+        {PPUSCROLL}(0)
+        {PPUMASK}(PPUMASK_BG_ON)
+    else
+        ppu_upload_scroll()
+        ppu_reset_scroll(p.camera_x.a, 0)
+        {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | (p.camera_x.b & 1))
+        {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+    
+    ppu_upload_oam_poll_pads(0)
+
+    // Select pressed?
+    if pads[0].held & BUTTON_SELECT
+        select_counter += 1
+        if select_counter == SELECT_BUTTON_DEBOUNCE_FRAMES
+            select_counter = 0
+            is_select_pressed = true
+    else
+        select_counter = 0
+
+    // Start pressed?
+    if pads[0].held & BUTTON_START
+        start_counter += 1
+        if start_counter == START_BUTTON_DEBOUNCE_FRAMES
+            start_counter = 0
+            is_start_pressed = true
+    else
+        start_counter = 0
+
+// MAIN
+mode main()  
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)    
+    current_level_index = FIRST_LEVEL_INDEX
+    load_level(levels[current_level_index])
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+
+    while true
+        switch game_state
+            case GAME_STATE_START
+                current_level_index = LAST_LEVEL_INDEX + 1
+                goto mode start_screen(current_level_index)
+                : preserves /game
+                break
+            case GAME_STATE_STORY
+                current_level_index = LAST_LEVEL_INDEX + 2
+                goto mode story_screen(current_level_index)
+                : preserves /game
+                break
+            case GAME_STATE_TIPS
+                current_level_index = LAST_LEVEL_INDEX + 3
+                goto mode tips_screen(current_level_index)
+                : preserves /game
+                break
+            default
+                current_level_index = p.level_index
+                goto mode play_level(current_level_index)
+                : preserves /game
+                break
+
+mode play_level(U level_index)
+: nmi game_nmi
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    
+    load_level(levels[level_index])
+
+    if !p.is_initialised
+        p = make_player_penitent()
+
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+    
+    while true
+        nmi
+        update_pads()
+        check_pause()
+        if !is_game_paused
+            update_player()
+            update_sprites()
+            update_scroll()
+        else
+            update_pause_sprites()
+
+fn update_sprites()
+    U o = 0
+
+    // Draw enemies
+    for U i = 0; i < enemies_eye_num; i += 1
+        o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
+        o += 4
+
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        following_eye_update(i)
+        o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
+        o += 4
+
+    // Draw player
+    // Metasprite is 32x32, pass the center-bottom position
+    o = push_oam_anim(o, p.center_x - p.camera_x, SS(p.y) + p.h, p.anim_state)
+
+    // Draw Health (reusing stamina graphics)
+    for U i = 0; i < p.health; i += 1
+        set_oam(o, 8 + (i << 3), 8, $5D, 0)
+        o += 4
+
+    hide_oam(o)
+
+    // Tick animations
+    p.anim_state = tick_anim(p.anim_state, true)
+    for U i = 0; i < enemies_eye_num; i += 1
+        enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
+    for U i = 0; i < enemies_following_eye_num; i += 1
+        enemies_following_eye_anim_state[i] = tick_anim(enemies_following_eye_anim_state[i], true)
+
+fn update_pause_sprites()
+    {PPUMASK}(PPUMASK_GRAYSCALE | PPUMASK_ON | PPUMASK_NO_CLIP)
+
+fn check_pause()
+    if is_start_pressed 
+        is_game_paused = !is_game_paused
+        is_start_pressed = false

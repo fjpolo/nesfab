@@ -15,14 +15,12 @@
 
 // Copies data from 'palette_ptr' into 'palette`.
 fn load_palette(PPP/palettes palette_ptr)
-: +static_fixed
     for U i = 0; i < len(palette); i += 1
     : -unroll
         palette[i] = palette_ptr[i]
 
 // Copies N bytes from 'palette_ptr' to the offset 'at'.
 fn load_palette_n(PPP/palettes palette_ptr, U at, U n)
-: +static_fixed
     for U i = 0; i < n; i += 1
         palette[i+at] = palette_ptr[i]
 

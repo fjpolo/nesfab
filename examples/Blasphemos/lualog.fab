@@ -1,0 +1,72 @@
+
+// Feel free to modify these, but keep them synched with the
+// corresponding constants in lualog.lua
+
+// Must be an unused memory address
+ct Int LOG_WRITE_HOOK_ADDR = $FF
+// I used $FF because older FCEUX versions seem to have a bug with
+// write hooks on non-zeropage addresses. Your NESFab project may
+// or may not use this one. Try $108 if in doubt.
+
+// Must be 8 consecutive unused ram bytes; $100..$107
+ct Int LOG_ARG_STORAGE_ADDR = $100
+
+
+
+
+charmap l("\0 !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~", '\0')
+: stows /l
+
+// Print an integer
+fn logd(UU n)
+  log_set_arg(0, n)
+  log(@"%d"l)
+
+// Print integer as hex
+fn logh(UU n)
+  log_set_arg(0, n)
+  log(@"$%04X"l)
+
+// Print string
+fn log(CCC/l str)
+: -inline
+  U i = 0
+  while true
+    {LOG_WRITE_HOOK_ADDR}(str[i])
+    if str[i] == '\0'l
+      break
+    i += 1
+
+// Print string with up to 4 arguments.
+// str supports printf-style format. See Lua's string.format.
+// e.g. logf2("here's some variables: %u hex:%04X", var1, var2)
+// 1 argument
+fn logf(CCC/l str, U a)
+  log_set_arg(0, a)
+  log(str)
+
+// 2 arguments
+fn logf2(CCC/l str, UU a, UU b)
+  log_set_arg(0, a)
+  log_set_arg(1, b)
+  log(str)
+
+// 3 arguments
+fn logf3(CCC/l str, UU a, UU b, UU c)
+  log_set_arg(0, a)
+  log_set_arg(1, b)
+  log_set_arg(2, c)
+  log(str)
+
+// 4 arguments
+fn logf4(CCC/l str, UU a, UU b, UU c, UU d)
+  log_set_arg(0, a)
+  log_set_arg(1, b)
+  log_set_arg(2, c)
+  log_set_arg(3, d)
+  log(str)
+
+fn log_set_arg(U i, UU arg)
+  UU addr = LOG_ARG_STORAGE_ADDR + UU(i<<1)
+  {addr}(arg.a)
+  {addr+1}(arg.b)
