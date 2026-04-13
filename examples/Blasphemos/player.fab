@@ -44,6 +44,7 @@ struct Player
     SS camera_x
     U health
     U attack_timer
+    Bool facing_left
 
 // Sprites and animations
 data /sprites
@@ -77,6 +78,11 @@ data /sprites
             Fs(20,   @sprite_penitent_rest_right)
         )))
     
+    [] penitent_animation_rest_left
+        (make_anim(Fs{}(
+            Fs(20,   @sprite_penitent_rest_left)
+        )))
+    
     [] penitent_animation_walk_right
         (make_anim(Fs{}(
             Fs(10,   @sprite_penitent_rest_right)
@@ -105,6 +111,86 @@ data /sprites
             Ms(-16, -8, $34, $00), Ms(-8, -8, $35, $00), Ms( 0, -8, $36, $00), Ms( 8, -8, $37, $00)
         )))
 
+    [] sprite_penitent_attack_right_1
+        (make_metasprite(0, Ms{}(
+            Ms(-16,-32, $40, $00), Ms(-8,-32, $41, $00), Ms( 0,-32, $42, $00), Ms( 8,-32, $43, $00),
+            Ms(-16,-24, $50, $00), Ms(-8,-24, $51, $00), Ms( 0,-24, $52, $00), Ms( 8,-24, $53, $00),
+            Ms(-16,-16, $60, $00), Ms(-8,-16, $61, $00), Ms( 0,-16, $62, $00), Ms( 8,-16, $63, $00),
+            Ms(-16, -8, $70, $00), Ms(-8, -8, $71, $00), Ms( 0, -8, $72, $00), Ms( 8, -8, $73, $00)
+        )))
+
+    [] sprite_penitent_attack_right_2
+        (make_metasprite(0, Ms{}(
+            Ms(-16,-32, $44, $00), Ms(-8,-32, $45, $00), Ms( 0,-32, $46, $00), Ms( 8,-32, $47, $00),
+            Ms(-16,-24, $54, $00), Ms(-8,-24, $55, $00), Ms( 0,-24, $56, $00), Ms( 8,-24, $57, $00),
+            Ms(-16,-16, $64, $00), Ms(-8,-16, $65, $00), Ms( 0,-16, $66, $00), Ms( 8,-16, $67, $00),
+            Ms(-16, -8, $74, $00), Ms(-8, -8, $75, $00), Ms( 0, -8, $76, $00), Ms( 8, -8, $77, $00)
+        )))
+
+    [] sprite_penitent_attack_right_3
+        (make_metasprite(0, Ms{}(
+            Ms(-16,-32, $48, $00), Ms(-8,-32, $49, $00), Ms( 0,-32, $4A, $00), Ms( 8,-32, $4B, $00),
+            Ms(-16,-24, $58, $00), Ms(-8,-24, $59, $00), Ms( 0,-24, $5A, $00), Ms( 8,-24, $5B, $00),
+            Ms(-16,-16, $68, $00), Ms(-8,-16, $69, $00), Ms( 0,-16, $6A, $00), Ms( 8,-16, $6B, $00),
+            Ms(-16, -8, $78, $00), Ms(-8, -8, $79, $00), Ms( 0, -8, $7A, $00), Ms( 8, -8, $7B, $00)
+        )))
+
+    [] sprite_penitent_attack_right_4
+        (make_metasprite(0, Ms{}(
+            Ms(-16,-32, $4C, $00), Ms(-8,-32, $4D, $00), Ms( 0,-32, $4E, $00), Ms( 8,-32, $4F, $00),
+            Ms(-16,-24, $5C, $00), Ms(-8,-24, $5D, $00), Ms( 0,-24, $5E, $00), Ms( 8,-24, $5F, $00),
+            Ms(-16,-16, $6C, $00), Ms(-8,-16, $6D, $00), Ms( 0,-16, $6E, $00), Ms( 8,-16, $6F, $00),
+            Ms(-16, -8, $7C, $00), Ms(-8, -8, $7D, $00), Ms( 0, -8, $7E, $00), Ms( 8, -8, $7F, $00)
+        )))
+
+    [] sprite_penitent_attack_left_1
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-16,-32, $40, $00), Ms(-8,-32, $41, $00), Ms( 0,-32, $42, $00), Ms( 8,-32, $43, $00),
+            Ms(-16,-24, $50, $00), Ms(-8,-24, $51, $00), Ms( 0,-24, $52, $00), Ms( 8,-24, $53, $00),
+            Ms(-16,-16, $60, $00), Ms(-8,-16, $61, $00), Ms( 0,-16, $62, $00), Ms( 8,-16, $63, $00),
+            Ms(-16, -8, $70, $00), Ms(-8, -8, $71, $00), Ms( 0, -8, $72, $00), Ms( 8, -8, $73, $00)
+        )))
+
+    [] sprite_penitent_attack_left_2
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-16,-32, $44, $00), Ms(-8,-32, $45, $00), Ms( 0,-32, $46, $00), Ms( 8,-32, $47, $00),
+            Ms(-16,-24, $54, $00), Ms(-8,-24, $55, $00), Ms( 0,-24, $56, $00), Ms( 8,-24, $57, $00),
+            Ms(-16,-16, $64, $00), Ms(-8,-16, $65, $00), Ms( 0,-16, $66, $00), Ms( 8,-16, $67, $00),
+            Ms(-16, -8, $74, $00), Ms(-8, -8, $75, $00), Ms( 0, -8, $76, $00), Ms( 8, -8, $77, $00)
+        )))
+
+    [] sprite_penitent_attack_left_3
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-16,-32, $48, $00), Ms(-8,-32, $49, $00), Ms( 0,-32, $4A, $00), Ms( 8,-32, $4B, $00),
+            Ms(-16,-24, $58, $00), Ms(-8,-24, $59, $00), Ms( 0,-24, $5A, $00), Ms( 8,-24, $5B, $00),
+            Ms(-16,-16, $68, $00), Ms(-8,-16, $69, $00), Ms( 0,-16, $6A, $00), Ms( 8,-16, $6B, $00),
+            Ms(-16, -8, $78, $00), Ms(-8, -8, $79, $00), Ms( 0, -8, $7A, $00), Ms( 8, -8, $7B, $00)
+        )))
+
+    [] sprite_penitent_attack_left_4
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-16,-32, $4C, $00), Ms(-8,-32, $4D, $00), Ms( 0,-32, $4E, $00), Ms( 8,-32, $4F, $00),
+            Ms(-16,-24, $5C, $00), Ms(-8,-24, $5D, $00), Ms( 0,-24, $5E, $00), Ms( 8,-24, $5F, $00),
+            Ms(-16,-16, $6C, $00), Ms(-8,-16, $6D, $00), Ms( 0,-16, $6E, $00), Ms( 8,-16, $6F, $00),
+            Ms(-16, -8, $7C, $00), Ms(-8, -8, $7D, $00), Ms( 0, -8, $7E, $00), Ms( 8, -8, $7F, $00)
+        )))
+
+    [] penitent_animation_attack_right
+        (make_anim(Fs{}(
+            Fs(5, @sprite_penitent_attack_right_1),
+            Fs(5, @sprite_penitent_attack_right_2),
+            Fs(5, @sprite_penitent_attack_right_3),
+            Fs(5, @sprite_penitent_attack_right_4)
+        )))
+
+    [] penitent_animation_attack_left
+        (make_anim(Fs{}(
+            Fs(5, @sprite_penitent_attack_left_1),
+            Fs(5, @sprite_penitent_attack_left_2),
+            Fs(5, @sprite_penitent_attack_left_3),
+            Fs(5, @sprite_penitent_attack_left_4)
+        )))
+
     [] penitent_animation_jump_right
         (make_anim(Fs{}(
             Fs(1,   @sprite_penitent_jump_right)
@@ -128,6 +214,8 @@ fn make_player_penitent() Player
     p.level_index = FIRST_LEVEL_INDEX
     p.is_initialised = true
     p.health = 3
+    p.attack_timer = 0
+    p.facing_left = false
     return p
 
 fn update_player()
@@ -143,20 +231,36 @@ fn update_player()
     update_camera()
 
 fn handle_input()
+    // Handle attack timer
+    if p.attack_timer > 0
+        p.attack_timer -= 1
+        if p.attack_timer == 0
+            if p.movement == PLAYER_MOVING_ATTACK
+                p.movement = PLAYER_MOVING_REST
+                if p.facing_left
+                    p.anim_state = make_anim_state(@penitent_animation_rest_left)
+                else
+                    p.anim_state = make_anim_state(@penitent_animation_rest)
+        return // Prevent other input during attack
+
     // Horizontal movement
     Bool moving = false
     SS speed = PLAYER_SPEED_WALK
-    if pads[0].held & BUTTON_B
+    
+    // Use SELECT for run instead of B since B is attack
+    if pads[0].held & BUTTON_SELECT
         speed = PLAYER_SPEED_RUN
     
     if pads[0].held & BUTTON_LEFT
         p.x -= speed
+        p.facing_left = true
         if p.movement != PLAYER_MOVING_LEFT
             p.movement = PLAYER_MOVING_LEFT
             p.anim_state = make_anim_state(@penitent_animation_walk_left)
         moving = true
     else if pads[0].held & BUTTON_RIGHT
         p.x += speed
+        p.facing_left = false
         if p.movement != PLAYER_MOVING_RIGHT
             p.movement = PLAYER_MOVING_RIGHT
             p.anim_state = make_anim_state(@penitent_animation_walk_right)
@@ -167,16 +271,29 @@ fn handle_input()
         if is_on_ground()
             p.yspeed = JUMP_SPEED
 
+    // Attack
+    if pads[0].pressed & BUTTON_B
+        p.attack_timer = 20
+        p.movement = PLAYER_MOVING_ATTACK
+        if p.facing_left
+            p.anim_state = make_anim_state(@penitent_animation_attack_left)
+        else
+            p.anim_state = make_anim_state(@penitent_animation_attack_right)
+        return
+
     if !moving
         if p.movement != PLAYER_MOVING_REST
             p.movement = PLAYER_MOVING_REST
-            p.anim_state = make_anim_state(@penitent_animation_rest)
+            if p.facing_left
+                p.anim_state = make_anim_state(@penitent_animation_rest_left)
+            else
+                p.anim_state = make_anim_state(@penitent_animation_rest)
     
     // Switch to jump animation if airborne (priority over walking/rest)
     if !is_on_ground()
         if p.movement != PLAYER_MOVING_JUMP
             p.movement = PLAYER_MOVING_JUMP
-            if pads[0].held & BUTTON_LEFT
+            if p.facing_left
                 p.anim_state = make_anim_state(@penitent_animation_jump_left)
             else
                 p.anim_state = make_anim_state(@penitent_animation_jump_right)
