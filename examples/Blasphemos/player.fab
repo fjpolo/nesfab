@@ -7,7 +7,8 @@
 ct Int PLAYER_MOVING_REST = 0
 ct Int PLAYER_MOVING_RIGHT = 1
 ct Int PLAYER_MOVING_LEFT = 2
-ct Int PLAYER_MOVING_ATTACK = 3
+ct Int PLAYER_MOVING_JUMP = 3
+ct Int PLAYER_MOVING_ATTACK = 4
 
 // Player speeds
 ct Int PLAYER_SPEED_WALK = 1
@@ -47,24 +48,24 @@ struct Player
 // Sprites and animations
 data /sprites
     // THE PENITENT ONE metasprites (32x32)
-    // Using the first 32x32 pixels of CHR (16 tiles in a 4x4 grid)
-    // Tiles: $00-$03, $10-$13, $20-$23, $30-$33
-    // Attribute $00 uses Sprite Palette 0 (White, Cyan, Orange)
+    // Standing: x=0, y=0 (Tiles $00, $01, $02, $03 etc.)
+    // Jumping: Third row (y=64). 
+    // If it's the "Second sprite" on that row: x=32 (Index $84)
+
     [] sprite_penitent_rest_right
         (make_metasprite(0, Ms{}(
-            // Row 0
+            // Row 0 (y=0)
             Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
-            // Row 1
+            // Row 1 (y=8)
             Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
-            // Row 2
+            // Row 2 (y=16)
             Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
-            // Row 3
+            // Row 3 (y=24)
             Ms(-16, -8, $30, $00), Ms(-8, -8, $31, $00), Ms( 0, -8, $32, $00), Ms( 8, -8, $33, $00)
         )))
 
     [] sprite_penitent_rest_left
         (make_metasprite(ATTR_H_FLIP, Ms{}(
-            // Row 0
             Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
             Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
             Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
@@ -84,6 +85,34 @@ data /sprites
     [] penitent_animation_walk_left
         (make_anim(Fs{}(
             Fs(10,   @sprite_penitent_rest_left)
+        )))
+
+    [] sprite_penitent_jump_right
+        (make_metasprite(0, Ms{}(
+            // First Row (y=0..32), Second Sprite (x=32..64)
+            Ms(-16,-32, $04, $00), Ms(-8,-32, $05, $00), Ms( 0,-32, $06, $00), Ms( 8,-32, $07, $00),
+            Ms(-16,-24, $14, $00), Ms(-8,-24, $15, $00), Ms( 0,-24, $16, $00), Ms( 8,-24, $17, $00),
+            Ms(-16,-16, $24, $00), Ms(-8,-16, $25, $00), Ms( 0,-16, $26, $00), Ms( 8,-16, $27, $00),
+            Ms(-16, -8, $34, $00), Ms(-8, -8, $35, $00), Ms( 0, -8, $36, $00), Ms( 8, -8, $37, $00)
+        )))
+
+    [] sprite_penitent_jump_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            // First Row (y=0..32), Second Sprite (x=32..64)
+            Ms(-16,-32, $04, $00), Ms(-8,-32, $05, $00), Ms( 0,-32, $06, $00), Ms( 8,-32, $07, $00),
+            Ms(-16,-24, $14, $00), Ms(-8,-24, $15, $00), Ms( 0,-24, $16, $00), Ms( 8,-24, $17, $00),
+            Ms(-16,-16, $24, $00), Ms(-8,-16, $25, $00), Ms( 0,-16, $26, $00), Ms( 8,-16, $27, $00),
+            Ms(-16, -8, $34, $00), Ms(-8, -8, $35, $00), Ms( 0, -8, $36, $00), Ms( 8, -8, $37, $00)
+        )))
+
+    [] penitent_animation_jump_right
+        (make_anim(Fs{}(
+            Fs(1,   @sprite_penitent_jump_right)
+        )))
+    
+    [] penitent_animation_jump_left
+        (make_anim(Fs{}(
+            Fs(1,   @sprite_penitent_jump_left)
         )))
 
 fn make_player_penitent() Player
@@ -142,19 +171,31 @@ fn handle_input()
         if p.movement != PLAYER_MOVING_REST
             p.movement = PLAYER_MOVING_REST
             p.anim_state = make_anim_state(@penitent_animation_rest)
+    
+    // Switch to jump animation if airborne (priority over walking/rest)
+    if !is_on_ground()
+        if p.movement != PLAYER_MOVING_JUMP
+            p.movement = PLAYER_MOVING_JUMP
+            if pads[0].held & BUTTON_LEFT
+                p.anim_state = make_anim_state(@penitent_animation_jump_left)
+            else
+                p.anim_state = make_anim_state(@penitent_animation_jump_right)
 
 fn is_on_ground() Bool
     return collision_at(UU(p.x), UU(SS(p.y) + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(SS(p.y) + p.h)) == C_WALL
 
 fn handle_physics()
-    // Gravity
-    if !is_on_ground()
-        p.y += SSF(p.yspeed)
+    p.y += SSF(p.yspeed)
+    
+    if is_on_ground()
+        if p.yspeed > 0
+            p.yspeed = 0
+            // Align to tile grid (assuming 16px tiles)
+            p.y = SSF(UU(SS(p.y) + p.h) & $F0) - SSF(p.h)
+    else
         p.yspeed += 0.25
         if p.yspeed > 4
             p.yspeed = 4
-    else
-        p.yspeed = 0
 
 fn handle_collisions()
     if collision_at(UU(p.center_x), UU(p.center_y)) == C_EXIT
