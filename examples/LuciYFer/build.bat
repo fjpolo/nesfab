@@ -1,1 +1,0 @@
-cls && ..\..\tools\windows_amd64_nesfab_1_8\nesfab.exe .\LuciYFer.cfg && python analyzeROM.py
