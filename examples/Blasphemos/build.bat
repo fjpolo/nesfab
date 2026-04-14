@@ -1,1 +1,1 @@
-cls && c:\Workspace\NESFab\windows_amd64_nesfab_1_3\nesfab.exe .\Blasphemos.cfg & python analyzeROM.py
+cls && c:\Workspace\NESFab\windows_amd64_nesfab_1_3\nesfab.exe .\BlasNESmous.cfg & python analyzeROM.py
