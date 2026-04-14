@@ -136,9 +136,9 @@ fn load_level(CCC/levels level)
     // Sprite Palette 0 (Player: The Penitent One)
     {PPUADDR}($3F)
     {PPUADDR}($11)
-    {PPUDATA}($30) // White
-    {PPUDATA}($31) // Cyan/Light Blue
-    {PPUDATA}($27) // Orange/Gold
+    {PPUDATA}($14) // Purple (Armor)
+    {PPUDATA}($00) // Dark Grey (Cloth)
+    {PPUDATA}($30) // White (Shadows/Highlights)
 
 
     // Metatiles:
