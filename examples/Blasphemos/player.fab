@@ -83,14 +83,92 @@ data /sprites
             Fs(20,   @sprite_penitent_rest_left)
         )))
     
+    [] sprite_penitent_walk_right_1
+        (make_metasprite(0, Ms{}(
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            // Leg strip 1: x=96, y=0
+            Ms(-4, -8, $0C, $00), Ms(4, -8, $0D, $00)
+        )))
+
+    [] sprite_penitent_walk_right_2
+        (make_metasprite(0, Ms{}(
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            // Leg strip 2: x=96, y=8
+            Ms(-4, -8, $1C, $00), Ms(4, -8, $1D, $00)
+        )))
+
+    [] sprite_penitent_walk_right_3
+        (make_metasprite(0, Ms{}(
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            // Leg strip 3: x=96, y=16
+            Ms(-4, -8, $2C, $00), Ms(4, -8, $2D, $00)
+        )))
+
+    [] sprite_penitent_walk_right_4
+        (make_metasprite(0, Ms{}(
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            // Leg strip 4: x=96, y=24
+            Ms(-4, -8, $3C, $00), Ms(4, -8, $3D, $00)
+        )))
+
+    [] sprite_penitent_walk_left_1
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            // Leg strip 1 (flipped): x=96, y=0
+            Ms(-4, -8, $0C, $00), Ms(4, -8, $0D, $00)
+        )))
+
+    [] sprite_penitent_walk_left_2
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            // Leg strip 2 (flipped): x=96, y=8
+            Ms(-4, -8, $1C, $00), Ms(4, -8, $1D, $00)
+        )))
+
+    [] sprite_penitent_walk_left_3
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            // Leg strip 3 (flipped): x=96, y=16
+            Ms(-4, -8, $2C, $00), Ms(4, -8, $2D, $00)
+        )))
+
+    [] sprite_penitent_walk_left_4
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
+            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
+            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
+            // Leg strip 4 (flipped): x=96, y=24
+            Ms(-4, -8, $3C, $00), Ms(4, -8, $3D, $00)
+        )))
+
     [] penitent_animation_walk_right
         (make_anim(Fs{}(
-            Fs(10,   @sprite_penitent_rest_right)
+            Fs(8,   @sprite_penitent_walk_right_1),
+            Fs(8,   @sprite_penitent_walk_right_2),
+            Fs(8,   @sprite_penitent_walk_right_3),
+            Fs(8,   @sprite_penitent_walk_right_4)
         )))
     
     [] penitent_animation_walk_left
         (make_anim(Fs{}(
-            Fs(10,   @sprite_penitent_rest_left)
+            Fs(8,   @sprite_penitent_walk_left_1),
+            Fs(8,   @sprite_penitent_walk_left_2),
+            Fs(8,   @sprite_penitent_walk_left_3),
+            Fs(8,   @sprite_penitent_walk_left_4)
         )))
 
     [] sprite_penitent_jump_right
@@ -113,6 +191,7 @@ data /sprites
 
     [] sprite_penitent_attack_right_1
         (make_metasprite(0, Ms{}(
+            // x=0, y=32
             Ms(-16,-32, $40, $00), Ms(-8,-32, $41, $00), Ms( 0,-32, $42, $00), Ms( 8,-32, $43, $00),
             Ms(-16,-24, $50, $00), Ms(-8,-24, $51, $00), Ms( 0,-24, $52, $00), Ms( 8,-24, $53, $00),
             Ms(-16,-16, $60, $00), Ms(-8,-16, $61, $00), Ms( 0,-16, $62, $00), Ms( 8,-16, $63, $00),
@@ -121,6 +200,7 @@ data /sprites
 
     [] sprite_penitent_attack_right_2
         (make_metasprite(0, Ms{}(
+            // x=32, y=32
             Ms(-16,-32, $44, $00), Ms(-8,-32, $45, $00), Ms( 0,-32, $46, $00), Ms( 8,-32, $47, $00),
             Ms(-16,-24, $54, $00), Ms(-8,-24, $55, $00), Ms( 0,-24, $56, $00), Ms( 8,-24, $57, $00),
             Ms(-16,-16, $64, $00), Ms(-8,-16, $65, $00), Ms( 0,-16, $66, $00), Ms( 8,-16, $67, $00),
@@ -129,6 +209,7 @@ data /sprites
 
     [] sprite_penitent_attack_right_3
         (make_metasprite(0, Ms{}(
+            // x=64, y=32
             Ms(-16,-32, $48, $00), Ms(-8,-32, $49, $00), Ms( 0,-32, $4A, $00), Ms( 8,-32, $4B, $00),
             Ms(-16,-24, $58, $00), Ms(-8,-24, $59, $00), Ms( 0,-24, $5A, $00), Ms( 8,-24, $5B, $00),
             Ms(-16,-16, $68, $00), Ms(-8,-16, $69, $00), Ms( 0,-16, $6A, $00), Ms( 8,-16, $6B, $00),
@@ -137,6 +218,7 @@ data /sprites
 
     [] sprite_penitent_attack_right_4
         (make_metasprite(0, Ms{}(
+            // x=96, y=32
             Ms(-16,-32, $4C, $00), Ms(-8,-32, $4D, $00), Ms( 0,-32, $4E, $00), Ms( 8,-32, $4F, $00),
             Ms(-16,-24, $5C, $00), Ms(-8,-24, $5D, $00), Ms( 0,-24, $5E, $00), Ms( 8,-24, $5F, $00),
             Ms(-16,-16, $6C, $00), Ms(-8,-16, $6D, $00), Ms( 0,-16, $6E, $00), Ms( 8,-16, $6F, $00),
@@ -145,6 +227,7 @@ data /sprites
 
     [] sprite_penitent_attack_left_1
         (make_metasprite(ATTR_H_FLIP, Ms{}(
+            // x=0, y=32 (flipped)
             Ms(-16,-32, $40, $00), Ms(-8,-32, $41, $00), Ms( 0,-32, $42, $00), Ms( 8,-32, $43, $00),
             Ms(-16,-24, $50, $00), Ms(-8,-24, $51, $00), Ms( 0,-24, $52, $00), Ms( 8,-24, $53, $00),
             Ms(-16,-16, $60, $00), Ms(-8,-16, $61, $00), Ms( 0,-16, $62, $00), Ms( 8,-16, $63, $00),
@@ -243,28 +326,30 @@ fn handle_input()
                     p.anim_state = make_anim_state(@penitent_animation_rest)
         return // Prevent other input during attack
 
-    // Horizontal movement
-    Bool moving = false
     SS speed = PLAYER_SPEED_WALK
-    
-    // Use SELECT for run instead of B since B is attack
     if pads[0].held & BUTTON_SELECT
         speed = PLAYER_SPEED_RUN
-    
+
     if pads[0].held & BUTTON_LEFT
         p.x -= speed
-        p.facing_left = true
-        if p.movement != PLAYER_MOVING_LEFT
+        if !p.facing_left || p.movement != PLAYER_MOVING_LEFT
+            p.facing_left = true
             p.movement = PLAYER_MOVING_LEFT
             p.anim_state = make_anim_state(@penitent_animation_walk_left)
-        moving = true
     else if pads[0].held & BUTTON_RIGHT
         p.x += speed
-        p.facing_left = false
-        if p.movement != PLAYER_MOVING_RIGHT
+        if p.facing_left || p.movement != PLAYER_MOVING_RIGHT
+            p.facing_left = false
             p.movement = PLAYER_MOVING_RIGHT
             p.anim_state = make_anim_state(@penitent_animation_walk_right)
-        moving = true
+    else
+        // Not moving horizontally
+        if p.movement != PLAYER_MOVING_REST
+            p.movement = PLAYER_MOVING_REST
+            if p.facing_left
+                p.anim_state = make_anim_state(@penitent_animation_rest_left)
+            else
+                p.anim_state = make_anim_state(@penitent_animation_rest)
     
     // Jump
     if pads[0].pressed & BUTTON_A
@@ -281,14 +366,6 @@ fn handle_input()
             p.anim_state = make_anim_state(@penitent_animation_attack_right)
         return
 
-    if !moving
-        if p.movement != PLAYER_MOVING_REST
-            p.movement = PLAYER_MOVING_REST
-            if p.facing_left
-                p.anim_state = make_anim_state(@penitent_animation_rest_left)
-            else
-                p.anim_state = make_anim_state(@penitent_animation_rest)
-    
     // Switch to jump animation if airborne (priority over walking/rest)
     if !is_on_ground()
         if p.movement != PLAYER_MOVING_JUMP
