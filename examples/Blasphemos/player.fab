@@ -284,6 +284,34 @@ data /sprites
             Fs(1,   @sprite_penitent_jump_left)
         )))
 
+    [] sprite_penitent_hit_right
+        (make_metasprite(0, Ms{}(
+            // x=64, y=0
+            Ms(-16,-32, $08, $00), Ms(-8,-32, $09, $00), Ms( 0,-32, $0A, $00), Ms( 8,-32, $0B, $00),
+            Ms(-16,-24, $18, $00), Ms(-8,-24, $19, $00), Ms( 0,-24, $1A, $00), Ms( 8,-24, $1B, $00),
+            Ms(-16,-16, $28, $00), Ms(-8,-16, $29, $00), Ms( 0,-16, $2A, $00), Ms( 8,-16, $2B, $00),
+            Ms(-16, -8, $38, $00), Ms(-8, -8, $39, $00), Ms( 0, -8, $3A, $00), Ms( 8, -8, $3B, $00)
+        )))
+
+    [] sprite_penitent_hit_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            // x=64, y=0 (flipped)
+            Ms(-16,-32, $08, $00), Ms(-8,-32, $09, $00), Ms( 0,-32, $0A, $00), Ms( 8,-32, $0B, $00),
+            Ms(-16,-24, $18, $00), Ms(-8,-24, $19, $00), Ms( 0,-24, $1A, $00), Ms( 8,-24, $1B, $00),
+            Ms(-16,-16, $28, $00), Ms(-8,-16, $29, $00), Ms( 0,-16, $2A, $00), Ms( 8,-16, $2B, $00),
+            Ms(-16, -8, $38, $00), Ms(-8, -8, $39, $00), Ms( 0, -8, $3A, $00), Ms( 8, -8, $3B, $00)
+        )))
+
+    [] penitent_animation_hit_right
+        (make_anim(Fs{}(
+            Fs(1,   @sprite_penitent_hit_right)
+        )))
+
+    [] penitent_animation_hit_left
+        (make_anim(Fs{}(
+            Fs(1,   @sprite_penitent_hit_left)
+        )))
+
 fn make_player_penitent() Player
     Player p = Player()
     p.x = PLAYER_INITIAL_X
