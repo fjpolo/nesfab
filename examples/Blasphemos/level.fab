@@ -123,24 +123,23 @@ fn load_level(CCC/levels level)
     palette[11] = $00 // Grey for metal bars
 
     // Sprite Palette 0 (Player: The Penitent One)
-    // "black (transparent layer), gray, blue and purple"
-    // Colors: $10 (Gray), $12 (Blue), $14 (Purple)
-    palette[12] = $10 // Gray
-    palette[13] = $12 // Blue
-    palette[14] = $14 // Purple
+    // Canonical scheme: Silver Armor ($10), Blood Red ($16), and Gold ($27)
+    palette[12] = $10 // Silver Armor
+    palette[13] = $16 // Blood Red Cloth
+    palette[14] = $27 // Gold Highlights
 
     // Apply the same scheme to all Sprite Palettes to ensure consistency
     palette[15] = $10
-    palette[16] = $12
-    palette[17] = $14
+    palette[16] = $16
+    palette[17] = $27
 
     palette[18] = $10
-    palette[19] = $12
-    palette[20] = $14
+    palette[19] = $16
+    palette[20] = $27
 
     palette[21] = $10
-    palette[22] = $12
-    palette[23] = $14
+    palette[22] = $16
+    palette[23] = $27
 
     ppu_upload_palette()
 
