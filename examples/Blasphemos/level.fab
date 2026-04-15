@@ -100,45 +100,50 @@ fn load_level(CCC/levels level)
     ppu_upload_palette()
 
     // Override Background Palettes for Hell Theme (Red/Black/Lava)
-    {PPUADDR}($3F)
-    {PPUADDR}($00)
-    {PPUDATA}($0F) // Universal Background: Black
+    palette[PALETTE_UBC] = $0F // Universal Background: Black
 
     // BG Palette 0 (Ground/Walls)
-    {PPUADDR}($3F)
-    {PPUADDR}($01)
-    {PPUDATA}($06) // Dark Red
-    {PPUDATA}($16) // Red
-    {PPUDATA}($30) // Bone White
+    palette[0] = $06 // Dark Red
+    palette[1] = $16 // Red
+    palette[2] = $30 // Bone White
 
     // BG Palette 1 (Lava/Fire)
-    {PPUADDR}($3F)
-    {PPUADDR}($05)
-    {PPUDATA}($16) // Red
-    {PPUDATA}($27) // Orange
-    {PPUDATA}($37) // Yellow
+    palette[3] = $16 // Red
+    palette[4] = $27 // Orange
+    palette[5] = $37 // Yellow
 
     // BG Palette 2 (Details/Background)
-    {PPUADDR}($3F)
-    {PPUADDR}($09)
-    {PPUDATA}($0F) // Black
-    {PPUDATA}($16) // Red
-    {PPUDATA}($26) // Pinkish Red
+    palette[6] = $0F // Black
+    palette[7] = $16 // Red
+    palette[8] = $26 // Pinkish Red
 
     // BG Palette 3 (Alternative)
-    {PPUADDR}($3F)
-    {PPUADDR}($0D)
-    {PPUDATA}($08) // Dark Brown/Red
-    {PPUDATA}($16) // Red
-    {PPUDATA}($21) // Desaturated Blue (for contrast or metal) -> Changed to Red/Grey: $00
-    // Actually keep $00 (Grey) for metal bars
+    palette[9] = $08 // Dark Brown/Red
+    palette[10] = $16 // Red
+    palette[11] = $00 // Grey for metal bars
 
     // Sprite Palette 0 (Player: The Penitent One)
-    {PPUADDR}($3F)
-    {PPUADDR}($11)
-    {PPUDATA}($14) // Purple (Armor)
-    {PPUDATA}($00) // Dark Grey (Cloth)
-    {PPUDATA}($30) // White (Shadows/Highlights)
+    // "black (transparent layer), gray, blue and purple"
+    // Colors: $10 (Gray), $12 (Blue), $14 (Purple)
+    palette[12] = $10 // Gray
+    palette[13] = $12 // Blue
+    palette[14] = $14 // Purple
+
+    // Apply the same scheme to all Sprite Palettes to ensure consistency
+    palette[15] = $10
+    palette[16] = $12
+    palette[17] = $14
+
+    palette[18] = $10
+    palette[19] = $12
+    palette[20] = $14
+
+    palette[21] = $10
+    palette[22] = $12
+    palette[23] = $14
+
+    ppu_upload_palette()
+
 
 
     // Metatiles:
