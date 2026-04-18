@@ -403,8 +403,7 @@ fn handle_input()
                     p.anim_state = make_anim_state(@penitent_animation_jump_left)
                 else
                     p.anim_state = make_anim_state(@penitent_animation_jump_right)
-            else
-                return // Ignore horizontal movement while perfectly on ladder
+                return
     else
         if p.movement == PLAYER_MOVING_CLIMB
             p.movement = PLAYER_MOVING_JUMP
@@ -429,14 +428,14 @@ fn handle_input()
                 p.movement = PLAYER_MOVING_RIGHT
                 p.anim_state = make_anim_state(@penitent_animation_walk_right)
     else
-
         // Not moving horizontally
         if p.movement != PLAYER_MOVING_REST
-            p.movement = PLAYER_MOVING_REST
-            if p.facing_left
-                p.anim_state = make_anim_state(@penitent_animation_rest_left)
-            else
-                p.anim_state = make_anim_state(@penitent_animation_rest)
+            if p.movement != PLAYER_MOVING_CLIMB
+                p.movement = PLAYER_MOVING_REST
+                if p.facing_left
+                    p.anim_state = make_anim_state(@penitent_animation_rest_left)
+                else
+                    p.anim_state = make_anim_state(@penitent_animation_rest)
     
     // Jump
     if pads[0].pressed & BUTTON_A
