@@ -186,3 +186,33 @@ fn load_enemies_following_eye(U ix)
     enemies_following_eye[ix].x = saved_following_eye__x[ix]
     enemies_following_eye[ix].y = saved_following_eye__y[ix]
     following_eye_state[ix] = saved_following_eye__state[ix]
+
+// --- Boss: Warden of the Silent Sorrow (Background Boss Test) ---
+vars /game
+    Bool warden_active = true
+    U warden_health = 10
+    SS warden_x = 180       // Placeholder coordinates for bg1.png placement
+    SS warden_y = 120
+    SS warden_w = 64
+    SS warden_h = 64
+    U warden_hurt_timer = 0
+
+fn warden_init(SS wx, SS wy)
+    warden_active = true
+    warden_health = 10
+    warden_x = wx
+    warden_y = wy
+    warden_hurt_timer = 0
+
+fn update_warden()
+    if warden_active
+        if warden_hurt_timer > 0
+            warden_hurt_timer -= 1
+        
+        // Optionally, check collision with player to deal damage
+        if p.x < (warden_x + warden_w) && (p.x + p.w) > SS(warden_x) && p.y < SSF(warden_y + warden_h) && (p.y + SSF(p.h)) > SSF(warden_y)
+            // Damage player if touched (basic)
+            if p.attack_timer == 0 // simple iframe check
+                p.health -= 1
+                if p.health == 0
+                    p.health = 3

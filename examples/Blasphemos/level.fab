@@ -99,51 +99,6 @@ fn load_level(CCC/levels level)
     load_palette(read CCC/palettes(level))
     ppu_upload_palette()
 
-    // Override Background Palettes for Hell Theme (Red/Black/Lava)
-    palette[PALETTE_UBC] = $0F // Universal Background: Black
-
-    // BG Palette 0 (Ground/Walls)
-    palette[0] = $06 // Dark Red
-    palette[1] = $16 // Red
-    palette[2] = $30 // Bone White
-
-    // BG Palette 1 (Lava/Fire)
-    palette[3] = $16 // Red
-    palette[4] = $27 // Orange
-    palette[5] = $37 // Yellow
-
-    // BG Palette 2 (Details/Background)
-    palette[6] = $0F // Black
-    palette[7] = $16 // Red
-    palette[8] = $26 // Pinkish Red
-
-    // BG Palette 3 (Alternative)
-    palette[9] = $08 // Dark Brown/Red
-    palette[10] = $16 // Red
-    palette[11] = $00 // Grey for metal bars
-
-    // Sprite Palette 0 (Player: The Penitent One)
-    // Canonical scheme: Silver Armor ($10), Blood Red ($16), and Gold ($27)
-    palette[12] = $10 // Silver Armor
-    palette[13] = $16 // Blood Red Cloth
-    palette[14] = $27 // Gold Highlights
-
-    // Apply the same scheme to all Sprite Palettes to ensure consistency
-    palette[15] = $10
-    palette[16] = $16
-    palette[17] = $27
-
-    palette[18] = $10
-    palette[19] = $16
-    palette[20] = $27
-
-    palette[21] = $10
-    palette[22] = $16
-    palette[23] = $27
-
-    ppu_upload_palette()
-
-
 
     // Metatiles:
     load_metatiles(read CC/metatiles(level))
