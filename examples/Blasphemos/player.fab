@@ -52,73 +52,80 @@ struct Player
 data /sprites
     // THE PENITENT ONE metasprites (32x32)
     // Standing: x=0..31, y=0..31 (Primary) and x=32..63, y=0..31 (Secondary)
-    [] sprite_penitent_standing_right
+    [] sprite_penitent_standing_right_01
         (make_metasprite(0, Ms{}(
             // Primary tiles (Palette 0)
-            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
-            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
-            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
-            Ms(-16, -8, $30, $00), Ms(-8, -8, $31, $00), Ms( 0, -8, $32, $00), Ms( 8, -8, $33, $00),
+            Ms(0,-32, $01, $00), Ms( 8,-32, $02, $00),
+            Ms(-8,-24, $10, $00), Ms(0,-24, $11, $00), Ms( 8,-24, $12, $00),
+            Ms(-8,-16, $20, $00), Ms(0,-16, $21, $00), Ms( 8,-16, $22, $00),
+            Ms(-8, -8, $30, $00), Ms(0, -8, $31, $00), Ms( 8, -8, $32, $00),
             // Secondary tiles (Palette 1) - Layered on top
-            Ms(-16,-32, $04, $01), Ms(-8,-32, $05, $01), Ms( 0,-32, $06, $01), Ms( 8,-32, $07, $01),
-            Ms(-16,-24, $14, $01), Ms(-8,-24, $15, $01), Ms( 0,-24, $16, $01), Ms( 8,-24, $17, $01),
-            Ms(-16,-16, $24, $01), Ms(-8,-16, $25, $01), Ms( 0,-16, $26, $01), Ms( 8,-16, $27, $01),
-            Ms(-16, -8, $34, $01), Ms(-8, -8, $35, $01), Ms( 0, -8, $36, $01), Ms( 8, -8, $37, $01)
+            Ms( 0,-32, $00, $00),
+            Ms(-8,-24, $03, $01),  Ms( 0,-24, $04, $01), Ms( 8,-24, $05, $01),
+            Ms(-16,-16, $13, $01), Ms(-8,-16, $14, $01), Ms( 0,-16, $15, $01), Ms( 8,-16, $24, $01),
+            Ms(-16, -8, $23, $01),
         )))
 
-    [] sprite_penitent_standing_left
+    [] sprite_penitent_standing_left_01
         (make_metasprite(ATTR_H_FLIP, Ms{}(
             // Primary tiles (Palette 0)
-            Ms(-16,-32, $00, $00), Ms(-8,-32, $01, $00), Ms( 0,-32, $02, $00), Ms( 8,-32, $03, $00),
-            Ms(-16,-24, $10, $00), Ms(-8,-24, $11, $00), Ms( 0,-24, $12, $00), Ms( 8,-24, $13, $00),
-            Ms(-16,-16, $20, $00), Ms(-8,-16, $21, $00), Ms( 0,-16, $22, $00), Ms( 8,-16, $23, $00),
-            Ms(-16, -8, $30, $00), Ms(-8, -8, $31, $00), Ms( 0, -8, $32, $00), Ms( 8, -8, $33, $00),
+            Ms(0,-32, $01, $00), Ms( 8,-32, $02, $00),
+            Ms(-8,-24, $10, $00), Ms(0,-24, $11, $00), Ms( 8,-24, $12, $00),
+            Ms(-8,-16, $20, $00), Ms(0,-16, $21, $00), Ms( 8,-16, $22, $00),
+            Ms(-8, -8, $30, $00), Ms(0, -8, $31, $00), Ms( 8, -8, $32, $00),
             // Secondary tiles (Palette 1) - Layered on top
-            Ms(-16,-32, $04, $01), Ms(-8,-32, $05, $01), Ms( 0,-32, $06, $01), Ms( 8,-32, $07, $01),
-            Ms(-16,-24, $14, $01), Ms(-8,-24, $15, $01), Ms( 0,-24, $16, $01), Ms( 8,-24, $17, $01),
-            Ms(-16,-16, $24, $01), Ms(-8,-16, $25, $01), Ms( 0,-16, $26, $01), Ms( 8,-16, $27, $01),
-            Ms(-16, -8, $34, $01), Ms(-8, -8, $35, $01), Ms( 0, -8, $36, $01), Ms( 8, -8, $37, $01)
+            Ms( 0,-32, $00, $00),
+            Ms(-8,-24, $03, $01),  Ms( 0,-24, $04, $01), Ms( 8,-24, $05, $01),
+            Ms(-16,-16, $13, $01), Ms(-8,-16, $14, $01), Ms( 0,-16, $15, $01), Ms( 8,-16, $24, $01),
+            Ms(-16, -8, $23, $01)
         )))
 
-    // Standing Alt (Y=32px offset -> $40 tiles offset)
-    [] sprite_penitent_standing_right_alt
+    [] sprite_penitent_jump_right_01
         (make_metasprite(0, Ms{}(
-            // Primary tiles (Palette 0)
-            Ms(-16,-32, $40, $00), Ms(-8,-32, $41, $00), Ms( 0,-32, $42, $00), Ms( 8,-32, $43, $00),
-            Ms(-16,-24, $50, $00), Ms(-8,-24, $51, $00), Ms( 0,-24, $52, $00), Ms( 8,-24, $53, $00),
-            Ms(-16,-16, $60, $00), Ms(-8,-16, $61, $00), Ms( 0,-16, $62, $00), Ms( 8,-16, $63, $00),
-            Ms(-16, -8, $70, $00), Ms(-8, -8, $71, $00), Ms( 0, -8, $72, $00), Ms( 8, -8, $73, $00),
-            // Secondary tiles (Palette 1) - Layered on top
-            Ms(-16,-32, $44, $01), Ms(-8,-32, $45, $01), Ms( 0,-32, $46, $01), Ms( 8,-32, $47, $01),
-            Ms(-16,-24, $54, $01), Ms(-8,-24, $55, $01), Ms( 0,-24, $56, $01), Ms( 8,-24, $57, $01),
-            Ms(-16,-16, $64, $01), Ms(-8,-16, $65, $01), Ms( 0,-16, $66, $01), Ms( 8,-16, $67, $01),
-            Ms(-16, -8, $74, $01), Ms(-8, -8, $75, $01), Ms( 0, -8, $76, $01), Ms( 8, -8, $77, $01)
+            // Primary tiles (Palette 0) - x=40..71, y=0..31
+            Ms( 0,-32, $07, $00), Ms( 8,-32, $08, $00),
+            Ms(-8,-24, $16, $00), Ms( 0,-24, $17, $00), Ms( 8,-24, $18, $00),
+            Ms(-8,-16, $26, $00), Ms( 0,-16, $27, $00), Ms( 8,-16, $28, $00), Ms( 16,-16, $29, $00),
+            Ms(-8, -8, $36, $00), Ms( 0, -8, $37, $00), Ms( 8, -8, $38, $00), Ms( 16, -8, $39, $00),
+            // Secondary tiles (Palette 1) - x=72..103, y=0..31
+            Ms(-16,-32, $0A, $01), Ms(-8,-32, $0B, $01), Ms( 0,-32, $0C, $01), Ms( 8,-32, $0D, $01),
+            Ms(-16,-24, $1A, $01), Ms(-8,-24, $1B, $01), Ms( 0,-24, $1C, $01), Ms( 8,-24, $1D, $01),
+            Ms(-16,-16, $2A, $01), Ms(-8,-16, $2B, $01), Ms( 0,-16, $2C, $01), Ms( 8,-16, $2D, $01),
+            Ms(-16, -8, $3A, $01), Ms(-8, -8, $3B, $01), Ms( 0, -8, $3C, $01), Ms( 8, -8, $3D, $01)
         )))
 
-    [] sprite_penitent_standing_left_alt
+    [] sprite_penitent_jump_left_01
         (make_metasprite(ATTR_H_FLIP, Ms{}(
-            // Primary tiles (Palette 0)
-            Ms(-16,-32, $40, $00), Ms(-8,-32, $41, $00), Ms( 0,-32, $42, $00), Ms( 8,-32, $43, $00),
-            Ms(-16,-24, $50, $00), Ms(-8,-24, $51, $00), Ms( 0,-24, $52, $00), Ms( 8,-24, $53, $00),
-            Ms(-16,-16, $60, $00), Ms(-8,-16, $61, $00), Ms( 0,-16, $62, $00), Ms( 8,-16, $63, $00),
-            Ms(-16, -8, $70, $00), Ms(-8, -8, $71, $00), Ms( 0, -8, $72, $00), Ms( 8, -8, $73, $00),
-            // Secondary tiles (Palette 1) - Layered on top
-            Ms(-16,-32, $44, $01), Ms(-8,-32, $45, $01), Ms( 0,-32, $46, $01), Ms( 8,-32, $47, $01),
-            Ms(-16,-24, $54, $01), Ms(-8,-24, $55, $01), Ms( 0,-24, $56, $01), Ms( 8,-24, $57, $01),
-            Ms(-16,-16, $64, $01), Ms(-8,-16, $65, $01), Ms( 0,-16, $66, $01), Ms( 8,-16, $67, $01),
-            Ms(-16, -8, $74, $01), Ms(-8, -8, $75, $01), Ms( 0, -8, $76, $01), Ms( 8, -8, $77, $01)
+            // Same tiles as right jump
+            Ms( 0,-32, $07, $00), Ms( 8,-32, $08, $00),
+            Ms(-8,-24, $16, $00), Ms( 0,-24, $17, $00), Ms( 8,-24, $18, $00),
+            Ms(-8,-16, $26, $00), Ms( 0,-16, $27, $00), Ms( 8,-16, $28, $00), Ms( 16,-16, $29, $00),
+            Ms(-8, -8, $36, $00), Ms( 0, -8, $37, $00), Ms( 8, -8, $38, $00), Ms( 16, -8, $39, $00),
+            // Secondary tiles (Palette 1)
+            Ms(-16,-32, $0A, $01), Ms(-8,-32, $0B, $01), Ms( 0,-32, $0C, $01), Ms( 8,-32, $0D, $01),
+            Ms(-16,-24, $1A, $01), Ms(-8,-24, $1B, $01), Ms( 0,-24, $1C, $01), Ms( 8,-24, $1D, $01),
+            Ms(-16,-16, $2A, $01), Ms(-8,-16, $2B, $01), Ms( 0,-16, $2C, $01), Ms( 8,-16, $2D, $01),
+            Ms(-16, -8, $3A, $01), Ms(-8, -8, $3B, $01), Ms( 0, -8, $3C, $01), Ms( 8, -8, $3D, $01)
         )))
 
     [] penitent_animation_standing
         (make_anim(Fs{}(
-            Fs(20,  @sprite_penitent_standing_right),
-            Fs(20,  @sprite_penitent_standing_right_alt)
+            Fs(1,  @sprite_penitent_standing_right_01)
         )))
     
     [] penitent_animation_standing_left
         (make_anim(Fs{}(
-            Fs(20,  @sprite_penitent_standing_left),
-            Fs(20,  @sprite_penitent_standing_left_alt)
+            Fs(1,  @sprite_penitent_standing_left_01)
+        )))
+
+    [] penitent_animation_jump
+        (make_anim(Fs{}(
+            Fs(1,  @sprite_penitent_jump_right_01)
+        )))
+    
+    [] penitent_animation_jump_left
+        (make_anim(Fs{}(
+            Fs(1,  @sprite_penitent_jump_left_01)
         )))
 
 
@@ -187,25 +194,25 @@ fn handle_input()
                 p.movement = PLAYER_MOVING_JUMP
                 p.yspeed = JUMP_SPEED
                 if p.facing_left
-                    p.anim_state = make_anim_state(@penitent_animation_standing_left)
+                    p.anim_state = make_anim_state(@penitent_animation_jump_left)
                 else
-                    p.anim_state = make_anim_state(@penitent_animation_standing)
+                    p.anim_state = make_anim_state(@penitent_animation_jump)
             else if pads[0].pressed & BUTTON_B
                 p.movement = PLAYER_MOVING_JUMP
                 p.yspeed = 0
                 if p.facing_left
-                    p.anim_state = make_anim_state(@penitent_animation_standing_left)
+                    p.anim_state = make_anim_state(@penitent_animation_jump_left)
                 else
-                    p.anim_state = make_anim_state(@penitent_animation_standing)
+                    p.anim_state = make_anim_state(@penitent_animation_jump)
                 return
     else
         if p.movement == PLAYER_MOVING_CLIMB
             p.movement = PLAYER_MOVING_JUMP
             p.yspeed = 0
             if p.facing_left
-                p.anim_state = make_anim_state(@penitent_animation_standing_left)
+                p.anim_state = make_anim_state(@penitent_animation_jump_left)
             else
-                p.anim_state = make_anim_state(@penitent_animation_standing)
+                p.anim_state = make_anim_state(@penitent_animation_jump)
 
     if pads[0].held & BUTTON_LEFT
         p.x -= speed
@@ -268,9 +275,9 @@ fn handle_input()
         if p.movement != PLAYER_MOVING_JUMP
             p.movement = PLAYER_MOVING_JUMP
             if p.facing_left
-                p.anim_state = make_anim_state(@penitent_animation_standing_left)
+                p.anim_state = make_anim_state(@penitent_animation_jump_left)
             else
-                p.anim_state = make_anim_state(@penitent_animation_standing)
+                p.anim_state = make_anim_state(@penitent_animation_jump)
 
 fn is_on_ground() Bool
     return collision_at(UU(p.x), UU(SS(p.y) + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(SS(p.y) + p.h)) == C_WALL
