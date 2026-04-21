@@ -55,29 +55,29 @@ data /sprites
     [] sprite_penitent_standing_right_01
         (make_metasprite(0, Ms{}(
             // Primary tiles (Palette 0)
-            Ms(0,-32, $01, $00), Ms( 8,-32, $02, $00),
+            Ms(0,-32, $01, $00),
             Ms(-8,-24, $10, $00), Ms(0,-24, $11, $00), Ms( 8,-24, $12, $00),
             Ms(-8,-16, $20, $00), Ms(0,-16, $21, $00), Ms( 8,-16, $22, $00),
             Ms(-8, -8, $30, $00), Ms(0, -8, $31, $00), Ms( 8, -8, $32, $00),
             // Secondary tiles (Palette 1) - Layered on top
             Ms( 0,-32, $00, $00),
             Ms(-8,-24, $03, $01),  Ms( 0,-24, $04, $01), Ms( 8,-24, $05, $01),
-            Ms(-16,-16, $13, $01), Ms(-8,-16, $14, $01), Ms( 0,-16, $15, $01), Ms( 8,-16, $24, $01),
+            Ms(-16,-16, $13, $01), Ms(-8,-16, $14, $01), Ms( 0,-16, $02, $01), Ms( 8,-16, $24, $01),
             Ms(-16, -8, $23, $01),
         )))
 
     [] sprite_penitent_standing_left_01
         (make_metasprite(ATTR_H_FLIP, Ms{}(
-            // Primary tiles (Palette 0)
-            Ms(0,-32, $01, $00), Ms( 8,-32, $02, $00),
+              // Primary tiles (Palette 0)
+            Ms(0,-32, $01, $00),
             Ms(-8,-24, $10, $00), Ms(0,-24, $11, $00), Ms( 8,-24, $12, $00),
             Ms(-8,-16, $20, $00), Ms(0,-16, $21, $00), Ms( 8,-16, $22, $00),
             Ms(-8, -8, $30, $00), Ms(0, -8, $31, $00), Ms( 8, -8, $32, $00),
             // Secondary tiles (Palette 1) - Layered on top
             Ms( 0,-32, $00, $00),
             Ms(-8,-24, $03, $01),  Ms( 0,-24, $04, $01), Ms( 8,-24, $05, $01),
-            Ms(-16,-16, $13, $01), Ms(-8,-16, $14, $01), Ms( 0,-16, $15, $01), Ms( 8,-16, $24, $01),
-            Ms(-16, -8, $23, $01)
+            Ms(-16,-16, $13, $01), Ms(-8,-16, $14, $01), Ms( 0,-16, $02, $01), Ms( 8,-16, $24, $01),
+            Ms(-16, -8, $23, $01),
         )))
 
     [] sprite_penitent_jump_right_01
@@ -127,7 +127,6 @@ data /sprites
         (make_anim(Fs{}(
             Fs(1,  @sprite_penitent_jump_left_01)
         )))
-
 
 fn make_player_penitent() Player
     Player p = Player()
