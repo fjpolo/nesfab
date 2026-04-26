@@ -219,9 +219,9 @@ data /sprites
 
     [] penitent_animation_attack_left
         (make_anim(Fs{}(
-            // Fs(5, @sprite_penitent_attack_left_01),
-            // Fs(5, @sprite_penitent_attack_left_02),
-            Fs(20, @sprite_penitent_attack_left_03)
+            Fs(5, @sprite_penitent_attack_left_01),
+            Fs(5, @sprite_penitent_attack_left_02),
+            Fs(5, @sprite_penitent_attack_left_03)
         )))
 
 fn make_player_penitent() Player
