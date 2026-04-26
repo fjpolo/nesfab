@@ -52,7 +52,7 @@ struct Player
 data /sprites
     // THE PENITENT ONE metasprites (32x32)
     // Standing: x=0..31, y=0..31 (Primary) and x=32..63, y=0..31 (Secondary)
-    [] sprite_penitent_standing_right_01
+    [] sprite_penitent_standing_right
         (make_metasprite(0, Ms{}(
             // Primary tiles (Palette 0)
             Ms(0,-32, $01, $00),
@@ -66,7 +66,7 @@ data /sprites
             Ms(-16, -8, $23, $01),
         )))
 
-    [] sprite_penitent_standing_left_01
+    [] sprite_penitent_standing_left
         (make_metasprite(ATTR_H_FLIP, Ms{}(
               // Primary tiles (Palette 0)
             Ms(0,-32, $01, $00),
@@ -80,7 +80,7 @@ data /sprites
             Ms(-16, -8, $23, $01),
         )))
 
-    [] sprite_penitent_jump_right_01
+    [] sprite_penitent_jump_right
         (make_metasprite(0, Ms{}(
             // Primary tiles (Palette 0)
             Ms( 0,-32, $06, $00),
@@ -94,7 +94,7 @@ data /sprites
             Ms( 0, -8, $0A, $01)
         )))
 
-    [] sprite_penitent_jump_left_01
+    [] sprite_penitent_jump_left
         (make_metasprite(ATTR_H_FLIP, Ms{}(
             // Primary tiles (Palette 0)
             Ms( 0,-32, $06, $00),
@@ -108,24 +108,61 @@ data /sprites
             Ms( 0, -8, $0A, $01)
         )))
 
+    [] sprite_penitent_attack_right
+        (make_metasprite(0, Ms{}(
+            // Primary
+            Ms( 16,-32, $42, $00),
+            Ms( 0,-24, $50, $00), Ms( 8,-24, $51, $00), Ms( 16,-24, $52, $00),
+            Ms( 8,-16, $61, $00), Ms( 16,-16, $62, $00), Ms( 24,-16, $63, $00),
+            Ms( 0, -8, $70, $00), Ms( 8, -8, $71, $00), Ms( 16, -8, $72, $00), Ms( 24, -8, $73, $00),
+            // Secondary
+            Ms( 14,-32, $00, $01),
+            Ms(-12,-24, $40, $01), Ms( -4,-24, $41, $01), Ms( 4,-24, $60, $01), Ms( 12,-24, $33, $01), 
+            Ms( 12,-16, $34, $01),
+        )))
+
+    [] sprite_penitent_attack_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            // Primary (Palette 0): x=0..31, y=32..63
+            Ms(-8,-32, $40, $00), Ms( 0,-32, $41, $00), Ms( 8,-32, $42, $00), Ms( 16,-32, $43, $00),
+            Ms(-8,-24, $50, $00), Ms( 0,-24, $51, $00), Ms( 8,-24, $52, $00), Ms( 16,-24, $53, $00),
+            Ms(-8,-16, $60, $00), Ms( 0,-16, $61, $00), Ms( 8,-16, $62, $00), Ms( 16,-16, $63, $00),
+            Ms(-8, -8, $70, $00), Ms( 0, -8, $71, $00), Ms( 8, -8, $72, $00), Ms( 16, -8, $73, $00),
+            // Secondary (Palette 1): x=32..63, y=32..63
+            Ms(-8,-32, $44, $01), Ms( 0,-32, $45, $01), Ms( 8,-32, $46, $01), Ms( 16,-32, $47, $01),
+            Ms(-8,-24, $54, $01), Ms( 0,-24, $55, $01), Ms( 8,-24, $56, $01), Ms( 16,-24, $57, $01),
+            Ms(-8,-16, $64, $01), Ms( 0,-16, $65, $01), Ms( 8,-16, $66, $01), Ms( 16,-16, $67, $01),
+            Ms(-8, -8, $74, $01), Ms( 0, -8, $75, $01), Ms( 8, -8, $76, $01), Ms( 16, -8, $77, $01)
+        )))
+
     [] penitent_animation_standing
         (make_anim(Fs{}(
-            Fs(1,  @sprite_penitent_standing_right_01)
+            Fs(1,  @sprite_penitent_standing_right)
         )))
     
     [] penitent_animation_standing_left
         (make_anim(Fs{}(
-            Fs(1,  @sprite_penitent_standing_left_01)
+            Fs(1,  @sprite_penitent_standing_left)
         )))
 
     [] penitent_animation_jump
         (make_anim(Fs{}(
-            Fs(1,  @sprite_penitent_jump_right_01)
+            Fs(1,  @sprite_penitent_jump_right)
         )))
     
     [] penitent_animation_jump_left
         (make_anim(Fs{}(
-            Fs(1,  @sprite_penitent_jump_left_01)
+            Fs(1,  @sprite_penitent_jump_left)
+        )))
+
+    [] penitent_animation_attack
+        (make_anim(Fs{}(
+            Fs(50,  @sprite_penitent_attack_right)
+        )))
+
+    [] penitent_animation_attack_left
+        (make_anim(Fs{}(
+            Fs(1,  @sprite_penitent_attack_left)
         )))
 
 fn make_player_penitent() Player
@@ -247,9 +284,9 @@ fn handle_input()
         p.attack_timer = 20
         p.movement = PLAYER_MOVING_ATTACK
         if p.facing_left
-            p.anim_state = make_anim_state(@penitent_animation_standing_left)
+            p.anim_state = make_anim_state(@penitent_animation_attack_left)
         else
-            p.anim_state = make_anim_state(@penitent_animation_standing)
+            p.anim_state = make_anim_state(@penitent_animation_attack)
             
         // --- WARDEN BOSS HITBOX TEST ---
         if warden_active && warden_hurt_timer == 0
