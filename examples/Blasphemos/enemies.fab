@@ -141,11 +141,7 @@ fn following_eye_update(U ix)
     // State Machine
     // Simple collision with player
     if p.x < SS(enemy_x + 16) && SS(p.x + p.w) > SS(enemy_x) && SS(p.y) < SS(enemy_y + 16) && (SS(p.y) + p.h) > SS(enemy_y)
-        // Damage player
-        p.health -= 1
-        if p.health == 0
-            // Game Over?
-            p.health = 3
+        hurt_player()
     
     switch following_eye_state[ix]
         case FOLLOWING_EYE_STATE_SLEEP
@@ -211,8 +207,4 @@ fn update_warden()
         
         // Optionally, check collision with player to deal damage
         if p.x < (warden_x + warden_w) && (p.x + p.w) > SS(warden_x) && p.y < SSF(warden_y + warden_h) && (p.y + SSF(p.h)) > SSF(warden_y)
-            // Damage player if touched (basic)
-            if p.attack_timer == 0 // simple iframe check
-                p.health -= 1
-                if p.health == 0
-                    p.health = 3
+            hurt_player()

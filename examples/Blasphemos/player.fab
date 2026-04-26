@@ -10,6 +10,7 @@ ct Int PLAYER_MOVING_LEFT = 2
 ct Int PLAYER_MOVING_JUMP = 3
 ct Int PLAYER_MOVING_ATTACK = 4
 ct Int PLAYER_MOVING_CLIMB = 5
+ct Int PLAYER_MOVING_HURT = 6
 
 // Player speeds
 ct Int PLAYER_SPEED_WALK = 1
@@ -46,6 +47,7 @@ struct Player
     SS camera_x
     U health
     U attack_timer
+    U hurt_timer
     Bool facing_left
 
 // Sprites and animations
@@ -86,7 +88,7 @@ data /sprites
             Ms( 0,-32, $06, $00),
             Ms(-8,-24, $15, $00), Ms( 0,-24, $16, $00), Ms( 8,-24, $17, $00),
             Ms(-8,-16, $25, $00), Ms( 0,-16, $26, $00), Ms( 8,-16, $27, $00), Ms( 16,-16, $28, $00),
-            Ms(-8, -8, $35, $00), Ms( 0, -8, $36, $00), Ms( 8, -8, $37, $00), Ms( 16, -8, $38, $00),
+            Ms(-8, -8, $35, $00), Ms( 0, -8, $36, $00), Ms( 16, -8, $38, $00),
             // Secondary tiles (Palette 1)
             Ms( 0,-33, $00, $00),
             Ms(-8,-24, $07, $01), Ms( 0,-24, $08, $01), Ms( 8,-24, $09, $01),
@@ -100,7 +102,7 @@ data /sprites
             Ms( 0,-32, $06, $00),
             Ms(-8,-24, $15, $00), Ms( 0,-24, $16, $00), Ms( 8,-24, $17, $00),
             Ms(-8,-16, $25, $00), Ms( 0,-16, $26, $00), Ms( 8,-16, $27, $00), Ms( 16,-16, $28, $00),
-            Ms(-8, -8, $35, $00), Ms( 0, -8, $36, $00), Ms( 8, -8, $37, $00), Ms( 16, -8, $38, $00),
+            Ms(-8, -8, $35, $00), Ms( 0, -8, $36, $00), Ms( 16, -8, $38, $00),
             // Secondary tiles (Palette 1)
             Ms( 0,-33, $00, $00),
             Ms(-8,-24, $07, $01), Ms( 0,-24, $08, $01), Ms( 8,-24, $09, $01),
@@ -138,7 +140,7 @@ data /sprites
     [] sprite_penitent_attack_right_03
         (make_metasprite(0, Ms{}(
             // Primary
-            Ms( 16,-32, $4A, $00), Ms( 24,-32, $4B, $00),
+            Ms( 24,-32, $4B, $00),
             Ms( 8,-24, $59, $00), Ms( 16,-24, $5A, $00), Ms( 24,-24, $5B, $00),
             Ms( 8,-16, $69, $00), Ms( 16,-16, $6A, $00), Ms( 24,-16, $6B, $00),
             Ms( 8, -8, $79, $00), Ms( 16, -8, $7A, $00), Ms( 24, -8, $7B, $00),
@@ -179,7 +181,7 @@ data /sprites
     [] sprite_penitent_attack_left_03
         (make_metasprite(ATTR_H_FLIP, Ms{}(
             // Primary
-            Ms( 16,-32, $4A, $00), Ms( 24,-32, $4B, $00),
+            Ms( 24,-32, $4B, $00),
             Ms( 8,-24, $59, $00), Ms( 16,-24, $5A, $00), Ms( 24,-24, $5B, $00),
             Ms( 8,-16, $69, $00), Ms( 16,-16, $6A, $00), Ms( 24,-16, $6B, $00),
             Ms( 8, -8, $79, $00), Ms( 16, -8, $7A, $00), Ms( 24, -8, $7B, $00),
@@ -188,6 +190,23 @@ data /sprites
             Ms( 8,-24, $90, $01), Ms( 16,-24, $91, $01), Ms( 24,-24, $92, $01), Ms( 32,-24, $93, $01), Ms( 40,-24, $94, $01),
             Ms( 8,-16, $A0, $01), Ms( 16,-16, $A1, $01), Ms( 24,-16, $A2, $01), Ms( 32,-16, $A3, $01), Ms( 40,-16, $A4, $01),
             Ms( 8, -8, $B0, $01), Ms( 16, -8, $B1, $01), Ms( 24, -8, $B2, $01), Ms( 32, -8, $B3, $01),
+        )))
+
+    [] sprite_penitent_hit_right
+        (make_metasprite(0, Ms{}(
+            // Primary tiles
+            Ms(-8,-32, $0A, $00), Ms( 0,-32, $0B, $00), Ms( 8,-32, $0C, $00), Ms( 16,-32, $0D, $00),
+            Ms(-8,-24, $1A, $00), Ms( 0,-24, $1B, $00), Ms( 8,-24, $1C, $00), Ms( 16,-24, $1D, $00),
+            Ms(-8,-16, $2A, $00), Ms( 0,-16, $2B, $00), Ms( 8,-16, $2C, $00), Ms( 16,-16, $2D, $00),
+            Ms(-8, -8, $3A, $00), Ms( 0, -8, $3B, $00), Ms( 8, -8, $3C, $00), Ms( 16, -8, $3D, $00)
+        )))
+
+    [] sprite_penitent_hit_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-32, $0A, $00), Ms( 0,-32, $0B, $00), Ms( 8,-32, $0C, $00), Ms( 16,-32, $0D, $00),
+            Ms(-8,-24, $1A, $00), Ms( 0,-24, $1B, $00), Ms( 8,-24, $1C, $00), Ms( 16,-24, $1D, $00),
+            Ms(-8,-16, $2A, $00), Ms( 0,-16, $2B, $00), Ms( 8,-16, $2C, $00), Ms( 16,-16, $2D, $00),
+            Ms(-8, -8, $3A, $00), Ms( 0, -8, $3B, $00), Ms( 8, -8, $3C, $00), Ms( 16, -8, $3D, $00)
         )))
 
     [] penitent_animation_standing
@@ -224,6 +243,16 @@ data /sprites
             Fs(5, @sprite_penitent_attack_left_03)
         )))
 
+    [] penitent_animation_hit
+        (make_anim(Fs{}(
+            Fs(1,  @sprite_penitent_hit_right)
+        )))
+    
+    [] penitent_animation_hit_left
+        (make_anim(Fs{}(
+            Fs(1,  @sprite_penitent_hit_left)
+        )))
+
 fn make_player_penitent() Player
     Player p = Player()
     p.x = PLAYER_INITIAL_X
@@ -238,6 +267,7 @@ fn make_player_penitent() Player
     p.is_initialised = true
     p.health = 3
     p.attack_timer = 0
+    p.hurt_timer = 0
     p.facing_left = false
     return p
 
@@ -254,6 +284,18 @@ fn update_player()
     update_camera()
 
 fn handle_input()
+    // Handle hurt timer
+    if p.hurt_timer > 0
+        p.hurt_timer -= 1
+        if p.hurt_timer == 0
+            if p.movement == PLAYER_MOVING_HURT
+                p.movement = PLAYER_MOVING_REST
+                if p.facing_left
+                    p.anim_state = make_anim_state(@penitent_animation_standing_left)
+                else
+                    p.anim_state = make_anim_state(@penitent_animation_standing)
+        return // Prevent input during hit recoil
+
     // Handle attack timer
     if p.attack_timer > 0
         p.attack_timer -= 1
@@ -415,3 +457,16 @@ fn restore_player(Player a) Player
 
 fn save_player(Player a) Player
     return a
+
+fn hurt_player()
+    if p.hurt_timer == 0
+        p.health -= 1
+        p.hurt_timer = 15
+        p.movement = PLAYER_MOVING_HURT
+        if p.facing_left
+            p.anim_state = make_anim_state(@penitent_animation_hit_left)
+        else
+            p.anim_state = make_anim_state(@penitent_animation_hit)
+        
+        if p.health == 0
+            p.health = 3 // Simple respawn logic
