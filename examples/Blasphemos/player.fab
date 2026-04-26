@@ -209,6 +209,99 @@ data /sprites
             Ms(-8, -8, $3A, $00), Ms( 0, -8, $3B, $00), Ms( 8, -8, $3C, $00), Ms( 16, -8, $3D, $00)
         )))
 
+    [] sprite_penitent_walk_right_01
+        (make_metasprite(0, Ms{}(
+            // Primary
+            // Primary
+            Ms(16, -40, $4E, $00), Ms(24, -40, $4F, $00),
+            Ms(16, -32, $5E, $00), Ms(24, -32, $5F, $00),
+            Ms(8, -24, $6D, $00), Ms(16, -24, $6E, $00), Ms(24, -24, $6F, $00),
+            Ms(8, -16, $7D, $00), Ms(16, -16, $7E, $00), Ms(24, -16, $7F, $00),
+            Ms(8, -8,  $8D, $00), Ms(16, -8,  $8E, $00), Ms(24, -8,  $8F, $00),
+            // Secondary
+            Ms(0, -32, $85, $00), Ms(8, -32, $86, $00), Ms(16, -32, $87, $00), Ms(24, -32, $88, $00),
+            Ms(0, -24, $95, $00), Ms(8, -24, $96, $00), Ms(16, -24, $97, $00), Ms(24, -24, $98, $00),
+            Ms(0, -16, $A5, $00), Ms(8, -16, $A6, $00), Ms(16, -16, $A7, $00), Ms(24, -16, $A8, $00),
+            Ms(0, -8,  $B5, $00), Ms(8, -8,  $B6, $00), Ms(16, -8,  $B7, $00), Ms(24, -8,  $B8, $00),
+        )))
+
+    [] sprite_penitent_walk_right_02
+        (make_metasprite(0, Ms{}(
+            // Primary
+            // Primary
+            Ms(16, -40, $4E, $00), Ms(24, -40, $4F, $00),
+            Ms(16, -32, $5E, $00), Ms(24, -32, $5F, $00),
+            Ms(8, -24, $6D, $00), Ms(16, -24, $6E, $00), Ms(24, -24, $6F, $00),
+            Ms(8, -16, $7D, $00), Ms(16, -16, $4C, $00), Ms(24, -16, $7F, $00),
+            Ms(8, -8,  $8D, $00), Ms(16, -8,  $5C, $00), Ms(24, -8,  $8F, $00),
+            // Secondary
+            Ms(0, -32, $85, $00), Ms(8, -32, $86, $00), Ms(16, -32, $87, $00), Ms(24, -32, $88, $00),
+            Ms(0, -24, $95, $00), Ms(8, -24, $96, $00), Ms(16, -24, $97, $00), Ms(24, -24, $98, $00),
+            Ms(0, -16, $A5, $00), Ms(8, -16, $A6, $00), Ms(16, -16, $4D, $00), Ms(24, -16, $A8, $00),
+            Ms(0, -8,  $B5, $00), Ms(8, -8,  $B6, $00), Ms(16, -8,  $5D, $00), Ms(24, -8,  $B8, $00),
+        )))
+
+    [] sprite_penitent_walk_right_03
+        (make_metasprite(0, Ms{}(
+            // Primary
+            // Primary
+            Ms(16, -40, $4E, $00), Ms(24, -40, $4F, $00),
+            Ms(16, -32, $5E, $00), Ms(24, -32, $5F, $00),
+            Ms(8, -24, $6D, $00), Ms(16, -24, $6E, $00), Ms(24, -24, $6F, $00),
+            Ms(8, -16, $7D, $00), Ms(16, -16, $8A, $00), Ms(24, -16, $7F, $00),
+            Ms(8, -8,  $90, $00), Ms(16, -8,  $9A, $00), Ms(24, -8,  $9B, $00),
+            // Secondary
+            Ms(0, -32, $85, $00), Ms(8, -32, $86, $00), Ms(16, -32, $87, $00), Ms(24, -32, $88, $00),
+            Ms(0, -24, $95, $00), Ms(8, -24, $96, $00), Ms(16, -24, $97, $00), Ms(24, -24, $98, $00),
+            Ms(0, -16, $A5, $00), Ms(8, -16, $A6, $00), Ms(16, -16, $AA, $00), Ms(24, -16, $A8, $00),
+            Ms(0, -8,  $B5, $00), Ms(8, -8,  $B9, $00), Ms(16, -8,  $BA, $00), Ms(24, -8,  $BB, $00),
+        )))
+
+    [] sprite_penitent_walk_left_01
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            // Primary
+            Ms(16, -40, $4E, $00), Ms(24, -40, $4F, $00),
+            Ms(16, -32, $5E, $00), Ms(24, -32, $5F, $00),
+            Ms(8, -24, $6D, $00), Ms(16, -24, $6E, $00), Ms(24, -24, $6F, $00),
+            Ms(8, -16, $7D, $00), Ms(16, -16, $7E, $00), Ms(24, -16, $7F, $00),
+            Ms(8, -8,  $8D, $00), Ms(16, -8,  $8E, $00), Ms(24, -8,  $8F, $00),
+            // Secondary
+            Ms(0, -32, $85, $00), Ms(8, -32, $86, $00), Ms(16, -32, $87, $00), Ms(24, -32, $88, $00),
+            Ms(0, -24, $95, $00), Ms(8, -24, $96, $00), Ms(16, -24, $97, $00), Ms(24, -24, $98, $00),
+            Ms(0, -16, $A5, $00), Ms(8, -16, $A6, $00), Ms(16, -16, $A7, $00), Ms(24, -16, $A8, $00),
+            Ms(0, -8,  $B5, $00), Ms(8, -8,  $B6, $00), Ms(16, -8,  $B7, $00), Ms(24, -8,  $B8, $00),
+        )))
+
+    [] sprite_penitent_walk_left_02
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            // Primary
+            Ms(16, -40, $4E, $00), Ms(24, -40, $4F, $00),
+            Ms(16, -32, $5E, $00), Ms(24, -32, $5F, $00),
+            Ms(8, -24, $6D, $00), Ms(16, -24, $6E, $00), Ms(24, -24, $6F, $00),
+            Ms(8, -16, $7D, $00), Ms(16, -16, $4C, $00), Ms(24, -16, $7F, $00),
+            Ms(8, -8,  $8D, $00), Ms(16, -8,  $5C, $00), Ms(24, -8,  $8F, $00),
+            // Secondary
+            Ms(0, -32, $85, $00), Ms(8, -32, $86, $00), Ms(16, -32, $87, $00), Ms(24, -32, $88, $00),
+            Ms(0, -24, $95, $00), Ms(8, -24, $96, $00), Ms(16, -24, $97, $00), Ms(24, -24, $98, $00),
+            Ms(0, -16, $A5, $00), Ms(8, -16, $A6, $00), Ms(16, -16, $4D, $00), Ms(24, -16, $A8, $00),
+            Ms(0, -8,  $B5, $00), Ms(8, -8,  $B6, $00), Ms(16, -8,  $5D, $00), Ms(24, -8,  $B8, $00),
+        )))
+
+    [] sprite_penitent_walk_left_03
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            // Primary
+            Ms(16, -40, $4E, $00), Ms(24, -40, $4F, $00),
+            Ms(16, -32, $5E, $00), Ms(24, -32, $5F, $00),
+            Ms(8, -24, $6D, $00), Ms(16, -24, $6E, $00), Ms(24, -24, $6F, $00),
+            Ms(8, -16, $7D, $00), Ms(16, -16, $8A, $00), Ms(24, -16, $7F, $00),
+            Ms(8, -8,  $90, $00), Ms(16, -8,  $9A, $00), Ms(24, -8,  $9B, $00),
+            // Secondary
+            Ms(0, -32, $85, $00), Ms(8, -32, $86, $00), Ms(16, -32, $87, $00), Ms(24, -32, $88, $00),
+            Ms(0, -24, $95, $00), Ms(8, -24, $96, $00), Ms(16, -24, $97, $00), Ms(24, -24, $98, $00),
+            Ms(0, -16, $A5, $00), Ms(8, -16, $A6, $00), Ms(16, -16, $AA, $00), Ms(24, -16, $A8, $00),
+            Ms(0, -8,  $B5, $00), Ms(8, -8,  $B9, $00), Ms(16, -8,  $BA, $00), Ms(24, -8,  $BB, $00),
+        )))
+
     [] penitent_animation_standing
         (make_anim(Fs{}(
             Fs(1,  @sprite_penitent_standing_right)
@@ -251,6 +344,22 @@ data /sprites
     [] penitent_animation_hit_left
         (make_anim(Fs{}(
             Fs(1,  @sprite_penitent_hit_left)
+        )))
+
+    [] penitent_animation_walk
+        (make_anim(Fs{}(
+            Fs(5,  @sprite_penitent_walk_right_01),
+            Fs(5,  @sprite_penitent_walk_right_02),
+            Fs(5,  @sprite_penitent_walk_right_03),
+            Fs(5,  @sprite_penitent_walk_right_02),
+        )))
+
+    [] penitent_animation_walk_left
+        (make_anim(Fs{}(
+            Fs(5,  @sprite_penitent_walk_left_01),
+            Fs(5,  @sprite_penitent_walk_left_02),
+            Fs(5,  @sprite_penitent_walk_left_03),
+            Fs(5,  @sprite_penitent_walk_left_02)
         )))
 
 fn make_player_penitent() Player
@@ -357,14 +466,14 @@ fn handle_input()
             p.facing_left = true
             if p.movement != PLAYER_MOVING_CLIMB
                 p.movement = PLAYER_MOVING_LEFT
-                p.anim_state = make_anim_state(@penitent_animation_standing_left)
+                p.anim_state = make_anim_state(@penitent_animation_walk_left)
     else if pads[0].held & BUTTON_RIGHT
         p.x += speed
         if p.facing_left || p.movement != PLAYER_MOVING_RIGHT
             p.facing_left = false
             if p.movement != PLAYER_MOVING_CLIMB
                 p.movement = PLAYER_MOVING_RIGHT
-                p.anim_state = make_anim_state(@penitent_animation_standing)
+                p.anim_state = make_anim_state(@penitent_animation_walk)
     else
         // Not moving horizontally
         if p.movement != PLAYER_MOVING_REST
