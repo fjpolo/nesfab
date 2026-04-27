@@ -118,6 +118,7 @@ mode play_level(U level_index)
 
     if !p.is_initialised
         p = make_player_penitent()
+        warden_init(180, 120)
 
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     
@@ -145,6 +146,9 @@ fn update_sprites()
         following_eye_update(i)
         o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
         o += 4
+
+    // Draw Warden sprites (projectiles)
+    o = draw_warden_sprites(o)
 
     // Draw player
     // Metasprite is 32x32, pass the center-bottom position

@@ -1,0 +1,258 @@
+/*
+ * BlasNESmous - Warden of the Silent Sorrow
+ * Boss Logic
+ */
+
+data /sprites
+    // Ammunition
+    [] sprite_projectile_ball
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $9D, $03),    // Top left
+            Ms( 0, 0, $9D, $83),    // Bottom left
+            Ms( 8,-8, $9D, $43),    // Top right
+            Ms( 8, 0, $9D, $C3)     // Bottom right
+        )))
+
+    [] projectile_animation_ball
+        (make_anim(Fs{}(
+            Fs(1, @sprite_projectile_ball)
+        )))
+
+    [] sprite_projectile_ball_grounded
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $9D, $23),    // Top left (Back layer: $03 | $20)
+            Ms( 0, 0, $9D, $A3),    // Bottom left (Back layer: $83 | $20)
+            Ms( 8,-8, $9D, $63),    // Top right (Back layer: $43 | $20)
+            Ms( 8, 0, $9D, $E3)     // Bottom right (Back layer: $C3 | $20)
+        )))
+
+    [] projectile_animation_ball_grounded
+        (make_anim(Fs{}(
+            Fs(1, @sprite_projectile_ball_grounded)
+        )))
+
+    [] sprite_warden_spike
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-16, $AC, $03) // Single tile spike, shifted up to be visible
+        )))
+
+    [] projectile_animation_spike
+        (make_anim(Fs{}(
+            Fs(1, @sprite_warden_spike)
+        )))
+
+// Boss state constants
+ct U WARDEN_STATE_IDLE = 0
+ct U WARDEN_STATE_ATTACK = 1
+ct U WARDEN_STATE_SHOOT = 2
+ct U WARDEN_STATE_HURT = 3
+ct U WARDEN_STATE_DEAD = 4
+
+vars /game
+    Bool warden_active = true
+    U warden_health = 10
+    SS warden_x = 180       // Coordinates for bg1.png placement
+    SS warden_y = 120
+    SS warden_w = 64
+    SS warden_h = 64
+    U warden_hurt_timer = 0
+    U warden_state = WARDEN_STATE_IDLE
+    U warden_timer = 0
+    Bool warden_enraged = false
+
+    // Projectile data
+    Bool warden_projectile_active = false
+    SSF warden_projectile_x
+    SSF warden_projectile_y
+    SF warden_projectile_vx
+    SF warden_projectile_vy
+    U warden_projectile_ground_timer
+    AnimState warden_projectile_anim
+
+    // Spike wave data
+    U warden_spike_wave_timer = 0
+    U warden_spike_wave_count = 0
+    SSF warden_spike_wave_origin_x
+    SSF warden_spike_wave_origin_y
+    S warden_spike_wave_dir = 0
+    SSF[3] warden_spike_x
+    SSF[3] warden_spike_y
+    Bool[3] warden_spike_active
+    U[3] warden_spike_timer
+    AnimState[3] warden_spike_anim
+
+fn warden_init(SS wx, SS wy)
+    warden_active = true
+    warden_health = 10
+    warden_x = wx
+    warden_y = wy
+    warden_hurt_timer = 0
+    warden_state = WARDEN_STATE_IDLE
+    warden_timer = 0
+    warden_enraged = false
+    warden_projectile_active = false
+    warden_projectile_ground_timer = 0
+    warden_projectile_anim = make_anim_state(@projectile_animation_ball)
+    
+    warden_spike_wave_timer = 0
+    warden_spike_wave_count = 0
+    for U i = 0; i < 3; i += 1
+        warden_spike_active[i] = false
+        warden_spike_timer[i] = 0
+        warden_spike_anim[i] = make_anim_state(@projectile_animation_spike)
+
+fn update_warden()
+    if !warden_active
+        return
+
+    update_warden_projectile()
+    update_warden_spikes()
+
+    // Once enraged, the Warden stays enraged until death
+    if (p.x >> 3) >= 48
+        warden_enraged = true
+
+    if !warden_enraged
+        return
+
+    // Stop if player or warden is dead
+    if p.health == 0 || !warden_active
+        return
+
+    // Handle hurt timer
+    if warden_hurt_timer > 0
+        warden_hurt_timer -= 1
+    
+    // State machine
+    warden_timer += 1
+    
+    switch warden_state
+        case WARDEN_STATE_IDLE
+            if warden_timer > 120
+                warden_timer = 0
+                warden_state = WARDEN_STATE_SHOOT
+            break
+            
+        case WARDEN_STATE_SHOOT
+            if warden_timer == 1
+                warden_fire_projectile()
+            
+            if warden_timer > 60
+                warden_timer = 0
+                warden_state = WARDEN_STATE_IDLE
+            break
+            
+        case WARDEN_STATE_HURT
+            if warden_timer > 20
+                warden_timer = 0
+                warden_state = WARDEN_STATE_IDLE
+            break
+
+    // Collision with player
+    if p.x < (warden_x + warden_w) && (p.x + p.w) > SS(warden_x) && SS(p.y) < (warden_y + warden_h) && (SS(p.y) + p.h) > warden_y
+        hurt_player()
+
+fn warden_fire_projectile()
+    if !warden_projectile_active
+        warden_projectile_active = true
+        warden_projectile_ground_timer = 0
+        warden_projectile_x = 384
+        warden_projectile_y = 72
+        
+        // Aim at player
+        SSF dx = SSF(p.x) - warden_projectile_x
+        SSF dy = SSF(SS(p.y) + 16) - warden_projectile_y
+        
+        // Travel to player in ~60 frames
+        warden_projectile_vx = SF(dx >> 6)
+        warden_projectile_vy = SF(dy >> 6)
+        
+        warden_projectile_anim = make_anim_state(@projectile_animation_ball)
+
+fn update_warden_projectile()
+    if warden_projectile_active
+        // Handle movement and ground check ONLY if not yet on ground
+        if warden_projectile_ground_timer == 0
+            warden_projectile_x += warden_projectile_vx
+            warden_projectile_y += warden_projectile_vy
+            
+            if SS(warden_projectile_y) > 184 && collision_at(UU(SS(warden_projectile_x) + 8), UU(SS(warden_projectile_y) + 16)) == C_WALL
+                 warden_projectile_ground_timer = 180
+                 warden_projectile_y += 14
+                 warden_projectile_anim = make_anim_state(@projectile_animation_ball_grounded)
+                 
+                 // Start spike wave
+                 warden_spike_wave_origin_x = warden_projectile_x
+                 warden_spike_wave_origin_y = warden_projectile_y - 14 + 16 + 4 // Moved 2 tiles + 4 pixels down
+                 if p.x > SS(warden_projectile_x)
+                    warden_spike_wave_dir = 1
+                 else
+                    warden_spike_wave_dir = -1
+                 warden_spike_wave_timer = 1
+                 warden_spike_wave_count = 0
+        else
+            // Already on ground, tick down timer
+            warden_projectile_ground_timer -= 1
+            if warden_projectile_ground_timer == 0
+                warden_projectile_active = false
+                return
+
+        // Check collision with player (Always dangerous while active)
+        if SS(warden_projectile_x) < (p.x + p.w) && (SS(warden_projectile_x) + 16) > p.x && SS(warden_projectile_y) < (SS(p.y) + p.h) && (SS(warden_projectile_y) + 16) > SS(p.y)
+            hurt_player()
+            // Optionally: warden_projectile_active = false // Should it disappear on hit?
+            warden_projectile_active = false
+            
+        // Offscreen check (relative to camera)
+        SS screen_x = SS(warden_projectile_x) - p.camera_x
+        if screen_x < -32 || screen_x > 288 || SS(warden_projectile_y) < -16 || SS(warden_projectile_y) > 240
+            warden_projectile_active = false
+        
+        warden_projectile_anim = tick_anim(warden_projectile_anim, true)
+
+fn update_warden_spikes()
+    // Handle wave spawning
+    if warden_spike_wave_timer > 0
+        warden_spike_wave_timer += 1
+        if (warden_spike_wave_timer & 15) == 0 // Every 16 frames spawn a new spike
+            if warden_spike_wave_count < 3
+                U i = warden_spike_wave_count
+                warden_spike_active[i] = true
+                warden_spike_x[i] = warden_spike_wave_origin_x + SSF(S(i + 1) * warden_spike_wave_dir * 16)
+                warden_spike_y[i] = warden_spike_wave_origin_y
+                warden_spike_timer[i] = 180 // 3 seconds
+                warden_spike_anim[i] = make_anim_state(@projectile_animation_spike)
+                warden_spike_wave_count += 1
+            else
+                warden_spike_wave_timer = 0 // Finished wave
+    
+    // Update active spikes
+    for U i = 0; i < 3; i += 1
+        if warden_spike_active[i]
+            // Tick animation
+            warden_spike_anim[i] = tick_anim(warden_spike_anim[i], true)
+            
+            // Stay for 3 seconds then disappear
+            warden_spike_timer[i] -= 1
+            if warden_spike_timer[i] == 0
+                warden_spike_active[i] = false
+            
+            // Collision with player
+            if SS(warden_spike_x[i]) < (p.x + p.w) && (SS(warden_spike_x[i]) + 16) > p.x && (SS(warden_spike_y[i]) - 8) < (SS(p.y) + p.h) && (SS(warden_spike_y[i]) + 8) > SS(p.y)
+                hurt_player()
+                warden_spike_active[i] = false
+
+fn draw_warden_sprites(U o) U
+    if warden_projectile_active
+        o = push_oam_anim(o, SS(warden_projectile_x) - p.camera_x, SS(warden_projectile_y), warden_projectile_anim)
+    
+    // Draw spikes
+    for U i = 0; i < 3; i += 1
+        if warden_spike_active[i]
+            o = push_oam_anim(o, SS(warden_spike_x[i]) - p.camera_x, SS(warden_spike_y[i]), warden_spike_anim[i])
+
+    // Triggered ball at tile X=48 (384), Y=72
+    if warden_enraged
+        o = push_oam_anim(o, 384 - p.camera_x, 72, warden_projectile_anim)
+
+    return o
