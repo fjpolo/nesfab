@@ -1,0 +1,4 @@
+ct Int _Boss = 0
+
+fn main()
+    log(_Boss)

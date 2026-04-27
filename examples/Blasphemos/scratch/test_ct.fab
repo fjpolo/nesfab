@@ -1,0 +1,4 @@
+ct Int{} test_list = Int{}(1, 2, 3)
+
+fn main()
+    log(@test_list)
