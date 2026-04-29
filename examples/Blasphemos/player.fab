@@ -11,6 +11,11 @@ ct Int PLAYER_MOVING_JUMP = 3
 ct Int PLAYER_MOVING_ATTACK = 4
 ct Int PLAYER_MOVING_CLIMB = 5
 ct Int PLAYER_MOVING_HURT = 6
+ct Int PLAYER_MOVING_DASH = 7
+
+ct Int DASH_SPEED = 4
+ct Int DASH_DURATION = 15
+ct Int DASH_COOLDOWN = 60
 
 
 // Player speeds
@@ -53,6 +58,10 @@ struct Player
     U hurt_timer
     Bool facing_left
     U attack_power
+    U dash_timer
+    U dash_cooldown
+    U last_input_timer
+    U last_input_dir
 
 vars /game
     Bool player_sword_active = false
@@ -371,6 +380,16 @@ data /sprites
             Fs(5,  @sprite_penitent_walk_left_02)
         )))
 
+    [] penitent_animation_dash
+        (make_anim(Fs{}(
+            Fs(1, @sprite_penitent_walk_right_01)
+        )))
+
+    [] penitent_animation_dash_left
+        (make_anim(Fs{}(
+            Fs(1, @sprite_penitent_walk_left_01)
+        )))
+
 fn make_player_penitent() Player
     Player p = Player()
     p.x = PLAYER_INITIAL_X
@@ -387,6 +406,10 @@ fn make_player_penitent() Player
     p.attack_timer = 0
     p.hurt_timer = 0
     p.facing_left = false
+    p.dash_timer = 0
+    p.dash_cooldown = 0
+    p.last_input_timer = 0
+    p.last_input_dir = 0
     return p
 
 fn update_player()
@@ -429,6 +452,19 @@ fn update_player()
     else
         player_sword_active = false
 
+    // Update dash timers
+    if p.dash_timer > 0
+        p.dash_timer -= 1
+        if p.dash_timer == 0
+            p.movement = PLAYER_MOVING_REST
+            p.dash_cooldown = DASH_COOLDOWN
+    
+    if p.dash_cooldown > 0
+        p.dash_cooldown -= 1
+        
+    if p.last_input_timer > 0
+        p.last_input_timer -= 1
+
 fn handle_input()
     // Handle hurt timer
     if p.hurt_timer > 0
@@ -453,6 +489,31 @@ fn handle_input()
                 else
                     p.anim_state = make_anim_state(@penitent_animation_standing)
         return // Prevent other input during attack
+    
+    // Prevent input during dash
+    if p.dash_timer > 0
+        return
+
+    // Double tap detection
+    if pads[0].pressed & BUTTON_LEFT
+        if p.last_input_timer > 0 && p.last_input_dir == BUTTON_LEFT && p.dash_cooldown == 0
+            p.movement = PLAYER_MOVING_DASH
+            p.dash_timer = DASH_DURATION
+            p.facing_left = true
+            p.anim_state = make_anim_state(@penitent_animation_dash_left)
+            return
+        p.last_input_timer = 15 // Window for double tap
+        p.last_input_dir = BUTTON_LEFT
+        
+    if pads[0].pressed & BUTTON_RIGHT
+        if p.last_input_timer > 0 && p.last_input_dir == BUTTON_RIGHT && p.dash_cooldown == 0
+            p.movement = PLAYER_MOVING_DASH
+            p.dash_timer = DASH_DURATION
+            p.facing_left = false
+            p.anim_state = make_anim_state(@penitent_animation_dash)
+            return
+        p.last_input_timer = 15
+        p.last_input_dir = BUTTON_RIGHT
 
     SS speed = PLAYER_SPEED_WALK
     if pads[0].held & BUTTON_SELECT
@@ -548,6 +609,13 @@ fn is_on_ground() Bool
     return collision_at(UU(p.x), UU(SS(p.y) + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(SS(p.y) + p.h)) == C_WALL
 
 fn handle_physics()
+    if p.movement == PLAYER_MOVING_DASH
+        if p.facing_left
+            p.x -= DASH_SPEED
+        else
+            p.x += DASH_SPEED
+        return
+
     if p.movement == PLAYER_MOVING_CLIMB
         p.yspeed = 0
     else

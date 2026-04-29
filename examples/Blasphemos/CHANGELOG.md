@@ -43,6 +43,10 @@
 
 # Changes
 
+## [29.04.2026] - v0.0.1.721
+- Add changelog
+
+
 ## [29.04.2026] - v0.0.1.720
 - Warden hitbox improved
 
