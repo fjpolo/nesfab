@@ -50,7 +50,7 @@ ct U WARDEN_STATE_DEAD = 4
 
 vars /game
     Bool warden_active = true
-    U warden_health = 10
+    U warden_health = 100
     SS warden_x = 180       // Coordinates for bg1.png placement
     SS warden_y = 120
     SS warden_w = 64
@@ -83,7 +83,7 @@ vars /game
 
 fn warden_init(SS wx, SS wy)
     warden_active = true
-    warden_health = 10
+    warden_health = 100
     warden_x = wx
     warden_y = wy + 64 // Offset to waist and legs (shifted 2 tiles down)
     warden_h = 32      // Height of waist and legs

@@ -52,10 +52,18 @@ nmi game_nmi()
         {PPUMASK}(PPUMASK_BG_ON)
     else
         ppu_upload_scroll()
-        ppu_reset_scroll(p.camera_x.a, 0)
+        U shake_x = 0
+        U shake_y = 0
+        if warden_active && warden_hurt_timer > 0
+            shake_x = frame_counter & 3
+            shake_y = (frame_counter >> 1) & 3
+        
+        ppu_reset_scroll(p.camera_x.a + shake_x, shake_y)
         {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | (p.camera_x.b & 1))
-        if warden_active && (warden_hurt_timer > 0 || warden_state == WARDEN_STATE_DEAD)
-            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP | $20) // Tint screen when boss is hurt or dead
+        
+        // Flash red when hurt, solid red when dead
+        if warden_active && (warden_state == WARDEN_STATE_DEAD || (warden_hurt_timer > 0 && (frame_counter & 2)))
+            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP | $20) // Tint screen red
         else
             {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
     

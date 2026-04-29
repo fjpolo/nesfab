@@ -452,6 +452,16 @@ fn update_player()
     else
         player_sword_active = false
 
+    // Victory transition: If warden is dead and player passes through him
+    if warden_active && warden_state == WARDEN_STATE_DEAD
+        if p.x > (warden_x + (warden_w >> 1))
+            current_level_index = 1
+            p.level_index = current_level_index
+            p.x = PLAYER_INITIAL_X
+            p.y = SSF(PLAYER_INITIAL_Y)
+            goto mode play_level(current_level_index)
+            : preserves /game
+
     // Update dash timers
     if p.dash_timer > 0
         p.dash_timer -= 1
