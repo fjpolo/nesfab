@@ -25,7 +25,7 @@ vars /controller
 // Game data
 vars /game
     Player p = Player()
-    U game_state = GAME_STATE_STORY
+    U game_state = GAME_STATE_PLAY
     U frame_counter = 0
     Bool[NUMBER_OF_KEYS] keys
     Bool[NUMBER_OF_KEYS] show_key = Bool[NUMBER_OF_KEYS](true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true)
@@ -78,6 +78,7 @@ nmi game_nmi()
 
 // MAIN
 mode main()  
+    mmc3_reset()
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)    
@@ -156,7 +157,7 @@ fn update_sprites()
 
     // Draw Health (reusing stamina graphics)
     for U i = 0; i < p.health; i += 1
-        set_oam(o, 8 + (i << 3), 8, $5D, 0)
+        set_oam(o, 8 + (i << 3), 8, $0B, 0)
         o += 4
 
     hide_oam(o)

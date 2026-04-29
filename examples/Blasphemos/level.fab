@@ -88,12 +88,22 @@ fn load_metatiles(CC/metatiles mt)
     mt += size
     mt_ca = mt
 
+// Helper function to switch the entire 8KB CHR bank using MMC3
+fn select_chr_8kb(U bank)
+    U base = bank << 3
+    mmc3_select(0, base)     // 2KB at $0000
+    mmc3_select(1, base + 2) // 2KB at $0800
+    mmc3_select(2, base + 4) // 1KB at $1000
+    mmc3_select(3, base + 5) // 1KB at $1400
+    mmc3_select(4, base + 6) // 1KB at $1800
+    mmc3_select(5, base + 7) // 1KB at $1C00
+
 fn disable_nmi()
     
 fn load_level(CCC/levels level)
     // CHR:
     U chr_bank = read U(level)
-    {$8000}(chr_bank)
+    select_chr_8kb(chr_bank)
 
     // Palette:
     load_palette(read CCC/palettes(level))
@@ -164,7 +174,7 @@ fn load_level(CCC/levels level)
 
 fn load_chrrom_bank(CCC/levels level, U bank)
     // CHR:
-    {$8000}(bank)
+    select_chr_8kb(bank)
 
     // Palette:
     // load_palette(read CCC/palettes(level))
