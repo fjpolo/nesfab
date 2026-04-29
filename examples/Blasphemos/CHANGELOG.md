@@ -43,6 +43,10 @@
 
 # Changes
 
+## [29.04.2026] - v0.0.1.720
+- Warden hitbox improved
+
+
 ## [14.12.2025]
 - Player splits when colliding with following_eye
 - Update some tiles
