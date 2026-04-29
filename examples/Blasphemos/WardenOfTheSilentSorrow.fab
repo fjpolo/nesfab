@@ -41,6 +41,43 @@ data /sprites
             Fs(1, @sprite_warden_spike)
         )))
 
+    // Enraged variants (Palette 0 - Red)
+    [] sprite_projectile_ball_red
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $9D, $00),
+            Ms( 0, 0, $9D, $80),
+            Ms( 8,-8, $9D, $40),
+            Ms( 8, 0, $9D, $C0)
+        )))
+
+    [] projectile_animation_ball_red
+        (make_anim(Fs{}(
+            Fs(1, @sprite_projectile_ball_red)
+        )))
+
+    [] sprite_projectile_ball_grounded_red
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-8, $9D, $20),
+            Ms( 0, 0, $9D, $A0),
+            Ms( 8,-8, $9D, $60),
+            Ms( 8, 0, $9D, $E0)
+        )))
+
+    [] projectile_animation_ball_grounded_red
+        (make_anim(Fs{}(
+            Fs(1, @sprite_projectile_ball_grounded_red)
+        )))
+
+    [] sprite_warden_spike_red
+        (make_metasprite(0, Ms{}(
+            Ms( 0,-16, $AC, $00)
+        )))
+
+    [] projectile_animation_spike_red
+        (make_anim(Fs{}(
+            Fs(1, @sprite_warden_spike_red)
+        )))
+
 // Boss state constants
 ct U WARDEN_STATE_IDLE = 0
 ct U WARDEN_STATE_ATTACK = 1
@@ -50,7 +87,7 @@ ct U WARDEN_STATE_DEAD = 4
 
 vars /game
     Bool warden_active = true
-    U warden_health = 100
+    U warden_health = 200
     SS warden_x = 180       // Coordinates for bg1.png placement
     SS warden_y = 120
     SS warden_w = 64
@@ -75,15 +112,15 @@ vars /game
     SSF warden_spike_wave_origin_x
     SSF warden_spike_wave_origin_y
     S warden_spike_wave_dir = 0
-    SSF[3] warden_spike_x
-    SSF[3] warden_spike_y
-    Bool[3] warden_spike_active
-    U[3] warden_spike_timer
-    AnimState[3] warden_spike_anim
+    SSF[6] warden_spike_x
+    SSF[6] warden_spike_y
+    Bool[6] warden_spike_active
+    U[6] warden_spike_timer
+    AnimState[6] warden_spike_anim
 
 fn warden_init(SS wx, SS wy)
     warden_active = true
-    warden_health = 100
+    warden_health = 200
     warden_x = wx
     warden_y = wy + 64 // Offset to waist and legs (shifted 2 tiles down)
     warden_h = 32      // Height of waist and legs
@@ -97,7 +134,7 @@ fn warden_init(SS wx, SS wy)
     
     warden_spike_wave_timer = 0
     warden_spike_wave_count = 0
-    for U i = 0; i < 3; i += 1
+    for U i = 0; i < 6; i += 1
         warden_spike_active[i] = false
         warden_spike_timer[i] = 0
         warden_spike_anim[i] = make_anim_state(@projectile_animation_spike)
@@ -168,7 +205,10 @@ fn warden_fire_projectile()
         warden_projectile_vx = SF(dx >> 6)
         warden_projectile_vy = SF(dy >> 6)
         
-        warden_projectile_anim = make_anim_state(@projectile_animation_ball)
+        if warden_health < 100
+            warden_projectile_anim = make_anim_state(@projectile_animation_ball_red)
+        else
+            warden_projectile_anim = make_anim_state(@projectile_animation_ball)
 
 fn update_warden_projectile()
     if warden_projectile_active
@@ -180,7 +220,10 @@ fn update_warden_projectile()
             if SS(warden_projectile_y) > 184 && collision_at(UU(SS(warden_projectile_x) + 8), UU(SS(warden_projectile_y) + 16)) == C_WALL
                  warden_projectile_ground_timer = 180
                  warden_projectile_y += 14
-                 warden_projectile_anim = make_anim_state(@projectile_animation_ball_grounded)
+                 if warden_health < 100
+                    warden_projectile_anim = make_anim_state(@projectile_animation_ball_grounded_red)
+                 else
+                    warden_projectile_anim = make_anim_state(@projectile_animation_ball_grounded)
                  
                  // Start spike wave
                  warden_spike_wave_origin_x = warden_projectile_x
@@ -222,13 +265,26 @@ fn update_warden_spikes()
                 warden_spike_x[i] = warden_spike_wave_origin_x + SSF(S(i + 1) * warden_spike_wave_dir * 16)
                 warden_spike_y[i] = warden_spike_wave_origin_y
                 warden_spike_timer[i] = 180 // 3 seconds
-                warden_spike_anim[i] = make_anim_state(@projectile_animation_spike)
+                if warden_health < 100
+                    warden_spike_anim[i] = make_anim_state(@projectile_animation_spike_red)
+                else
+                    warden_spike_anim[i] = make_anim_state(@projectile_animation_spike)
+                
+                // Low health mode: Spawn in opposite direction too
+                if warden_health < 100
+                    U j = i + 3
+                    warden_spike_active[j] = true
+                    warden_spike_x[j] = warden_spike_wave_origin_x - SSF(S(i + 1) * warden_spike_wave_dir * 16)
+                    warden_spike_y[j] = warden_spike_wave_origin_y
+                    warden_spike_timer[j] = 180
+                    warden_spike_anim[j] = make_anim_state(@projectile_animation_spike_red)
+
                 warden_spike_wave_count += 1
             else
                 warden_spike_wave_timer = 0 // Finished wave
     
     // Update active spikes
-    for U i = 0; i < 3; i += 1
+    for U i = 0; i < 6; i += 1
         if warden_spike_active[i]
             // Tick animation
             warden_spike_anim[i] = tick_anim(warden_spike_anim[i], true)
@@ -248,12 +304,15 @@ fn draw_warden_sprites(U o) U
         o = push_oam_anim(o, SS(warden_projectile_x) - p.camera_x, SS(warden_projectile_y), warden_projectile_anim)
     
     // Draw spikes
-    for U i = 0; i < 3; i += 1
+    for U i = 0; i < 6; i += 1
         if warden_spike_active[i]
             o = push_oam_anim(o, SS(warden_spike_x[i]) - p.camera_x, SS(warden_spike_y[i]), warden_spike_anim[i])
 
     // Triggered ball at tile X=48 (384), Y=72
     if warden_enraged && warden_state != WARDEN_STATE_DEAD
-        o = push_oam_anim(o, 384 - p.camera_x, 72, warden_projectile_anim)
+        AnimState anim = warden_projectile_anim
+        if warden_health < 100
+            anim = make_anim_state(@projectile_animation_ball_red)
+        o = push_oam_anim(o, 384 - p.camera_x, 72, anim)
 
     return o
