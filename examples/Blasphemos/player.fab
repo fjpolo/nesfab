@@ -576,4 +576,6 @@ fn hurt_player()
             p.anim_state = make_anim_state(@penitent_animation_hit)
         
         if p.health == 0
-            p.health = 3 // Simple respawn logic
+            p.is_initialised = false
+            goto mode play_level(current_level_index)
+            : preserves /game

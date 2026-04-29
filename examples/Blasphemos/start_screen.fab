@@ -1,3 +1,7 @@
+data /strings
+    [] start_string
+        ( "Blasphemous v0.0.1 - PRESS START" )
+
 mode start_screen(U level_index)
 : nmi game_nmi
     // {PPUCTRL}(0)
@@ -6,11 +10,25 @@ mode start_screen(U level_index)
     current_level_index = LAST_LEVEL_INDEX + 1
     {PPUMASK}(0) // Turn off rendering while loading
     load_level(levels[current_level_index]) 
-    {PPUCTRL}(PPUCTRL_NMI_ON)
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     log_set_arg(0, current_level_index)
     log(@"level: %d"l)
     while true
         nmi
+        
+        U o = 0
+        U cx = 0
+        U cy = 120
+        CCC/strings str = @start_string
+        for U i = 0; i < len(start_string); i += 1
+            U c = str[i]
+            if c != 0
+                set_oam(o, cx, cy, c + $80, 0)
+                o += 4
+            cx += 8
+            
+        hide_oam(o)
+
         if is_start_pressed
             game_state = GAME_STATE_STORY
             current_level_index = LAST_LEVEL_INDEX + 2

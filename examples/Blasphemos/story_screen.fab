@@ -16,14 +16,8 @@ charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abc
 data /strings
     [] story_string
         (
-            `Born Luci\n`
-            `Born Fer\n`
-            `One with G\n`
-            `One with TD\n`
-            `Help them be together...\n`
+            `Blasphemous v0.0.1\n`
             `\n`
-            `\n`
-            `PRESS SELECT FOR TIPS\n`
             `PRESS START TO PLAY\n`
         )
 
