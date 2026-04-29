@@ -12,6 +12,7 @@ ct Int PLAYER_MOVING_ATTACK = 4
 ct Int PLAYER_MOVING_CLIMB = 5
 ct Int PLAYER_MOVING_HURT = 6
 
+
 // Player speeds
 ct Int PLAYER_SPEED_WALK = 1
 ct Int PLAYER_SPEED_CLIMB = 1
@@ -27,6 +28,8 @@ ct Int pw = 16 // Collision width (tighter than visual)
 ct Int ph = 30 // Collision height
 ct Int rw = pw - 1
 ct Int rh = ph - 1
+
+ct Int PLAYER_INITIAL_ATTACK_POWER = 7
 
 // Player data struct
 struct Player
@@ -49,6 +52,7 @@ struct Player
     U attack_timer
     U hurt_timer
     Bool facing_left
+    U attack_power
 
 vars /game
     Bool player_sword_active = false
@@ -389,6 +393,8 @@ fn update_player()
     if !p.is_initialised
         p = make_player_penitent()
     
+    p.attack_power = PLAYER_INITIAL_ATTACK_POWER
+
     p.center_x = p.x + (p.w >> 1)
     p.center_y = SS(p.y) + (p.h >> 1)
 
@@ -415,14 +421,11 @@ fn update_player()
                     else
                         warden_health = 0
                     warden_hurt_timer = 20 // IFrames
+                    logf(@"Warden HP: %d"l, warden_health)
                     if warden_health == 0
-                        warden_active = false
-                        current_level_index = 1
-                        p.level_index = current_level_index
-                        p.x = PLAYER_INITIAL_X
-                        p.y = SSF(PLAYER_INITIAL_Y)
-                        goto mode play_level(current_level_index)
-                        : preserves /game
+                        warden_state = WARDEN_STATE_DEAD
+                        warden_projectile_active = false
+                        // warden_active stays true so we can still see/tint him
     else
         player_sword_active = false
 

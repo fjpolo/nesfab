@@ -54,8 +54,8 @@ nmi game_nmi()
         ppu_upload_scroll()
         ppu_reset_scroll(p.camera_x.a, 0)
         {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | (p.camera_x.b & 1))
-        if warden_active && warden_hurt_timer > 0
-            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP | $20) // Tint screen when boss is hurt
+        if warden_active && (warden_hurt_timer > 0 || warden_state == WARDEN_STATE_DEAD)
+            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP | $20) // Tint screen when boss is hurt or dead
         else
             {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
     

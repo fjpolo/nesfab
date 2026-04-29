@@ -83,9 +83,9 @@ vars /game
 
 fn warden_init(SS wx, SS wy)
     warden_active = true
-    warden_health = 100
+    warden_health = 10
     warden_x = wx
-    warden_y = wy + 32 // Offset to waist and legs
+    warden_y = wy + 64 // Offset to waist and legs (shifted 2 tiles down)
     warden_h = 32      // Height of waist and legs
     warden_hurt_timer = 0
     warden_state = WARDEN_STATE_IDLE
@@ -116,8 +116,8 @@ fn update_warden()
     if !warden_enraged
         return
 
-    // Stop if player or warden is dead
-    if p.health == 0 || !warden_active
+    // Stop if player or warden is dead or health is 0
+    if p.health == 0 || !warden_active || warden_state == WARDEN_STATE_DEAD
         return
 
     // Handle hurt timer
@@ -253,7 +253,7 @@ fn draw_warden_sprites(U o) U
             o = push_oam_anim(o, SS(warden_spike_x[i]) - p.camera_x, SS(warden_spike_y[i]), warden_spike_anim[i])
 
     // Triggered ball at tile X=48 (384), Y=72
-    if warden_enraged
+    if warden_enraged && warden_state != WARDEN_STATE_DEAD
         o = push_oam_anim(o, 384 - p.camera_x, 72, warden_projectile_anim)
 
     return o
