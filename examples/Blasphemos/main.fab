@@ -54,7 +54,10 @@ nmi game_nmi()
         ppu_upload_scroll()
         ppu_reset_scroll(p.camera_x.a, 0)
         {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | (p.camera_x.b & 1))
-        {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+        if warden_active && warden_hurt_timer > 0
+            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP | $20) // Tint screen when boss is hurt
+        else
+            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
     
     ppu_upload_oam_poll_pads(0)
 
@@ -119,7 +122,7 @@ mode play_level(U level_index)
 
     if !p.is_initialised
         p = make_player_penitent()
-        warden_init(180, 120)
+        warden_init(436, 120)
 
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     
@@ -132,8 +135,57 @@ mode play_level(U level_index)
             update_warden()
             update_sprites()
             update_scroll()
+            export_hitboxes()
         else
             update_pause_sprites()
+
+ct Int HITBOX_EXPORT_ADDR = $FE
+
+fn export_hitboxes()
+    {HITBOX_EXPORT_ADDR}(p.x.a)
+    {HITBOX_EXPORT_ADDR}(p.x.b)
+    
+    SS py_int = SS(p.y)
+    {HITBOX_EXPORT_ADDR}(py_int.a)
+    {HITBOX_EXPORT_ADDR}(py_int.b)
+    
+    {HITBOX_EXPORT_ADDR}(p.w.a)
+    {HITBOX_EXPORT_ADDR}(p.w.b)
+    
+    {HITBOX_EXPORT_ADDR}(p.h.a)
+    {HITBOX_EXPORT_ADDR}(p.h.b)
+    
+    {HITBOX_EXPORT_ADDR}(warden_x.a)
+    {HITBOX_EXPORT_ADDR}(warden_x.b)
+    
+    SS wy_int = SS(warden_y)
+    {HITBOX_EXPORT_ADDR}(wy_int.a)
+    {HITBOX_EXPORT_ADDR}(wy_int.b)
+    
+    {HITBOX_EXPORT_ADDR}(warden_w.a)
+    {HITBOX_EXPORT_ADDR}(warden_w.b)
+    
+    {HITBOX_EXPORT_ADDR}(warden_h.a)
+    {HITBOX_EXPORT_ADDR}(warden_h.b)
+    
+    {HITBOX_EXPORT_ADDR}(U(warden_active))
+    
+    {HITBOX_EXPORT_ADDR}(p.camera_x.a)
+    {HITBOX_EXPORT_ADDR}(p.camera_x.b)
+    
+    {HITBOX_EXPORT_ADDR}(player_sword_x.a)
+    {HITBOX_EXPORT_ADDR}(player_sword_x.b)
+    
+    {HITBOX_EXPORT_ADDR}(player_sword_y.a)
+    {HITBOX_EXPORT_ADDR}(player_sword_y.b)
+    
+    {HITBOX_EXPORT_ADDR}(player_sword_w.a)
+    {HITBOX_EXPORT_ADDR}(player_sword_w.b)
+    
+    {HITBOX_EXPORT_ADDR}(player_sword_h.a)
+    {HITBOX_EXPORT_ADDR}(player_sword_h.b)
+    
+    {HITBOX_EXPORT_ADDR}(U(player_sword_active))
 
 fn update_sprites()
     U o = 0
@@ -153,7 +205,8 @@ fn update_sprites()
 
     // Draw player
     // Metasprite is 32x32, pass the center-bottom position
-    o = push_oam_anim(o, p.center_x - p.camera_x, SS(p.y) + p.h, p.anim_state)
+    // Shift sprite 8 pixels left so the hitbox effectively moves half a tile to the right!
+    o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
 
     // Draw Health (reusing stamina graphics)
     for U i = 0; i < p.health; i += 1

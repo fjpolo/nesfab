@@ -83,9 +83,10 @@ vars /game
 
 fn warden_init(SS wx, SS wy)
     warden_active = true
-    warden_health = 10
+    warden_health = 100
     warden_x = wx
-    warden_y = wy
+    warden_y = wy + 32 // Offset to waist and legs
+    warden_h = 32      // Height of waist and legs
     warden_hurt_timer = 0
     warden_state = WARDEN_STATE_IDLE
     warden_timer = 0
