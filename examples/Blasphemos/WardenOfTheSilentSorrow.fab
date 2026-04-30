@@ -98,13 +98,13 @@ vars /game
     Bool warden_enraged = false
 
     // Projectile data
-    Bool warden_projectile_active = false
-    SSF warden_projectile_x
-    SSF warden_projectile_y
-    SF warden_projectile_vx
-    SF warden_projectile_vy
-    U warden_projectile_ground_timer
-    AnimState warden_projectile_anim
+    Bool[3] warden_projectile_active
+    SSF[3] warden_projectile_x
+    SSF[3] warden_projectile_y
+    SF[3] warden_projectile_vx
+    SF[3] warden_projectile_vy
+    U[3] warden_projectile_ground_timer
+    AnimState[3] warden_projectile_anim
 
     // Spike wave data
     U warden_spike_wave_timer = 0
@@ -128,9 +128,10 @@ fn warden_init(SS wx, SS wy)
     warden_state = WARDEN_STATE_IDLE
     warden_timer = 0
     warden_enraged = false
-    warden_projectile_active = false
-    warden_projectile_ground_timer = 0
-    warden_projectile_anim = make_anim_state(@projectile_animation_ball)
+    for U i = 0; i < 3; i += 1
+        warden_projectile_active[i] = false
+        warden_projectile_ground_timer[i] = 0
+        warden_projectile_anim[i] = make_anim_state(@projectile_animation_ball)
     
     warden_spike_wave_timer = 0
     warden_spike_wave_count = 0
@@ -166,7 +167,10 @@ fn update_warden()
     
     switch warden_state
         case WARDEN_STATE_IDLE
-            if warden_timer > 120
+            U wait_time = 120
+            if warden_health < 100
+                wait_time = 60 // Twice as fast at low health
+            if warden_timer > wait_time
                 warden_timer = 0
                 warden_state = WARDEN_STATE_SHOOT
             break
@@ -188,77 +192,95 @@ fn update_warden()
 
     // Collision with player
     if p.x < (warden_x + warden_w) && (p.x + p.w) > SS(warden_x) && SS(p.y) < (warden_y + warden_h) && (SS(p.y) + p.h) > warden_y
-        hurt_player()
+        hurt_player(ATTACK_BOSS)
 
 fn warden_fire_projectile()
-    if !warden_projectile_active
-        warden_projectile_active = true
-        warden_projectile_ground_timer = 0
-        warden_projectile_x = 384
-        warden_projectile_y = 72
-        
-        // Aim at player
-        SSF dx = SSF(p.x) - warden_projectile_x
-        SSF dy = SSF(SS(p.y) + 16) - warden_projectile_y
-        
-        // Travel to player in ~60 frames
-        warden_projectile_vx = SF(dx >> 6)
-        warden_projectile_vy = SF(dy >> 6)
-        
-        if warden_health < 100
-            warden_projectile_anim = make_anim_state(@projectile_animation_ball_red)
-        else
-            warden_projectile_anim = make_anim_state(@projectile_animation_ball)
+    U count = 1
+    if warden_health < 100
+        count = 3
+
+    for U i = 0; i < count; i += 1
+        if !warden_projectile_active[i]
+            warden_projectile_active[i] = true
+            warden_projectile_ground_timer[i] = 0
+            warden_projectile_x[i] = 384
+            warden_projectile_y[i] = 72
+            
+            // Aim at player
+            SSF dx = SSF(p.x) - warden_projectile_x[i]
+            SSF dy = SSF(SS(p.y) + 16) - warden_projectile_y[i]
+            
+            warden_projectile_vx[i] = SF(dx >> 6)
+            warden_projectile_vy[i] = SF(dy >> 6)
+
+            if count > 1
+                if i == 1
+                    warden_projectile_vx[i] -= 0.5
+                    warden_projectile_vy[i] -= 0.25
+                else if i == 2
+                    warden_projectile_vx[i] += 0.5
+                    warden_projectile_vy[i] += 0.25
+            
+            if warden_health < 100
+                warden_projectile_anim[i] = make_anim_state(@projectile_animation_ball_red)
+            else
+                warden_projectile_anim[i] = make_anim_state(@projectile_animation_ball)
 
 fn update_warden_projectile()
-    if warden_projectile_active
-        // Handle movement and ground check ONLY if not yet on ground
-        if warden_projectile_ground_timer == 0
-            warden_projectile_x += warden_projectile_vx
-            warden_projectile_y += warden_projectile_vy
-            
-            if SS(warden_projectile_y) > 184 && collision_at(UU(SS(warden_projectile_x) + 8), UU(SS(warden_projectile_y) + 16)) == C_WALL
-                 warden_projectile_ground_timer = 180
-                 warden_projectile_y += 14
-                 if warden_health < 100
-                    warden_projectile_anim = make_anim_state(@projectile_animation_ball_grounded_red)
-                 else
-                    warden_projectile_anim = make_anim_state(@projectile_animation_ball_grounded)
-                 
-                 // Start spike wave
-                 warden_spike_wave_origin_x = warden_projectile_x
-                 warden_spike_wave_origin_y = warden_projectile_y - 14 + 16 + 4 // Moved 2 tiles + 4 pixels down
-                 if p.x > SS(warden_projectile_x)
-                    warden_spike_wave_dir = 1
-                 else
-                    warden_spike_wave_dir = -1
-                 warden_spike_wave_timer = 1
-                 warden_spike_wave_count = 0
-        else
-            // Already on ground, tick down timer
-            warden_projectile_ground_timer -= 1
-            if warden_projectile_ground_timer == 0
-                warden_projectile_active = false
-                return
+    for U i = 0; i < 3; i += 1
+        if warden_projectile_active[i]
+            // Handle movement and ground check ONLY if not yet on ground
+            if warden_projectile_ground_timer[i] == 0
+                warden_projectile_x[i] += warden_projectile_vx[i]
+                warden_projectile_y[i] += warden_projectile_vy[i]
+                
+                if SS(warden_projectile_y[i]) > 184 && collision_at(UU(SS(warden_projectile_x[i]) + 8), UU(SS(warden_projectile_y[i]) + 16)) == C_WALL
+                     warden_projectile_ground_timer[i] = 180
+                     warden_projectile_y[i] += 14
+                     if warden_health < 100
+                        warden_projectile_anim[i] = make_anim_state(@projectile_animation_ball_grounded_red)
+                     else
+                        warden_projectile_anim[i] = make_anim_state(@projectile_animation_ball_grounded)
+                     
+                     // Start spike wave
+                     warden_spike_wave_origin_x = warden_projectile_x[i]
+                     warden_spike_wave_origin_y = warden_projectile_y[i] - 14 + 16 + 4
+                     if p.x > SS(warden_projectile_x[i])
+                        warden_spike_wave_dir = 1
+                     else
+                        warden_spike_wave_dir = -1
+                     warden_spike_wave_timer = 1
+                     warden_spike_wave_count = 0
+            else
+                // Already on ground, tick down timer
+                warden_projectile_ground_timer[i] -= 1
+                if warden_projectile_ground_timer[i] == 0
+                    warden_projectile_active[i] = false
+                    continue
 
-        // Check collision with player (Always dangerous while active)
-        if SS(warden_projectile_x) < (p.x + p.w) && (SS(warden_projectile_x) + 16) > p.x && SS(warden_projectile_y) < (SS(p.y) + p.h) && (SS(warden_projectile_y) + 16) > SS(p.y)
-            hurt_player()
-            // Optionally: warden_projectile_active = false // Should it disappear on hit?
-            warden_projectile_active = false
+            // Check collision with player
+            if SS(warden_projectile_x[i]) < (p.x + p.w) && (SS(warden_projectile_x[i]) + 16) > p.x && SS(warden_projectile_y[i]) < (SS(p.y) + p.h) && (SS(warden_projectile_y[i]) + 16) > SS(p.y)
+                if hurt_player(ATTACK_BOSS) || true
+                    warden_projectile_active[i] = false
+                continue
+                
+            // Offscreen check
+            SS screen_x = SS(warden_projectile_x[i]) - p.camera_x
+            if screen_x < -32 || screen_x > 288 || SS(warden_projectile_y[i]) < -16 || SS(warden_projectile_y[i]) > 240
+                warden_projectile_active[i] = false
+                continue
             
-        // Offscreen check (relative to camera)
-        SS screen_x = SS(warden_projectile_x) - p.camera_x
-        if screen_x < -32 || screen_x > 288 || SS(warden_projectile_y) < -16 || SS(warden_projectile_y) > 240
-            warden_projectile_active = false
-        
-        warden_projectile_anim = tick_anim(warden_projectile_anim, true)
+            warden_projectile_anim[i] = tick_anim(warden_projectile_anim[i], true)
 
 fn update_warden_spikes()
     // Handle wave spawning
     if warden_spike_wave_timer > 0
         warden_spike_wave_timer += 1
-        if (warden_spike_wave_timer & 15) == 0 // Every 16 frames spawn a new spike
+        U speed = 15
+        if warden_health < 100
+            speed = 7 // Twice as fast
+            
+        if (warden_spike_wave_timer & speed) == 0
             if warden_spike_wave_count < 3
                 U i = warden_spike_wave_count
                 warden_spike_active[i] = true
@@ -296,12 +318,13 @@ fn update_warden_spikes()
             
             // Collision with player
             if SS(warden_spike_x[i]) < (p.x + p.w) && (SS(warden_spike_x[i]) + 16) > p.x && (SS(warden_spike_y[i]) - 8) < (SS(p.y) + p.h) && (SS(warden_spike_y[i]) + 8) > SS(p.y)
-                hurt_player()
-                warden_spike_active[i] = false
+                if hurt_player(ATTACK_BOSS) || true
+                    warden_spike_active[i] = false
 
 fn draw_warden_sprites(U o) U
-    if warden_projectile_active
-        o = push_oam_anim(o, SS(warden_projectile_x) - p.camera_x, SS(warden_projectile_y), warden_projectile_anim)
+    for U i = 0; i < 3; i += 1
+        if warden_projectile_active[i]
+            o = push_oam_anim(o, SS(warden_projectile_x[i]) - p.camera_x, SS(warden_projectile_y[i]), warden_projectile_anim[i])
     
     // Draw spikes
     for U i = 0; i < 6; i += 1
@@ -310,9 +333,11 @@ fn draw_warden_sprites(U o) U
 
     // Triggered ball at tile X=48 (384), Y=72
     if warden_enraged && warden_state != WARDEN_STATE_DEAD
-        AnimState anim = warden_projectile_anim
+        AnimState anim
         if warden_health < 100
             anim = make_anim_state(@projectile_animation_ball_red)
+        else
+            anim = make_anim_state(@projectile_animation_ball)
         o = push_oam_anim(o, 384 - p.camera_x, 72, anim)
 
     return o

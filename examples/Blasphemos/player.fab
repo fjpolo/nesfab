@@ -12,10 +12,17 @@ ct Int PLAYER_MOVING_ATTACK = 4
 ct Int PLAYER_MOVING_CLIMB = 5
 ct Int PLAYER_MOVING_HURT = 6
 ct Int PLAYER_MOVING_DASH = 7
+ct Int PLAYER_MOVING_PARRY = 8
 
 ct Int DASH_SPEED = 4
 ct Int DASH_DURATION = 15
 ct Int DASH_COOLDOWN = 60
+
+ct Int PARRY_DURATION = 60
+ct Int PARRY_COOLDOWN = 120
+
+ct U ATTACK_NORMAL = 0
+ct U ATTACK_BOSS = 1
 
 
 // Player speeds
@@ -62,6 +69,8 @@ struct Player
     U dash_cooldown
     U last_input_timer
     U last_input_dir
+    U parry_timer
+    U parry_cooldown
 
 vars /game
     Bool player_sword_active = false
@@ -100,6 +109,32 @@ data /sprites
             Ms(-8,-24, $03, $01),  Ms( 0,-24, $04, $01),
             Ms(-16,-16, $13, $01), Ms(-8,-16, $14, $01), Ms( 0,-16, $02, $01), Ms( 8,-16, $24, $01),
             Ms(-16, -8, $23, $01),
+        )))
+
+    [] sprite_penitent_parry_right
+        (make_metasprite(0, Ms{}(
+            // Primary tiles (Palette 0)
+            Ms(0,-32, $01, $00),
+            Ms(-8,-24, $10, $00), Ms(0,-24, $11, $00), Ms( 8,-24, $12, $00),
+            Ms(-8,-16, $20, $00), Ms(0,-16, $21, $00), Ms( 8,-16, $22, $00),
+            Ms(-8, -8, $30, $00), Ms(0, -8, $31, $00), Ms( 8, -8, $32, $00),
+            // Secondary tiles (Palette 1)
+            Ms( 0,-32, $00, $00), 
+            Ms(-8,-24, $03, $01), Ms( 0,-24, $04, $01), Ms(16, -24, $29, $01),
+            Ms( 0,-16, $02, $01), Ms( 8,-16, $24, $01), Ms(16, -16, $39, $01),
+        )))
+
+    [] sprite_penitent_parry_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            // Primary tiles (Palette 0)
+            Ms(0,-32, $01, $00),
+            Ms(-8,-24, $10, $00), Ms(0,-24, $11, $00), Ms( 8,-24, $12, $00),
+            Ms(-8,-16, $20, $00), Ms(0,-16, $21, $00), Ms( 8,-16, $22, $00),
+            Ms(-8, -8, $30, $00), Ms(0, -8, $31, $00), Ms( 8, -8, $32, $00),
+            // Secondary tiles (Palette 1)
+            Ms( 0,-32, $00, $00),
+            Ms(-8,-24, $03, $01), Ms( 0,-24, $04, $01), Ms(16, -24, $29, $01),
+            Ms( 0,-16, $02, $01), Ms( 8,-16, $24, $01), Ms(16, -16, $39, $01),
         )))
 
     [] sprite_penitent_jump_right
@@ -330,6 +365,16 @@ data /sprites
             Fs(1,  @sprite_penitent_standing_left)
         )))
 
+    [] penitent_animation_parry_right
+        (make_anim(Fs{}(
+            Fs(1,  @sprite_penitent_parry_right)
+        )))
+
+    [] penitent_animation_parry_left
+        (make_anim(Fs{}(
+            Fs(1,  @sprite_penitent_parry_left)
+        )))
+
     [] penitent_animation_jump
         (make_anim(Fs{}(
             Fs(1,  @sprite_penitent_jump_right)
@@ -410,6 +455,8 @@ fn make_player_penitent() Player
     p.dash_cooldown = 0
     p.last_input_timer = 0
     p.last_input_dir = 0
+    p.parry_timer = 0
+    p.parry_cooldown = 0
     return p
 
 fn update_player()
@@ -447,7 +494,8 @@ fn update_player()
                     logf(@"Warden HP: %d"l, warden_health)
                     if warden_health == 0
                         warden_state = WARDEN_STATE_DEAD
-                        warden_projectile_active = false
+                        for U i = 0; i < 3; i += 1
+                            warden_projectile_active[i] = false
                         // warden_active stays true so we can still see/tint him
     else
         player_sword_active = false
@@ -474,6 +522,19 @@ fn update_player()
     if p.dash_cooldown > 0
         p.dash_cooldown -= 1
         
+    if p.parry_timer > 0
+        p.parry_timer -= 1
+        if p.parry_timer == 0
+            p.movement = PLAYER_MOVING_REST
+            p.parry_cooldown = PARRY_COOLDOWN
+            if p.facing_left
+                p.anim_state = make_anim_state(@penitent_animation_standing_left)
+            else
+                p.anim_state = make_anim_state(@penitent_animation_standing)
+    
+    if p.parry_cooldown > 0
+        p.parry_cooldown -= 1
+
     if p.last_input_timer > 0
         p.last_input_timer -= 1
 
@@ -502,13 +563,23 @@ fn handle_input()
                     p.anim_state = make_anim_state(@penitent_animation_standing)
         return // Prevent other input during attack
     
-    // Prevent input during dash
-    if p.dash_timer > 0
+    // Prevent input during dash or parry
+    if p.dash_timer > 0 || p.parry_timer > 0
+        return
+
+    // Parry activation
+    if (pads[0].pressed & BUTTON_UP) && p.parry_cooldown == 0 && is_on_ground()
+        p.movement = PLAYER_MOVING_PARRY
+        p.parry_timer = PARRY_DURATION
+        if p.facing_left
+            p.anim_state = make_anim_state(@penitent_animation_parry_left)
+        else
+            p.anim_state = make_anim_state(@penitent_animation_parry_right)
         return
 
     // Double tap detection
     if pads[0].pressed & BUTTON_LEFT
-        if p.last_input_timer > 0 && p.last_input_dir == BUTTON_LEFT && p.dash_cooldown == 0
+        if p.last_input_timer > 0 && p.last_input_dir == BUTTON_LEFT && p.dash_cooldown == 0 && is_on_ground()
             p.movement = PLAYER_MOVING_DASH
             p.dash_timer = DASH_DURATION
             p.facing_left = true
@@ -518,7 +589,7 @@ fn handle_input()
         p.last_input_dir = BUTTON_LEFT
         
     if pads[0].pressed & BUTTON_RIGHT
-        if p.last_input_timer > 0 && p.last_input_dir == BUTTON_RIGHT && p.dash_cooldown == 0
+        if p.last_input_timer > 0 && p.last_input_dir == BUTTON_RIGHT && p.dash_cooldown == 0 && is_on_ground()
             p.movement = PLAYER_MOVING_DASH
             p.dash_timer = DASH_DURATION
             p.facing_left = false
@@ -666,7 +737,16 @@ fn restore_player(Player a) Player
 fn save_player(Player a) Player
     return a
 
-fn hurt_player()
+fn hurt_player(U attack_type) Bool
+    if p.parry_timer > 0
+        if attack_type == ATTACK_BOSS
+            if p.facing_left
+                p.x += 32
+            else
+                p.x -= 32
+            return true // Signal to remove boss attack
+        return false // Parried but no removal needed
+    
     if p.hurt_timer == 0
         p.health -= 1
         p.hurt_timer = 15
