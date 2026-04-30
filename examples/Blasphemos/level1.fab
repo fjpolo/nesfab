@@ -1,0 +1,35 @@
+/*
+ * BlasNESmous - Level 1
+ * Prie Dieu Altar Logic
+ */
+
+fn level1_init()
+    // Level 1 initialization logic here
+    // SPR2 palette: ($2D, $17, $32)
+    palette[18] = $2D
+    palette[19] = $17
+    palette[20] = $32
+    ppu_upload_palette()
+
+fn level1_main()
+    // Altar hit detection (moved from player.fab)
+    if current_level_index == 1 && !prie_dieu_lit && p.movement == PLAYER_MOVING_ATTACK
+        if player_sword_x < 132 && (player_sword_x + player_sword_w) > 116
+             // Altar is roughly between 116 and 132
+             prie_dieu_lit = true
+             last_prie_dieu_level = p.level_index
+             log(@"Prie Dieu lit!"l)
+
+fn draw_level1_sprites(U o) U
+    // Bring back the candles after hitting the prie dieu
+    // But make the candles disappear when they are no longer seen because of scrolling
+    if current_level_index == 1 && prie_dieu_lit
+        SS ax = 124 - p.camera_x
+        // Check if onscreen (with some margin for 8px wide tiles)
+        if ax > -16 && ax < 256
+            // Draw candles using tiles $0E, $0F with palette 1 (SPR1)
+            set_oam(o, U(ax - 4), 199, $0E, 1)
+            o += 4
+            set_oam(o, U(ax + 4), 199, $0F, 1)
+            o += 4
+    return o

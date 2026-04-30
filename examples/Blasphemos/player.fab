@@ -23,6 +23,7 @@ ct Int PARRY_COOLDOWN = 120
 
 ct U ATTACK_NORMAL = 0
 ct U ATTACK_BOSS = 1
+ct U ATTACK_PILGRIM = 2
 
 
 // Player speeds
@@ -41,7 +42,7 @@ ct Int ph = 30 // Collision height
 ct Int rw = pw - 1
 ct Int rh = ph - 1
 
-ct Int PLAYER_INITIAL_ATTACK_POWER = 7
+ct Int PLAYER_INITIAL_ATTACK_POWER = 10
 ct Int PLAYER_PARRY_BOSS_PUSH = 24
 
 // Player data struct
@@ -450,9 +451,9 @@ fn make_player_penitent() Player
     p.level_index = FIRST_LEVEL_INDEX
     p.is_initialised = true
     if game_mode == GAME_MODE_KONAMI
-        p.health = 5
+        p.health = 50
     else
-        p.health = 7
+        p.health = 70
     p.attack_timer = 0
     p.hurt_timer = 0
     p.facing_left = false
@@ -463,6 +464,7 @@ fn make_player_penitent() Player
     p.parry_timer = 0
     p.parry_cooldown = 0
     p.buffered_attack = false
+    p.attack_power = PLAYER_INITIAL_ATTACK_POWER
     return p
 
 fn update_player()
@@ -488,6 +490,8 @@ fn update_player()
         else
             player_sword_x = p.center_x + 8
             
+
+
         // --- WARDEN BOSS HITBOX TEST ---
         if warden_active && warden_hurt_timer == 0
             if player_sword_x < (warden_x + warden_w) && (player_sword_x + player_sword_w) > warden_x
@@ -557,14 +561,16 @@ fn handle_input()
     // Handle hurt timer
     if p.hurt_timer > 0
         p.hurt_timer -= 1
-        if p.hurt_timer == 0
+        if p.hurt_timer == 105 // End of 15-frame recoil
             if p.movement == PLAYER_MOVING_HURT
                 p.movement = PLAYER_MOVING_REST
                 if p.facing_left
                     p.anim_state = make_anim_state(@penitent_animation_standing_left)
                 else
                     p.anim_state = make_anim_state(@penitent_animation_standing)
-        return // Prevent input during hit recoil
+        
+        if p.hurt_timer > 105
+            return // Prevent input ONLY during hit recoil (first 15 frames)
 
     // Handle attack timer
     if p.attack_timer > 0
@@ -733,6 +739,11 @@ fn handle_physics()
             p.yspeed += 0.25
             if p.yspeed > 4
                 p.yspeed = 4
+        
+        // Out of bounds check
+        if SS(p.y) > (SS(current_level_height) << 4)
+            p.health = 0
+            p.is_initialised = false
 
 fn handle_collisions()
     if collision_at(UU(p.center_x), UU(p.center_y)) == C_EXIT
@@ -768,8 +779,17 @@ fn hurt_player(U attack_type) Bool
         return false // Parried but no removal needed
     
     if p.hurt_timer == 0
-        p.health -= 1
-        p.hurt_timer = 15
+        U damage = 3
+        if attack_type == ATTACK_BOSS
+            damage = 10
+        else if attack_type == ATTACK_PILGRIM
+            damage = 13
+        
+        if p.health > damage
+            p.health -= damage
+        else
+            p.health = 0
+        p.hurt_timer = 120 // 2 seconds of immunity
         p.dash_timer = 0
         p.attack_timer = 0
         p.buffered_attack = false

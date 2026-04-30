@@ -9,6 +9,7 @@ mapfab(raw, "BlasNESmous.mapfab", "chr", "palette", "metatiles", "level")
 
 macro("pool_contiguous", "Enemy_eye", "8", "enemies_eye", "/game")
 macro("pool_contiguous", "Enemy_following_eye", "8", "enemies_following_eye", "/game")
+macro("pool_contiguous", "EnragedPilgrim", "8", "enraged_pilgrims", "/game")
 
 // Used in level.macrofab to format the enemies:
 ct fn enemies_eye_vec(Int{} x, Int{} y) Enemy_eye{}
@@ -22,6 +23,13 @@ ct fn enemies_following_eye_vec(Int{} x, Int{} y) Enemy_following_eye{}
     Enemy_following_eye{} out = Enemy_following_eye{}()
     for UU i = 0; i < len(x); i += 1
         push(out, Enemy_following_eye(U(x{i}), U(y{i})))
+    return out
+
+// Used in level.macrofab to format the enemies:
+ct fn enraged_pilgrims_vec(Int{} x, Int{} y) EnragedPilgrim{}
+    EnragedPilgrim{} out = EnragedPilgrim{}()
+    for UU i = 0; i < len(x); i += 1
+        push(out, EnragedPilgrim(SS(x{i}), SS(y{i}), false, 0, 30, 0))
     return out
 
 // Tile collision values:
@@ -70,7 +78,7 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l14,   // 11
                                         @lev_l15,   // 12
                                     )
-ct U FIRST_LEVEL_INDEX =  0
+ct U FIRST_LEVEL_INDEX =  1
 ct U LAST_LEVEL_INDEX =  3
 
 // Sets the 'mt_' pointers to offsets of 'mt'.
@@ -136,24 +144,23 @@ fn load_level(CCC/levels level)
         following_eye_set_initial_state_current_level_flag = true
         following_eye_set_initial_state(i, enemies_following_eye[i].x, enemies_following_eye[i].y)
 
+    // Enemies: Enraged Pilgrim
+    enraged_pilgrims_clear()
+    U pilgrim_num = read U(level)
+    for U i = 0; i < pilgrim_num; i += 1
+        enraged_pilgrims_new(read EnragedPilgrim(level))
+        enraged_pilgrim_anim_state[i] = make_anim_state(@enraged_pilgrim_animation_standing)
+
     // Check if key was grabbed
     if !show_key[current_level_index]
         if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
             destroy(key_x[current_level_index], key_y[current_level_index])
+    if current_level_index == 0
+        level0_init()
+    else if current_level_index == 1
+        level1_init()
+    
     switch current_level_index
-        case 0
-             if keys[current_level_index]
-                // remove door
-                if collision_at(LEVEL_0_DOOR_0_X, LEVEL_0_DOOR_0_Y) == C_JAIL
-                    destroy(LEVEL_0_DOOR_0_X, LEVEL_0_DOOR_0_Y)
-                if collision_at(LEVEL_0_DOOR_1_X, LEVEL_0_DOOR_1_Y) == C_JAIL
-                    destroy(LEVEL_0_DOOR_1_X, LEVEL_0_DOOR_2_Y)
-                if collision_at(LEVEL_0_DOOR_2_X, LEVEL_0_DOOR_1_Y) == C_JAIL
-                    destroy(LEVEL_0_DOOR_2_X, LEVEL_0_DOOR_2_Y)
-                if collision_at(LEVEL_0_DOOR_3_X, LEVEL_0_DOOR_3_Y) == C_JAIL
-                    destroy(LEVEL_0_DOOR_3_X, LEVEL_0_DOOR_3_Y)
-                if collision_at(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y) == C_JAIL
-                    destroy(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y)
         case 2
             if keys[current_level_index]
                 // remove door
@@ -246,3 +253,17 @@ fn door_collision_at(UU level_index, UU pixel_x, UU pixel_y) Bool
        return C_JAIL == collision_at(pixel_x, pixel_y)
     else
         return false
+
+fn level_update()
+    if current_level_index == 0
+        level0_main()
+    else if current_level_index == 1
+        level1_main()
+
+fn level_draw_sprites(U o) U
+    if current_level_index == 0
+        o = draw_warden_sprites(o)
+    else if current_level_index == 1
+        o = draw_level1_sprites(o)
+    
+    return o

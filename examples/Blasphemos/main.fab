@@ -40,6 +40,8 @@ vars /game
     U cheat_index = 0
     U cheat_timer = 0
     U cheat_shake_timer = 0
+    Bool prie_dieu_lit = false
+    U last_prie_dieu_level = 0
 
 data /game
     [] konami_code
@@ -104,6 +106,7 @@ mode main()
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)    
+    p.level_index = FIRST_LEVEL_INDEX
     current_level_index = FIRST_LEVEL_INDEX
     load_level(levels[current_level_index])
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
@@ -141,7 +144,6 @@ mode play_level(U level_index)
 
     if !p.is_initialised
         p = make_player_penitent()
-        warden_init(436, 120)
 
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     
@@ -151,7 +153,7 @@ mode play_level(U level_index)
         check_pause()
         if !is_game_paused
             update_player()
-            update_warden()
+            level_update()
             check_cheats()
             update_sprites()
             update_scroll()
@@ -228,26 +230,34 @@ fn draw_enemies(U o) U
         following_eye_update(i)
         o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
         o += 4
+
+    o = draw_enraged_pilgrims(o)
+
     return o
 
 fn update_sprites()
     U o = 0
 
-    // Draw Health (highest priority)
-    for U i = 0; i < p.health; i += 1
-        set_oam(o, 8 + (i << 3), 8, $0B, 0)
-        o += 4
+    // Draw Health (highest priority) - Each heart is 10 HP
+    for U i = 0; i < 7; i += 1
+        if p.health >= U((i + 1) * 10)
+            set_oam(o, 8 + (i << 3), 8, $0B, 0)
+            o += 4
 
     if (frame_counter & 1) == 0
-        // Order: Enemies -> Boss -> Player
+        // Order: Enemies -> Level-specific -> Player
         o = draw_enemies(o)
-        o = draw_warden_sprites(o)
-        o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
+        o = level_draw_sprites(o)
+        if p.hurt_timer == 0 || (frame_counter & 2) == 0
+            o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
     else
-        // Order: Player -> Boss -> Enemies
-        o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
-        o = draw_warden_sprites(o)
+        // Order: Player -> Level-specific -> Enemies
+        if p.hurt_timer == 0 || (frame_counter & 2) == 0
+            o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
+        o = level_draw_sprites(o)
         o = draw_enemies(o)
+
+
 
     hide_oam(o)
 

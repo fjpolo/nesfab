@@ -43,6 +43,274 @@
 
 # Changes
 
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
+## [30.04.2026] - v0.0.1.727
+- Adjust player health and parry knockback, update version
+
+
 ## [30.04.2026] - v0.0.1.726
 - Make Warden slightly easier
 

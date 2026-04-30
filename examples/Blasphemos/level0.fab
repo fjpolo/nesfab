@@ -1,8 +1,9 @@
 /*
- * BlasNESmous - Warden of the Silent Sorrow
- * Boss Logic
+ * BlasNESmous - Level 0 (The Warden's Arena)
+ * Consolidated logic for Level 0 and the Warden Boss
  */
 
+// Include Warden Logic (moved from WardenOfTheSilentSorrow.fab)
 data /sprites
     // Ammunition
     [] sprite_projectile_ball
@@ -86,9 +87,9 @@ ct U WARDEN_STATE_HURT = 3
 ct U WARDEN_STATE_DEAD = 4
 
 vars /game
-    Bool warden_active = true
+    Bool warden_active = false
     U warden_health = 140
-    SS warden_x = 180       // Coordinates for bg1.png placement
+    SS warden_x = 180
     SS warden_y = 120
     SS warden_w = 64
     SS warden_h = 64
@@ -139,6 +140,27 @@ fn warden_init(SS wx, SS wy)
         warden_spike_active[i] = false
         warden_spike_timer[i] = 0
         warden_spike_anim[i] = make_anim_state(@projectile_animation_spike)
+
+fn level0_init()
+    // Initialize Warden
+    warden_init(436, 120)
+
+    // Initial door destruction logic (if keys are already held)
+    if keys[0]
+        if collision_at(LEVEL_0_DOOR_0_X, LEVEL_0_DOOR_0_Y) == C_JAIL
+            destroy(LEVEL_0_DOOR_0_X, LEVEL_0_DOOR_0_Y)
+        if collision_at(LEVEL_0_DOOR_1_X, LEVEL_0_DOOR_1_Y) == C_JAIL
+            destroy(LEVEL_0_DOOR_1_X, LEVEL_0_DOOR_1_Y) // Fixed typo in original level.fab (was Y2)
+        if collision_at(LEVEL_0_DOOR_2_X, LEVEL_0_DOOR_1_Y) == C_JAIL
+            destroy(LEVEL_0_DOOR_2_X, LEVEL_0_DOOR_2_Y)
+        if collision_at(LEVEL_0_DOOR_3_X, LEVEL_0_DOOR_3_Y) == C_JAIL
+            destroy(LEVEL_0_DOOR_3_X, LEVEL_0_DOOR_3_Y)
+        if collision_at(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y) == C_JAIL
+            destroy(LEVEL_0_DOOR_4_X, LEVEL_0_DOOR_4_Y)
+
+fn level0_main()
+    // Per-frame Warden update
+    update_warden()
 
 fn update_warden()
     if !warden_active
@@ -345,7 +367,7 @@ fn draw_warden_sprites(U o) U
             o = push_oam_anim(o, SS(warden_spike_x[i]) - p.camera_x, SS(warden_spike_y[i]), warden_spike_anim[i])
 
     // Triggered ball at tile X=48 (384), Y=72
-    if warden_enraged && warden_state != WARDEN_STATE_DEAD
+    if warden_active && warden_enraged && warden_state != WARDEN_STATE_DEAD
         AnimState anim
         if warden_health < 100 || game_mode == GAME_MODE_KONAMI
             anim = make_anim_state(@projectile_animation_ball_red)
