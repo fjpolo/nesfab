@@ -486,8 +486,8 @@ fn update_player()
         if warden_active && warden_hurt_timer == 0
             if player_sword_x < (warden_x + warden_w) && (player_sword_x + player_sword_w) > warden_x
                 if player_sword_y < (warden_y + warden_h) && (player_sword_y + player_sword_h) > warden_y
-                    if warden_health > 7
-                        warden_health -= 7
+                    if warden_health > p.attack_power
+                        warden_health -= p.attack_power
                     else
                         warden_health = 0
                     warden_hurt_timer = 20 // IFrames

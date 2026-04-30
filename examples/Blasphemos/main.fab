@@ -195,31 +195,47 @@ fn export_hitboxes()
     
     {HITBOX_EXPORT_ADDR}(U(player_sword_active))
 
-fn update_sprites()
-    U o = 0
-
-    // Draw enemies
-    for U i = 0; i < enemies_eye_num; i += 1
+fn draw_enemies(U o) U
+    U e_start = frame_counter & 7
+    if e_start >= enemies_eye_num
+        e_start = 0
+    for U j = 0; j < enemies_eye_num; j += 1
+        U i = (e_start + j)
+        if i >= enemies_eye_num
+            i -= enemies_eye_num
         o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
         o += 4
 
-    for U i = 0; i < enemies_following_eye_num; i += 1
+    U fe_start = frame_counter & 7
+    if fe_start >= enemies_following_eye_num
+        fe_start = 0
+    for U j = 0; j < enemies_following_eye_num; j += 1
+        U i = (fe_start + j)
+        if i >= enemies_following_eye_num
+            i -= enemies_following_eye_num
         following_eye_update(i)
         o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
         o += 4
+    return o
 
-    // Draw Warden sprites (projectiles)
-    o = draw_warden_sprites(o)
+fn update_sprites()
+    U o = 0
 
-    // Draw player
-    // Metasprite is 32x32, pass the center-bottom position
-    // Shift sprite 8 pixels left so the hitbox effectively moves half a tile to the right!
-    o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
-
-    // Draw Health (reusing stamina graphics)
+    // Draw Health (highest priority)
     for U i = 0; i < p.health; i += 1
         set_oam(o, 8 + (i << 3), 8, $0B, 0)
         o += 4
+
+    if (frame_counter & 1) == 0
+        // Order: Enemies -> Boss -> Player
+        o = draw_enemies(o)
+        o = draw_warden_sprites(o)
+        o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
+    else
+        // Order: Player -> Boss -> Enemies
+        o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
+        o = draw_warden_sprites(o)
+        o = draw_enemies(o)
 
     hide_oam(o)
 

@@ -43,6 +43,20 @@
 
 # Changes
 
+## [30.04.2026] - v0.0.1.725
+- - Fix dash (in-the-air-dash)
+
+- Improve warden
+- Add very rudimentary parry
+
+
+## [30.04.2026] - v0.0.1.725
+- - Fix dash (in-the-air-dash)
+
+- Improve warden
+- Add very rudimentary parry
+
+
 ## [30.04.2026] - v0.0.1.724
 - Improve warden
 

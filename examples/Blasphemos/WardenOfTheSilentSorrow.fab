@@ -87,7 +87,7 @@ ct U WARDEN_STATE_DEAD = 4
 
 vars /game
     Bool warden_active = true
-    U warden_health = 200
+    U warden_health = 140
     SS warden_x = 180       // Coordinates for bg1.png placement
     SS warden_y = 120
     SS warden_w = 64
@@ -120,7 +120,7 @@ vars /game
 
 fn warden_init(SS wx, SS wy)
     warden_active = true
-    warden_health = 200
+    warden_health = 140
     warden_x = wx
     warden_y = wy + 64 // Offset to waist and legs (shifted 2 tiles down)
     warden_h = 32      // Height of waist and legs
@@ -167,9 +167,9 @@ fn update_warden()
     
     switch warden_state
         case WARDEN_STATE_IDLE
-            U wait_time = 120
-            if warden_health < 100
-                wait_time = 60 // Twice as fast at low health
+            U wait_time = 180
+            if warden_health < 70
+                wait_time = 90 // Twice as fast at low health
             if warden_timer > wait_time
                 warden_timer = 0
                 warden_state = WARDEN_STATE_SHOOT
@@ -322,12 +322,25 @@ fn update_warden_spikes()
                     warden_spike_active[i] = false
 
 fn draw_warden_sprites(U o) U
-    for U i = 0; i < 3; i += 1
+    // Sprite cycling for projectiles
+    U p_start = frame_counter & 3
+    if p_start >= 3
+        p_start = 0
+    for U j = 0; j < 3; j += 1
+        U i = (p_start + j)
+        if i >= 3
+            i -= 3
         if warden_projectile_active[i]
             o = push_oam_anim(o, SS(warden_projectile_x[i]) - p.camera_x, SS(warden_projectile_y[i]), warden_projectile_anim[i])
     
-    // Draw spikes
-    for U i = 0; i < 6; i += 1
+    // Sprite cycling for spikes
+    U s_start = frame_counter & 7
+    if s_start >= 6
+        s_start = 0
+    for U j = 0; j < 6; j += 1
+        U i = (s_start + j)
+        if i >= 6
+            i -= 6
         if warden_spike_active[i]
             o = push_oam_anim(o, SS(warden_spike_x[i]) - p.camera_x, SS(warden_spike_y[i]), warden_spike_anim[i])
 
