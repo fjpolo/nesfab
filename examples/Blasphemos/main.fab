@@ -15,6 +15,9 @@ ct Int GAME_STATE_PLAY = 3
 ct Int GAME_STATE_WIN = 4
 ct Int GAME_STATE_GAME_OVER = 63
 
+ct U GAME_MODE_NORMAL = 0
+ct U GAME_MODE_KONAMI = 1
+
 // Controller data
 vars /controller
     Bool is_start_pressed = false
@@ -33,6 +36,14 @@ vars /game
     U[NUMBER_OF_KEYS] key_y
     Bool is_game_paused = false
     U load_level_counter = 0
+    U game_mode = GAME_MODE_NORMAL
+    U cheat_index = 0
+    U cheat_timer = 0
+    U cheat_shake_timer = 0
+
+data /game
+    [] konami_code
+        U[10](BUTTON_UP, BUTTON_UP, BUTTON_DOWN, BUTTON_DOWN, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_B, BUTTON_A)
 
 // NMI
 nmi game_nmi()
@@ -54,7 +65,7 @@ nmi game_nmi()
         ppu_upload_scroll()
         U shake_x = 0
         U shake_y = 0
-        if warden_active && warden_hurt_timer > 0
+        if (warden_active && warden_hurt_timer > 0) || cheat_shake_timer > 0
             shake_x = frame_counter & 3
             shake_y = (frame_counter >> 1) & 3
         
@@ -141,6 +152,7 @@ mode play_level(U level_index)
         if !is_game_paused
             update_player()
             update_warden()
+            check_cheats()
             update_sprites()
             update_scroll()
             export_hitboxes()
@@ -256,3 +268,33 @@ fn check_pause()
     if is_start_pressed 
         is_game_paused = !is_game_paused
         is_start_pressed = false
+
+fn check_cheats()
+    U pressed = pads[0].pressed
+    if pressed != 0
+        cheat_timer = 0
+        CCC/game code = @konami_code
+        if pressed == code[cheat_index]
+            cheat_index += 1
+            if cheat_index == 10
+                cheat_index = 0
+                cheat_shake_timer = 60 // Shake for 1 second
+                if game_mode == GAME_MODE_NORMAL
+                    game_mode = GAME_MODE_KONAMI
+                    p.health = 5
+                else
+                    game_mode = GAME_MODE_NORMAL
+                    p.health = 7
+        else
+            if pressed == code[0]
+                cheat_index = 1
+            else
+                cheat_index = 0
+    else
+        cheat_timer += 1
+        if cheat_timer > 120
+            cheat_index = 0
+            cheat_timer = 0
+    
+    if cheat_shake_timer > 0
+        cheat_shake_timer -= 1

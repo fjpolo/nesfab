@@ -168,8 +168,8 @@ fn update_warden()
     switch warden_state
         case WARDEN_STATE_IDLE
             U wait_time = 180
-            if warden_health < 70
-                wait_time = 90 // Twice as fast at low health
+            if warden_health < 70 || game_mode == GAME_MODE_KONAMI
+                wait_time = 90 // Twice as fast at low health or Konami Mode
             if warden_timer > wait_time
                 warden_timer = 0
                 warden_state = WARDEN_STATE_SHOOT
@@ -196,7 +196,7 @@ fn update_warden()
 
 fn warden_fire_projectile()
     U count = 1
-    if warden_health < 100
+    if warden_health < 100 || game_mode == GAME_MODE_KONAMI
         count = 3
 
     for U i = 0; i < count; i += 1
@@ -221,7 +221,7 @@ fn warden_fire_projectile()
                     warden_projectile_vx[i] += 0.5
                     warden_projectile_vy[i] += 0.25
             
-            if warden_health < 100
+            if warden_health < 100 || game_mode == GAME_MODE_KONAMI
                 warden_projectile_anim[i] = make_anim_state(@projectile_animation_ball_red)
             else
                 warden_projectile_anim[i] = make_anim_state(@projectile_animation_ball)
@@ -237,7 +237,7 @@ fn update_warden_projectile()
                 if SS(warden_projectile_y[i]) > 184 && collision_at(UU(SS(warden_projectile_x[i]) + 8), UU(SS(warden_projectile_y[i]) + 16)) == C_WALL
                      warden_projectile_ground_timer[i] = 180
                      warden_projectile_y[i] += 14
-                     if warden_health < 100
+                     if warden_health < 100 || game_mode == GAME_MODE_KONAMI
                         warden_projectile_anim[i] = make_anim_state(@projectile_animation_ball_grounded_red)
                      else
                         warden_projectile_anim[i] = make_anim_state(@projectile_animation_ball_grounded)
@@ -277,7 +277,7 @@ fn update_warden_spikes()
     if warden_spike_wave_timer > 0
         warden_spike_wave_timer += 1
         U speed = 15
-        if warden_health < 100
+        if warden_health < 100 || game_mode == GAME_MODE_KONAMI
             speed = 7 // Twice as fast
             
         if (warden_spike_wave_timer & speed) == 0
@@ -287,13 +287,13 @@ fn update_warden_spikes()
                 warden_spike_x[i] = warden_spike_wave_origin_x + SSF(S(i + 1) * warden_spike_wave_dir * 16)
                 warden_spike_y[i] = warden_spike_wave_origin_y
                 warden_spike_timer[i] = 180 // 3 seconds
-                if warden_health < 100
+                if warden_health < 100 || game_mode == GAME_MODE_KONAMI
                     warden_spike_anim[i] = make_anim_state(@projectile_animation_spike_red)
                 else
                     warden_spike_anim[i] = make_anim_state(@projectile_animation_spike)
                 
                 // Low health mode: Spawn in opposite direction too
-                if warden_health < 100
+                if warden_health < 100 || game_mode == GAME_MODE_KONAMI
                     U j = i + 3
                     warden_spike_active[j] = true
                     warden_spike_x[j] = warden_spike_wave_origin_x - SSF(S(i + 1) * warden_spike_wave_dir * 16)
@@ -347,7 +347,7 @@ fn draw_warden_sprites(U o) U
     // Triggered ball at tile X=48 (384), Y=72
     if warden_enraged && warden_state != WARDEN_STATE_DEAD
         AnimState anim
-        if warden_health < 100
+        if warden_health < 100 || game_mode == GAME_MODE_KONAMI
             anim = make_anim_state(@projectile_animation_ball_red)
         else
             anim = make_anim_state(@projectile_animation_ball)

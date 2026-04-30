@@ -42,6 +42,7 @@ ct Int rw = pw - 1
 ct Int rh = ph - 1
 
 ct Int PLAYER_INITIAL_ATTACK_POWER = 7
+ct Int PLAYER_PARRY_BOSS_PUSH = 24
 
 // Player data struct
 struct Player
@@ -71,6 +72,7 @@ struct Player
     U last_input_dir
     U parry_timer
     U parry_cooldown
+    Bool buffered_attack
 
 vars /game
     Bool player_sword_active = false
@@ -447,7 +449,10 @@ fn make_player_penitent() Player
     p.anim_state = make_anim_state(@penitent_animation_standing)
     p.level_index = FIRST_LEVEL_INDEX
     p.is_initialised = true
-    p.health = 3
+    if game_mode == GAME_MODE_KONAMI
+        p.health = 5
+    else
+        p.health = 7
     p.attack_timer = 0
     p.hurt_timer = 0
     p.facing_left = false
@@ -457,6 +462,7 @@ fn make_player_penitent() Player
     p.last_input_dir = 0
     p.parry_timer = 0
     p.parry_cooldown = 0
+    p.buffered_attack = false
     return p
 
 fn update_player()
@@ -516,8 +522,17 @@ fn update_player()
     if p.dash_timer > 0
         p.dash_timer -= 1
         if p.dash_timer == 0
-            p.movement = PLAYER_MOVING_REST
             p.dash_cooldown = DASH_COOLDOWN
+            if p.buffered_attack
+                p.buffered_attack = false
+                p.attack_timer = 20
+                p.movement = PLAYER_MOVING_ATTACK
+                if p.facing_left
+                    p.anim_state = make_anim_state(@penitent_animation_attack_left)
+                else
+                    p.anim_state = make_anim_state(@penitent_animation_attack)
+            else
+                p.movement = PLAYER_MOVING_REST
     
     if p.dash_cooldown > 0
         p.dash_cooldown -= 1
@@ -564,7 +579,12 @@ fn handle_input()
         return // Prevent other input during attack
     
     // Prevent input during dash or parry
-    if p.dash_timer > 0 || p.parry_timer > 0
+    if p.dash_timer > 0
+        if pads[0].pressed & BUTTON_B
+            p.buffered_attack = true
+        return
+
+    if p.parry_timer > 0
         return
 
     // Parry activation
@@ -741,15 +761,18 @@ fn hurt_player(U attack_type) Bool
     if p.parry_timer > 0
         if attack_type == ATTACK_BOSS
             if p.facing_left
-                p.x += 32
+                p.x += PLAYER_PARRY_BOSS_PUSH
             else
-                p.x -= 32
+                p.x -= PLAYER_PARRY_BOSS_PUSH
             return true // Signal to remove boss attack
         return false // Parried but no removal needed
     
     if p.hurt_timer == 0
         p.health -= 1
         p.hurt_timer = 15
+        p.dash_timer = 0
+        p.attack_timer = 0
+        p.buffered_attack = false
         p.movement = PLAYER_MOVING_HURT
         if p.facing_left
             p.anim_state = make_anim_state(@penitent_animation_hit_left)

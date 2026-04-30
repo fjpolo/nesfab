@@ -43,6 +43,86 @@
 
 # Changes
 
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
+## [30.04.2026] - v0.0.1.726
+- Make Warden slightly easier
+
+
 ## [30.04.2026] - v0.0.1.725
 - - Fix dash (in-the-air-dash)
 
