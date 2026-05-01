@@ -43,6 +43,14 @@
 
 # Changes
 
+## [30.04.2026] - v0.0.1.728
+- Refined Pilgrim hitboxes, increased player immunity to 2s, and added flickering effect
+
+
+## [30.04.2026] - v0.0.1.728
+- Refined Pilgrim hitboxes, increased player immunity to 2s, and added flickering effect
+
+
 ## [30.04.2026] - v0.0.1.727
 - Adjust player health and parry knockback, update version
 

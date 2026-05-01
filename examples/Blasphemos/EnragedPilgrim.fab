@@ -12,24 +12,28 @@ vars /enemies
 data /sprites
     [] sprite_enraged_pilgrim_standing
         (make_metasprite(0, Ms{}(
+            Ms(-8,-24, $D0, $01), Ms( 0,-24, $D1, $01), 
             Ms(-8,-16, $E0, $01), Ms( 0,-16, $E1, $01), 
             Ms(-8, -8, $F0, $01), Ms( 0, -8, $F1, $01)
         )))
 
     [] sprite_enraged_pilgrim_standing_left
         (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-24, $D0, $01), Ms( 0,-24, $D1, $01), 
             Ms(-8,-16, $E0, $01), Ms( 0,-16, $E1, $01), 
             Ms(-8, -8, $F0, $01), Ms( 0, -8, $F1, $01)
         )))
 
     [] sprite_enraged_pilgrim_standing_attack
         (make_metasprite(0, Ms{}(
+            Ms(-8,-24, $D0, $01), Ms( 0,-24, $D1, $01), 
             Ms(-8,-16, $E0, $01), Ms( 0,-16, $E1, $01), Ms( 8,-16, $E2, $01), 
             Ms(-8, -8, $F0, $01), Ms( 0, -8, $F1, $01)
         )))
 
     [] sprite_enraged_pilgrim_standing_attack_left
         (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-24, $D0, $01), Ms( 0,-24, $D1, $01), 
             Ms(-8,-16, $E0, $01), Ms( 0,-16, $E1, $01), Ms( 8,-16, $E2, $01), 
             Ms(-8, -8, $F0, $01), Ms( 0, -8, $F1, $01)
         )))
