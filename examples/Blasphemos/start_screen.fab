@@ -1,6 +1,6 @@
 data /strings
     [] start_string
-        ( "Blasphemous v0.0.1.728 - PRESS START" )
+        ( "Blasphemous v0.0.1.729 - PRESS START" )
 
 mode start_screen(U level_index)
 : nmi game_nmi

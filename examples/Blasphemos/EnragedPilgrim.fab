@@ -62,7 +62,7 @@ fn enraged_pilgrim_update(U ix) Bool
     SS ex = enraged_pilgrims[ix].x
     SS ey = enraged_pilgrims[ix].y
     
-    // Facing logic: Face player if within 4 tiles (32 pixels)
+    // Facing logic: Face player if within 5 tiles (40 pixels)
     SS dist_x = p.x - ex
     if dist_x < 0
         dist_x = -dist_x
@@ -70,7 +70,7 @@ fn enraged_pilgrim_update(U ix) Bool
     if dist_y < 0
         dist_y = -dist_y
 
-    if dist_x < 32 && dist_y < 32
+    if dist_x < 40 && dist_y < 40
         if p.x < ex
             enraged_pilgrims[ix].facing_left = true
         else
