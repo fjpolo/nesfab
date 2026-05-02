@@ -137,14 +137,14 @@ fn wheelbroken_update(U ix) Bool
         if wheelbrokens[ix].facing_left
             whx = ex - 32
         else
-            whx = ex + 8
+            whx = ex + 0
         SS why = ey - 32
-        SS whw = 24
+        SS whw = 32
         SS whh = 24
         
         // Collision with player
-        if p.x < (whx + whw) && (p.x + p.w) > whx && SS(p.y) < (why + whh) && (SS(p.y) + p.h) > why
-            if hurt_player(ATTACK_PILGRIM)
+        if p.hitbox_x < (whx + whw) && (p.hitbox_x + p.w) > whx && SS(p.y) < (why + whh) && (SS(p.y) + p.h) > why
+            if hurt_player(ATTACK_PILGRIM, ex)
                 // If parried, end attack phase early
                 wheelbrokens[ix].attack_timer = 61
                 wheelbrokens[ix].blocked_timer = 120 // Turn red for 2 seconds
@@ -168,9 +168,9 @@ fn wheelbroken_update(U ix) Bool
 
 
 
-    // Contact damage (Body collision) - Always active
-    if p.x < SS(ex + 8) && (p.x + p.w) > (ex - 8) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey - 24)
-        if hurt_player(ATTACK_PILGRIM)
+    // Basic collision with player (contact damage)
+    if p.hitbox_x < (ex + 8) && (p.hitbox_x + p.w) > (ex - 8) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey - 24)
+        if hurt_player(ATTACK_PILGRIM, ex)
             // Parried the body!
             wheelbrokens[ix].blocked_timer = 120
             wheelbrokens[ix].attack_timer = 0

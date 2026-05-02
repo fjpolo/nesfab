@@ -144,8 +144,8 @@ fn following_eye_update(U ix)
 
     // State Machine
     // Simple collision with player
-    if p.x < SS(enemy_x + 16) && SS(p.x + p.w) > SS(enemy_x) && SS(p.y) < SS(enemy_y + 16) && (SS(p.y) + p.h) > SS(enemy_y)
-        if hurt_player(ATTACK_NORMAL)
+    if p.hitbox_x < SS(enemy_x + 16) && SS(p.hitbox_x + p.w) > SS(enemy_x) && SS(p.y) < SS(enemy_y + 16) && (SS(p.y) + p.h) > SS(enemy_y)
+        if hurt_player(ATTACK_NORMAL, SS(enemy_x))
             following_eye_blocked_timer[ix] = 120
             // Push back
             if p.x < SS(enemy_x)

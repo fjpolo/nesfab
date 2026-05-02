@@ -213,8 +213,8 @@ fn update_warden()
             break
 
     // Collision with player
-    if p.x < (warden_x + warden_w) && (p.x + p.w) > SS(warden_x) && SS(p.y) < (warden_y + warden_h) && (SS(p.y) + p.h) > warden_y
-        if hurt_player(ATTACK_BOSS)
+    if p.hitbox_x < (warden_x + warden_w) && (p.hitbox_x + p.w) > SS(warden_x) && SS(p.y) < (warden_y + warden_h) && (SS(p.y) + p.h) > warden_y
+        if hurt_player(ATTACK_BOSS, warden_x)
             warden_state = WARDEN_STATE_HURT
             warden_timer = 0
 
@@ -284,8 +284,8 @@ fn update_warden_projectile()
                     continue
 
             // Check collision with player
-            if SS(warden_projectile_x[i]) < (p.x + p.w) && (SS(warden_projectile_x[i]) + 16) > p.x && SS(warden_projectile_y[i]) < (SS(p.y) + p.h) && (SS(warden_projectile_y[i]) + 16) > SS(p.y)
-                if hurt_player(ATTACK_BOSS) || true
+            if SS(warden_projectile_x[i]) < (p.hitbox_x + p.w) && (SS(warden_projectile_x[i]) + 16) > p.hitbox_x && SS(warden_projectile_y[i]) < (SS(p.y) + p.h) && (SS(warden_projectile_y[i]) + 16) > SS(p.y)
+                if hurt_player(ATTACK_BOSS, SS(warden_projectile_x[i])) || true
                     warden_projectile_active[i] = false
                 continue
                 
@@ -342,8 +342,8 @@ fn update_warden_spikes()
                 warden_spike_active[i] = false
             
             // Collision with player
-            if SS(warden_spike_x[i]) < (p.x + p.w) && (SS(warden_spike_x[i]) + 16) > p.x && (SS(warden_spike_y[i]) - 8) < (SS(p.y) + p.h) && (SS(warden_spike_y[i]) + 8) > SS(p.y)
-                if hurt_player(ATTACK_BOSS) || true
+            if SS(warden_spike_x[i]) < (p.hitbox_x + p.w) && (SS(warden_spike_x[i]) + 16) > p.hitbox_x && (SS(warden_spike_y[i]) - 8) < (SS(p.y) + p.h) && (SS(warden_spike_y[i]) + 8) > SS(p.y)
+                if hurt_player(ATTACK_BOSS, SS(warden_spike_x[i])) || true
                     warden_spike_active[i] = false
 
 fn draw_warden_sprites(U o) U

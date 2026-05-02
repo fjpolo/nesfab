@@ -55,6 +55,8 @@ struct Player
     SS rh
     SS center_x 
     SS center_y
+    SS hitbox_x
+    SS hitbox_center_x
     SF xspeed
     SF yspeed
     U movement
@@ -79,8 +81,8 @@ vars /game
     Bool player_sword_active = false
     SS player_sword_x = 0
     SS player_sword_y = 0
-    SS player_sword_w = 24
-    SS player_sword_h = 24
+    SS player_sword_w = 32
+    SS player_sword_h = 32
 
 // Sprites and animations
 data /sprites
@@ -476,6 +478,12 @@ fn update_player()
     p.center_x = p.x + (p.w >> 1)
     p.center_y = SS(p.y) + (p.h >> 1)
 
+    if p.facing_left
+        p.hitbox_x = p.x - 16
+    else
+        p.hitbox_x = p.x
+    p.hitbox_center_x = p.hitbox_x + (p.w >> 1)
+
     handle_input()
     handle_physics()
     handle_collisions()
@@ -486,10 +494,11 @@ fn update_player()
         player_sword_active = true
         player_sword_y = SS(p.y) + 4
         if p.facing_left
-            player_sword_x = p.center_x - 32
+            player_sword_x = p.hitbox_center_x - 32
         else
-            player_sword_x = p.center_x + 8
+            player_sword_x = p.hitbox_center_x + 8
             
+
 
 
         // --- WARDEN BOSS HITBOX TEST ---
@@ -544,12 +553,13 @@ fn update_player()
     if p.parry_timer > 0
         p.parry_timer -= 1
         if p.parry_timer == 0
-            p.movement = PLAYER_MOVING_REST
+            if p.movement == PLAYER_MOVING_PARRY
+                p.movement = PLAYER_MOVING_REST
+                if p.facing_left
+                    p.anim_state = make_anim_state(@penitent_animation_standing_left)
+                else
+                    p.anim_state = make_anim_state(@penitent_animation_standing)
             p.parry_cooldown = PARRY_COOLDOWN
-            if p.facing_left
-                p.anim_state = make_anim_state(@penitent_animation_standing_left)
-            else
-                p.anim_state = make_anim_state(@penitent_animation_standing)
     
     if p.parry_cooldown > 0
         p.parry_cooldown -= 1
@@ -768,16 +778,18 @@ fn restore_player(Player a) Player
 fn save_player(Player a) Player
     return a
 
-fn hurt_player(U attack_type) Bool
-    if p.parry_timer > 0
-        if attack_type == ATTACK_BOSS
-            if p.facing_left
-                p.x += PLAYER_PARRY_BOSS_PUSH
-            else
-                p.x -= PLAYER_PARRY_BOSS_PUSH
-        return true // Signal that a parry occurred
-
+fn hurt_player(U attack_type, SS ex) Bool
+    if p.parry_timer > 0 || p.movement == PLAYER_MOVING_PARRY
+        // Only parry if facing the enemy
+        if (p.facing_left && ex < p.hitbox_center_x) || (!p.facing_left && ex > p.hitbox_center_x)
+            if attack_type == ATTACK_BOSS
+                if p.facing_left
+                    p.x += PLAYER_PARRY_BOSS_PUSH
+                else
+                    p.x -= PLAYER_PARRY_BOSS_PUSH
+            return true // Signal that a parry occurred
     
+    // If not parrying (or facing the wrong way), check for damage
     if p.hurt_timer == 0
         U damage = 3
         if attack_type == ATTACK_BOSS
@@ -785,6 +797,10 @@ fn hurt_player(U attack_type) Bool
         else if attack_type == ATTACK_PILGRIM
             damage = 13
         
+        // Final safety check: never damage if parrying
+        if p.parry_timer > 0 || p.movement == PLAYER_MOVING_PARRY
+            return true
+
         if p.health > damage
             p.health -= damage
         else
@@ -803,3 +819,8 @@ fn hurt_player(U attack_type) Bool
             p.is_initialised = false
             goto mode play_level(current_level_index)
             : preserves /game
+        
+        return false // Damage taken, not parried
+    
+    return false // I-frames active, not parried
+

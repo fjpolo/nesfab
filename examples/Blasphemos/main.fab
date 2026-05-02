@@ -164,8 +164,8 @@ mode play_level(U level_index)
 ct Int HITBOX_EXPORT_ADDR = $FE
 
 fn export_hitboxes()
-    {HITBOX_EXPORT_ADDR}(p.x.a)
-    {HITBOX_EXPORT_ADDR}(p.x.b)
+    {HITBOX_EXPORT_ADDR}(p.hitbox_x.a)
+    {HITBOX_EXPORT_ADDR}(p.hitbox_x.b)
     
     SS py_int = SS(p.y)
     {HITBOX_EXPORT_ADDR}(py_int.a)
