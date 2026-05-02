@@ -78,7 +78,7 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l14,   // 11
                                         @lev_l15,   // 12
                                     )
-ct U FIRST_LEVEL_INDEX =  1
+ct U FIRST_LEVEL_INDEX =  0
 ct U LAST_LEVEL_INDEX =  3
 
 // Sets the 'mt_' pointers to offsets of 'mt'.

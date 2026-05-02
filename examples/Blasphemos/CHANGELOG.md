@@ -43,6 +43,34 @@
 
 # Changes
 
+## [02.05.2026] - v0.0.1.732
+- Fix player facing left hitboxes
+
+
+## [02.05.2026] - v0.0.1.732
+- Fix player facing left hitboxes
+
+
+## [02.05.2026] - v0.0.1.732
+- Fix player facing left hitboxes
+
+
+## [02.05.2026] - v0.0.1.732
+- Fix player facing left hitboxes
+
+
+## [02.05.2026] - v0.0.1.732
+- Fix player facing left hitboxes
+
+
+## [02.05.2026] - v0.0.1.732
+- Fix player facing left hitboxes
+
+
+## [02.05.2026] - v0.0.1.732
+- Fix player facing left hitboxes
+
+
 ## [02.05.2026] - v0.0.1.731
 - Implement dual hitboxes and parry mechanics for Wheelbroken, with universal parry response across all enemies
 

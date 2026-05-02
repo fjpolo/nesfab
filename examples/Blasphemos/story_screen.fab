@@ -16,7 +16,7 @@ charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abc
 data /strings
     [] story_string
         (
-            `Blasphemous v0.0.1.731\n`
+            `Blasphemous v0.0.1.732\n`
             `\n`
             `PRESS START TO PLAY\n`
         )
