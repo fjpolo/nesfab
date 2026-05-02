@@ -43,6 +43,106 @@
 
 # Changes
 
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
+## [02.05.2026] - v0.0.1.730
+- Improve Pilgrim's aggro
+
+
 ## [30.04.2026] - v0.0.1.729
 - IMprove pilgrim sprite
 

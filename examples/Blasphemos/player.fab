@@ -775,8 +775,8 @@ fn hurt_player(U attack_type) Bool
                 p.x += PLAYER_PARRY_BOSS_PUSH
             else
                 p.x -= PLAYER_PARRY_BOSS_PUSH
-            return true // Signal to remove boss attack
-        return false // Parried but no removal needed
+        return true // Signal that a parry occurred
+
     
     if p.hurt_timer == 0
         U damage = 3

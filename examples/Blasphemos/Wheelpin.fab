@@ -1,0 +1,193 @@
+macro("pool_contiguous", "Wheelbroken", "8", "wheelbrokens", "/game")
+
+ct fn wheelbroken_vec(Int{} x, Int{} y) Wheelbroken{}
+    Wheelbroken{} out = Wheelbroken{}()
+    for UU i = 0; i < len(x); i += 1
+        push(out, Wheelbroken(SS(x{i}), SS(y{i}), false, 0, 40, 0, 0)) // 40 HP, 0 blocked_timer
+    return out
+
+struct Wheelbroken
+
+    SS x
+    SS y
+    Bool facing_left
+    U attack_timer
+    U health
+    U hurt_timer
+    U blocked_timer
+
+
+vars /enemies
+    AnimState[8] wheelbroken_anim_state
+
+data /sprites
+    [] sprite_wheelbroken_standing
+        (make_metasprite(0, Ms{}(
+            Ms(-8,-24, $D3, $01), Ms( 0,-24, $D4, $01), Ms( 8,-24, $D5, $01),
+            Ms(-8,-16, $E3, $01), Ms( 0,-16, $E4, $01), Ms( 8,-16, $E5, $01),  
+            Ms(-8, -8, $F3, $01), Ms( 0, -8, $F4, $01), Ms( 8, -8, $F5, $01)
+        )))
+
+    [] sprite_wheelbroken_standing_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8,-24, $D3, $01), Ms( 0,-24, $D4, $01), Ms( 8,-24, $D5, $01),
+            Ms(-8,-16, $E3, $01), Ms( 0,-16, $E4, $01), Ms( 8,-16, $E5, $01),  
+            Ms(-8, -8, $F3, $01), Ms( 0, -8, $F4, $01), Ms( 8, -8, $F5, $01)
+        )))
+
+    [] sprite_wheelbroken_standing_attack
+        (make_metasprite(0, Ms{}(
+            Ms( 8,-32, $C8, $01), Ms( 16,-32, $C9, $01), Ms( 24,-32, $CA, $01),
+            Ms(-8,-24, $D6, $01), Ms( 0,-24, $D7, $01), Ms( 8,-24, $D8, $01), Ms( 16,-24, $D9, $01), Ms(24,-24, $DA, $01),
+            Ms(-8,-16, $E6, $01), Ms( 0,-16, $E7, $01), Ms( 8,-16, $E8, $01), Ms( 16,-16, $E9, $01),  
+            Ms(-8, -8, $F6, $01), Ms( 0, -8, $F7, $01), Ms( 8, -8, $F8, $01), Ms( 16, -8, $F9, $01)
+        )))
+
+    [] sprite_wheelbroken_standing_attack_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms( 8,-32, $C8, $01), Ms( 16,-32, $C9, $01), Ms( 24,-32, $CA, $01),
+            Ms(-8,-24, $D6, $01), Ms( 0,-24, $D7, $01), Ms( 8,-24, $D8, $01), Ms( 16,-24, $D9, $01), Ms(24,-24, $DA, $01),
+            Ms(-8,-16, $E6, $01), Ms( 0,-16, $E7, $01), Ms( 8,-16, $E8, $01), Ms( 16,-16, $E9, $01),  
+            Ms(-8, -8, $F6, $01), Ms( 0, -8, $F7, $01), Ms( 8, -8, $F8, $01), Ms( 16, -8, $F9, $01)
+        )))
+
+    [] wheelbroken_animation_standing
+        (make_anim(Fs{}(
+            Fs(1, @sprite_wheelbroken_standing)
+        )))
+
+    [] wheelbroken_animation_standing_left
+        (make_anim(Fs{}(
+            Fs(1, @sprite_wheelbroken_standing_left)
+        )))
+    
+    [] wheelbroken_animation_attack
+        (make_anim(Fs{}(
+            Fs(1, @sprite_wheelbroken_standing_attack)
+        )))
+
+    [] wheelbroken_animation_attack_left
+        (make_anim(Fs{}(
+            Fs(1, @sprite_wheelbroken_standing_attack_left)
+        )))
+
+fn wheelbroken_update(U ix) Bool
+    SS ex = wheelbrokens[ix].x
+    SS ey = wheelbrokens[ix].y
+    
+    // Facing logic: Face player if within 5 tiles (40 pixels)
+    SS dist_x = p.x - ex
+    if dist_x < 0
+        dist_x = -dist_x
+    SS dist_y = SS(p.y) - ey
+    if dist_y < 0
+        dist_y = -dist_y
+
+    if dist_x < 40 && dist_y < 40
+        if p.x < ex
+            wheelbrokens[ix].facing_left = true
+        else
+            wheelbrokens[ix].facing_left = false
+
+    if wheelbrokens[ix].hurt_timer > 0
+        wheelbrokens[ix].hurt_timer -= 1
+
+    // Body Hitbox (Player attacks Enemy)
+    if player_sword_active && wheelbrokens[ix].hurt_timer == 0
+        SS sx = player_sword_x
+        SS sy = player_sword_y
+        // Body bounds: (ex-8, ey-24) to (ex+8, ey)
+        if sx < (ex + 8) && (sx + player_sword_w) > (ex - 8) && sy < ey && (sy + player_sword_h) > (ey - 24)
+             wheelbrokens[ix].hurt_timer = 15 // I-frames
+             U power = p.attack_power
+             if wheelbrokens[ix].blocked_timer > 0
+                 power = power << 1 // Double damage when blocked
+             
+             if wheelbrokens[ix].health > power
+                 wheelbrokens[ix].health -= power
+             else
+                 wheelbrokens[ix].health = 0
+                 wheelbrokens_delete(ix)
+                 return false
+
+    if wheelbrokens[ix].blocked_timer > 0
+        wheelbrokens[ix].blocked_timer -= 1
+        wheelbrokens[ix].attack_timer = 0 // Stay idle while blocked
+    else
+        // Attack logic: Trigger when player is close
+        if wheelbrokens[ix].attack_timer == 0
+            if dist_x < 64 && dist_y < 32
+                wheelbrokens[ix].attack_timer = 1
+        else
+            wheelbrokens[ix].attack_timer += 1
+            if wheelbrokens[ix].attack_timer >= 120 // 2s total cycle
+                wheelbrokens[ix].attack_timer = 0
+
+    // Determine current state based on attack_timer
+    // 0: Standing/Idle
+    // 1-30: Wind-up (Still Standing)
+    // 31-60: Active Attack (Attack Animation + Hitbox)
+    // 61-120: Recovery (Standing)
+    
+    Bool is_attacking = wheelbrokens[ix].attack_timer >= 31 && wheelbrokens[ix].attack_timer <= 60
+
+    // Wheel Hitbox (Enemy attacks Player)
+    if is_attacking
+        SS whx
+        if wheelbrokens[ix].facing_left
+            whx = ex - 32
+        else
+            whx = ex + 8
+        SS why = ey - 32
+        SS whw = 24
+        SS whh = 24
+        
+        // Collision with player
+        if p.x < (whx + whw) && (p.x + p.w) > whx && SS(p.y) < (why + whh) && (SS(p.y) + p.h) > why
+            if hurt_player(ATTACK_PILGRIM)
+                // If parried, end attack phase early
+                wheelbrokens[ix].attack_timer = 61
+                wheelbrokens[ix].blocked_timer = 120 // Turn red for 2 seconds
+    
+    // Animation selection
+    // Only update if it's different from the current animation to avoid resetting frames
+    CCC/sprites anim_to_set
+    if is_attacking
+        if wheelbrokens[ix].facing_left
+            anim_to_set = @wheelbroken_animation_attack_left
+        else
+            anim_to_set = @wheelbroken_animation_attack
+    else
+        if wheelbrokens[ix].facing_left
+            anim_to_set = @wheelbroken_animation_standing_left
+        else
+            anim_to_set = @wheelbroken_animation_standing
+            
+    if UU(wheelbroken_anim_state[ix].frames) != UU(anim_to_set)
+        wheelbroken_anim_state[ix] = make_anim_state(anim_to_set)
+
+
+
+    // Contact damage (Body collision) - Always active
+    if p.x < SS(ex + 8) && (p.x + p.w) > (ex - 8) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey - 24)
+        if hurt_player(ATTACK_PILGRIM)
+            // Parried the body!
+            wheelbrokens[ix].blocked_timer = 120
+            wheelbrokens[ix].attack_timer = 0
+
+
+
+    
+    return true
+
+fn draw_wheelbrokens(U o) U
+    for U i = 0; i < wheelbrokens_num; 
+        if wheelbroken_update(i)
+            SS x = SS(wheelbrokens[i].x) - p.camera_x
+            SS y = wheelbrokens[i].y
+            if wheelbrokens[i].blocked_timer > 0
+                o = push_oam_anim_a(o, x, y, wheelbroken_anim_state[i], $03) // XOR Palette 1 with $03 to get Palette 2 (Red?)
+            else
+                o = push_oam_anim(o, x, y, wheelbroken_anim_state[i])
+            i += 1
+    return o

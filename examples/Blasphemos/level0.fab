@@ -214,7 +214,10 @@ fn update_warden()
 
     // Collision with player
     if p.x < (warden_x + warden_w) && (p.x + p.w) > SS(warden_x) && SS(p.y) < (warden_y + warden_h) && (SS(p.y) + p.h) > warden_y
-        hurt_player(ATTACK_BOSS)
+        if hurt_player(ATTACK_BOSS)
+            warden_state = WARDEN_STATE_HURT
+            warden_timer = 0
+
 
 fn warden_fire_projectile()
     U count = 1

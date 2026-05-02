@@ -8,6 +8,9 @@ vars /enemies
     Bool[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_set_initial_state_level_flag = Bool[NUMBER_OF_EYE_ENEMIES_PER_LEVEL](false, false, false, false, false, false, false, false)
     AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_eye_anim_state
     AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_following_eye_anim_state
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_blocked_timer
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] eye_blocked_timer
+
 
 struct Enemy_eye
     U x
@@ -142,7 +145,19 @@ fn following_eye_update(U ix)
     // State Machine
     // Simple collision with player
     if p.x < SS(enemy_x + 16) && SS(p.x + p.w) > SS(enemy_x) && SS(p.y) < SS(enemy_y + 16) && (SS(p.y) + p.h) > SS(enemy_y)
-        hurt_player(ATTACK_NORMAL)
+        if hurt_player(ATTACK_NORMAL)
+            following_eye_blocked_timer[ix] = 120
+            // Push back
+            if p.x < SS(enemy_x)
+                enemy_x += 8
+            else
+                enemy_x -= 8
+            enemies_following_eye[ix].x = enemy_x
+
+    if following_eye_blocked_timer[ix] > 0
+        following_eye_blocked_timer[ix] -= 1
+        save_enemies_following_eye(ix)
+        return
     
     switch following_eye_state[ix]
         case FOLLOWING_EYE_STATE_SLEEP

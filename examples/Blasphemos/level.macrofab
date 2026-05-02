@@ -17,5 +17,9 @@ data /levels
         (enemies_following_eye_vec(_enemies_following_eye_x, _enemies_following_eye_y))
         U(_enraged_pilgrim_num)         // Number of "enraged_pilgrim" objects
         (enraged_pilgrims_vec(_enraged_pilgrim_x, _enraged_pilgrim_y))
+        U(_wheelbroken_num)                // Number of "wheelbroken" objects
+        (wheelbroken_vec(_wheelbroken_x, _wheelbroken_y))
+
+
     [] tiles_#name#
             (_column_major)

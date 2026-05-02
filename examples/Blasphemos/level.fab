@@ -29,7 +29,7 @@ ct fn enemies_following_eye_vec(Int{} x, Int{} y) Enemy_following_eye{}
 ct fn enraged_pilgrims_vec(Int{} x, Int{} y) EnragedPilgrim{}
     EnragedPilgrim{} out = EnragedPilgrim{}()
     for UU i = 0; i < len(x); i += 1
-        push(out, EnragedPilgrim(SS(x{i}), SS(y{i}), false, 0, 30, 0))
+        push(out, EnragedPilgrim(SS(x{i}), SS(y{i}), false, 0, 30, 0, 0))
     return out
 
 // Tile collision values:
@@ -150,6 +150,14 @@ fn load_level(CCC/levels level)
     for U i = 0; i < pilgrim_num; i += 1
         enraged_pilgrims_new(read EnragedPilgrim(level))
         enraged_pilgrim_anim_state[i] = make_anim_state(@enraged_pilgrim_animation_standing)
+
+    // Enemies: Wheelbroken
+    wheelbrokens_clear()
+    U wheel_num = read U(level)
+    for U i = 0; i < wheel_num; i += 1
+        wheelbrokens_new(read Wheelbroken(level))
+        wheelbroken_anim_state[i] = make_anim_state(@wheelbroken_animation_standing)
+
 
     // Check if key was grabbed
     if !show_key[current_level_index]

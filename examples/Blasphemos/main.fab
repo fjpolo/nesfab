@@ -217,7 +217,11 @@ fn draw_enemies(U o) U
         U i = (e_start + j)
         if i >= enemies_eye_num
             i -= enemies_eye_num
-        o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
+        if eye_blocked_timer[i] > 0
+            eye_blocked_timer[i] -= 1
+            o = push_oam_anim_a(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i], $03)
+        else
+            o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
         o += 4
 
     U fe_start = frame_counter & 7
@@ -228,10 +232,14 @@ fn draw_enemies(U o) U
         if i >= enemies_following_eye_num
             i -= enemies_following_eye_num
         following_eye_update(i)
-        o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
+        if following_eye_blocked_timer[i] > 0
+            o = push_oam_anim_a(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i], $03)
+        else
+            o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
         o += 4
 
     o = draw_enraged_pilgrims(o)
+    o = draw_wheelbrokens(o)
 
     return o
 
@@ -270,6 +278,10 @@ fn update_sprites()
         enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
     for U i = 0; i < enemies_following_eye_num; i += 1
         enemies_following_eye_anim_state[i] = tick_anim(enemies_following_eye_anim_state[i], true)
+    for U i = 0; i < enraged_pilgrims_num; i += 1
+        enraged_pilgrim_anim_state[i] = tick_anim(enraged_pilgrim_anim_state[i], true)
+    for U i = 0; i < wheelbrokens_num; i += 1
+        wheelbroken_anim_state[i] = tick_anim(wheelbroken_anim_state[i], true)
 
 fn update_pause_sprites()
     {PPUMASK}(PPUMASK_GRAYSCALE | PPUMASK_ON | PPUMASK_NO_CLIP)
