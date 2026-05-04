@@ -754,6 +754,8 @@ fn handle_physics()
         if SS(p.y) > (SS(current_level_height) << 4)
             p.health = 0
             p.is_initialised = false
+            goto mode play_level(current_level_index)
+            : preserves /game
 
 fn handle_collisions()
     if collision_at(UU(p.center_x), UU(p.center_y)) == C_EXIT

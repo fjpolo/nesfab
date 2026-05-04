@@ -43,6 +43,38 @@
 
 # Changes
 
+## [04.05.2026] - v0.0.1.734
+- Update todo
+
+
+## [04.05.2026] - v0.0.1.734
+- Update todo
+
+
+## [04.05.2026] - v0.0.1.734
+- Update todo
+
+
+## [04.05.2026] - v0.0.1.734
+- Update todo
+
+
+## [04.05.2026] - v0.0.1.734
+- Update todo
+
+
+## [04.05.2026] - v0.0.1.734
+- Update todo
+
+
+## [04.05.2026] - v0.0.1.734
+- Update todo
+
+
+## [04.05.2026] - v0.0.1.733
+- Implement level navigation cheats and fix player hitbox alignment. Fixes graphical glitches and state inconsistencies during level transitions. Sets starting level to level0.
+
+
 ## [02.05.2026] - v0.0.1.732
 - Fix player facing left hitboxes
 

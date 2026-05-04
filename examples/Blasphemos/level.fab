@@ -109,6 +109,9 @@ fn select_chr_8kb(U bank)
 fn disable_nmi()
     
 fn load_level(CCC/levels level)
+    for UU i = 0; i < 256; i += 1
+        destroyed[U(i)] = 0
+    
     // CHR:
     U chr_bank = read U(level)
     select_chr_8kb(chr_bank)
@@ -134,7 +137,7 @@ fn load_level(CCC/levels level)
         enemies_eye_anim_state[i] = make_anim_state(@eye_animation)
         
     // Enemies: Following Eye
-    // clear_following_eye_set_initial_state_level_flag()
+    clear_following_eye_set_initial_state_level_flag()
     enemies_following_eye_clear()
     U following_eye_num = read U(level)
     for U i = 0; i < following_eye_num; i += 1

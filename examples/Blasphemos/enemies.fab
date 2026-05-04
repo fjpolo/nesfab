@@ -122,7 +122,7 @@ fn following_eye_set_initial_state(U ix, U enemy_x, U enemy_y)
     while following_eye_state[ix] > FOLLOWING_EYE_STATE_MAX
         following_eye_state[ix] = following_eye_state[ix] >> 1
     following_eye_state_counter[ix] = 0
-    if(!following_eye_set_initial_state_level_flag[ix] && load_level_counter == 0)
+    if(!following_eye_set_initial_state_level_flag[ix])
         save_enemies_following_eye(ix)
         following_eye_set_initial_state_level_flag[ix] = true
 
