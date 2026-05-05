@@ -13,6 +13,7 @@ ct Int PLAYER_MOVING_CLIMB = 5
 ct Int PLAYER_MOVING_HURT = 6
 ct Int PLAYER_MOVING_DASH = 7
 ct Int PLAYER_MOVING_PARRY = 8
+ct Int PLAYER_MOVING_LEDGE = 9
 
 ct Int DASH_SPEED = 4
 ct Int DASH_DURATION = 15
@@ -33,7 +34,7 @@ ct Int PLAYER_SPEED_RUN = 2
 ct Int JUMP_SPEED = -4
 
 // Player initial [x, y]
-ct Int PLAYER_INITIAL_X = 32
+ct Int PLAYER_INITIAL_X = 16
 ct Int PLAYER_INITIAL_Y = 160
 
 // Player width and height (32x32 metasprite)
@@ -443,6 +444,30 @@ data /sprites
             Fs(1, @sprite_penitent_walk_left_01)
         )))
 
+
+fn player_respawn()
+    if prie_dieu_lit
+        current_level_index = last_prie_dieu_level
+        p.level_index = current_level_index
+        p.x = last_prie_dieu_x
+        p.y = SSF(last_prie_dieu_y)
+        p.health = 70
+        p.hurt_timer = 0
+        p.movement = PLAYER_MOVING_REST
+        p.anim_state = make_anim_state(@penitent_animation_standing)
+        p.camera_x = max(0, p.x - 128)
+    else
+        p.health = 70
+        p.hurt_timer = 0
+        p.movement = PLAYER_MOVING_REST
+        p.x = PLAYER_INITIAL_X
+        p.y = SSF(PLAYER_INITIAL_Y)
+        p.camera_x = 0
+    
+    p.is_initialised = true
+    goto mode play_level(current_level_index)
+    : preserves /game
+
 fn make_player_penitent() Player
     Player p = Player()
     p.x = PLAYER_INITIAL_X
@@ -571,6 +596,20 @@ fn update_player()
         p.last_input_timer -= 1
 
 fn handle_input()
+    if p.movement == PLAYER_MOVING_LEDGE
+        if pads[0].pressed & BUTTON_A
+            p.yspeed = JUMP_SPEED
+            p.movement = PLAYER_MOVING_JUMP
+            if p.facing_left
+                p.anim_state = make_anim_state(@penitent_animation_jump_left)
+            else
+                p.anim_state = make_anim_state(@penitent_animation_jump)
+            return
+        if pads[0].held & BUTTON_DOWN
+            p.movement = PLAYER_MOVING_JUMP
+            return
+        return
+
     // Handle hurt timer
     if p.hurt_timer > 0
         p.hurt_timer -= 1
@@ -761,10 +800,30 @@ fn handle_physics()
             p.x += DASH_SPEED
         return
 
+    if p.movement == PLAYER_MOVING_LEDGE
+        p.yspeed = 0
+        return
+
     if p.movement == PLAYER_MOVING_CLIMB
         p.yspeed = 0
     else
         p.y += SSF(p.yspeed)
+        
+        // Ledge detection
+        if p.movement == PLAYER_MOVING_JUMP && p.yspeed >= 0
+            SS lx = p.center_x
+            if p.facing_left
+                lx -= 10
+            else
+                lx += 10
+            SS ly = SS(p.y) + 8
+            U t = collision_at(UU(lx), UU(ly))
+            if (t == C_WALL || t == C_PLATFORM) && ((p.facing_left && (pads[0].held & BUTTON_LEFT)) || (!p.facing_left && (pads[0].held & BUTTON_RIGHT)))
+                if collision_at(UU(lx), UU(ly - 16)) == C_OPEN
+                    p.movement = PLAYER_MOVING_LEDGE
+                    p.yspeed = 0
+                    p.y = SSF(ly & $F0) - SSF(8)
+                    return
         
         if is_on_ground()
             if p.yspeed > 0
@@ -787,9 +846,7 @@ fn handle_physics()
         // Out of bounds check
         if SS(p.y) > (SS(current_level_height) << 4)
             p.health = 0
-            p.is_initialised = false
-            goto mode play_level(current_level_index)
-            : preserves /game
+            player_respawn()
 
 fn handle_collisions()
     if collision_at(UU(p.center_x), UU(p.center_y)) == C_EXIT
@@ -797,6 +854,17 @@ fn handle_collisions()
         p.level_index = current_level_index
         p.is_initialised = false
         p.camera_x = 0
+        goto mode play_level(current_level_index)
+        : preserves /game
+    
+    // Level 1 -> Level 2 transition via right bound
+    SS level_right_bound = (SS(current_level_width) << 4) - 20
+    if p.x > level_right_bound && current_level_index == 1
+        current_level_index = 2
+        p.level_index = current_level_index
+        p.is_initialised = false
+        p.camera_x = 0
+        p.x = 16 // Reset to left side of next level
         goto mode play_level(current_level_index)
         : preserves /game
 
@@ -855,9 +923,7 @@ fn hurt_player(U attack_type, SS ex) Bool
             p.anim_state = make_anim_state(@penitent_animation_hit)
         
         if p.health == 0
-            p.is_initialised = false
-            goto mode play_level(current_level_index)
-            : preserves /game
+            player_respawn()
         
         return false // Damage taken, not parried
     

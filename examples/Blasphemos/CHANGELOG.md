@@ -43,6 +43,46 @@
 
 # Changes
 
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
+## [05.05.2026] - v0.0.1.738
+- fix: Optimized sprite cycling logic and fixed crash
+
+
 ## [05.05.2026] - v0.0.1.737
 - feat: Implement ItemBone collectibles and enemy hit flash effects
 

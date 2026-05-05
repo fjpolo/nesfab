@@ -17,7 +17,9 @@ fn level1_main()
         if player_sword_x < 132 && (player_sword_x + player_sword_w) > 116
              // Altar is roughly between 116 and 132
              prie_dieu_lit = true
-             last_prie_dieu_level = p.level_index
+             last_prie_dieu_level = current_level_index
+             last_prie_dieu_x = p.x
+             last_prie_dieu_y = SS(p.y)
              log(@"Prie Dieu lit!"l)
 
 fn draw_level1_sprites(U o) U
