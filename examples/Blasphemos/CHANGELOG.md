@@ -43,6 +43,30 @@
 
 # Changes
 
+## [05.05.2026] - v0.0.1.740
+- feat: implement automatic pogo bounce mechanic with 2-hit limit
+
+
+## [05.05.2026] - v0.0.1.740
+- feat: implement automatic pogo bounce mechanic with 2-hit limit
+
+
+## [05.05.2026] - v0.0.1.740
+- feat: implement automatic pogo bounce mechanic with 2-hit limit
+
+
+## [05.05.2026] - v0.0.1.740
+- feat: implement automatic pogo bounce mechanic with 2-hit limit
+
+
+## [05.05.2026] - v0.0.1.740
+- feat: implement automatic pogo bounce mechanic with 2-hit limit
+
+
+## [05.05.2026] - v0.0.1.740
+- feat: implement automatic pogo bounce mechanic with 2-hit limit
+
+
 ## [05.05.2026] - v0.0.1.739
 - feat: implement ledge grab, cross-level Prie Dieu respawn, and Level 1->2 bounds transition
 

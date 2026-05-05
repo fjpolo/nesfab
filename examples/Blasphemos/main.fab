@@ -159,7 +159,7 @@ mode play_level(U level_index)
         nmi
         update_pads()
         check_pause()
-        export_hitboxes()
+        // export_hitboxes()
         if !is_game_paused
             update_player()
             level_update()
@@ -425,9 +425,9 @@ fn check_cheats()
                 else
                     level_cheat_index = 0
 
-        // "Shift" shortcuts (SELECT + Right/Left)
+        // "Shift" shortcuts (SELECT + Left/Right/Start)
         if (pads[0].held & BUTTON_SELECT)
-            if pressed == BUTTON_RIGHT
+            if pressed == BUTTON_START || pressed == BUTTON_RIGHT
                 cheat_shake_timer = 30
                 current_level_index += 1
                 if current_level_index > LAST_LEVEL_INDEX
