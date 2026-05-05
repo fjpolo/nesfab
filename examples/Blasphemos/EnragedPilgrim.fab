@@ -152,8 +152,10 @@ fn draw_enraged_pilgrims(U o) U
         if enraged_pilgrim_update(i)
             SS x = SS(enraged_pilgrims[i].x) - p.camera_x
             SS y = enraged_pilgrims[i].y
-            if enraged_pilgrims[i].blocked_timer > 0
-                o = push_oam_anim_a(o, x, y, enraged_pilgrim_anim_state[i], $03)
+            if enraged_pilgrims[i].hurt_timer > 0
+                o = push_oam_anim_a(o, x, y, enraged_pilgrim_anim_state[i], $02) // White flash
+            else if enraged_pilgrims[i].blocked_timer > 0
+                o = push_oam_anim_a(o, x, y, enraged_pilgrim_anim_state[i], $03) // Original red/tint
             else
                 o = push_oam_anim(o, x, y, enraged_pilgrim_anim_state[i])
             i += 1

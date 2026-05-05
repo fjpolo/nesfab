@@ -185,7 +185,9 @@ fn draw_wheelbrokens(U o) U
         if wheelbroken_update(i)
             SS x = SS(wheelbrokens[i].x) - p.camera_x
             SS y = wheelbrokens[i].y
-            if wheelbrokens[i].blocked_timer > 0
+            if wheelbrokens[i].hurt_timer > 0
+                o = push_oam_anim_a(o, x, y, wheelbroken_anim_state[i], $02) // White flash
+            else if wheelbrokens[i].blocked_timer > 0
                 o = push_oam_anim_a(o, x, y, wheelbroken_anim_state[i], $03) // XOR Palette 1 with $03 to get Palette 2 (Red?)
             else
                 o = push_oam_anim(o, x, y, wheelbroken_anim_state[i])

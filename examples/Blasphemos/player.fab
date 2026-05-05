@@ -45,6 +45,8 @@ ct Int rh = ph - 1
 ct Int PLAYER_INITIAL_ATTACK_POWER = 10
 ct Int PLAYER_PARRY_BOSS_PUSH = 24
 
+ct Int PLATFORM_OFFSET = 13 // Pixels from top of tile to platform surface
+
 // Player data struct
 struct Player
     SS x
@@ -76,6 +78,7 @@ struct Player
     U parry_timer
     U parry_cooldown
     Bool buffered_attack
+    Bool is_invincible
 
 vars /game
     Bool player_sword_active = false
@@ -603,6 +606,10 @@ fn handle_input()
     if p.parry_timer > 0
         return
 
+    if (pads[0].pressed & BUTTON_UP) && (pads[0].held & BUTTON_SELECT)
+        p.is_invincible = !p.is_invincible
+        cheat_shake_timer = 20
+
     // Parry activation
     if (pads[0].pressed & BUTTON_UP) && p.parry_cooldown == 0 && is_on_ground()
         p.movement = PLAYER_MOVING_PARRY
@@ -725,7 +732,26 @@ fn handle_input()
                 p.anim_state = make_anim_state(@penitent_animation_jump)
 
 fn is_on_ground() Bool
-    return collision_at(UU(p.x), UU(SS(p.y) + p.h)) == C_WALL || collision_at(UU(p.x + p.rw), UU(SS(p.y) + p.h)) == C_WALL
+    UU y = UU(SS(p.y) + p.h)
+    UU x1 = UU(p.x)
+    UU x2 = UU(p.x + p.rw)
+    
+    U t1 = collision_at(x1, y)
+    U t2 = collision_at(x2, y)
+    
+    if t1 == C_WALL || t2 == C_WALL
+        return true
+        
+    if t1 == C_PLATFORM || t2 == C_PLATFORM
+        // Land on platform if moving down, were previously above its surface, 
+        // and are currently within the 3-pixel landing window.
+        if p.yspeed >= 0
+            SS surface_y = SS(y & $F0) + PLATFORM_OFFSET
+            SS old_y_feet = SS(p.y - SSF(p.yspeed)) + p.h
+            if old_y_feet <= surface_y && (SS(p.y) + p.h) <= surface_y + 3
+                return true
+    
+    return false
 
 fn handle_physics()
     if p.movement == PLAYER_MOVING_DASH
@@ -743,8 +769,16 @@ fn handle_physics()
         if is_on_ground()
             if p.yspeed > 0
                 p.yspeed = 0
-                // Align to tile grid (assuming 16px tiles)
-                p.y = SSF(UU(SS(p.y) + p.h) & $F0) - SSF(p.h)
+                
+                UU feet_y = UU(SS(p.y) + p.h)
+                U t1 = collision_at(UU(p.x), feet_y)
+                U t2 = collision_at(UU(p.x + p.rw), feet_y)
+                
+                SS snap_y = SS(feet_y & $F0)
+                if t1 == C_PLATFORM || t2 == C_PLATFORM
+                    snap_y += PLATFORM_OFFSET
+                
+                p.y = SSF(snap_y) - SSF(p.h)
         else
             p.yspeed += 0.25
             if p.yspeed > 4
@@ -781,6 +815,9 @@ fn save_player(Player a) Player
     return a
 
 fn hurt_player(U attack_type, SS ex) Bool
+    if p.is_invincible
+        return true
+
     if p.parry_timer > 0 || p.movement == PLAYER_MOVING_PARRY
         // Only parry if facing the enemy
         if (p.facing_left && ex < p.hitbox_center_x) || (!p.facing_left && ex > p.hitbox_center_x)

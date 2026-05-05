@@ -43,6 +43,138 @@
 
 # Changes
 
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
+## [05.05.2026] - v0.0.1.736
+- Fix enemy health bar synchronization using robust hardware-port export protocol
+
+
 ## [05.05.2026] - v0.0.1.735
 - Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
 

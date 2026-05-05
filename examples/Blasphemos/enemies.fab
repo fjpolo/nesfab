@@ -10,6 +10,8 @@ vars /enemies
     AnimState[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] enemies_following_eye_anim_state
     U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_blocked_timer
     U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] eye_blocked_timer
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] following_eye_hurt_timer
+    U[NUMBER_OF_EYE_ENEMIES_PER_LEVEL] eye_hurt_timer
 
 
 struct Enemy_eye

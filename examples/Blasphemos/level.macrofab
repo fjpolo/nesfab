@@ -19,6 +19,8 @@ data /levels
         (enraged_pilgrims_vec(_enraged_pilgrim_x, _enraged_pilgrim_y))
         U(_wheelbroken_num)                // Number of "wheelbroken" objects
         (wheelbroken_vec(_wheelbroken_x, _wheelbroken_y))
+        U(_item_bone_num)                 // Number of "item_bone" objects
+        (item_bones_vec(_item_bone_x, _item_bone_y))
 
 
     [] tiles_#name#

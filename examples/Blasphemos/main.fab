@@ -260,9 +260,18 @@ fn draw_enemies(U o) U
         U i = (e_start + j)
         if i >= enemies_eye_num
             i -= enemies_eye_num
-        if eye_blocked_timer[i] > 0
+        
+        // Eye hit detection
+        if player_sword_active && eye_hurt_timer[i] == 0
+            if player_sword_x < SS(enemies_eye[i].x + 16) && (player_sword_x + player_sword_w) > SS(enemies_eye[i].x) && player_sword_y < SS(enemies_eye[i].y) && (player_sword_y + player_sword_h) > SS(enemies_eye[i].y - 8)
+                eye_hurt_timer[i] = 30
+
+        if eye_hurt_timer[i] > 0
+            eye_hurt_timer[i] -= 1
+            o = push_oam_anim_a(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i], $01) // Palette 2 XOR 1 = 3 (White)
+        else if eye_blocked_timer[i] > 0
             eye_blocked_timer[i] -= 1
-            o = push_oam_anim_a(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i], $03)
+            o = push_oam_anim_a(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i], $03) // Palette 2 XOR 3 = 1
         else
             o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
         o += 4
@@ -275,7 +284,16 @@ fn draw_enemies(U o) U
         if i >= enemies_following_eye_num
             i -= enemies_following_eye_num
         following_eye_update(i)
-        if following_eye_blocked_timer[i] > 0
+
+        // Following Eye hit detection
+        if player_sword_active && following_eye_hurt_timer[i] == 0
+            if player_sword_x < SS(enemies_following_eye[i].x + 16) && (player_sword_x + player_sword_w) > SS(enemies_following_eye[i].x) && player_sword_y < SS(enemies_following_eye[i].y + 16) && (player_sword_y + player_sword_h) > SS(enemies_following_eye[i].y)
+                following_eye_hurt_timer[i] = 30
+
+        if following_eye_hurt_timer[i] > 0
+            following_eye_hurt_timer[i] -= 1
+            o = push_oam_anim_a(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i], $01) // White
+        else if following_eye_blocked_timer[i] > 0
             o = push_oam_anim_a(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i], $03)
         else
             o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
