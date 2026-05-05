@@ -313,16 +313,15 @@ fn update_sprites()
             set_oam(o, 8 + (i << 3), 8, $0B, 0)
             o += 4
 
+    // PLAYER - Always first (after HUD) to prevent flickering
+    if p.hurt_timer == 0 || (frame_counter & 2) == 0
+        o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
+
+    // OTHER SPRITES - Cycle order to distribute flickering among enemies/items
     if (frame_counter & 1) == 0
-        // Order: Enemies -> Level-specific -> Player
         o = draw_enemies(o)
         o = level_draw_sprites(o)
-        if p.hurt_timer == 0 || (frame_counter & 2) == 0
-            o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
     else
-        // Order: Player -> Level-specific -> Enemies
-        if p.hurt_timer == 0 || (frame_counter & 2) == 0
-            o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
         o = level_draw_sprites(o)
         o = draw_enemies(o)
 

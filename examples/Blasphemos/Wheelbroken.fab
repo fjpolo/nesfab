@@ -181,7 +181,17 @@ fn wheelbroken_update(U ix) Bool
     return true
 
 fn draw_wheelbrokens(U o) U
-    for U i = 0; i < wheelbrokens_num; 
+    if wheelbrokens_num == 0
+        return o
+        
+    U start = frame_counter & 7
+    if start >= wheelbrokens_num
+        start = 0
+    for U j = 0; j < wheelbrokens_num; j += 1
+        U i = start + j
+        if i >= wheelbrokens_num
+            i -= wheelbrokens_num
+            
         if wheelbroken_update(i)
             SS x = SS(wheelbrokens[i].x) - p.camera_x
             SS y = wheelbrokens[i].y
@@ -191,5 +201,4 @@ fn draw_wheelbrokens(U o) U
                 o = push_oam_anim_a(o, x, y, wheelbroken_anim_state[i], $03) // XOR Palette 1 with $03 to get Palette 2 (Red?)
             else
                 o = push_oam_anim(o, x, y, wheelbroken_anim_state[i])
-            i += 1
     return o

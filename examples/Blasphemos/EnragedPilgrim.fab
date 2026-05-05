@@ -148,7 +148,17 @@ fn enraged_pilgrim_update(U ix) Bool
     return true
 
 fn draw_enraged_pilgrims(U o) U
-    for U i = 0; i < enraged_pilgrims_num; 
+    if enraged_pilgrims_num == 0
+        return o
+        
+    U start = frame_counter & 7
+    if start >= enraged_pilgrims_num
+        start = 0
+    for U j = 0; j < enraged_pilgrims_num; j += 1
+        U i = start + j
+        if i >= enraged_pilgrims_num
+            i -= enraged_pilgrims_num
+            
         if enraged_pilgrim_update(i)
             SS x = SS(enraged_pilgrims[i].x) - p.camera_x
             SS y = enraged_pilgrims[i].y
@@ -158,5 +168,4 @@ fn draw_enraged_pilgrims(U o) U
                 o = push_oam_anim_a(o, x, y, enraged_pilgrim_anim_state[i], $03) // Original red/tint
             else
                 o = push_oam_anim(o, x, y, enraged_pilgrim_anim_state[i])
-            i += 1
     return o

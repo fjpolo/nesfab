@@ -40,7 +40,17 @@ fn item_bone_update(U ix) Bool
     return true
 
 fn draw_item_bones(U o) U
-    for U i = 0; i < item_bones_num; i += 1
+    if item_bones_num == 0
+        return o
+        
+    U start = frame_counter & 7
+    if start >= item_bones_num
+        start = 0
+    for U j = 0; j < item_bones_num; j += 1
+        U i = start + j
+        if i >= item_bones_num
+            i -= item_bones_num
+            
         if item_bone_update(i)
             SS x = item_bones[i].x - p.camera_x
             SS y = item_bones[i].y

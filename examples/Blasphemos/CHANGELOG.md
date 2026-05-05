@@ -43,6 +43,38 @@
 
 # Changes
 
+## [05.05.2026] - v0.0.1.737
+- feat: Implement ItemBone collectibles and enemy hit flash effects
+
+
+## [05.05.2026] - v0.0.1.737
+- feat: Implement ItemBone collectibles and enemy hit flash effects
+
+
+## [05.05.2026] - v0.0.1.737
+- feat: Implement ItemBone collectibles and enemy hit flash effects
+
+
+## [05.05.2026] - v0.0.1.737
+- feat: Implement ItemBone collectibles and enemy hit flash effects
+
+
+## [05.05.2026] - v0.0.1.737
+- feat: Implement ItemBone collectibles and enemy hit flash effects
+
+
+## [05.05.2026] - v0.0.1.737
+- feat: Implement ItemBone collectibles and enemy hit flash effects
+
+
+## [05.05.2026] - v0.0.1.737
+- feat: Implement ItemBone collectibles and enemy hit flash effects
+
+
+## [05.05.2026] - v0.0.1.737
+- feat: Implement ItemBone collectibles and enemy hit flash effects
+
+
 ## [05.05.2026] - v0.0.1.736
 - Fix enemy health bar synchronization using robust hardware-port export protocol
 
