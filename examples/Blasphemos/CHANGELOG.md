@@ -43,6 +43,34 @@
 
 # Changes
 
+## [05.05.2026] - v0.0.1.739
+- feat: implement ledge grab, cross-level Prie Dieu respawn, and Level 1->2 bounds transition
+
+
+## [05.05.2026] - v0.0.1.739
+- feat: implement ledge grab, cross-level Prie Dieu respawn, and Level 1->2 bounds transition
+
+
+## [05.05.2026] - v0.0.1.739
+- feat: implement ledge grab, cross-level Prie Dieu respawn, and Level 1->2 bounds transition
+
+
+## [05.05.2026] - v0.0.1.739
+- feat: implement ledge grab, cross-level Prie Dieu respawn, and Level 1->2 bounds transition
+
+
+## [05.05.2026] - v0.0.1.739
+- feat: implement ledge grab, cross-level Prie Dieu respawn, and Level 1->2 bounds transition
+
+
+## [05.05.2026] - v0.0.1.739
+- feat: implement ledge grab, cross-level Prie Dieu respawn, and Level 1->2 bounds transition
+
+
+## [05.05.2026] - v0.0.1.739
+- feat: implement ledge grab, cross-level Prie Dieu respawn, and Level 1->2 bounds transition
+
+
 ## [05.05.2026] - v0.0.1.738
 - fix: Optimized sprite cycling logic and fixed crash
 

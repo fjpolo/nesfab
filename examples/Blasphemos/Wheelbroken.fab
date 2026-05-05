@@ -99,6 +99,7 @@ fn wheelbroken_update(U ix) Bool
         // Body bounds: (ex-8, ey-24) to (ex+8, ey)
         if sx < (ex + 8) && (sx + player_sword_w) > (ex - 8) && sy < ey && (sy + player_sword_h) > (ey - 24)
              wheelbrokens[ix].hurt_timer = 30 // I-frames
+             player_pogo()
              U power = p.attack_power
              if wheelbrokens[ix].blocked_timer > 0
                  power = power << 1 // Double damage when blocked

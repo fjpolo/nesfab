@@ -80,6 +80,7 @@ struct Player
     U parry_cooldown
     Bool buffered_attack
     Bool is_invincible
+    U pogo_count
 
 vars /game
     Bool player_sword_active = false
@@ -443,6 +444,11 @@ data /sprites
         (make_anim(Fs{}(
             Fs(1, @sprite_penitent_walk_left_01)
         )))
+    
+fn player_pogo()
+    if p.pogo_count < 2 && !is_on_ground()
+        p.yspeed = -3.0
+        p.pogo_count += 1
 
 
 fn player_respawn()
@@ -538,6 +544,7 @@ fn update_player()
                     else
                         warden_health = 0
                     warden_hurt_timer = 30 // IFrames
+                    player_pogo()
                     logf(@"Warden HP: %d"l, warden_health)
                     if warden_health == 0
                         warden_state = WARDEN_STATE_DEAD
@@ -826,6 +833,7 @@ fn handle_physics()
                     return
         
         if is_on_ground()
+            p.pogo_count = 0
             if p.yspeed > 0
                 p.yspeed = 0
                 

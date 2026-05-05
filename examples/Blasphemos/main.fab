@@ -267,6 +267,7 @@ fn draw_enemies(U o) U
         if player_sword_active && eye_hurt_timer[i] == 0
             if player_sword_x < SS(enemies_eye[i].x + 16) && (player_sword_x + player_sword_w) > SS(enemies_eye[i].x) && player_sword_y < SS(enemies_eye[i].y) && (player_sword_y + player_sword_h) > SS(enemies_eye[i].y - 8)
                 eye_hurt_timer[i] = 30
+                player_pogo()
 
         if eye_hurt_timer[i] > 0
             eye_hurt_timer[i] -= 1
@@ -291,6 +292,7 @@ fn draw_enemies(U o) U
         if player_sword_active && following_eye_hurt_timer[i] == 0
             if player_sword_x < SS(enemies_following_eye[i].x + 16) && (player_sword_x + player_sword_w) > SS(enemies_following_eye[i].x) && player_sword_y < SS(enemies_following_eye[i].y + 16) && (player_sword_y + player_sword_h) > SS(enemies_following_eye[i].y)
                 following_eye_hurt_timer[i] = 30
+                player_pogo()
 
         if following_eye_hurt_timer[i] > 0
             following_eye_hurt_timer[i] -= 1
