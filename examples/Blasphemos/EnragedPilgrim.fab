@@ -91,7 +91,7 @@ fn enraged_pilgrim_update(U ix) Bool
         SS sy = player_sword_y
         // Body bounds: (ex-8, ey-16) to (ex+8, ey)
         if sx < (ex + 8) && (sx + player_sword_w) > (ex - 8) && sy < ey && (sy + player_sword_h) > (ey - 16)
-             enraged_pilgrims[ix].hurt_timer = 15 // I-frames
+             enraged_pilgrims[ix].hurt_timer = 30 // I-frames
              U power = p.attack_power
              if enraged_pilgrims[ix].blocked_timer > 0
                  power = power << 1 // Double damage when blocked

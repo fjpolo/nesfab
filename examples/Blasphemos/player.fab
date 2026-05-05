@@ -509,7 +509,7 @@ fn update_player()
                         warden_health -= p.attack_power
                     else
                         warden_health = 0
-                    warden_hurt_timer = 20 // IFrames
+                    warden_hurt_timer = 30 // IFrames
                     logf(@"Warden HP: %d"l, warden_health)
                     if warden_health == 0
                         warden_state = WARDEN_STATE_DEAD

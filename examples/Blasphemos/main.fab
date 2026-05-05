@@ -157,19 +157,24 @@ mode play_level(U level_index)
         nmi
         update_pads()
         check_pause()
+        export_hitboxes()
         if !is_game_paused
             update_player()
             level_update()
             check_cheats()
             update_sprites()
             update_scroll()
-            export_hitboxes()
         else
             update_pause_sprites()
 
-ct Int HITBOX_EXPORT_ADDR = $FE
+ct Int HITBOX_EXPORT_ADDR = $4018
 
 fn export_hitboxes()
+    {HITBOX_EXPORT_ADDR}($77)
+    {HITBOX_EXPORT_ADDR}($88)
+    {HITBOX_EXPORT_ADDR}($99)
+    {HITBOX_EXPORT_ADDR}($AA)
+
     {HITBOX_EXPORT_ADDR}(p.hitbox_x.a)
     {HITBOX_EXPORT_ADDR}(p.hitbox_x.b)
     
@@ -214,6 +219,38 @@ fn export_hitboxes()
     {HITBOX_EXPORT_ADDR}(player_sword_h.b)
     
     {HITBOX_EXPORT_ADDR}(U(player_sword_active))
+
+    {HITBOX_EXPORT_ADDR}(warden_health)
+
+    // Export Enraged Pilgrims (max 8)
+    {HITBOX_EXPORT_ADDR}(enraged_pilgrims_num)
+    for U i = 0; i < 8; i += 1
+        if i < enraged_pilgrims_num
+            {HITBOX_EXPORT_ADDR}(enraged_pilgrims[i].x.a)
+            {HITBOX_EXPORT_ADDR}(enraged_pilgrims[i].x.b)
+            {HITBOX_EXPORT_ADDR}(enraged_pilgrims[i].y.a)
+            {HITBOX_EXPORT_ADDR}(enraged_pilgrims[i].y.b)
+            {HITBOX_EXPORT_ADDR}(enraged_pilgrims[i].health)
+        else
+            for U j = 0; j < 5; j += 1
+                {HITBOX_EXPORT_ADDR}(0)
+
+    // Export Wheelbrokens (max 8)
+    {HITBOX_EXPORT_ADDR}(wheelbrokens_num)
+    for U i = 0; i < 8; i += 1
+        if i < wheelbrokens_num
+            {HITBOX_EXPORT_ADDR}(wheelbrokens[i].x.a)
+            {HITBOX_EXPORT_ADDR}(wheelbrokens[i].x.b)
+            {HITBOX_EXPORT_ADDR}(wheelbrokens[i].y.a)
+            {HITBOX_EXPORT_ADDR}(wheelbrokens[i].y.b)
+            {HITBOX_EXPORT_ADDR}(wheelbrokens[i].health)
+        else
+            for U j = 0; j < 5; j += 1
+                {HITBOX_EXPORT_ADDR}(0)
+    
+    // Padding to reach 120 bytes exactly (115 + 5)
+    for U i = 0; i < 5; i += 1
+        {HITBOX_EXPORT_ADDR}(0)
 
 fn draw_enemies(U o) U
     U e_start = frame_counter & 7

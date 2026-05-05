@@ -43,6 +43,170 @@
 
 # Changes
 
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
+## [05.05.2026] - v0.0.1.735
+- Fix: All enemies and level elements now correctly respawn upon player death, including pit deaths in Level 1.
+
+
 ## [04.05.2026] - v0.0.1.734
 - Update todo
 
