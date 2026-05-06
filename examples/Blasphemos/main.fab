@@ -378,10 +378,10 @@ fn check_cheats()
                 cheat_shake_timer = 60 // Shake for 1 second
                 if game_mode == GAME_MODE_NORMAL
                     game_mode = GAME_MODE_KONAMI
-                    p.health = 5
+                    p.health = 50
                 else
                     game_mode = GAME_MODE_NORMAL
-                    p.health = 7
+                    p.health = 70
         else
             if pressed == kcode[0]
                 cheat_index = 1
@@ -408,11 +408,11 @@ fn check_cheats()
                     current_level_index = FIRST_LEVEL_INDEX
                 
                 p.level_index = current_level_index
-                p.is_initialised = false
+                player_prepare_level_transition()
                 p.camera_x = 0
                 goto mode play_level(current_level_index)
                 : preserves /game
-                p.health = 7
+
             else if pressed == BUTTON_LEFT
                 // Previous level
                 level_cheat_index = 0
@@ -423,11 +423,10 @@ fn check_cheats()
                     current_level_index = LAST_LEVEL_INDEX
                 
                 p.level_index = current_level_index
-                p.is_initialised = false
+                player_prepare_level_transition()
                 p.camera_x = 0
                 goto mode play_level(current_level_index)
                 : preserves /game
-                p.health = 7
             else
                 if pressed == lcode[0]
                     level_cheat_index = 1
@@ -443,11 +442,11 @@ fn check_cheats()
                     current_level_index = FIRST_LEVEL_INDEX
                 
                 p.level_index = current_level_index
-                p.is_initialised = false
+                player_prepare_level_transition()
                 p.camera_x = 0
                 goto mode play_level(current_level_index)
                 : preserves /game
-                p.health = 7
+
             else if pressed == BUTTON_LEFT
                 cheat_shake_timer = 30
                 if current_level_index > FIRST_LEVEL_INDEX
@@ -456,11 +455,10 @@ fn check_cheats()
                     current_level_index = LAST_LEVEL_INDEX
                 
                 p.level_index = current_level_index
-                p.is_initialised = false
+                player_prepare_level_transition()
                 p.camera_x = 0
                 goto mode play_level(current_level_index)
                 : preserves /game
-                p.health = 7
     else
         cheat_timer += 1
         if cheat_timer > 120

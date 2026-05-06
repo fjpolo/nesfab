@@ -43,6 +43,30 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.744
+- Make Wheelbroken attack with a wheel
+
+
+## [06.05.2026] - v0.0.1.744
+- Make Wheelbroken attack with a wheel
+
+
+## [06.05.2026] - v0.0.1.744
+- Make Wheelbroken attack with a wheel
+
+
+## [06.05.2026] - v0.0.1.744
+- Make Wheelbroken attack with a wheel
+
+
+## [06.05.2026] - v0.0.1.744
+- Make Wheelbroken attack with a wheel
+
+
+## [06.05.2026] - v0.0.1.744
+- Make Wheelbroken attack with a wheel
+
+
 ## [06.05.2026] - v0.0.1.743
 - Platforms now are on perspective xD
 
