@@ -43,6 +43,14 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.747
+- Fix macOS build scripts and update version
+
+
+## [06.05.2026] - v0.0.1.747
+- Fix macOS build scripts and update version
+
+
 ## [06.05.2026] - v0.0.1.746
 - Add explicit make target for MacBook Pro 2019 Intel i5
 
