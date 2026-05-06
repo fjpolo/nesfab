@@ -13,7 +13,7 @@ fn level1_init()
 
 fn level1_main()
     // Altar hit detection (moved from player.fab)
-    if current_level_index == 1 && !prie_dieu_lit && p.movement == PLAYER_MOVING_ATTACK
+    if current_level_index == 1 && (!prie_dieu_lit || last_prie_dieu_level != 1) && p.movement == PLAYER_MOVING_ATTACK
         if player_sword_x < 132 && (player_sword_x + player_sword_w) > 116
              // Altar is roughly between 116 and 132
              prie_dieu_lit = true
@@ -25,7 +25,7 @@ fn level1_main()
 fn draw_level1_sprites(U o) U
     // Bring back the candles after hitting the prie dieu
     // But make the candles disappear when they are no longer seen because of scrolling
-    if current_level_index == 1 && prie_dieu_lit
+    if current_level_index == 1 && prie_dieu_lit && last_prie_dieu_level == 1
         SS ax = 124 - p.camera_x
         // Check if onscreen (with some margin for 8px wide tiles)
         if ax > -16 && ax < 256

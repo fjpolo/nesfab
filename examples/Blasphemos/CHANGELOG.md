@@ -43,6 +43,18 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.753
+- Implement healing flash effect and fix level transition spawning issues
+
+
+## [06.05.2026] - v0.0.1.753
+- Implement healing flash effect and fix level transition spawning issues
+
+
+## [06.05.2026] - v0.0.1.753
+- Implement healing flash effect and fix level transition spawning issues
+
+
 ## [06.05.2026] - v0.0.1.752
 - Penitent one flashes when healing
 

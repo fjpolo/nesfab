@@ -14,7 +14,7 @@ fn level3_init()
 fn level3_main()
     // Altar hit detection
     // Adjusted: 4 pixels left (128 - 4 = 124)
-    if current_level_index == 3 && !prie_dieu_lit && p.movement == PLAYER_MOVING_ATTACK
+    if current_level_index == 3 && (!prie_dieu_lit || last_prie_dieu_level != 3) && p.movement == PLAYER_MOVING_ATTACK
         if player_sword_x < 132 && (player_sword_x + player_sword_w) > 116
              prie_dieu_lit = true
              last_prie_dieu_level = current_level_index
@@ -23,7 +23,7 @@ fn level3_main()
              log(@"Prie Dieu Level 3 lit!"l)
 
 fn draw_level3_sprites(U o) U
-    if current_level_index == 3 && prie_dieu_lit
+    if current_level_index == 3 && prie_dieu_lit && last_prie_dieu_level == 3
         SS ax = 124 - p.camera_x
         if ax > -16 && ax < 256
             // Draw candles using tiles $0E, $0F with palette 1 (SPR1)
