@@ -1,0 +1,35 @@
+/*
+ * BlasNESmous - Level 3
+ * Prie Dieu Altar Logic
+ */
+
+fn level3_init()
+    // Level 3 initialization logic here
+    // SPR2 palette: ($2D, $17, $32)
+    palette[18] = $2D
+    palette[19] = $17
+    palette[20] = $32
+    ppu_upload_palette()
+
+fn level3_main()
+    // Altar hit detection
+    // Adjusted: 4 pixels left (128 - 4 = 124)
+    if current_level_index == 3 && !prie_dieu_lit && p.movement == PLAYER_MOVING_ATTACK
+        if player_sword_x < 132 && (player_sword_x + player_sword_w) > 116
+             prie_dieu_lit = true
+             last_prie_dieu_level = current_level_index
+             last_prie_dieu_x = p.x
+             last_prie_dieu_y = SS(p.y)
+             log(@"Prie Dieu Level 3 lit!"l)
+
+fn draw_level3_sprites(U o) U
+    if current_level_index == 3 && prie_dieu_lit
+        SS ax = 124 - p.camera_x
+        if ax > -16 && ax < 256
+            // Draw candles using tiles $0E, $0F with palette 1 (SPR1)
+            // Adjusted: 1 tile up (231 - 16 = 215)
+            set_oam(o, U(ax - 4), 215, $0E, 1)
+            o += 4
+            set_oam(o, U(ax + 4), 215, $0F, 1)
+            o += 4
+    return o

@@ -17,10 +17,12 @@ vars /enemies
 struct Enemy_eye
     U x
     U y
+    U local_index
 
 struct Enemy_following_eye
     U x
     U y
+    U local_index
 
 struct Enemy_following_eye_pupil
     U x

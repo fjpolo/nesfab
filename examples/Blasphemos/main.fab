@@ -45,6 +45,11 @@ vars /game
     U last_prie_dieu_level = 0
     SS last_prie_dieu_x = 0
     SS last_prie_dieu_y = 0
+    Bool spawn_from_right = false
+    U[16] dead_pilgrims = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    U[16] dead_wheelbrokens = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    U[16] dead_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    U[16] dead_following_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 
 data /game
     [] konami_code
@@ -152,6 +157,10 @@ mode play_level(U level_index)
 
     if !p.is_initialised
         p = make_player_penitent()
+        if spawn_from_right
+            p.x = (SS(current_level_width) << 4) - 32
+            p.camera_x = p.x - 128
+            spawn_from_right = false
 
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     

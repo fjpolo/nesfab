@@ -3,7 +3,7 @@ macro("pool_contiguous", "Wheelbroken", "8", "wheelbrokens", "/game")
 ct fn wheelbroken_vec(Int{} x, Int{} y) Wheelbroken{}
     Wheelbroken{} out = Wheelbroken{}()
     for UU i = 0; i < len(x); i += 1
-        push(out, Wheelbroken(SS(x{i}), SS(y{i}), false, 0, 40, 0, 0)) // 40 HP, 0 blocked_timer
+        push(out, Wheelbroken(SS(x{i}), SS(y{i}), false, 0, 40, 0, 0, 0)) // 40 HP, 0 blocked_timer
     return out
 
 struct Wheelbroken
@@ -15,6 +15,7 @@ struct Wheelbroken
     U health
     U hurt_timer
     U blocked_timer
+    U local_index
 
 
 vars /enemies
@@ -108,6 +109,10 @@ fn wheelbroken_update(U ix) Bool
                  wheelbrokens[ix].health -= power
              else
                  wheelbrokens[ix].health = 0
+                 U global_ix = (current_level_index << 3) + wheelbrokens[ix].local_index
+                 U byte_ix = global_ix >> 3
+                 U bit_ix = global_ix & 7
+                 dead_wheelbrokens[byte_ix] |= (U(1) << bit_ix)
                  wheelbrokens_delete(ix)
                  return false
 

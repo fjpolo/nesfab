@@ -6,6 +6,7 @@ struct EnragedPilgrim
     U health
     U hurt_timer
     U blocked_timer
+    U local_index
 
 
 vars /enemies
@@ -101,6 +102,10 @@ fn enraged_pilgrim_update(U ix) Bool
                  enraged_pilgrims[ix].health -= power
              else
                  enraged_pilgrims[ix].health = 0
+                 U global_ix = (current_level_index << 3) + enraged_pilgrims[ix].local_index
+                 U byte_ix = global_ix >> 3
+                 U bit_ix = global_ix & 7
+                 dead_pilgrims[byte_ix] |= (U(1) << bit_ix)
                  enraged_pilgrims_delete(ix)
                  return false
 
