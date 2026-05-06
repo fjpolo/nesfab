@@ -43,6 +43,10 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.742
+- Implement Level 3 Prie Dieu, bi-directional transitions, and enemy persistence
+
+
 ## [06.05.2026] - v0.0.1.741
 - fix: update debug shortcuts, add respawn logging, and implement Level 2->3 transition
 
