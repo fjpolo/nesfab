@@ -43,6 +43,18 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.754
+- Differentiate Prie-Dieu save points and allow switching
+
+
+## [06.05.2026] - v0.0.1.754
+- Differentiate Prie-Dieu save points and allow switching
+
+
+## [06.05.2026] - v0.0.1.754
+- Differentiate Prie-Dieu save points and allow switching
+
+
 ## [06.05.2026] - v0.0.1.753
 - Implement healing flash effect and fix level transition spawning issues
 

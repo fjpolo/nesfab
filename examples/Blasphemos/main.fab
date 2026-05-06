@@ -50,6 +50,7 @@ vars /game
     U[16] dead_wheelbrokens = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
     U[16] dead_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
     U[16] dead_following_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    Bool warden_defeated = false
     U bile_vessel_hp = 18
 
 data /game

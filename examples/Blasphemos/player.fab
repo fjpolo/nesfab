@@ -596,6 +596,7 @@ fn update_player()
                     logf(@"Warden HP: %d"l, warden_health)
                     if warden_health == 0
                         warden_state = WARDEN_STATE_DEAD
+                        warden_defeated = true
                         for U i = 0; i < 3; i += 1
                             warden_projectile_active[i] = false
                         // warden_active stays true so we can still see/tint him

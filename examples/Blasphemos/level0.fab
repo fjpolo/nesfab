@@ -143,7 +143,10 @@ fn warden_init(SS wx, SS wy)
 
 fn level0_init()
     // Initialize Warden
-    warden_init(436, 120)
+    if !warden_defeated
+        warden_init(436, 120)
+    else
+        warden_active = false
 
     // Initial door destruction logic (if keys are already held)
     if keys[0]
