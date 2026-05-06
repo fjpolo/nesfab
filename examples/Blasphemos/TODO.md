@@ -8,6 +8,7 @@
 - [ ] Add background animation using CHR bank switching
 - [ ] Add HUB area
 - [ ] Fix ground collision issue
+- [ ] Implement robust OAM sprite priority rotation to handle 64-sprite limit in crowded levels
 
 ## Gameplay
 

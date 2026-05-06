@@ -335,5 +335,5 @@ fn level_draw_sprites(U o) U
     else if current_level_index == 3
         o = draw_level3_sprites(o)
     
-    o = draw_item_bones(o)
+    // o = draw_item_bones(o) // Moved to main.fab for higher priority
     return o

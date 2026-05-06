@@ -3,7 +3,7 @@ struct ItemBone
     SS y
     Bool collected
 
-vars /items
+vars /game
     AnimState[8] item_bone_anim_state
 
 vars /game

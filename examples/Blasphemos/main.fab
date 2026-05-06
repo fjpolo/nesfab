@@ -345,6 +345,9 @@ fn update_sprites()
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
         o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 0, attr_xor)
 
+    // Stage 1.5: Items (High priority to avoid 64-sprite limit drops)
+    o = draw_item_bones(o)
+
     // Stage 2: Rotating Priority (Flickering Group)
     U cycle = frame_counter & 3
     if cycle == 0
@@ -381,6 +384,8 @@ fn update_sprites()
         enraged_pilgrim_anim_state[i] = tick_anim(enraged_pilgrim_anim_state[i], true)
     for U i = 0; i < wheelbrokens_num; i += 1
         wheelbroken_anim_state[i] = tick_anim(wheelbroken_anim_state[i], true)
+    for U i = 0; i < item_bones_num; i += 1
+        item_bone_anim_state[i] = tick_anim(item_bone_anim_state[i], true)
 
 fn update_pause_sprites()
     {PPUMASK}(PPUMASK_GRAYSCALE | PPUMASK_ON | PPUMASK_NO_CLIP)

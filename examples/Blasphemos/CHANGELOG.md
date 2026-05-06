@@ -43,6 +43,50 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
+## [06.05.2026] - v0.0.1.755
+- Implement persistent Warden boss death
+
+
 ## [06.05.2026] - v0.0.1.754
 - Differentiate Prie-Dieu save points and allow switching
 
