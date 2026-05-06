@@ -84,6 +84,7 @@ struct Player
     U pogo_count
     U max_bile_vessels
     U current_bile_vessels
+    U heal_timer
 
 vars /game
     Bool player_sword_active = false
@@ -448,7 +449,7 @@ data /sprites
             Fs(1, @sprite_penitent_walk_left_01)
         )))
 
-fn push_oam_anim_palette(U index, SS x, SS y, AnimState anim_state, U palette_target) U
+fn push_oam_anim_palette(U index, SS x, SS y, AnimState anim_state, U palette_target, U attr_xor) U
     anim_state.frames += U(2 + (anim_state.frame_index * sizeof Fs))
     CCC/sprites metasprite = read CCC/sprites(anim_state.frames)
     
@@ -469,7 +470,7 @@ fn push_oam_anim_palette(U index, SS x, SS y, AnimState anim_state, U palette_ta
                 SS sprite_y = y + SS(S(oy))
                 if sprite_y.b == 0 && sprite_y.a <= 240
                     set_oam_p(index, pattern)
-                    set_oam_a(index, attr)
+                    set_oam_a(index, attr ^ attr_xor)
                     set_oam_y(index, sprite_y.a)
                     set_oam_x(index, sprite_x.a)
                     index += 4
@@ -544,6 +545,7 @@ fn make_player_penitent() Player
     p.attack_power = PLAYER_INITIAL_ATTACK_POWER
     p.max_bile_vessels = 1
     p.current_bile_vessels = 1
+    p.heal_timer = 0
     return p
 
 fn update_player()
@@ -561,6 +563,9 @@ fn update_player()
         p.hitbox_x = p.x
     p.hitbox_center_x = p.hitbox_x + (p.w >> 1)
 
+    if p.heal_timer > 0
+        p.heal_timer -= 1
+    
     handle_input()
     handle_physics()
     handle_collisions()
@@ -736,6 +741,7 @@ fn handle_input()
             if p.current_bile_vessels > 0
                 p.current_bile_vessels -= 1
                 p.health += bile_vessel_hp
+                p.heal_timer = 30
                 if p.health > U(PLAYER_MAX_HEALTH)
                     p.health = U(PLAYER_MAX_HEALTH)
         p.last_input_timer = 15

@@ -43,6 +43,18 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.751
+- Fix sprite cycling and OAM indexing, split player rendering for flickering priority
+
+
+## [06.05.2026] - v0.0.1.751
+- Fix sprite cycling and OAM indexing, split player rendering for flickering priority
+
+
+## [06.05.2026] - v0.0.1.751
+- Fix sprite cycling and OAM indexing, split player rendering for flickering priority
+
+
 ## [06.05.2026] - v0.0.1.750
 - Implement Bile Vessel healing system with HUD display
 

@@ -316,9 +316,9 @@ fn draw_enemies(U o) U
 
     return o
 
-fn draw_player_secondary(U o) U
+fn draw_player_secondary(U o, U attr_xor) U
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
-        o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 1)
+        o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 1, attr_xor)
     return o
 
 fn update_sprites()
@@ -337,26 +337,29 @@ fn update_sprites()
             o += 4
 
     // Stage 1: Player Primary (Always Stable)
+    U attr_xor = 0
+    if p.heal_timer > 0
+        attr_xor = 2
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
-        o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 0)
+        o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 0, attr_xor)
 
     // Stage 2: Rotating Priority (Flickering Group)
     U cycle = frame_counter & 3
     if cycle == 0
         o = draw_enemies(o)
         o = level_draw_sprites(o)
-        o = draw_player_secondary(o)
+        o = draw_player_secondary(o, attr_xor)
     else if cycle == 1
         o = level_draw_sprites(o)
-        o = draw_player_secondary(o)
+        o = draw_player_secondary(o, attr_xor)
         o = draw_enemies(o)
     else if cycle == 2
-        o = draw_player_secondary(o)
+        o = draw_player_secondary(o, attr_xor)
         o = draw_enemies(o)
         o = level_draw_sprites(o)
     else
         o = draw_enemies(o)
-        o = draw_player_secondary(o)
+        o = draw_player_secondary(o, attr_xor)
         o = level_draw_sprites(o)
 
 
