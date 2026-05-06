@@ -287,7 +287,6 @@ fn draw_enemies(U o) U
             o = push_oam_anim_a(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i], $03) // Palette 2 XOR 3 = 1
         else
             o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
-        o += 4
 
     U fe_start = frame_counter & 7
     if fe_start >= enemies_following_eye_num
@@ -311,11 +310,15 @@ fn draw_enemies(U o) U
             o = push_oam_anim_a(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i], $03)
         else
             o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
-        o += 4
 
     o = draw_enraged_pilgrims(o)
     o = draw_wheelbrokens(o)
 
+    return o
+
+fn draw_player_secondary(U o) U
+    if p.hurt_timer == 0 || (frame_counter & 2) == 0
+        o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 1)
     return o
 
 fn update_sprites()
@@ -333,17 +336,28 @@ fn update_sprites()
             set_oam(o, 8 + (i << 3), 16, $0B, 1)
             o += 4
 
-    // PLAYER - Always first (after HUD) to prevent flickering
+    // Stage 1: Player Primary (Always Stable)
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
-        o = push_oam_anim(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state)
+        o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 0)
 
-    // OTHER SPRITES - Cycle order to distribute flickering among enemies/items
-    if (frame_counter & 1) == 0
+    // Stage 2: Rotating Priority (Flickering Group)
+    U cycle = frame_counter & 3
+    if cycle == 0
+        o = draw_enemies(o)
+        o = level_draw_sprites(o)
+        o = draw_player_secondary(o)
+    else if cycle == 1
+        o = level_draw_sprites(o)
+        o = draw_player_secondary(o)
+        o = draw_enemies(o)
+    else if cycle == 2
+        o = draw_player_secondary(o)
         o = draw_enemies(o)
         o = level_draw_sprites(o)
     else
-        o = level_draw_sprites(o)
         o = draw_enemies(o)
+        o = draw_player_secondary(o)
+        o = level_draw_sprites(o)
 
 
 

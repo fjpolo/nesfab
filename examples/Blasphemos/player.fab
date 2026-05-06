@@ -447,6 +447,33 @@ data /sprites
         (make_anim(Fs{}(
             Fs(1, @sprite_penitent_walk_left_01)
         )))
+
+fn push_oam_anim_palette(U index, SS x, SS y, AnimState anim_state, U palette_target) U
+    anim_state.frames += U(2 + (anim_state.frame_index * sizeof Fs))
+    CCC/sprites metasprite = read CCC/sprites(anim_state.frames)
+    
+    U size = metasprite[0]
+    do for U i = 0; i != size;
+        i += 1
+        U oy = metasprite[i]
+        i += 1
+        U pattern = metasprite[i]
+        i += 1
+        U attr = metasprite[i]
+        i += 1
+        U ox = metasprite[i]
+        
+        if (attr & 3) == palette_target
+            SS sprite_x = x + SS(S(ox))
+            if sprite_x.b == 0
+                SS sprite_y = y + SS(S(oy))
+                if sprite_y.b == 0 && sprite_y.a <= 240
+                    set_oam_p(index, pattern)
+                    set_oam_a(index, attr)
+                    set_oam_y(index, sprite_y.a)
+                    set_oam_x(index, sprite_x.a)
+                    index += 4
+    return U(index)
     
 fn player_pogo()
     if p.pogo_count < 2 && !is_on_ground()

@@ -43,6 +43,26 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.750
+- Implement Bile Vessel healing system with HUD display
+
+
+## [06.05.2026] - v0.0.1.750
+- Implement Bile Vessel healing system with HUD display
+
+
+## [06.05.2026] - v0.0.1.750
+- Implement Bile Vessel healing system with HUD display
+
+
+## [06.05.2026] - v0.0.1.750
+- Implement Bile Vessel healing system with HUD display
+
+
+## [06.05.2026] - v0.0.1.750
+- Implement Bile Vessel healing system with HUD display
+
+
 ## [06.05.2026] - v0.0.1.749
 - Fix transparent
 
