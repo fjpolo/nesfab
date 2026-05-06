@@ -43,6 +43,14 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.743
+- Platforms now are on perspective xD
+
+
+## [06.05.2026] - v0.0.1.743
+- Platforms now are on perspective xD
+
+
 ## [06.05.2026] - v0.0.1.742
 - Implement Level 3 Prie Dieu, bi-directional transitions, and enemy persistence
 
