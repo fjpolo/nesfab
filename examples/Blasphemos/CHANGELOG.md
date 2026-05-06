@@ -43,6 +43,70 @@
 
 # Changes
 
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
+## [06.05.2026] - v0.0.1.749
+- Fix transparent
+
+
 ## [06.05.2026] - v0.0.1.747
 - Fix macOS build scripts and update version
 
