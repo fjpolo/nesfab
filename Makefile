@@ -62,6 +62,14 @@ override CXXFLAGS+= \
   -mmovbe
 endif
 
+ifeq ($(ARCH),MAC_INTEL)
+override CXXFLAGS+= \
+  -mpopcnt \
+  -msse4 \
+  -mcx16 \
+  -mmovbe
+endif
+
 ifeq ($(ARCH),AMD64_OLD)
 override CXXFLAGS+= \
   -mpopcnt \

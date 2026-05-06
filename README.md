@@ -37,6 +37,10 @@ To target others, specify a blank `ARCH` flag:
 
     make ARCH= release
 
+For macOS running on Intel (e.g., MacBook Pro 2019 Intel i5), you can explicitly use:
+
+    make ARCH=MAC_INTEL
+
 By default, the NESFab compiler builds binaries that use unofficial ("illegal") instructions. 
 To force the compiler to only use official ones, compile the compiler with the following flag:
 
