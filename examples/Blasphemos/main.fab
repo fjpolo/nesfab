@@ -158,10 +158,11 @@ mode play_level(U level_index)
 
     if !p.is_initialised
         p = make_player_penitent()
-        if spawn_from_right
-            p.x = (SS(current_level_width) << 4) - 32
-            p.camera_x = p.x - 128
-            spawn_from_right = false
+    
+    if spawn_from_right
+        p.x = (SS(current_level_width) << 4) - 32
+        p.camera_x = p.x - 128
+        spawn_from_right = false
 
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     
@@ -467,6 +468,8 @@ fn check_cheats()
                 
                 p.level_index = current_level_index
                 player_prepare_level_transition()
+                p.x = PLAYER_INITIAL_X
+                p.y = SSF(PLAYER_INITIAL_Y)
                 p.camera_x = 0
                 goto mode play_level(current_level_index)
                 : preserves /game
@@ -480,6 +483,8 @@ fn check_cheats()
                 
                 p.level_index = current_level_index
                 player_prepare_level_transition()
+                spawn_from_right = true
+                p.y = SSF(PLAYER_INITIAL_Y)
                 p.camera_x = 0
                 goto mode play_level(current_level_index)
                 : preserves /game

@@ -128,17 +128,14 @@ fn load_level(CCC/levels level)
 
     // Palette:
     load_palette(read CCC/palettes(level))
-    // Sprite Palette 2 and 3 -> ALL WHITE for hit flash
-    palette[18] = $30
-    palette[19] = $30
-    palette[20] = $30
+    // Sprite Palette 2 -> RED (for healing flash)
+    palette[18] = $15 // Dark red
+    palette[19] = $06 // Medium red
+    palette[20] = $26 // Light red
+    // Sprite Palette 3 -> WHITE (for highlights/flicker)
     palette[21] = $30
     palette[22] = $30
     palette[23] = $30
-    // Sprite Palette 2 -> RED (for healing flash)
-    palette[25] = $15 // Dark red
-    palette[26] = $06 // Medium red
-    palette[27] = $26 // Light red
     ppu_upload_palette()
 
 
