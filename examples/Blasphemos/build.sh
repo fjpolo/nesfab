@@ -1,2 +1,2 @@
-# !/bin/bash
-clear; nesfab LuciYFer.cfg
+#!/bin/bash
+clear; ../../nesfab BlasNESmous.cfg
