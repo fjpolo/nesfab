@@ -1,107 +1,117 @@
--- hitbox.lua for Mesen
--- Listens to memory writes on 0x00FE to receive hitbox coordinates
+-- hitbox.lua for Mesen (Updated for $4018 protocol)
+-- Shows hitboxes for player, sword, and enemies
+-- Listens to memory writes on 0x4018
 
 local hitbox_data = {}
-local data_index = 1
+local current_packet = nil
+local PACKET_SIZE = 120
+local data_index = 0
+local header_window = {0,0,0,0}
 
-function process_hitboxes()
-    -- Ensure we have exactly 28 bytes
-    if #hitbox_data ~= 28 then return end
+local function to_signed(lo, hi)
+    if not lo or not hi then return 0 end
+    local val = lo | (hi << 8)
+    if val >= 0x8000 then val = val - 0x10000 end
+    return val
+end
 
-    local px_lo = hitbox_data[1]
-    local px_hi = hitbox_data[2]
-    local py_lo = hitbox_data[3]
-    local py_hi = hitbox_data[4]
-    local pw_lo = hitbox_data[5]
-    local pw_hi = hitbox_data[6]
-    local ph_lo = hitbox_data[7]
-    local ph_hi = hitbox_data[8]
+function draw_hitbox(x, y, w, h, color)
+    if x + w < 0 or x > 256 or y + h < 0 or y > 240 then return end
+    emu.drawRectangle(x, y, w, h, color, false)
+end
 
-    local wx_lo = hitbox_data[9]
-    local wx_hi = hitbox_data[10]
-    local wy_lo = hitbox_data[11]
-    local wy_hi = hitbox_data[12]
-    local ww_lo = hitbox_data[13]
-    local ww_hi = hitbox_data[14]
-    local wh_lo = hitbox_data[15]
-    local wh_hi = hitbox_data[16]
-
-    local warden_active = hitbox_data[17]
-
-    local cam_x_lo = hitbox_data[18]
-    local cam_x_hi = hitbox_data[19]
+function process_packet()
+    if not current_packet then return end
+    local d = current_packet
     
-    local sx_lo = hitbox_data[20]
-    local sx_hi = hitbox_data[21]
-    local sy_lo = hitbox_data[22]
-    local sy_hi = hitbox_data[23]
-    local sw_lo = hitbox_data[24]
-    local sw_hi = hitbox_data[25]
-    local sh_lo = hitbox_data[26]
-    local sh_hi = hitbox_data[27]
+    -- Offsets based on main.fab export_hitboxes()
+    -- Header: 1-4
+    local px = to_signed(d[5], d[6])
+    local py = to_signed(d[7], d[8])
+    local pw = to_signed(d[9], d[10])
+    local ph = to_signed(d[11], d[12])
     
-    local sword_active = hitbox_data[28]
-
-    -- Convert to 16-bit signed integers
-    local function to_signed(lo, hi)
-        local val = lo | (hi << 8)
-        if val >= 0x8000 then val = val - 0x10000 end
-        return val
-    end
-
-    local px = to_signed(px_lo, px_hi)
-    local py = to_signed(py_lo, py_hi)
-    local pw = to_signed(pw_lo, pw_hi)
-    local ph = to_signed(ph_lo, ph_hi)
+    local wx = to_signed(d[13], d[14])
+    local wy = to_signed(d[15], d[16])
+    local ww = to_signed(d[17], d[18])
+    local wh = to_signed(d[19], d[20])
+    local warden_active = d[21]
     
-    local wx = to_signed(wx_lo, wx_hi)
-    local wy = to_signed(wy_lo, wy_hi)
-    local ww = to_signed(ww_lo, ww_hi)
-    local wh = to_signed(wh_lo, wh_hi)
+    local cam_x = to_signed(d[22], d[23])
     
-    local sx = to_signed(sx_lo, sx_hi)
-    local sy = to_signed(sy_lo, sy_hi)
-    local sw = to_signed(sw_lo, sw_hi)
-    local sh = to_signed(sh_lo, sh_hi)
-
-    local cam_x = to_signed(cam_x_lo, cam_x_hi)
-
-    -- Draw Player Hitbox (always drawn)
-    local p_screen_x = px - cam_x
-    local p_screen_y = py
-    emu.drawRectangle(p_screen_x, p_screen_y, pw, ph, 0x00FF00, false)
-
-    -- Draw Sword Hitbox (if active)
+    local sx = to_signed(d[24], d[25])
+    local sy = to_signed(d[26], d[27])
+    local sw = to_signed(d[28], d[29])
+    local sh = to_signed(d[30], d[31])
+    local sword_active = d[32]
+    
+    -- Draw Player
+    draw_hitbox(px - cam_x, py, pw, ph, 0x00FF00)
+    
+    -- Draw Sword
     if sword_active ~= 0 then
-        local s_screen_x = sx - cam_x
-        local s_screen_y = sy
-        emu.drawRectangle(s_screen_x, s_screen_y, sw, sh, 0x00A0FF, false)
+        draw_hitbox(sx - cam_x, sy, sw, sh, 0x00FFFF)
     end
-
-    -- Draw Warden Hitbox (if active)
+    
+    -- Draw Warden (Boss)
     if warden_active ~= 0 then
-        local w_screen_x = wx - cam_x
-        local w_screen_y = wy
-        -- Only draw if partially visible
-        if w_screen_x + ww >= 0 and w_screen_x < 256 then
-            emu.drawRectangle(w_screen_x, w_screen_y, ww, wh, 0xFF0000, false)
+        draw_hitbox(wx - cam_x, wy, ww, wh, 0xFF0000)
+    end
+    
+    -- Draw Enraged Pilgrims
+    local pilgrim_num = d[34] or 0
+    for i = 0, 7 do
+        if i < pilgrim_num then
+            local b = 35 + (i * 5)
+            local ex = to_signed(d[b], d[b+1])
+            local ey = to_signed(d[b+2], d[b+3])
+            -- Enraged Pilgrims have a fixed 16x16 body hitbox in the engine
+            draw_hitbox(ex - cam_x, ey - 16, 16, 16, 0xFFA500)
+        end
+    end
+    
+    -- Draw Wheelbrokens
+    local wheel_num = d[75] or 0
+    for i = 0, 7 do
+        if i < wheel_num then
+            local b = 76 + (i * 5)
+            local ex = to_signed(d[b], d[b+1])
+            local ey = to_signed(d[b+2], d[b+3])
+            -- Wheelbrokens also have a fixed hitbox
+            draw_hitbox(ex - cam_x, ey - 16, 16, 16, 0xFFFF00)
         end
     end
 end
 
--- Intercept CPU writes to our designated hook address
-function on_hitbox_write(address, value)
-    hitbox_data[data_index] = value
-    data_index = data_index + 1
+function on_write(address, value)
+    header_window[1] = header_window[2]
+    header_window[2] = header_window[3]
+    header_window[3] = header_window[4]
+    header_window[4] = value
     
-    -- Once 28 bytes are written, process and draw!
-    if data_index > 28 then
-        process_hitboxes()
-        data_index = 1
+    if header_window[1] == 0x77 and header_window[2] == 0x88 and header_window[3] == 0x99 and header_window[4] == 0xAA then
+        hitbox_data = { 0x77, 0x88, 0x99, 0xAA }
+        data_index = 5
+        return
+    end
+    
+    if data_index > 0 then
+        hitbox_data[data_index] = value
+        data_index = data_index + 1
+        if data_index > PACKET_SIZE then
+            current_packet = {}
+            for i=1, PACKET_SIZE do current_packet[i] = hitbox_data[i] end
+            data_index = 0
+            -- We can process immediately or wait for on_frame
+        end
     end
 end
 
--- Register the callback
-emu.addMemoryCallback(on_hitbox_write, emu.callbackType.write, 0x00FE)
+function on_frame()
+    process_packet()
+end
 
-emu.log("Hitbox script loaded! Waiting for game data...")
+emu.addMemoryCallback(on_write, emu.callbackType.write, 0x4018)
+emu.addEventCallback(on_frame, emu.eventType.endFrame)
+
+emu.log("Hitbox script v3.0 ($4018) loaded.")

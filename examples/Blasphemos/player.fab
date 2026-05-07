@@ -43,7 +43,7 @@ ct Int ph = 30 // Collision height
 ct Int rw = pw - 1
 ct Int rh = ph - 1
 
-ct Int PLAYER_INITIAL_ATTACK_POWER = 10
+ct Int PLAYER_INITIAL_ATTACK_POWER = 8
 ct Int PLAYER_PARRY_BOSS_PUSH = 24
 
 ct Int PLAYER_MAX_HEALTH = 70
@@ -90,8 +90,8 @@ vars /game
     Bool player_sword_active = false
     SS player_sword_x = 0
     SS player_sword_y = 0
-    SS player_sword_w = 32
-    SS player_sword_h = 32
+    SS player_sword_w = 16
+    SS player_sword_h = 29
 
 // Sprites and animations
 data /sprites
@@ -574,7 +574,7 @@ fn update_player()
     // Update sword hitbox
     if p.movement == PLAYER_MOVING_ATTACK
         player_sword_active = true
-        player_sword_y = SS(p.y) + 4
+        player_sword_y = SS(p.y) - 2
         if p.facing_left
             player_sword_x = p.hitbox_center_x - 32
         else

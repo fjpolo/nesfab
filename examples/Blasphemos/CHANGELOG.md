@@ -43,6 +43,42 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.759
+- "Improve" level0 tiles
+
+
+## [07.05.2026] - v0.0.1.759
+- "Improve" level0 tiles
+
+
+## [07.05.2026] - v0.0.1.759
+- "Improve" level0 tiles
+
+
+## [07.05.2026] - v0.0.1.759
+- "Improve" level0 tiles
+
+
+## [07.05.2026] - v0.0.1.759
+- "Improve" level0 tiles
+
+
+## [07.05.2026] - v0.0.1.759
+- "Improve" level0 tiles
+
+
+## [07.05.2026] - v0.0.1.759
+- "Improve" level0 tiles
+
+
+## [07.05.2026] - v0.0.1.759
+- "Improve" level0 tiles
+
+
+## [07.05.2026] - v0.0.1.759
+- "Improve" level0 tiles
+
+
 ## [07.05.2026] - v0.0.1.758
 - Add sprite count debug script and update screens
 
