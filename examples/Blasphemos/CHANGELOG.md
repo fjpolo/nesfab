@@ -43,6 +43,42 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.764
+- - Add Attack Power in HUD
+
+- Add bones collected in HUD
+
+
+## [07.05.2026] - v0.0.1.764
+- - Add Attack Power in HUD
+
+- Add bones collected in HUD
+
+
+## [07.05.2026] - v0.0.1.764
+- - Add Attack Power in HUD
+
+- Add bones collected in HUD
+
+
+## [07.05.2026] - v0.0.1.764
+- - Add Attack Power in HUD
+
+- Add bones collected in HUD
+
+
+## [07.05.2026] - v0.0.1.764
+- - Add Attack Power in HUD
+
+- Add bones collected in HUD
+
+
+## [07.05.2026] - v0.0.1.764
+- - Add Attack Power in HUD
+
+- Add bones collected in HUD
+
+
 ## [07.05.2026] - v0.0.1.763
 - Do some more art
 
