@@ -6,7 +6,8 @@
 
 ct U chr_#name#_index = _index
 
-chrrom (_index * $2000)
-    file(fmt, #"path"#)
-chrrom (_index * $2000 + $1000)
-    file(fmt, "assets/sprite.png")
+data /chr_data
+    [] chr_#name#_data
+        file(fmt, #"path"#)
+        file(fmt, "assets/sprite.png")
+

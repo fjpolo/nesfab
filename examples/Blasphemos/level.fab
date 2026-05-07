@@ -105,15 +105,17 @@ fn load_metatiles(CC/metatiles mt)
     mt += size
     mt_ca = mt
 
-// Helper function to switch the entire 8KB CHR bank using MMC3
-fn select_chr_8kb(U bank)
-    U base = bank << 3
-    mmc3_select(0, base)     // 2KB at $0000
-    mmc3_select(1, base + 2) // 2KB at $0800
-    mmc3_select(2, base + 4) // 1KB at $1000
-    mmc3_select(3, base + 5) // 1KB at $1400
-    mmc3_select(4, base + 6) // 1KB at $1800
-    mmc3_select(5, base + 7) // 1KB at $1C00
+// Helper function to upload 8KB of CHR data to PPU VRAM (CHR RAM)
+fn upload_chr(CCC/chr_data ptr)
+    CCC/chr_data p = ptr
+    {PPUSTATUS}()
+    {PPUADDR}(0)
+    {PPUADDR}(0)
+    for UU i = 0; i < 8192; i += 1
+        {PPUDATA}(read U(p))
+        p += 1
+
+
 
 fn disable_nmi()
     
@@ -123,8 +125,8 @@ fn load_level(CCC/levels level)
         destroyed[U(i)] = 0
     
     // CHR:
-    U chr_bank = read U(level)
-    select_chr_8kb(chr_bank)
+    CCC/chr_data chr_ptr = read CCC/chr_data(level)
+    upload_chr(chr_ptr)
 
     // Palette:
     load_palette(read CCC/palettes(level))
@@ -244,9 +246,9 @@ fn load_level(CCC/levels level)
 
     load_level_counter += 1
 
-fn load_chrrom_bank(CCC/levels level, U bank)
+fn load_chr_data(CCC/levels level, CCC/chr_data ptr)
     // CHR:
-    select_chr_8kb(bank)
+    upload_chr(ptr)
 
     // Palette:
     // load_palette(read CCC/palettes(level))
