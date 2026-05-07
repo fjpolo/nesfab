@@ -43,6 +43,38 @@
 
 # Changes
 
+## [07.05.2026] - v773
+- Refactored level numbering, fixed Warden death logic, and automated BlasNESmous versioning.
+
+
+## [07.05.2026] - v773
+- Refactored level numbering, fixed Warden death logic, and automated BlasNESmous versioning.
+
+
+## [07.05.2026] - v773
+- Refactored level numbering, fixed Warden death logic, and automated BlasNESmous versioning.
+
+
+## [07.05.2026] - v773
+- Refactored level numbering, fixed Warden death logic, and automated BlasNESmous versioning.
+
+
+## [07.05.2026] - v773
+- Refactored level numbering, fixed Warden death logic, and automated BlasNESmous versioning.
+
+
+## [07.05.2026] - v773
+- Refactored level numbering, fixed Warden death logic, and automated BlasNESmous versioning.
+
+
+## [07.05.2026] - v773
+- Refactored level numbering, fixed Warden death logic, and automated BlasNESmous versioning.
+
+
+## [07.05.2026] - v773
+- Refactored level numbering, fixed Warden death logic, and automated BlasNESmous versioning.
+
+
 ## [07.05.2026] - v772
 - Fix enemy placement
 

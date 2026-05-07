@@ -171,7 +171,7 @@ mode play_level(U level_index)
         fps_ticks += 1
         update_pads()
         check_pause()
-        // export_hitboxes()
+        export_hitboxes()
         if !is_game_paused
             update_player()
             level_update()
@@ -263,7 +263,8 @@ fn export_hitboxes()
                 {HITBOX_EXPORT_ADDR}(0)
     
     // Padding to reach 120 bytes exactly (115 + 5)
-    for U i = 0; i < 5; i += 1
+    {HITBOX_EXPORT_ADDR}(game_mode)
+    for U i = 0; i < 4; i += 1
         {HITBOX_EXPORT_ADDR}(0)
 
 fn draw_enemies(U o) U

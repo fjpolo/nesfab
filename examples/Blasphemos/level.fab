@@ -216,6 +216,14 @@ fn load_level(CCC/levels level)
         level2_init()
     else if current_level_index == 4
         level4_init()
+
+    if game_mode == GAME_MODE_KONAMI
+        for U i = 0; i < enraged_pilgrims_num; i += 1
+            enraged_pilgrims[i].health = 60
+        for U i = 0; i < wheelbrokens_num; i += 1
+            wheelbrokens[i].health = 80
+        if current_level_index == 1
+            warden_health = 255 // Double Warden health (capped at 255)
     
     switch current_level_index
         case 3

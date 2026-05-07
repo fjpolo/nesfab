@@ -1,4 +1,4 @@
--- enemy_debug.lua v2.2 (Port $4018)
+-- enemy_debug.lua v2.3 (Port $4018)
 -- Shows health bars for on-screen enemies
 -- Listens to memory writes on 0x4018
 
@@ -20,14 +20,24 @@ end
 local function draw_health_bar(x, y, w, current, max_val, color)
     if not current or current <= 0 then return end
     if x + w < 0 or x > 256 or y < -20 or y > 240 then return end
+    
     local bar_h, bar_w = 4, w
     local fill_w = math.floor((current / max_val) * bar_w)
     if fill_w > bar_w then fill_w = bar_w end
     if fill_w < 0 then fill_w = 0 end
-    emu.drawRectangle(x, y, bar_w, bar_h, 0x333333, true)
-    if fill_w > 0 then emu.drawRectangle(x, y, fill_w, bar_h, color, true) end
-    emu.drawRectangle(x, y, bar_w, bar_h, 0xFFFFFF, false)
-    emu.drawString(x, y - 10, "HP:" .. current, 0xFFFFFF, 0x000000)
+    
+    -- Background
+    emu.drawRectangle(x, y, bar_w, bar_h, 0x000000, true, 1)
+    -- Fill
+    if fill_w > 0 then 
+        emu.drawRectangle(x, y, fill_w, bar_h, color, true, 1) 
+    end
+    -- Border
+    emu.drawRectangle(x, y, bar_w, bar_h, 0xFFFFFF, false, 1)
+    
+    -- Label
+    local text = "HP:" .. current
+    emu.drawString(x, y - 8, text, 0xFFFFFF, 0x000000)
 end
 
 function on_debug_write(address, value)
@@ -61,25 +71,45 @@ function on_frame()
     if current_frame_data then
         local d = current_frame_data
         local cam_x = to_signed(d[22], d[23])
+        
+        local is_konami = d[116] == 1 -- GAME_MODE_KONAMI
+        
+        -- Warden (Warden health at d[33])
         local warden_active = d[21]
         if warden_active ~= 0 then
             local wx = to_signed(d[13], d[14])
             local wy = to_signed(d[15], d[16])
             local ww = to_signed(d[17], d[18])
-            draw_health_bar(wx - cam_x + (ww/2) - 16, wy - 12, 32, d[33], 140, 0xFF0000)
+            local max_hp = 140
+            if is_konami then max_hp = 255 end
+            draw_health_bar(wx - cam_x + (ww/2) - 16, wy - 12, 32, d[33], max_hp, 0xFF0000)
         end
+        
+        -- Enraged Pilgrims (Max 8, starts at d[35], count at d[34])
         local p_num = d[34] or 0
         for i = 0, 7 do
             if i < p_num then
                 local b = 35 + (i * 5)
-                draw_health_bar(to_signed(d[b], d[b+1]) - cam_x - 12, to_signed(d[b+2], d[b+3]) - 36, 24, d[b+4], 30, 0xFFA500)
+                local ex = to_signed(d[b], d[b+1])
+                local ey = to_signed(d[b+2], d[b+3])
+                local hp = d[b+4]
+                local max_hp = 30
+                if is_konami then max_hp = 60 end
+                draw_health_bar(ex - cam_x - 12, ey - 36, 24, hp, max_hp, 0xFFA500)
             end
         end
+        
+        -- Wheelbrokens (Max 8, starts at d[76], count at d[75])
         local w_num = d[75] or 0
         for i = 0, 7 do
             if i < w_num then
                 local b = 76 + (i * 5)
-                draw_health_bar(to_signed(d[b], d[b+1]) - cam_x - 12, to_signed(d[b+2], d[b+3]) - 36, 24, d[b+4], 40, 0xFFFF00)
+                local ex = to_signed(d[b], d[b+1])
+                local ey = to_signed(d[b+2], d[b+3])
+                local hp = d[b+4]
+                local max_hp = 40
+                if is_konami then max_hp = 80 end
+                draw_health_bar(ex - cam_x - 12, ey - 36, 24, hp, max_hp, 0xFFFF00)
             end
         end
     end
@@ -90,10 +120,12 @@ function on_frame()
         local h_str = ""
         for i=1,4 do h_str = h_str .. string.format("%02X ", header_window[i]) end
         emu.drawString(8, 20, "Hdr: " .. h_str, 0xFFFFFF, 0x000000)
+    else
+        emu.drawString(8, 8, "DEBUG DATA ACTIVE", 0x00FF00, 0x000000)
     end
 end
 
 local writeCallbackType = (emu.callbackType and emu.callbackType.write) or (emu.memCallbackType and emu.memCallbackType.cpuWrite) or 1
 emu.addMemoryCallback(on_debug_write, writeCallbackType, 0x4018)
 emu.addEventCallback(on_frame, emu.eventType.endFrame)
-emu.log("Enemy Debug script v2.2 (Port $4018) Loaded.")
+emu.log("Enemy Debug script v2.3 (Port $4018) Loaded.")
