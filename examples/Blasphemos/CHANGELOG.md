@@ -43,6 +43,10 @@
 
 # Changes
 
+## [07.05.2026] - v771
+- Rename Blasphemous to BlasNESmous in title screen
+
+
 ## [07.05.2026] - v770
 - - Stop shaking after Warden is defeated
 
