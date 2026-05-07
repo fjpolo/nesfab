@@ -43,6 +43,14 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.762
+- IMprove levels 1 and 2
+
+
+## [07.05.2026] - v0.0.1.762
+- IMprove levels 1 and 2
+
+
 ## [07.05.2026] - v0.0.1.761
 - Add some trees xD
 
