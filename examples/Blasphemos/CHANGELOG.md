@@ -43,6 +43,70 @@
 
 # Changes
 
+## [07.05.2026] - v768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
+## [07.05.2026] - v0.0.1.768
+- Update Player Sprite palette for details
+
+
 ## [07.05.2026] - v0.0.1.767
 - I just discovered I can add more palettes in MapFab :D
 

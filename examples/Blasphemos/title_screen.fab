@@ -1,4 +1,4 @@
-// Story screen cons
+// Title screen cons
 ct U WRITING_DONE  = 0
 ct U WRITING_WAIT  = 1
 ct U WRITING_READY = 2
@@ -16,14 +16,14 @@ charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abc
 data /strings
     [] story_string
         (
-            `Blasphemous v0.0.1.767\n`
+            `Blasphemous v768\n`
             `\n`
             `PRESS START TO PLAY\n`
         )
 
-mode story_screen(U level_index)
+mode title_screen(U level_index)
 : nmi game_nmi
-    current_level_index = LAST_LEVEL_INDEX + 2
+    current_level_index = 0
 
     // Prepare the decompressor
     decompress_string_init(@story_string)
@@ -54,12 +54,6 @@ mode story_screen(U level_index)
         nmi
         nmi
         nmi
-
-        if is_select_pressed
-            game_state = GAME_STATE_TIPS
-            current_level_index = LAST_LEVEL_INDEX + 3
-            goto mode tips_screen(current_level_index)
-            : preserves /game
 
         if is_start_pressed
             game_state = GAME_STATE_PLAY

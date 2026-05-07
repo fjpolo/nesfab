@@ -50,7 +50,7 @@ def update_changelog(version, message):
 
 def main():
     commit_count = get_git_commit_count()
-    version_string = f"v0.0.1.{commit_count}"
+    version_string = f"v{commit_count}"
     
     with open("VERSION", "w", encoding='utf-8') as f:
         f.write(version_string)
@@ -65,7 +65,7 @@ def main():
 
     update_changelog(version_string, commit_message)
 
-    files_to_update = ["story_screen.fab", "start_screen.fab"]
+    files_to_update = ["title_screen.fab"]
     
     for filename in files_to_update:
         if os.path.exists(filename):
