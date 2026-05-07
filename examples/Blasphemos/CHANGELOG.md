@@ -43,6 +43,10 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.767
+- I just discovered I can add more palettes in MapFab :D
+
+
 ## [07.05.2026] - v0.0.1.766
 - Fix sword hitbox when facing left
 
