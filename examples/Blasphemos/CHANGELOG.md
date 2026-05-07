@@ -43,6 +43,14 @@
 
 # Changes
 
+## [07.05.2026] - v770
+- - Stop shaking after Warden is defeated
+
+- Add arrow when Warden is defeated
+- Rename level fab files
+- Improve title_screen
+
+
 ## [07.05.2026] - v769
 - - Clean up a bit
 
