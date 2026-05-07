@@ -707,6 +707,31 @@ fn handle_input()
         p.is_invincible = !p.is_invincible
         cheat_shake_timer = 20
 
+    // Ladder detection
+    U center_tile = collision_at(UU(p.center_x), UU(p.center_y))
+    U top_tile = collision_at(UU(p.center_x), UU(SS(p.y)))
+    U bottom_tile = collision_at(UU(p.center_x), UU(SS(p.y) + p.h))
+    U feet_tile = collision_at(UU(p.center_x), UU(SS(p.y) + p.h + 2))
+
+    // Try to grab ladder
+    if p.movement != PLAYER_MOVING_CLIMB
+        Bool grab_ladder = false
+        if pads[0].held & BUTTON_UP
+            if center_tile == C_LADDER
+                grab_ladder = true
+        else if pads[0].held & BUTTON_DOWN
+            if center_tile == C_LADDER || feet_tile == C_LADDER
+                grab_ladder = true
+                p.y += SSF(4) // Move into the ladder tile if grabbing down
+
+        if grab_ladder
+            p.movement = PLAYER_MOVING_CLIMB
+            p.x = p.center_x & -16 // Snap to ladder grid
+            p.yspeed = 0
+            p.anim_state = make_anim_state(@penitent_animation_standing)
+            return
+    
+
     // Parry activation
     if (pads[0].pressed & BUTTON_UP) && p.parry_cooldown == 0 && is_on_ground()
         p.movement = PLAYER_MOVING_PARRY
@@ -754,63 +779,52 @@ fn handle_input()
     if pads[0].held & BUTTON_SELECT
         speed = PLAYER_SPEED_RUN
 
-    Bool climbing = false
-    if collision_at(UU(p.center_x), UU(p.center_y)) == C_LADDER
+    if p.movement == PLAYER_MOVING_CLIMB
         if pads[0].held & BUTTON_UP
             p.y -= SSF(PLAYER_SPEED_CLIMB)
-            climbing = true
-        else if (pads[0].held & BUTTON_DOWN) && !is_on_ground()
+        else if pads[0].held & BUTTON_DOWN
             p.y += SSF(PLAYER_SPEED_CLIMB)
-            climbing = true
-
-        if climbing || p.movement == PLAYER_MOVING_CLIMB
-            if p.movement != PLAYER_MOVING_CLIMB
-                p.movement = PLAYER_MOVING_CLIMB
-                p.yspeed = 0
-                p.anim_state = make_anim_state(@penitent_animation_standing)
-            
-            if pads[0].pressed & BUTTON_A
-                p.movement = PLAYER_MOVING_JUMP
-                p.yspeed = JUMP_SPEED
-                if p.facing_left
-                    p.anim_state = make_anim_state(@penitent_animation_jump_left)
-                else
-                    p.anim_state = make_anim_state(@penitent_animation_jump)
-            else if pads[0].pressed & BUTTON_B
-                p.movement = PLAYER_MOVING_JUMP
-                p.yspeed = 0
-                if p.facing_left
-                    p.anim_state = make_anim_state(@penitent_animation_jump_left)
-                else
-                    p.anim_state = make_anim_state(@penitent_animation_jump)
-                return
-    else
-        if p.movement == PLAYER_MOVING_CLIMB
+            if is_on_ground()
+                p.movement = PLAYER_MOVING_REST
+        
+        // Jump off
+        if pads[0].pressed & BUTTON_A
             p.movement = PLAYER_MOVING_JUMP
-            p.yspeed = 0
+            p.yspeed = JUMP_SPEED
             if p.facing_left
                 p.anim_state = make_anim_state(@penitent_animation_jump_left)
             else
                 p.anim_state = make_anim_state(@penitent_animation_jump)
+        
+        // Exit ladder if no longer overlapping
+        if center_tile != C_LADDER && top_tile != C_LADDER && bottom_tile != C_LADDER
+            p.movement = PLAYER_MOVING_JUMP
+            p.yspeed = 0
 
-    if pads[0].held & BUTTON_LEFT
-        p.x -= speed
-        if !p.facing_left || p.movement != PLAYER_MOVING_LEFT
+        // Limited horizontal movement on ladder
+        if pads[0].held & BUTTON_LEFT
+            p.x -= 1
             p.facing_left = true
-            if p.movement != PLAYER_MOVING_CLIMB
+        else if pads[0].held & BUTTON_RIGHT
+            p.x += 1
+            p.facing_left = false
+
+    if p.movement != PLAYER_MOVING_CLIMB
+        if pads[0].held & BUTTON_LEFT
+            p.x -= speed
+            if !p.facing_left || p.movement != PLAYER_MOVING_LEFT
+                p.facing_left = true
                 p.movement = PLAYER_MOVING_LEFT
                 p.anim_state = make_anim_state(@penitent_animation_walk_left)
-    else if pads[0].held & BUTTON_RIGHT
-        p.x += speed
-        if p.facing_left || p.movement != PLAYER_MOVING_RIGHT
-            p.facing_left = false
-            if p.movement != PLAYER_MOVING_CLIMB
+        else if pads[0].held & BUTTON_RIGHT
+            p.x += speed
+            if p.facing_left || p.movement != PLAYER_MOVING_RIGHT
+                p.facing_left = false
                 p.movement = PLAYER_MOVING_RIGHT
                 p.anim_state = make_anim_state(@penitent_animation_walk)
-    else
-        // Not moving horizontally
-        if p.movement != PLAYER_MOVING_REST
-            if p.movement != PLAYER_MOVING_CLIMB
+        else
+            // Not moving horizontally
+            if p.movement != PLAYER_MOVING_REST
                 p.movement = PLAYER_MOVING_REST
                 if p.facing_left
                     p.anim_state = make_anim_state(@penitent_animation_standing_left)

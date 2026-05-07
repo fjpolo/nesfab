@@ -43,6 +43,34 @@
 
 # Changes
 
+## [07.05.2026] - v775
+- Fix broken collision
+
+
+## [07.05.2026] - v775
+- Fix broken collision
+
+
+## [07.05.2026] - v775
+- Fix broken collision
+
+
+## [07.05.2026] - v775
+- Fix broken collision
+
+
+## [07.05.2026] - v775
+- Fix broken collision
+
+
+## [07.05.2026] - v775
+- Fix broken collision
+
+
+## [07.05.2026] - v775
+- Fix broken collision
+
+
 ## [07.05.2026] - v774
 - Implemented Konami mode health doubling, restored and improved enemy health debug bars.
 
