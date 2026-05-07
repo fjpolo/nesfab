@@ -43,6 +43,46 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
+## [07.05.2026] - v0.0.1.758
+- Add sprite count debug script and update screens
+
+
 ## [07.05.2026] - v0.0.1.757
 - Fix one pitfall
 
