@@ -43,6 +43,30 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.757
+- Fix one pitfall
+
+
+## [07.05.2026] - v0.0.1.757
+- Fix one pitfall
+
+
+## [07.05.2026] - v0.0.1.757
+- Fix one pitfall
+
+
+## [07.05.2026] - v0.0.1.757
+- Fix one pitfall
+
+
+## [07.05.2026] - v0.0.1.757
+- Fix one pitfall
+
+
+## [06.05.2026] - v0.0.1.757
+- Fix one pitfall
+
+
 ## [06.05.2026] - v0.0.1.755
 - Implement persistent Warden boss death
 
