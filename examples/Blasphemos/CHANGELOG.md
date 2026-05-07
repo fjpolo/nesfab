@@ -43,6 +43,18 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.764
+- Move to CHR RAM
+
+
+## [07.05.2026] - v0.0.1.764
+- Move to CHR RAM
+
+
+## [07.05.2026] - v0.0.1.764
+- Move to CHR RAM
+
+
 ## [07.05.2026] - v0.0.1.763
 - Do some more art
 
