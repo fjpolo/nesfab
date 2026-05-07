@@ -43,6 +43,54 @@
 
 # Changes
 
+## [07.05.2026] - v769
+- - Clean up a bit
+
+- Add title screen
+
+
+## [07.05.2026] - v769
+- - Clean up a bit
+
+- Add title screen
+
+
+## [07.05.2026] - v769
+- - Clean up a bit
+
+- Add title screen
+
+
+## [07.05.2026] - v769
+- - Clean up a bit
+
+- Add title screen
+
+
+## [07.05.2026] - v769
+- - Clean up a bit
+
+- Add title screen
+
+
+## [07.05.2026] - v769
+- - Clean up a bit
+
+- Add title screen
+
+
+## [07.05.2026] - v769
+- - Clean up a bit
+
+- Add title screen
+
+
+## [07.05.2026] - v769
+- - Clean up a bit
+
+- Add title screen
+
+
 ## [07.05.2026] - v768
 - Update Player Sprite palette for details
 

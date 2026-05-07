@@ -210,21 +210,21 @@ fn load_level(CCC/levels level)
     if !show_key[current_level_index]
         if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
             destroy(key_x[current_level_index], key_y[current_level_index])
-    if current_level_index == 0
-        level0_init()
-    else if current_level_index == 1
+    if current_level_index == 1
         level1_init()
-    else if current_level_index == 3
-        level3_init()
+    else if current_level_index == 2
+        level2_init()
+    else if current_level_index == 4
+        level4_init()
     
     switch current_level_index
-        case 2
+        case 3
             if keys[current_level_index]
                 // remove door
-                if collision_at(LEVEL_2_DOOR_0_X, LEVEL_2_DOOR_0_Y) == C_JAIL
-                    destroy(LEVEL_2_DOOR_0_X, LEVEL_2_DOOR_0_Y)
-                if collision_at(LEVEL_2_DOOR_1_X, LEVEL_2_DOOR_1_Y) == C_JAIL
-                    destroy(LEVEL_2_DOOR_1_X, LEVEL_2_DOOR_1_Y)
+                if collision_at(LEVEL_3_DOOR_0_X, LEVEL_3_DOOR_0_Y) == C_JAIL
+                    destroy(LEVEL_3_DOOR_0_X, LEVEL_3_DOOR_0_Y)
+                if collision_at(LEVEL_3_DOOR_1_X, LEVEL_3_DOOR_1_Y) == C_JAIL
+                    destroy(LEVEL_3_DOOR_1_X, LEVEL_3_DOOR_1_Y)
         break
 
     // Set the scroll off-screen, then run the scroll code several times
@@ -312,20 +312,20 @@ fn door_collision_at(UU level_index, UU pixel_x, UU pixel_y) Bool
         return false
 
 fn level_update()
-    if current_level_index == 0
-        level0_main()
-    else if current_level_index == 1
+    if current_level_index == 1
         level1_main()
-    else if current_level_index == 3
-        level3_main()
+    else if current_level_index == 2
+        level2_main()
+    else if current_level_index == 4
+        level4_main()
 
 fn level_draw_sprites(U o) U
-    if current_level_index == 0
-        o = draw_warden_sprites(o)
-    else if current_level_index == 1
+    if current_level_index == 1
         o = draw_level1_sprites(o)
-    else if current_level_index == 3
-        o = draw_level3_sprites(o)
+    else if current_level_index == 2
+        o = draw_level2_sprites(o)
+    else if current_level_index == 4
+        o = draw_level4_sprites(o)
     
     // o = draw_item_bones(o) // Moved to main.fab for higher priority
     return o

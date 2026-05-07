@@ -49,6 +49,7 @@ vars /game
     U[16] dead_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
     U[16] dead_following_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
     Bool warden_defeated = false
+    Bool warden_arrow_dismissed = false
     U bile_vessel_hp = 18
     U fps_ticks = 0
     U fps_display = 60
@@ -411,6 +412,11 @@ fn update_sprites()
         o = level_draw_sprites(o)
 
 
+
+    // Draw Warden Defeated Arrow
+    if warden_defeated && !warden_arrow_dismissed && current_level_index == 1 && (frame_counter & 16)
+        set_oam(o, 240, 120, $3F, 0)
+        o += 4
 
     hide_oam(o)
 
