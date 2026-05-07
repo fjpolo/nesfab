@@ -72,8 +72,8 @@ def main():
             with open(filename, "r", encoding='utf-8') as f:
                 content = f.read()
                 
-            # Replace Blasphemous v... with Blasphemous version_string
-            new_content = re.sub(r'Blasphemous v[0-9\.]+', f'Blasphemous {version_string}', content)
+            # Replace Blas... v... with BlasNESmous version_string
+            new_content = re.sub(r'Blas(?:phe|NES)?mous v[0-9\.]+', f'BlasNESmous {version_string}', content, flags=re.IGNORECASE)
             
             if new_content != content:
                 with open(filename, "w", encoding='utf-8') as f:

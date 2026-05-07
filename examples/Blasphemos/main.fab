@@ -171,7 +171,7 @@ mode play_level(U level_index)
         fps_ticks += 1
         update_pads()
         check_pause()
-        export_hitboxes()
+        // export_hitboxes()
         if !is_game_paused
             update_player()
             level_update()

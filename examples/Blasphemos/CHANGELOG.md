@@ -43,6 +43,18 @@
 
 # Changes
 
+## [07.05.2026] - v772
+- Fix enemy placement
+
+
+## [07.05.2026] - v772
+- Fix enemy placement
+
+
+## [07.05.2026] - v772
+- Fix enemy placement
+
+
 ## [07.05.2026] - v771
 - Rename Blasphemous to BlasNESmous in title screen
 
