@@ -43,6 +43,10 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.760
+- Refine sword hitboxes and adjust player attack power
+
+
 ## [07.05.2026] - v0.0.1.759
 - "Improve" level0 tiles
 
