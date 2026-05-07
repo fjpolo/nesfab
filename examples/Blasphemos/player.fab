@@ -577,7 +577,7 @@ fn update_player()
         player_sword_active = true
         player_sword_y = SS(p.y) - 2
         if p.facing_left
-            player_sword_x = p.hitbox_center_x - 32
+            player_sword_x = p.hitbox_center_x - 24
         else
             player_sword_x = p.hitbox_center_x + 8
             

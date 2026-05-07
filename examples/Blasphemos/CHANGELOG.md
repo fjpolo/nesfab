@@ -43,6 +43,34 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.765
+- Fix Pilgrim's hitboxes
+
+
+## [07.05.2026] - v0.0.1.765
+- Fix Pilgrim's hitboxes
+
+
+## [07.05.2026] - v0.0.1.765
+- Fix Pilgrim's hitboxes
+
+
+## [07.05.2026] - v0.0.1.765
+- Fix Pilgrim's hitboxes
+
+
+## [07.05.2026] - v0.0.1.765
+- Fix Pilgrim's hitboxes
+
+
+## [07.05.2026] - v0.0.1.765
+- Fix Pilgrim's hitboxes
+
+
+## [07.05.2026] - v0.0.1.765
+- Fix Pilgrim's hitboxes
+
+
 ## [07.05.2026] - v0.0.1.764
 - - Add Attack Power in HUD
 
