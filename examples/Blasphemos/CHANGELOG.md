@@ -43,6 +43,10 @@
 
 # Changes
 
+## [07.05.2026] - v774
+- Implemented Konami mode health doubling, restored and improved enemy health debug bars.
+
+
 ## [07.05.2026] - v773
 - Refactored level numbering, fixed Warden death logic, and automated BlasNESmous versioning.
 
