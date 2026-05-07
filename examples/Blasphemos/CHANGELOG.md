@@ -43,6 +43,18 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.761
+- Add some trees xD
+
+
+## [07.05.2026] - v0.0.1.761
+- Add some trees xD
+
+
+## [07.05.2026] - v0.0.1.761
+- Add some trees xD
+
+
 ## [07.05.2026] - v0.0.1.760
 - Refine sword hitboxes and adjust player attack power
 
