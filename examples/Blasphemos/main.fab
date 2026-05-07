@@ -52,6 +52,10 @@ vars /game
     U[16] dead_following_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
     Bool warden_defeated = false
     U bile_vessel_hp = 18
+    U fps_ticks = 0
+    U fps_display = 60
+    U fps_timer = 0
+    U total_bones_collected = 0
 
 data /game
     [] konami_code
@@ -62,6 +66,12 @@ data /game
 // NMI
 nmi game_nmi()
     frame_counter = frame_counter + 1
+    fps_timer += 1
+    if fps_timer >= 60
+        fps_timer = 0
+        fps_display = fps_ticks
+        fps_ticks = 0
+
 
     if game_state == GAME_STATE_STORY || game_state == GAME_STATE_TIPS
         if ready && writing == WRITING_READY
@@ -169,6 +179,7 @@ mode play_level(U level_index)
     
     while true
         nmi
+        fps_ticks += 1
         update_pads()
         check_pause()
         // export_hitboxes()
@@ -318,6 +329,11 @@ fn draw_enemies(U o) U
 
     return o
 
+fn get_digit_tile(U digit) U
+    if digit >= 5
+        return $DB + digit - 5
+    return $CB + digit
+
 fn draw_player_secondary(U o, U attr_xor) U
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
         o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 1, attr_xor)
@@ -337,6 +353,45 @@ fn update_sprites()
         if p.current_bile_vessels > i
             set_oam(o, 8 + (i << 3), 16, $0B, 1)
             o += 4
+
+    // Draw Attack Power (Cycle to prevent 9th sprite dropout on Y=8)
+    U ap_tens = 0
+    U ap_ones = p.attack_power
+    while ap_ones >= 10
+        ap_ones -= 10
+        ap_tens += 1
+    
+    if (frame_counter & 1) == 0
+        set_oam(o, 232, 8, get_digit_tile(ap_tens), 0) 
+        o += 4
+        set_oam(o, 240, 8, get_digit_tile(ap_ones), 0)
+        o += 4
+    else
+        set_oam(o, 240, 8, get_digit_tile(ap_ones), 0)
+        o += 4
+        set_oam(o, 232, 8, get_digit_tile(ap_tens), 0) 
+        o += 4
+
+    // Draw Collected Bones (Cycle to prevent sprite dropout on Y=16)
+    U b_tens = 0
+    U b_ones = total_bones_collected
+    while b_ones >= 10
+        b_ones -= 10
+        b_tens += 1
+
+    if (frame_counter & 1) == 0
+        set_oam(o, 232, 16, get_digit_tile(b_tens), 1) // Using palette 1 (gold/red)
+        o += 4
+        set_oam(o, 240, 16, get_digit_tile(b_ones), 1)
+        o += 4
+    else
+        set_oam(o, 240, 16, get_digit_tile(b_ones), 1)
+        o += 4
+        set_oam(o, 232, 16, get_digit_tile(b_tens), 1) 
+        o += 4
+
+
+
 
     // Stage 1: Player Primary (Always Stable)
     U attr_xor = 0

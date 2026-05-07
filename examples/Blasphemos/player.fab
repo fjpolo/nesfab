@@ -46,7 +46,8 @@ ct Int rh = ph - 1
 ct Int PLAYER_INITIAL_ATTACK_POWER = 8
 ct Int PLAYER_PARRY_BOSS_PUSH = 24
 
-ct Int PLAYER_MAX_HEALTH = 70
+ct Int PLAYER_MAX_HEALTH = 50
+ct Int PLAYER_STARTING_BILE_VESSELS = 1
 ct Int PLATFORM_OFFSET = 13 // Pixels from top of tile to platform surface
 
 // Player data struct

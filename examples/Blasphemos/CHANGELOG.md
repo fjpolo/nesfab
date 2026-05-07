@@ -43,6 +43,30 @@
 
 # Changes
 
+## [07.05.2026] - v0.0.1.763
+- Do some more art
+
+
+## [07.05.2026] - v0.0.1.763
+- Do some more art
+
+
+## [07.05.2026] - v0.0.1.763
+- Do some more art
+
+
+## [07.05.2026] - v0.0.1.763
+- Do some more art
+
+
+## [07.05.2026] - v0.0.1.763
+- Do some more art
+
+
+## [07.05.2026] - v0.0.1.763
+- Do some more art
+
+
 ## [07.05.2026] - v0.0.1.762
 - IMprove levels 1 and 2
 

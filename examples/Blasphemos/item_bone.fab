@@ -32,6 +32,7 @@ fn item_bone_update(U ix) Bool
         if player_sword_x < (ex + 8) && (player_sword_x + player_sword_w) > (ex - 8)
             if player_sword_y < (ey) && (player_sword_y + player_sword_h) > (ey - 16)
                 item_bones[ix].collected = true
+                total_bones_collected += 1
                 U global_ix = (U(current_level_index) << 3) + ix
                 if global_ix < 64
                     item_bones_collected_flags[global_ix] = true
