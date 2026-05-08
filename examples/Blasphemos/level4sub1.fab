@@ -1,0 +1,20 @@
+/*
+ * BlasNESmous - Level 4 Sub 1
+ * Mea Culpa Altar Logic
+ */
+
+fn level4sub1_init()
+    // Level 4 Sub 1 initialization logic
+    
+fn level4sub1_main()
+    // Mea Culpa Altar hit detection
+    if current_level_index == 5 && !mea_culpa_upgraded && p.movement == PLAYER_MOVING_ATTACK
+        // Hitbox for the Mea Culpa altar in l4sub1
+        // Roughly around x=128 (moved 4 tiles right from original 64)
+        if player_sword_x < 144 && (player_sword_x + player_sword_w) > 112
+             mea_culpa_upgraded = true
+             cheat_shake_timer = 30
+             log(@"Mea Culpa upgraded!"l)
+
+fn draw_level4sub1_sprites(U o) U
+    return o

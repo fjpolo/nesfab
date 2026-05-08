@@ -44,12 +44,15 @@ vars /game
     SS last_prie_dieu_x = 0
     SS last_prie_dieu_y = 0
     Bool spawn_from_right = false
+    Bool spawn_from_top = false
+    Bool spawn_from_bottom = false
     U[16] dead_pilgrims = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
     U[16] dead_wheelbrokens = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
     U[16] dead_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
     U[16] dead_following_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
     Bool warden_defeated = false
     Bool warden_arrow_dismissed = false
+    Bool mea_culpa_upgraded = false
     U bile_vessel_hp = 18
     U fps_ticks = 0
     U fps_display = 60
@@ -163,6 +166,12 @@ mode play_level(U level_index)
         p.x = (SS(current_level_width) << 4) - 32
         p.camera_x = p.x - 128
         spawn_from_right = false
+    else if spawn_from_top
+        p.y = 0
+        spawn_from_top = false
+    else if spawn_from_bottom
+        p.y = SSF((SS(current_level_height) << 4) - SS(p.h))
+        spawn_from_bottom = false
 
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     

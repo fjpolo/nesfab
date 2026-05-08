@@ -554,6 +554,8 @@ fn update_player()
         p = make_player_penitent()
     
     p.attack_power = PLAYER_INITIAL_ATTACK_POWER
+    if mea_culpa_upgraded
+        p.attack_power <<= 1
 
     p.center_x = p.x + (p.w >> 1)
     p.center_y = SS(p.y) + (p.h >> 1)
@@ -930,8 +932,24 @@ fn handle_physics()
         
         // Out of bounds check
         if SS(p.y) > (SS(current_level_height) << 4)
-            p.health = 0
-            player_respawn()
+            if current_level_index == 4
+                current_level_index = 5
+                p.level_index = current_level_index
+                player_prepare_level_transition()
+                spawn_from_top = true
+                goto mode play_level(current_level_index)
+                : preserves /game
+            else
+                p.health = 0
+                player_respawn()
+        else if SS(p.y) < -16
+            if current_level_index == 5
+                current_level_index = 4
+                p.level_index = current_level_index
+                player_prepare_level_transition()
+                spawn_from_bottom = true
+                goto mode play_level(current_level_index)
+                : preserves /game
 
 fn player_prepare_level_transition()
     p.movement = PLAYER_MOVING_REST
@@ -998,6 +1016,23 @@ fn handle_collisions()
         : preserves /game
     else if p.x < 0 && current_level_index == 4
         current_level_index = 3
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        spawn_from_right = true
+        p.y = SSF(PLAYER_INITIAL_Y)
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if p.x > level_right_bound && current_level_index == 4
+        current_level_index = 6
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        p.y = SSF(PLAYER_INITIAL_Y)
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if p.x < 0 && current_level_index == 6
+        current_level_index = 4
         p.level_index = current_level_index
         player_prepare_level_transition()
         spawn_from_right = true
