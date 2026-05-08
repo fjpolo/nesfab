@@ -1028,7 +1028,6 @@ fn handle_collisions()
         player_prepare_level_transition()
         p.camera_x = 0
         p.x = 16
-        p.y = SSF(PLAYER_INITIAL_Y)
         goto mode play_level(current_level_index)
         : preserves /game
     else if p.x < 0 && current_level_index == 6
@@ -1036,7 +1035,6 @@ fn handle_collisions()
         p.level_index = current_level_index
         player_prepare_level_transition()
         spawn_from_right = true
-        p.y = SSF(PLAYER_INITIAL_Y)
         goto mode play_level(current_level_index)
         : preserves /game
 

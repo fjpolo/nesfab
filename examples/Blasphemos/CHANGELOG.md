@@ -43,6 +43,14 @@
 
 # Changes
 
+## [08.05.2026] - v778
+- Add level transitions for l4, l4sub1, l5 and implement Mea Culpa altar with improved RAM analysis
+
+
+## [08.05.2026] - v778
+- Add level transitions for l4, l4sub1, l5 and implement Mea Culpa altar with improved RAM analysis
+
+
 ## [08.05.2026] - v777
 - Implement very rough mea culpa altar
 
