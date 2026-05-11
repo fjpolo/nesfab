@@ -964,6 +964,7 @@ fn player_prepare_level_transition()
     p.is_initialised = true
 
 fn handle_collisions()
+    /*
     if collision_at(UU(p.center_x), UU(p.center_y)) == C_EXIT
         current_level_index += 1
         p.level_index = current_level_index
@@ -973,6 +974,7 @@ fn handle_collisions()
         p.camera_x = 0
         goto mode play_level(current_level_index)
         : preserves /game
+    */
     
     // Level 1 -> Level 2 transition via right bound
     SS level_right_bound = (SS(current_level_width) << 4) - 20
@@ -1045,11 +1047,52 @@ fn handle_collisions()
         p.x = 16
         goto mode play_level(current_level_index)
         : preserves /game
+    else if p.x > level_right_bound && current_level_index == 7
+        current_level_index = 8
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        goto mode play_level(current_level_index)
+        : preserves /game
     else if p.x < 0 && current_level_index == 7
         current_level_index = 6
         p.level_index = current_level_index
         player_prepare_level_transition()
         spawn_from_right = true
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if p.x < 0 && current_level_index == 8
+        current_level_index = 7
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        spawn_from_right = true
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if p.x > level_right_bound && current_level_index == 8
+        current_level_index = 10
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        goto mode game_over(current_level_index)
+        : preserves /game
+    else if p.y < 0 && current_level_index == 8
+        U old_movement = p.movement
+        current_level_index = 9
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.movement = old_movement
+        spawn_from_bottom = true
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if p.y > SSF(238) && current_level_index == 9
+        U old_movement = p.movement
+        current_level_index = 8
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.movement = old_movement
+        spawn_from_top = true
         goto mode play_level(current_level_index)
         : preserves /game
 

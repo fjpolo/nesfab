@@ -43,6 +43,90 @@
 
 # Changes
 
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
+## [11.05.2026] - v783
+- Clean up title screen
+
+
 ## [11.05.2026] - v782
 - Add Title Screen
 

@@ -158,12 +158,14 @@ mode play_level(U level_index)
         p.x = (SS(current_level_width) << 4) - 32
         p.camera_x = p.x - 128
         spawn_from_right = false
-    else if spawn_from_top
-        p.y = 0
-        spawn_from_top = false
-    else if spawn_from_bottom
-        p.y = SSF((SS(current_level_height) << 4) - SS(p.h))
-        spawn_from_bottom = false
+    if spawn_from_top || spawn_from_bottom
+        p.camera_x = max(0, min(p.center_x - 128, (SS(current_level_width) << 4) - 256))
+        if spawn_from_top
+            p.y = 2
+            spawn_from_top = false
+        else
+            p.y = SSF((SS(current_level_height) << 4) - SS(p.h) - 2)
+            spawn_from_bottom = false
 
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     
@@ -331,6 +333,9 @@ fn draw_player_secondary(U o, U attr_xor) U
     return o
 
 fn update_sprites()
+    if current_level_index == 10
+        hide_oam(0)
+        return
     U o = 0
 
     // Draw Health (highest priority) - Each heart is 10 HP

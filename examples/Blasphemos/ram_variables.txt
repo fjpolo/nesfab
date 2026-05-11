@@ -17,7 +17,7 @@ raw_pads                                 1        $001A
 scroll_tiles                             1        $001C
 scroll_attrs                             1        $003A
 current_level_enemies                    3        $0042-$0043, $07E6
-current_level                            3        $0044-$0045, $07E7
+current_level                            3        $0044-$0045, $07E5
 mt_ca                                    2        $0046-$0047
 mt_se                                    2        $0048-$0049
 mt_sw                                    2        $004A-$004B
@@ -124,7 +124,7 @@ warden_projectile_x                      3        $07CB, $07CE, $07E0
 warden_projectile_vy                     2        $07D1, $07DD
 warden_projectile_vx                     2        $07D4, $07D7
 warden_spike_wave_origin_y               3        $07E3-$07E4, $07E8
-current_level_width                      1        $07E5
+current_level_width                      1        $07E7
 warden_spike_wave_origin_x               3        $07E9-$07EB
 current_level_height                     1        $07EC
 

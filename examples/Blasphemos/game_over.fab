@@ -1,0 +1,30 @@
+/*
+ * BlasNESmous - game_over
+ */
+
+fn game_over_init()
+    // game_over initialization logic here
+
+fn game_over_main()
+    // game_over main logic here
+
+fn game_over_sprites(U o) U
+    hide_oam(0)
+    return 64
+
+mode game_over(U level_index)
+: nmi game_nmi
+    current_level_index = 10
+
+    // Load level
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    load_level(levels[current_level_index])
+
+    // NMI ON
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_NT_2000)
+    {PPUMASK}(PPUMASK_BG_ON | PPUMASK_NO_CLIP)
+
+    while true
+        nmi
