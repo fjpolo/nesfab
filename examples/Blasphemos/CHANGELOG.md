@@ -43,6 +43,22 @@
 
 # Changes
 
+## [11.05.2026] - v786
+- Fix C_WALL collisions
+
+
+## [11.05.2026] - v786
+- Fix C_WALL collisions
+
+
+## [11.05.2026] - v786
+- Fix C_WALL collisions
+
+
+## [11.05.2026] - v786
+- Fix C_WALL collisions
+
+
 ## [11.05.2026] - v785
 - Add new tiles from Castlevania3
 

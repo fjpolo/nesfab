@@ -123,8 +123,9 @@ fn warden_init(SS wx, SS wy)
     warden_active = true
     warden_health = 140
     warden_x = wx
-    warden_y = wy + 64 // Offset to waist and legs (shifted 2 tiles down)
-    warden_h = 32      // Height of waist and legs
+    warden_y = wy + 32 // Offset to torso, waist and legs
+    warden_w = 80
+    warden_h = 64      // Increased height to cover torso and legs
     warden_hurt_timer = 0
     warden_state = WARDEN_STATE_IDLE
     warden_timer = 0

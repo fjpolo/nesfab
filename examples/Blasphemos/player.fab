@@ -91,7 +91,7 @@ vars /game
     Bool player_sword_active = false
     SS player_sword_x = 0
     SS player_sword_y = 0
-    SS player_sword_w = 16
+    SS player_sword_w = 32
     SS player_sword_h = 29
 
 // Sprites and animations
@@ -579,7 +579,7 @@ fn update_player()
         player_sword_active = true
         player_sword_y = SS(p.y) - 2
         if p.facing_left
-            player_sword_x = p.hitbox_center_x - 24
+            player_sword_x = p.hitbox_center_x - 40
         else
             player_sword_x = p.hitbox_center_x + 8
             
@@ -806,20 +806,20 @@ fn handle_input()
         // Limited horizontal movement on ladder
         if pads[0].held & BUTTON_LEFT
             SS nx = p.x - 1
-            if collision_at(UU(nx), UU(SS(p.y) + 4)) != C_WALL
+            if collision_at(UU(nx + 4), UU(SS(p.y) + 4)) != C_WALL
                 p.x = nx
             p.facing_left = true
         else if pads[0].held & BUTTON_RIGHT
             SS nx = p.x + 1
-            if collision_at(UU(nx + p.rw), UU(SS(p.y) + 4)) != C_WALL
+            if collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + 4)) != C_WALL
                 p.x = nx
             p.facing_left = false
 
     if p.movement != PLAYER_MOVING_CLIMB
         if pads[0].held & BUTTON_LEFT
             SS nx = p.x - speed
-            U t1 = collision_at(UU(nx), UU(SS(p.y) + 4))
-            U t2 = collision_at(UU(nx), UU(SS(p.y) + p.h - 4))
+            U t1 = collision_at(UU(nx + 4), UU(SS(p.y) + 4))
+            U t2 = collision_at(UU(nx + 4), UU(SS(p.y) + p.h - 4))
             if t1 != C_WALL && t2 != C_WALL
                 p.x = nx
             
@@ -829,8 +829,8 @@ fn handle_input()
                 p.anim_state = make_anim_state(@penitent_animation_walk_left)
         else if pads[0].held & BUTTON_RIGHT
             SS nx = p.x + speed
-            U t1 = collision_at(UU(nx + p.rw), UU(SS(p.y) + 4))
-            U t2 = collision_at(UU(nx + p.rw), UU(SS(p.y) + p.h - 4))
+            U t1 = collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + 4))
+            U t2 = collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + p.h - 4))
             if t1 != C_WALL && t2 != C_WALL
                 p.x = nx
 
@@ -896,16 +896,16 @@ fn handle_physics()
     if p.movement == PLAYER_MOVING_DASH
         if p.facing_left
             SS nx = p.x - DASH_SPEED
-            U t1 = collision_at(UU(nx), UU(SS(p.y) + 4))
-            U t2 = collision_at(UU(nx), UU(SS(p.y) + p.h - 4))
+            U t1 = collision_at(UU(nx + 4), UU(SS(p.y) + 4))
+            U t2 = collision_at(UU(nx + 4), UU(SS(p.y) + p.h - 4))
             if t1 != C_WALL && t2 != C_WALL
                 p.x = nx
             else
                 p.dash_timer = 0 // Stop dash on impact
         else
             SS nx = p.x + DASH_SPEED
-            U t1 = collision_at(UU(nx + p.rw), UU(SS(p.y) + 4))
-            U t2 = collision_at(UU(nx + p.rw), UU(SS(p.y) + p.h - 4))
+            U t1 = collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + 4))
+            U t2 = collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + p.h - 4))
             if t1 != C_WALL && t2 != C_WALL
                 p.x = nx
             else
