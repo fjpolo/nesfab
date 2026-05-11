@@ -1,0 +1,12 @@
+/*
+ * BlasNESmous - Level 6
+ */
+
+fn level6_init()
+    // Level 6 initialization logic here
+
+fn level6_main()
+    // Level 6 main logic here
+
+fn draw_level6_sprites(U o) U
+    return o

@@ -80,9 +80,10 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l4,    // 4
                                         @lev_l4sub1, // 5
                                         @lev_l5,    // 6
+                                        @lev_l6,    // 7
                                     )
 ct U FIRST_LEVEL_INDEX =  1
-ct U LAST_LEVEL_INDEX =  6
+ct U LAST_LEVEL_INDEX =  7
 
 // Sets the 'mt_' pointers to offsets of 'mt'.
 fn load_metatiles(CC/metatiles mt)
@@ -220,6 +221,8 @@ fn load_level(CCC/levels level)
         level4_init()
     else if current_level_index == 5
         level4sub1_init()
+    else if current_level_index == 7
+        level6_init()
 
     if game_mode == GAME_MODE_KONAMI
         for U i = 0; i < enraged_pilgrims_num; i += 1
@@ -332,6 +335,8 @@ fn level_update()
         level4_main()
     else if current_level_index == 5
         level4sub1_main()
+    else if current_level_index == 7
+        level6_main()
 
 fn level_draw_sprites(U o) U
     if current_level_index == 1
@@ -342,6 +347,8 @@ fn level_draw_sprites(U o) U
         o = draw_level4_sprites(o)
     else if current_level_index == 5
         o = draw_level4sub1_sprites(o)
+    else if current_level_index == 7
+        o = draw_level6_sprites(o)
     
     // o = draw_item_bones(o) // Moved to main.fab for higher priority
     return o

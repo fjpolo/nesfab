@@ -1037,6 +1037,22 @@ fn handle_collisions()
         spawn_from_right = true
         goto mode play_level(current_level_index)
         : preserves /game
+    else if p.x > level_right_bound && current_level_index == 6
+        current_level_index = 7
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if p.x < 0 && current_level_index == 7
+        current_level_index = 6
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        spawn_from_right = true
+        goto mode play_level(current_level_index)
+        : preserves /game
+
 
 fn update_camera()
     ct Int window = 112

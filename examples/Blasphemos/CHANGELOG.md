@@ -43,6 +43,34 @@
 
 # Changes
 
+## [11.05.2026] - v779
+- Preserve Y coordinate in l4 <-> l5 transitions
+
+
+## [11.05.2026] - v779
+- Preserve Y coordinate in l4 <-> l5 transitions
+
+
+## [11.05.2026] - v779
+- Preserve Y coordinate in l4 <-> l5 transitions
+
+
+## [11.05.2026] - v779
+- Preserve Y coordinate in l4 <-> l5 transitions
+
+
+## [11.05.2026] - v779
+- Preserve Y coordinate in l4 <-> l5 transitions
+
+
+## [11.05.2026] - v779
+- Preserve Y coordinate in l4 <-> l5 transitions
+
+
+## [08.05.2026] - v779
+- Preserve Y coordinate in l4 <-> l5 transitions
+
+
 ## [08.05.2026] - v778
 - Add level transitions for l4, l4sub1, l5 and implement Mea Culpa altar with improved RAM analysis
 
