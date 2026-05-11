@@ -43,6 +43,14 @@
 
 # Changes
 
+## [11.05.2026] - v785
+- Add new tiles from Castlevania3
+
+
+## [11.05.2026] - v785
+- Add new tiles from Castlevania3
+
+
 ## [11.05.2026] - v783
 - Clean up title screen
 

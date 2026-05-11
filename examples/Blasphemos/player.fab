@@ -805,21 +805,35 @@ fn handle_input()
 
         // Limited horizontal movement on ladder
         if pads[0].held & BUTTON_LEFT
-            p.x -= 1
+            SS nx = p.x - 1
+            if collision_at(UU(nx), UU(SS(p.y) + 4)) != C_WALL
+                p.x = nx
             p.facing_left = true
         else if pads[0].held & BUTTON_RIGHT
-            p.x += 1
+            SS nx = p.x + 1
+            if collision_at(UU(nx + p.rw), UU(SS(p.y) + 4)) != C_WALL
+                p.x = nx
             p.facing_left = false
 
     if p.movement != PLAYER_MOVING_CLIMB
         if pads[0].held & BUTTON_LEFT
-            p.x -= speed
+            SS nx = p.x - speed
+            U t1 = collision_at(UU(nx), UU(SS(p.y) + 4))
+            U t2 = collision_at(UU(nx), UU(SS(p.y) + p.h - 4))
+            if t1 != C_WALL && t2 != C_WALL
+                p.x = nx
+            
             if !p.facing_left || p.movement != PLAYER_MOVING_LEFT
                 p.facing_left = true
                 p.movement = PLAYER_MOVING_LEFT
                 p.anim_state = make_anim_state(@penitent_animation_walk_left)
         else if pads[0].held & BUTTON_RIGHT
-            p.x += speed
+            SS nx = p.x + speed
+            U t1 = collision_at(UU(nx + p.rw), UU(SS(p.y) + 4))
+            U t2 = collision_at(UU(nx + p.rw), UU(SS(p.y) + p.h - 4))
+            if t1 != C_WALL && t2 != C_WALL
+                p.x = nx
+
             if p.facing_left || p.movement != PLAYER_MOVING_RIGHT
                 p.facing_left = false
                 p.movement = PLAYER_MOVING_RIGHT
@@ -881,9 +895,21 @@ fn is_on_ground() Bool
 fn handle_physics()
     if p.movement == PLAYER_MOVING_DASH
         if p.facing_left
-            p.x -= DASH_SPEED
+            SS nx = p.x - DASH_SPEED
+            U t1 = collision_at(UU(nx), UU(SS(p.y) + 4))
+            U t2 = collision_at(UU(nx), UU(SS(p.y) + p.h - 4))
+            if t1 != C_WALL && t2 != C_WALL
+                p.x = nx
+            else
+                p.dash_timer = 0 // Stop dash on impact
         else
-            p.x += DASH_SPEED
+            SS nx = p.x + DASH_SPEED
+            U t1 = collision_at(UU(nx + p.rw), UU(SS(p.y) + 4))
+            U t2 = collision_at(UU(nx + p.rw), UU(SS(p.y) + p.h - 4))
+            if t1 != C_WALL && t2 != C_WALL
+                p.x = nx
+            else
+                p.dash_timer = 0 // Stop dash on impact
         return
 
     if p.movement == PLAYER_MOVING_LEDGE
