@@ -5,28 +5,11 @@ ct U WRITING_DONE  = 0
 ct U WRITING_WAIT  = 1
 ct U WRITING_READY = 2
 
-vars /story
-    U writing = WRITING_WAIT
-    U char
-    UU row_addr = $2106
-    UU cur_addr = $2106
+
 
 charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}@\0", '\0')
 : stows /strings
 data /strings
-    [] story_string
-        (
-            `BlasNESmous v781\n`
-            `\n`
-            `\n`
-            `\n`
-            `\n`
-            `PRESS START TO PLAY\n`
-        )
-    [] title_version_str
-        (`v781\0`)
-    [] title_press_start_str
-        (`PRESS START\0`)
 
 fn title_upload_nametable_and_attrs()
     // Write nametable (960 bytes) starting at $2000
@@ -80,20 +63,9 @@ fn title_load_palette()
         {PPUDATA}($0F)
 
 
-fn draw_sprite_text(U o, U x, U y, CCC/strings str) U
-    CCC/strings ptr = str
-    while true
-        U c = read U(ptr)
-        if c == 0 break
-        if c > 32
-            o = push_oam(o, x, y, c - 32, 0)
-        x += 8
-        ptr += 1
-    return o
 
-vars /title_text
-    U title_blink_timer = 0
-    Bool title_show_press_start = true
+
+
 
 mode title_screen(U level_index)
 : nmi game_nmi
@@ -117,8 +89,7 @@ mode title_screen(U level_index)
     // Upload nametable + attribute table from NEXXT .nam binary
     title_upload_nametable_and_attrs()
 
-    title_blink_timer = 0
-    title_show_press_start = true
+
     is_start_pressed = false
 
     // Enable BG and Sprite rendering
@@ -128,17 +99,7 @@ mode title_screen(U level_index)
     while true
         nmi
         U o = 0
-        // Draw version text at the top
-        o = draw_sprite_text(o, 180, 20, @title_version_str)
-        
-        // Blink "PRESS START" at the bottom
-        title_blink_timer += 1
-        if title_blink_timer >= 30
-            title_blink_timer = 0
-            title_show_press_start = !title_show_press_start
-            
-        if title_show_press_start
-            o = draw_sprite_text(o, 88, 190, @title_press_start_str)
+
             
         hide_oam(o)
         ppu_upload_oam_poll_pads(0)

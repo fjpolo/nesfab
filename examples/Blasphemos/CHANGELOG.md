@@ -43,6 +43,14 @@
 
 # Changes
 
+## [11.05.2026] - v782
+- Add Title Screen
+
+
+## [11.05.2026] - v782
+- Add Title Screen
+
+
 ## [11.05.2026] - v781
 - Start working on Wasteland
 
