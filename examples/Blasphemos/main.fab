@@ -76,17 +76,9 @@ nmi game_nmi()
 
 
     if game_state == GAME_STATE_TITLE
-        if ready && writing == WRITING_READY
-            {PPUSTATUS}()
-            {PPUADDR}(cur_addr.b)
-            {PPUADDR}(cur_addr.a)
-            {PPUDATA}(char)
-            cur_addr += 1
-            writing = WRITING_WAIT
-            {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
         {PPUSCROLL}(0)
         {PPUSCROLL}(0)
-        {PPUMASK}(PPUMASK_BG_ON)
+        {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
     else
         ppu_upload_scroll()
         U shake_x = 0

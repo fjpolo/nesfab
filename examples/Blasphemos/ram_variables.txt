@@ -10,23 +10,21 @@ runtime_mapper_detail                    1        $000C
 runtime_nmi_saved_bank                   1        $000D
 runtime_irq_saved_bank                   1        $000E
 runtime_system                           1        $000F
-p                                        52       $0010-$0011, $0219-$024A
-scroll_x                                 2        $0012-$0013
 scroll_tiles_ppuaddr                     2        $0014-$0015
 scroll_attrs_ppuaddr                     2        $0016-$0017
 scroll_coin_ppuaddr                      2        $0018-$0019
 raw_pads                                 1        $001A
 scroll_tiles                             1        $001C
 scroll_attrs                             1        $003A
-decompress_string_state                  4        $0042-$0043, $02FF, $07F2
-current_level_enemies                    3        $0044-$0045, $07EE
-current_level                            3        $0046-$0047, $07EB
-mt_ca                                    2        $0048-$0049
-mt_se                                    2        $004A-$004B
-mt_sw                                    2        $004C-$004D
-mt_ne                                    2        $004E-$004F
-mt_nw                                    2        $0050-$0051
+current_level_enemies                    3        $0042-$0043, $07E6
+current_level                            3        $0044-$0045, $07E8
+mt_ca                                    2        $0046-$0047
+mt_se                                    2        $0048-$0049
+mt_sw                                    2        $004A-$004B
+mt_ne                                    2        $004C-$004D
+mt_nw                                    2        $004E-$004F
 palette                                  1        $0200
+p                                        45       $021E-$024A
 frame_counter                            1        $024B
 is_game_paused                           1        $024C
 load_level_counter                       1        $024D
@@ -81,18 +79,14 @@ fps_display                              1        $02CC
 current_level_index                      1        $02CD
 warden_health                            1        $02D0
 rng_state                                1        $02D5
-following_eye_set_initial_state_current_level_flag 1        $02D7
-following_eye_set_initial_state_level_flag 1        $02D8
-pads                                     3        $02E0, $02E2, $02E4
-is_start_pressed                         1        $02E6
-start_counter                            1        $02E7
-is_select_pressed                        1        $02E8
-select_counter                           1        $02E9
+is_start_pressed                         1        $02E0
+start_counter                            1        $02E1
+is_select_pressed                        1        $02E2
+select_counter                           1        $02E3
+pads                                     3        $02E4, $02E6, $02E8
 following_eye_state                      1        $02EA
 following_eye_state_counter              1        $02F2
-writing                                  1        $02FA
-row_addr                                 2        $02FB-$02FC
-cur_addr                                 2        $02FD-$02FE
+warden_spike_anim                        5        $02FA, $076E, $0774, $077A, $0780
 destroyed                                1        $0300
 oam                                      1        $0400
 item_bones_collected_flags               1        $0500
@@ -116,26 +110,24 @@ eye_hurt_timer                           1        $06C8
 following_eye_hurt_timer                 1        $06D0
 eye_blocked_timer                        1        $0740
 enemies_eye                              3        $0748, $0750, $0760
-warden_spike_anim                        5        $0768, $0774, $077A, $0780, $0786
-warden_spike_active                      1        $076E
-warden_spike_timer                       1        $078C
-warden_spike_y                           3        $0792, $07A4, $07AA
-warden_spike_x                           3        $0798, $079E, $07B0
-warden_projectile_active                 1        $07B6
-warden_projectile_anim                   5        $07B9, $07BC, $07BF, $07C2, $07C5
-warden_projectile_ground_timer           1        $07C8
-warden_projectile_y                      3        $07CB, $07CE, $07E3
-warden_projectile_x                      3        $07D1, $07D4, $07E6
-warden_projectile_vy                     2        $07D7, $07DA
-warden_projectile_vx                     2        $07DD, $07E0
-warden_spike_wave_origin_y               3        $07E9-$07EA, $07EC
-current_level_width                      1        $07ED
-warden_spike_wave_origin_x               3        $07EF-$07F1
-current_level_height                     1        $07F3
-char                                     1        $07F4
+warden_spike_active                      1        $0768
+warden_spike_timer                       1        $0786
+warden_spike_y                           3        $078C, $079E, $07A4
+warden_spike_x                           3        $0792, $0798, $07AA
+warden_projectile_active                 1        $07B0
+warden_projectile_anim                   5        $07B3, $07B6, $07B9, $07BC, $07BF
+warden_projectile_ground_timer           1        $07C2
+warden_projectile_y                      3        $07C5, $07C8, $07DD
+warden_projectile_x                      3        $07CB, $07CE, $07E0
+warden_projectile_vy                     2        $07D1, $07D4
+warden_projectile_vx                     2        $07D7, $07DA
+warden_spike_wave_origin_y               3        $07E3-$07E5
+current_level_width                      1        $07E7
+warden_spike_wave_origin_x               3        $07E9-$07EB
+current_level_height                     1        $07EC
 
 ================================================================================
-Variable Bytes: 284
-System Bytes:   471
-Free Bytes:     1293
-Total Usage:    755/2048 bytes (36.9%)
+Variable Bytes: 263
+System Bytes:   477
+Free Bytes:     1308
+Total Usage:    740/2048 bytes (36.1%)

@@ -1,10 +1,10 @@
-// Title screen cons
+// Title screen - uses raw CHR from assets/TitleScreen_CHR.chr (NEXXT-generated)
+// Nametable and palette from assets/TitleScreen.nss
+
 ct U WRITING_DONE  = 0
 ct U WRITING_WAIT  = 1
 ct U WRITING_READY = 2
-ct U FONT_BASE_NUMBER = $80
 
-// Stroy screen data
 vars /story
     U writing = WRITING_WAIT
     U char
@@ -16,51 +16,136 @@ charmap(" !\"#$%&'()*+,-./0123456789:;<=>?\nABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abc
 data /strings
     [] story_string
         (
-            `BlasNESmous v780\n`
-            `    \n`
-            `    \n`
-            `    \n`
-            `    \n`
+            `BlasNESmous v781\n`
+            `\n`
+            `\n`
+            `\n`
+            `\n`
             `PRESS START TO PLAY\n`
         )
+    [] title_version_str
+        (`v781\0`)
+    [] title_press_start_str
+        (`PRESS START\0`)
+
+fn title_upload_nametable_and_attrs()
+    // Write nametable (960 bytes) starting at $2000
+    {PPUSTATUS}()
+    {PPUADDR}($20)
+    {PPUADDR}($00)
+    CCC/title ptr = @title_nam
+    // First 960 bytes = nametable
+    for UU i = 0; i < 960; i += 1
+        {PPUDATA}(read U(ptr))
+    // Attribute table at $23C0 (64 bytes follow immediately in .nam)
+    // Reset PPU address to attribute table location
+    {PPUSTATUS}()
+    {PPUADDR}($23)
+    {PPUADDR}($C0)
+    // Bytes 960-1023 = attribute table
+    for U i = 0; i < 64; i += 1
+        {PPUDATA}(read U(ptr))
+
+fn title_load_palette()
+    {PPUSTATUS}()
+    {PPUADDR}($3F)
+    {PPUADDR}($00)
+    // Palette 0
+    {PPUDATA}(TITLE_UBC)
+    {PPUDATA}(title_bg_palette[0])
+    {PPUDATA}(title_bg_palette[1])
+    {PPUDATA}(title_bg_palette[2])
+    // Palette 1
+    {PPUDATA}(TITLE_UBC)
+    {PPUDATA}(title_bg_palette[3])
+    {PPUDATA}(title_bg_palette[4])
+    {PPUDATA}(title_bg_palette[5])
+    // Palette 2
+    {PPUDATA}(TITLE_UBC)
+    {PPUDATA}(title_bg_palette[6])
+    {PPUDATA}(title_bg_palette[7])
+    {PPUDATA}(title_bg_palette[8])
+    // Palette 3
+    {PPUDATA}(TITLE_UBC)
+    {PPUDATA}(title_bg_palette[9])
+    {PPUDATA}(title_bg_palette[10])
+    {PPUDATA}(title_bg_palette[11])
+    // Sprite palettes: Palette 0 = All White for visibility
+    {PPUDATA}(TITLE_UBC) // UBC Mirror
+    {PPUDATA}($30)       // White
+    {PPUDATA}($30)       // White
+    {PPUDATA}($30)       // White
+    // Remaining sprite palettes
+    for U i = 0; i < 12; i += 1
+        {PPUDATA}($0F)
+
+
+fn draw_sprite_text(U o, U x, U y, CCC/strings str) U
+    CCC/strings ptr = str
+    while true
+        U c = read U(ptr)
+        if c == 0 break
+        if c > 32
+            o = push_oam(o, x, y, c - 32, 0)
+        x += 8
+        ptr += 1
+    return o
+
+vars /title_text
+    U title_blink_timer = 0
+    Bool title_show_press_start = true
 
 mode title_screen(U level_index)
 : nmi game_nmi
-    current_level_index = 0
-
-    // Prepare the decompressor
-    decompress_string_init(@story_string)
-
-    // Load level
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)
-    load_level(levels[current_level_index])
-    log_set_arg(0, current_level_index)
-    log(@"level: %d"l) 
 
-    // NMI ON
-    {PPUCTRL}(PPUCTRL_NMI_ON)
+    current_level_index = 0
+
+    // Bank-switch MMC3 to the title CHR bank (bank 5, raw .chr file)
+    select_chr_8kb(TITLE_CHR_BANK)
+    // Map font (bank 8) to sprites
+    mmc3_select(2, 64)
+    mmc3_select(3, 65)
+    mmc3_select(4, 66)
+    mmc3_select(5, 67)
+
+    // Upload title palette from NEXXT data
+    title_load_palette()
+
+    // Upload nametable + attribute table from NEXXT .nam binary
+    title_upload_nametable_and_attrs()
+
+    title_blink_timer = 0
+    title_show_press_start = true
+    is_start_pressed = false
+
+    // Enable BG and Sprite rendering
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | PPUCTRL_NT_2000)
+    {PPUMASK}(PPUMASK_BG_ON | PPUMASK_SPR_ON | PPUMASK_NO_CLIP)
 
     while true
         nmi
-        // Decompress one character
-        if writing == WRITING_WAIT
-            char = decompress_string()
-            if char == charmap.sentinel
-                writing = WRITING_DONE
-            else if char == '\n'
-                row_addr += 32
-                cur_addr = row_addr
-            else
-                writing = WRITING_READY
-        nmi
-        nmi
-        nmi
+        U o = 0
+        // Draw version text at the top
+        o = draw_sprite_text(o, 180, 20, @title_version_str)
+        
+        // Blink "PRESS START" at the bottom
+        title_blink_timer += 1
+        if title_blink_timer >= 30
+            title_blink_timer = 0
+            title_show_press_start = !title_show_press_start
+            
+        if title_show_press_start
+            o = draw_sprite_text(o, 88, 190, @title_press_start_str)
+            
+        hide_oam(o)
+        ppu_upload_oam_poll_pads(0)
+        update_pads()
 
         if is_start_pressed
             game_state = GAME_STATE_PLAY
-            current_level_index = FIRST_LEVEL_INDEX   
+            current_level_index = FIRST_LEVEL_INDEX
             goto mode play_level(current_level_index)
             : preserves /game
-        update_pads()
