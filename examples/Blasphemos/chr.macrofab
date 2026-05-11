@@ -1,12 +1,17 @@
 #:name:# 
 #:path:# 
 
-// Since this example uses CNROM, we'll store each CHR file at a different offset.
-// Note that you don't have to use "path"; you could use "name" to derive a filename instead.
-
 ct U chr_#name#_index = _index
 
+// Standard bank
 chrrom (_index * $2000)
     file(fmt, #"path"#)
 chrrom (_index * $2000 + $1000)
     file(fmt, "assets/sprite.png")
+
+// Alternate bank (with sprite2.png)
+// We offset these by 16 to keep them separate from the main banks
+chrrom ((_index + 16) * $2000)
+    file(fmt, #"path"#)
+chrrom ((_index + 16) * $2000 + $1000)
+    file(fmt, "assets/sprite2.png")
