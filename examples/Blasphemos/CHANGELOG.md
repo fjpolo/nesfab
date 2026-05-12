@@ -43,6 +43,18 @@
 
 # Changes
 
+## [12.05.2026] - v791
+- Add crucified, not attacking yet
+
+
+## [12.05.2026] - v791
+- Add crucified, not attacking yet
+
+
+## [12.05.2026] - v791
+- Add crucified, not attacking yet
+
+
 ## [12.05.2026] - v790
 - Fix item_bone persistence and expand level flags capacity
 

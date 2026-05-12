@@ -57,14 +57,14 @@ data /sprites
     
     [] crucified_animation_attack
         (make_anim(Fs{}(
-            Fs(150, @sprite_crucified_idle),
-            Fs(60, @sprite_crucified_attack)
+            Fs(150, @sprite_crucified_idle_left),
+            Fs(60, @sprite_crucified_idle)
         )))
 
     [] crucified_animation_attack_left
         (make_anim(Fs{}(
-            Fs(150, @sprite_crucified_idle_left),
-            Fs(60, @sprite_crucified_attack_left)
+            Fs(150, @sprite_crucified_idle),
+            Fs(60, @sprite_crucified_idle_left)
         )))
 
 fn crucified_update(U ix) Bool
@@ -124,7 +124,7 @@ fn crucified_update(U ix) Bool
             if crucifieds[ix].attack_timer >= 210 // 3.5 seconds
                 crucifieds[ix].attack_timer = 0
 
-            // Proper attack lasts 1 second (final 60 frames of cycle)
+            // Proper attack lasts 1 second (final 60 frames of cycle, when it flips)
             if crucifieds[ix].attack_timer > 150
                 SS swx
                 if crucifieds[ix].facing_left
