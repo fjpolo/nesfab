@@ -50,6 +50,7 @@ vars /game
     U[20] dead_wheelbrokens = U[20](0)
     U[20] dead_eyes = U[20](0)
     U[20] dead_following_eyes = U[20](0)
+    U[20] dead_crucifieds = U[20](0)
     Bool warden_defeated = false
     Bool warden_arrow_dismissed = false
     Bool mea_culpa_upgraded = false
@@ -319,6 +320,7 @@ fn draw_enemies(U o) U
 
     o = draw_enraged_pilgrims(o)
     o = draw_wheelbrokens(o)
+    o = draw_crucifieds(o)
 
     return o
 
@@ -440,6 +442,8 @@ fn update_sprites()
         enraged_pilgrim_anim_state[i] = tick_anim(enraged_pilgrim_anim_state[i], true)
     for U i = 0; i < wheelbrokens_num; i += 1
         wheelbroken_anim_state[i] = tick_anim(wheelbroken_anim_state[i], true)
+    for U i = 0; i < crucifieds_num; i += 1
+        crucified_anim_state[i] = tick_anim(crucified_anim_state[i], true)
     for U i = 0; i < item_bones_num; i += 1
         item_bone_anim_state[i] = tick_anim(item_bone_anim_state[i], true)
 

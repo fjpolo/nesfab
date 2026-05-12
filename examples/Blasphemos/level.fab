@@ -7,9 +7,10 @@
 // Load the .mapfab file, calling the macros for each definition.
 mapfab(raw, "BlasNESmous.mapfab", "chr", "palette", "metatiles", "level")
 
-macro("pool_contiguous", "Enemy_eye", "8", "enemies_eye", "/game")
-macro("pool_contiguous", "Enemy_following_eye", "8", "enemies_following_eye", "/game")
-macro("pool_contiguous", "EnragedPilgrim", "8", "enraged_pilgrims", "/game")
+macro("pool_contiguous", "Enemy_eye", "4", "enemies_eye", "/game")
+macro("pool_contiguous", "Enemy_following_eye", "4", "enemies_following_eye", "/game")
+macro("pool_contiguous", "EnragedPilgrim", "4", "enraged_pilgrims", "/game")
+macro("pool_contiguous", "Crucified", "4", "crucifieds", "/game")
 macro("pool_contiguous", "ItemBone", "8", "item_bones", "/game")
 
 // Used in level.macrofab to format the enemies:
@@ -31,6 +32,13 @@ ct fn enraged_pilgrims_vec(Int{} x, Int{} y) EnragedPilgrim{}
     EnragedPilgrim{} out = EnragedPilgrim{}()
     for UU i = 0; i < len(x); i += 1
         push(out, EnragedPilgrim(SS(x{i}), SS(y{i}), false, 0, 30, 0, 0, 0))
+    return out
+
+// Used in level.macrofab to format the enemies:
+ct fn crucifieds_vec(Int{} x, Int{} y) Crucified{}
+    Crucified{} out = Crucified{}()
+    for UU i = 0; i < len(x); i += 1
+        push(out, Crucified(SS(x{i}), SS(y{i}), false, 0, 30, 0, 0, 0))
     return out
 
 // Used in level.macrofab to format the items:
@@ -197,6 +205,19 @@ fn load_level(CCC/levels level)
         if (dead_pilgrims[byte_ix] & (U(1) << bit_ix)) == 0
             enraged_pilgrims_new(ep)
             enraged_pilgrim_anim_state[enraged_pilgrims_num - 1] = make_anim_state(@enraged_pilgrim_animation_standing)
+
+    // Enemies: Crucified
+    crucifieds_clear()
+    U crucified_num = read U(level)
+    for U i = 0; i < crucified_num; i += 1
+        Crucified c = read Crucified(level)
+        c.local_index = i
+        U global_ix = (current_level_index << 3) + i
+        U byte_ix = global_ix >> 3
+        U bit_ix = global_ix & 7
+        if (dead_crucifieds[byte_ix] & (U(1) << bit_ix)) == 0
+            crucifieds_new(c)
+            crucified_anim_state[crucifieds_num - 1] = make_anim_state(@crucified_animation_standing)
 
     // Enemies: Wheelbroken
     wheelbrokens_clear()

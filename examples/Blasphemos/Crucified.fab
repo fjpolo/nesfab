@@ -1,0 +1,189 @@
+struct Crucified
+    SS x
+    SS y
+    Bool facing_left
+    U attack_timer
+    U health
+    U hurt_timer
+    U blocked_timer
+    U local_index
+
+
+vars /enemies
+    AnimState[4] crucified_anim_state
+
+data /sprites
+    [] sprite_crucified_idle
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(0,  -32, $C1, $01), Ms( 0, -23, $C2, $01), 
+            Ms(-8, -24, $D0, $01), Ms( 0, -24, $D1, $01), Ms( 8, -24, $D2, $01), 
+            Ms(-8, -16, $E0, $01), Ms( 0, -16, $E1, $01), Ms( 8, -16, $E2, $01), Ms( 16, -16, $E3, $01),
+            Ms(-8, -8,  $F0, $01), Ms( 0, -8,  $F1, $01), Ms( 8, -8,  $F2, $01), Ms( 16, -8, $F3, $01), Ms( 24, -8, $F4, $01)
+        )))
+
+    [] sprite_crucified_idle_left
+        (make_metasprite(0, Ms{}(
+            Ms(0,  -32, $C1, $01), Ms( 0, -23, $C2, $01), 
+            Ms(-8, -24, $D0, $01), Ms( 0, -24, $D1, $01), Ms( 8, -24, $D2, $01), 
+            Ms(-8, -16, $E0, $01), Ms( 0, -16, $E1, $01), Ms( 8, -16, $E2, $01), Ms( 16, -16, $E3, $01),
+            Ms(-8, -8,  $F0, $01), Ms( 0, -8,  $F1, $01), Ms( 8, -8,  $F2, $01), Ms( 16, -8, $F3, $01), Ms( 24, -8, $F4, $01)
+        )))
+
+    [] sprite_crucified_attack
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(0,  -32, $C1, $01), Ms( 0, -23, $C2, $01), 
+            Ms(-8, -24, $D0, $01), Ms( 0, -24, $D1, $01), Ms( 8, -24, $D2, $01), 
+            Ms(-8, -16, $E0, $01), Ms( 0, -16, $E1, $01), Ms( 8, -16, $E2, $01), Ms( 16, -16, $E3, $01),
+            Ms(-8, -8,  $F0, $01), Ms( 0, -8,  $F1, $01), Ms( 8, -8,  $F2, $01), Ms( 16, -8, $F3, $01), Ms( 24, -8, $F4, $01)
+        )))
+
+    [] sprite_crucified_attack_left
+        (make_metasprite(0, Ms{}(
+            Ms(0,  -32, $C1, $01), Ms( 0, -23, $C2, $01), 
+            Ms(-8, -24, $D0, $01), Ms( 0, -24, $D1, $01), Ms( 8, -24, $D2, $01), 
+            Ms(-8, -16, $E0, $01), Ms( 0, -16, $E1, $01), Ms( 8, -16, $E2, $01), Ms( 16, -16, $E3, $01),
+            Ms(-8, -8,  $F0, $01), Ms( 0, -8,  $F1, $01), Ms( 8, -8,  $F2, $01), Ms( 16, -8, $F3, $01), Ms( 24, -8, $F4, $01)
+        )))
+
+    [] crucified_animation_standing
+        (make_anim(Fs{}(
+            Fs(1, @sprite_crucified_idle)
+        )))
+
+    [] crucified_animation_standing_left
+        (make_anim(Fs{}(
+            Fs(1, @sprite_crucified_idle_left)
+        )))
+    
+    [] crucified_animation_attack
+        (make_anim(Fs{}(
+            Fs(150, @sprite_crucified_idle),
+            Fs(60, @sprite_crucified_attack)
+        )))
+
+    [] crucified_animation_attack_left
+        (make_anim(Fs{}(
+            Fs(150, @sprite_crucified_idle_left),
+            Fs(60, @sprite_crucified_attack_left)
+        )))
+
+fn crucified_update(U ix) Bool
+    SS ex = crucifieds[ix].x
+    SS ey = crucifieds[ix].y
+    
+    // Facing logic: Face player if within 100 pixels
+    SS dist_x = p.x - ex
+    if dist_x < 0
+        dist_x = -dist_x
+    SS dist_y = SS(p.y) - ey
+    if dist_y < 0
+        dist_y = -dist_y
+
+    if dist_x < 100 && dist_y < 100
+        if p.x < ex
+            crucifieds[ix].facing_left = true
+        else
+            crucifieds[ix].facing_left = false
+
+    if crucifieds[ix].hurt_timer > 0
+        crucifieds[ix].hurt_timer -= 1
+
+    if crucifieds[ix].blocked_timer > 0
+        crucifieds[ix].blocked_timer -= 1
+        crucifieds[ix].attack_timer = 0 // Stay idle while blocked
+
+    // Player hit Pilgrim (Hitbox logic)
+    if player_sword_active && crucifieds[ix].hurt_timer == 0
+        SS sx = player_sword_x
+        SS sy = player_sword_y
+        // Body bounds: (ex-4, ey-16) to (ex+12, ey)
+        if sx < (ex + 12) && (sx + player_sword_w) > (ex - 4) && sy < ey && (sy + player_sword_h) > (ey - 16)
+             crucifieds[ix].hurt_timer = 30 // I-frames
+             player_pogo()
+             U power = p.attack_power
+             if crucifieds[ix].blocked_timer > 0
+                 power = power << 1 // Double damage when blocked
+             
+             if crucifieds[ix].health > power
+                 crucifieds[ix].health -= power
+             else
+                 crucifieds[ix].health = 0
+                 U global_ix = (current_level_index << 3) + crucifieds[ix].local_index
+                 U byte_ix = global_ix >> 3
+                 U bit_ix = global_ix & 7
+                 dead_pilgrims[byte_ix] |= (U(1) << bit_ix)
+                 crucifieds_delete(ix)
+                 return false
+
+    if crucifieds[ix].blocked_timer == 0
+        if crucifieds[ix].attack_timer == 0
+            if dist_x < 16 && dist_y < 16 // 2 tiles away
+                crucifieds[ix].attack_timer = 1
+        else
+            crucifieds[ix].attack_timer += 1
+            if crucifieds[ix].attack_timer >= 210 // 3.5 seconds
+                crucifieds[ix].attack_timer = 0
+
+            // Proper attack lasts 1 second (final 60 frames of cycle)
+            if crucifieds[ix].attack_timer > 150
+                SS swx
+                if crucifieds[ix].facing_left
+                    swx = ex - 16
+                else
+                    swx = ex + 8
+                SS swy = ey - 16
+                SS sww = 24
+                SS swh = 16
+                
+                // Check collision with player using a more precise area
+                if p.hitbox_x < (swx + sww) && (p.hitbox_x + p.w) > swx && SS(p.y) < (swy + swh) && (SS(p.y) + p.h) > swy
+                    if hurt_player(ATTACK_PILGRIM, ex)
+                        crucifieds[ix].blocked_timer = 120
+                        crucifieds[ix].attack_timer = 0
+
+    // Animation selection
+    CCC/sprites anim_to_set
+    if crucifieds[ix].attack_timer > 0
+        if crucifieds[ix].facing_left
+            anim_to_set = @crucified_animation_attack_left
+        else
+            anim_to_set = @crucified_animation_attack
+    else
+        if crucifieds[ix].facing_left
+            anim_to_set = @crucified_animation_standing_left
+        else
+            anim_to_set = @crucified_animation_standing
+            
+    if UU(crucified_anim_state[ix].frames) != UU(anim_to_set)
+        crucified_anim_state[ix] = make_anim_state(anim_to_set)
+
+    // Basic collision with player (contact damage)
+    if p.hitbox_x < (ex + 12) && (p.hitbox_x + p.w) > (ex - 4) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey - 16)
+        if hurt_player(ATTACK_PILGRIM, ex)
+            crucifieds[ix].blocked_timer = 120
+            crucifieds[ix].attack_timer = 0
+    
+    return true
+
+fn draw_crucifieds(U o) U
+    if crucifieds_num == 0
+        return o
+        
+    U start = frame_counter & 7
+    if start >= crucifieds_num
+        start = 0
+    for U j = 0; j < crucifieds_num; j += 1
+        U i = start + j
+        if i >= crucifieds_num
+            i -= crucifieds_num
+            
+        if crucified_update(i)
+            SS x = SS(crucifieds[i].x) - p.camera_x
+            SS y = crucifieds[i].y
+            if crucifieds[i].hurt_timer > 0
+                o = push_oam_anim_a(o, x, y, crucified_anim_state[i], $02) // White flash
+            else if crucifieds[i].blocked_timer > 0
+                o = push_oam_anim_a(o, x, y, crucified_anim_state[i], $03) // Original red/tint
+            else
+                o = push_oam_anim(o, x, y, crucified_anim_state[i])
+    return o

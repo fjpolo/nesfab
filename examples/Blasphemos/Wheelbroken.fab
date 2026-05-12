@@ -1,4 +1,4 @@
-macro("pool_contiguous", "Wheelbroken", "8", "wheelbrokens", "/game")
+macro("pool_contiguous", "Wheelbroken", "4", "wheelbrokens", "/game")
 
 ct fn wheelbroken_vec(Int{} x, Int{} y) Wheelbroken{}
     Wheelbroken{} out = Wheelbroken{}()
