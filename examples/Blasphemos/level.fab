@@ -83,10 +83,17 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l6,            // 7
                                         @lev_l7,            // 8
                                         @lev_l7over1,       // 9
-                                        @lev_game_over,     // 10
+                                        @lev_l8,            // 10
+                                        @lev_l9,            // 11
+                                        @lev_l10,           // 12
+                                        @lev_l9sub1,        // 13
+                                        @lev_l9over1,       // 14
+                                        @lev_l9over2,       // 15
+                                        @lev_l10sub1,       // 16
+                                        @lev_game_over,     // 17
                                     )
 ct U FIRST_LEVEL_INDEX =  1
-ct U LAST_LEVEL_INDEX =  10
+ct U LAST_LEVEL_INDEX =  17
 
 // Sets the 'mt_' pointers to offsets of 'mt'.
 fn load_metatiles(CC/metatiles mt)
@@ -231,8 +238,22 @@ fn load_level(CCC/levels level)
     else if current_level_index == 8
         level7_init()
     else if current_level_index == 9
-        // level7over1_init()
+        level7over1_init()
     else if current_level_index == 10
+        level8_init()
+    else if current_level_index == 11
+        level9_init()
+    else if current_level_index == 12
+        level10_init()
+    else if current_level_index == 13
+        level9sub1_init()
+    else if current_level_index == 14
+        level9over1_init()
+    else if current_level_index == 15
+        level9over2_init()
+    else if current_level_index == 16
+        level10sub1_init()
+    else if current_level_index == 17
         game_over_init()
 
     if game_mode == GAME_MODE_KONAMI
@@ -357,8 +378,22 @@ fn level_update()
     else if current_level_index == 8
         level7_main()
     else if current_level_index == 9
-        // level7over1_main()
+        level7over1_main()
     else if current_level_index == 10
+        level8_main()
+    else if current_level_index == 11
+        level9_main()
+    else if current_level_index == 12
+        level10_main()
+    else if current_level_index == 13
+        level9sub1_main()
+    else if current_level_index == 14
+        level9over1_main()
+    else if current_level_index == 15
+        level9over2_main()
+    else if current_level_index == 16
+        level10sub1_main()
+    else if current_level_index == 17
         game_over_main()
 
 fn level_draw_sprites(U o) U
@@ -375,8 +410,22 @@ fn level_draw_sprites(U o) U
     else if current_level_index == 8
         o = draw_level7_sprites(o)
     else if current_level_index == 9
-        // o = draw_level7over1_sprites(o)
+        o = draw_level7over1_sprites(o)
     else if current_level_index == 10
+        o = draw_level8_sprites(o)
+    else if current_level_index == 11
+        o = draw_level9_sprites(o)
+    else if current_level_index == 12
+        o = draw_level10_sprites(o)
+    else if current_level_index == 13
+        o = draw_level9sub1_sprites(o)
+    else if current_level_index == 14
+        o = draw_level9over1_sprites(o)
+    else if current_level_index == 15
+        o = draw_level9over2_sprites(o)
+    else if current_level_index == 16
+        o = draw_level10sub1_sprites(o)
+    else if current_level_index == 17
         o = game_over_sprites(o)
     
     // o = draw_item_bones(o) // Moved to main.fab for higher priority

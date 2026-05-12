@@ -1,0 +1,12 @@
+/*
+ * BlasNESmous - level 9 over 2
+ */
+
+fn level9over2_init()
+    // Initialization logic
+
+fn level9over2_main()
+    // Main logic
+
+fn draw_level9over2_sprites(U o) U
+    return o

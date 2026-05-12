@@ -333,7 +333,7 @@ fn draw_player_secondary(U o, U attr_xor) U
     return o
 
 fn update_sprites()
-    if current_level_index == 10
+    if current_level_index == 17
         hide_oam(0)
         return
     U o = 0

@@ -1,0 +1,12 @@
+/*
+ * BlasNESmous - level 10 sub 1
+ */
+
+fn level10sub1_init()
+    // Initialization logic
+
+fn level10sub1_main()
+    // Main logic
+
+fn draw_level10sub1_sprites(U o) U
+    return o

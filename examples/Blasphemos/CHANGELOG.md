@@ -43,6 +43,74 @@
 
 # Changes
 
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
+## [12.05.2026] - v788
+- Fix Warden arena walls and transition bug
+
+
 ## [12.05.2026] - v787
 - Fix Warden not hittable
 
