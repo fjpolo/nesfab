@@ -504,7 +504,7 @@ fn player_respawn()
         p.y = SSF(PLAYER_INITIAL_Y)
         p.camera_x = 0
     
-    for U i = 0; i < 16; i += 1
+    for U i = 0; i < 20; i += 1
         dead_pilgrims[i] = 0
         dead_wheelbrokens[i] = 0
         dead_eyes[i] = 0
@@ -1151,12 +1151,45 @@ fn handle_collisions()
         goto mode play_level(current_level_index)
         : preserves /game
     else if p.x > level_right_bound && current_level_index == 12
-        current_level_index = 17
+        current_level_index = 18
         p.level_index = current_level_index
         player_prepare_level_transition()
         p.camera_x = 0
         p.x = 16
         goto mode game_over(current_level_index)
+        : preserves /game
+    else if p.y < 0 && current_level_index == 10
+        U old_movement = p.movement
+        current_level_index = 17
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.movement = old_movement
+        spawn_from_bottom = true
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if p.y > SSF(238) && current_level_index == 17
+        U old_movement = p.movement
+        current_level_index = 10
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.movement = old_movement
+        spawn_from_top = true
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if p.x > level_right_bound && current_level_index == 17
+        current_level_index = 14
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if p.x < 0 && current_level_index == 14
+        current_level_index = 17
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        spawn_from_right = true
+        goto mode play_level(current_level_index)
         : preserves /game
     else if p.y < 0 && current_level_index == 11
         U old_movement = p.movement

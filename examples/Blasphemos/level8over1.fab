@@ -1,0 +1,12 @@
+/*
+ * BlasNESmous - level 8 over 1
+ */
+
+fn level8over1_init()
+    // Initialization logic
+
+fn level8over1_main()
+    // Main logic
+
+fn draw_level8over1_sprites(U o) U
+    return o

@@ -46,10 +46,10 @@ vars /game
     Bool spawn_from_right = false
     Bool spawn_from_top = false
     Bool spawn_from_bottom = false
-    U[16] dead_pilgrims = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
-    U[16] dead_wheelbrokens = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
-    U[16] dead_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
-    U[16] dead_following_eyes = U[16](0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    U[20] dead_pilgrims = U[20](0)
+    U[20] dead_wheelbrokens = U[20](0)
+    U[20] dead_eyes = U[20](0)
+    U[20] dead_following_eyes = U[20](0)
     Bool warden_defeated = false
     Bool warden_arrow_dismissed = false
     Bool mea_culpa_upgraded = false
@@ -333,7 +333,7 @@ fn draw_player_secondary(U o, U attr_xor) U
     return o
 
 fn update_sprites()
-    if current_level_index == 17
+    if current_level_index == 18
         hide_oam(0)
         return
     U o = 0
