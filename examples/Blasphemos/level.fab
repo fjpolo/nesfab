@@ -38,7 +38,7 @@ ct fn enraged_pilgrims_vec(Int{} x, Int{} y) EnragedPilgrim{}
 ct fn crucifieds_vec(Int{} x, Int{} y) Crucified{}
     Crucified{} out = Crucified{}()
     for UU i = 0; i < len(x); i += 1
-        push(out, Crucified(SS(x{i}), SS(y{i}), false, 0, 30, 0, 0, 0))
+        push(out, Crucified(SS(x{i}), SS(y{i}), false, 0, 60, 0, 0, 0))
     return out
 
 // Used in level.macrofab to format the items:
