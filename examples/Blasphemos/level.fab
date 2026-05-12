@@ -299,7 +299,13 @@ fn tile_at(UU pixel_x, UU pixel_y) U
 
 // Returns the collision at a pixel position:
 fn collision_at(UU pixel_x, UU pixel_y) U
-    return mt_ca[tile_at(pixel_x, pixel_y)] >> 2
+    U c = mt_ca[tile_at(pixel_x, pixel_y)] >> 2
+    if c == C_WALL && current_level_index == 1 && warden_defeated
+        // In Warden's arena, make walls walkable after defeat.
+        // Arena is roughly from X=352 to X=768.
+        if pixel_x > 352 && pixel_x < 768 && pixel_y < 224
+            return C_OPEN
+    return c
 ct fn _destroyed_masks() U[128]
     U[128] masks
     for U i = 0; i < 128; i += 1

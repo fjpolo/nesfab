@@ -43,6 +43,54 @@
 
 # Changes
 
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
+## [12.05.2026] - v787
+- Fix Warden not hittable
+
+
 ## [11.05.2026] - v786
 - Fix C_WALL collisions
 

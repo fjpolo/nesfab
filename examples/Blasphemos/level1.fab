@@ -383,3 +383,4 @@ fn draw_level1_sprites(U o) U
         o = push_oam_anim(o, 384 - p.camera_x, 72, anim)
 
     return o
+
