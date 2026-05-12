@@ -1,0 +1,9 @@
+#:name:# 
+#:path:# 
+
+ct U chr_#name#_index = _index
+
+chrrom (_index * $2000)
+    file(fmt, #"path"#)
+chrrom (_index * $2000 + $1000)
+    file(fmt, #"path"#)
