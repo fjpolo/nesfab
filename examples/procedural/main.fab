@@ -1,6 +1,6 @@
 /*
- * Procedural NES Game
- * A basic demo with procedural generation and player movement.
+ * Procedural NES Game - Cave Explorer
+ * Robust Column-to-Row drawing for better PPU compatibility.
  */
 
 chrrom ($0000)
@@ -9,9 +9,11 @@ chrrom ($1000)
     file(fmt, "assets/sprite.png")
 
 // Game constants
-ct U TILE_EMPTY = $00
-ct U TILE_WALL  = $23 // '#' character in font
-ct U TILE_PLAYER = $01
+ct U TILE_EMPTY   = $20 
+ct U TILE_WALL    = $58 // 'X'
+ct U TILE_FLOOR   = $2E // '.' 
+ct U TILE_BRICK   = $23 // '#'
+ct U TILE_STAR    = $2A // '*'
 
 // Player state
 struct Player
@@ -22,95 +24,132 @@ struct Player
 
 vars /game
     U frame_counter = 0
-    Player p = Player(120, 120, 0, false)
-    U seed_val = 0
+    Player p = Player(128, 120, 0, false)
+    Bool needs_regeneration = false
+    U[32] floor_heights
+    U[32] ceil_heights
 
 // NMI
 nmi game_nmi()
     frame_counter = frame_counter + 1
-    
-    // Upload palette if needed (we'll just do it once at start)
-    // ppu_upload_palette()
-    
-    // Set scroll
+    {PPUSTATUS}()
     {PPUSCROLL}(0)
     {PPUSCROLL}(0)
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
-    
-    // Update OAM and poll pads
     ppu_upload_oam_poll_pads(0)
 
-// Function to get tile at X, Y (simplified)
-fn get_tile(U x, U y) U
-    // This would normally read from VRAM or a buffer.
-    // For now, we'll just return a value based on a simple formula.
-    return TILE_EMPTY
+// MMC3 Bank selection helper
+fn select_chr_8kb(U bank)
+    U base = bank << 3
+    mmc3_select(0, base)
+    mmc3_select(1, base + 2)
+    mmc3_select(2, base + 4)
+    mmc3_select(3, base + 5)
+    mmc3_select(4, base + 6)
+    mmc3_select(5, base + 7)
+
+fn update_biome()
+    U b = rand() & 3
+    if b == 0 // Rock
+        palette[1] = $00
+        palette[2] = $10
+    else if b == 1 // Lava
+        palette[1] = $06
+        palette[2] = $16
+    else if b == 2 // Ice
+        palette[1] = $11
+        palette[2] = $21
+    else // Forest
+        palette[1] = $0A
+        palette[2] = $1A
+    ppu_upload_palette()
+
+fn generate_cave()
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    
+    // 1. Generate heights in column-major order (Random Walk)
+    U fh = 8
+    U ch = 8
+    for U x = 0; x < 32; x += 1
+        U r = rand() & 3
+        if r == 1 && fh < 12
+            fh += 1
+        else if r == 2 && fh > 4
+            fh -= 1
+            
+        r = rand() & 3
+        if r == 1 && ch < 12
+            ch += 1
+        else if r == 2 && ch > 4
+            ch -= 1
+        
+        floor_heights[x] = fh
+        ceil_heights[x] = ch
+
+    // 2. Draw to PPU in row-major order (Efficient)
+    ppu_set_addr($2000)
+    for U y = 0; y < 30; y += 1
+        for U x = 0; x < 32; x += 1
+            U tile = TILE_EMPTY
+            if y < ceil_heights[x]
+                tile = TILE_WALL
+            else if y > (29 - floor_heights[x])
+                tile = TILE_BRICK
+            else if y == (29 - floor_heights[x])
+                tile = TILE_FLOOR
+            else
+                if (rand() & $7F) == 0
+                    tile = TILE_STAR
+            {PPUDATA}(tile)
+        
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+    {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
 
 // MAIN
 mode main()  
     mmc3_reset()
     {PPUCTRL}(0)
     {PPUMASK}(0)
-    hide_oam(0)    
     
-    // Set a vibrant palette
-    palette[PALETTE_UBC] = $0F // Black background
+    wait_polled(4)
+    select_chr_8kb(0)
     
-    // BG Palettes
-    palette[0] = $00
-    palette[1] = $10
-    palette[2] = $30
-    palette[3] = $01
-    palette[4] = $11
-    palette[5] = $21
-    palette[6] = $06
-    palette[7] = $16
-    palette[8] = $26
-
-    
-    palette[12] = $15
-    palette[13] = $27
-    palette[14] = $30
+    palette[PALETTE_UBC] = $0F
+    palette[0] = $00 
+    palette[1] = $10 
+    palette[2] = $20 
+    palette[3] = $01 
+    palette[4] = $11 
+    palette[5] = $21 
+    palette[12] = $0F
+    palette[13] = $05
+    palette[14] = $15
+    palette[15] = $30
     
     ppu_upload_palette()
+    hide_oam(0)
+    seed(frame_counter + 1)
     
-    // Procedural Screen Generation
-    ppu_set_addr($2000)
-    seed(frame_counter) // Use frame counter as seed
-    
-    for U y = 0; y < 30; y += 1
-        for U x = 0; x < 32; x += 1
-            U tile = TILE_EMPTY
-            if y == 0 || y == 29 || x == 0 || x == 31
-                tile = TILE_WALL
-            else if (rand() & $1F) == 0
-                tile = TILE_WALL
-                
-            {PPUDATA}(tile)
-            
-    // Draw Title
-    ppu_set_addr($2042)
-    {PPUDATA}($10) // 'P' (approximate)
-    {PPUDATA}($12) // 'R'
-    {PPUDATA}($0F) // 'O'
-    {PPUDATA}($03) // 'C'
-    {PPUDATA}($05) // 'E'
-    {PPUDATA}($04) // 'D'
-    {PPUDATA}($15) // 'U'
-    {PPUDATA}($12) // 'R'
-    {PPUDATA}($01) // 'A'
-    {PPUDATA}($0C) // 'L'
-    
-    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+    update_biome()
+    generate_cave()
 
     while true
         nmi
         update_pads()
         
-        // Input Handling
-        U old_x = p.x
-        U old_y = p.y
+        if needs_regeneration
+            update_biome()
+            generate_cave()
+            needs_regeneration = false
+            
+        if pads[0].pressed & (BUTTON_START | BUTTON_A | BUTTON_B)
+            seed(frame_counter)
+            needs_regeneration = true
         
+        // Input
+        U old_x = p.x
         if pads[0].held & BUTTON_LEFT
             p.x -= 1
             p.facing_left = true
@@ -122,31 +161,16 @@ mode main()
         if pads[0].held & BUTTON_DOWN
             p.y += 1
             
-        // Simple bounds check
         if p.x < 8 || p.x > 240 || p.y < 8 || p.y > 224
             p.x = old_x
-            p.y = old_y
 
-        // Animation
-        if (frame_counter & 7) == 0
-            p.frame = (p.frame + 1) & 3
-
-        // Sprite Rendering
+        // Render Player
         U attr = 0
         if p.facing_left
             attr |= ATTR_H_FLIP
             
-        // Draw a 2x2 player sprite (16x16 pixels)
-        set_oam(0, p.x,     p.y,     $00, attr)
-        set_oam(4, p.x + 8, p.y,     $01, attr)
-        set_oam(8, p.x,     p.y + 8, $10, attr)
-        set_oam(12, p.x + 8, p.y + 8, $11, attr)
-        
+        set_oam(0, p.x,     p.y,     $10, attr)
+        set_oam(4, p.x + 8, p.y,     $11, attr)
+        set_oam(8, p.x,     p.y + 8, $20, attr)
+        set_oam(12, p.x + 8, p.y + 8, $21, attr)
         hide_oam(16)
-        
-        // Procedural "living" tiles: change one random tile every frame
-        if (frame_counter & 7) == 0
-            U rx = (rand() & 30) + 1
-            U ry = (rand() & 28) + 1
-            ppu_set_addr($2000 + (UU(ry) << 5) + UU(rx))
-            {PPUDATA}(U(rand() & $3F))
