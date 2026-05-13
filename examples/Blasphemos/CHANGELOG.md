@@ -1,5 +1,89 @@
 # Changes
 
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
+## [13.05.2026] - v793
+- Start working on Damned enemy
+
+
 ## [12.05.2026] - v791
 - Add crucified, not attacking yet
 

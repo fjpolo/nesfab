@@ -25,6 +25,7 @@ ct Int PARRY_COOLDOWN = 120
 ct U ATTACK_NORMAL = 0
 ct U ATTACK_BOSS = 1
 ct U ATTACK_PILGRIM = 2
+ct U ATTACK_CRUCIFIED = 3
 
 
 // Player speeds
@@ -1290,6 +1291,8 @@ fn hurt_player(U attack_type, SS ex) Bool
             damage = 10
         else if attack_type == ATTACK_PILGRIM
             damage = 13
+        else if attack_type == ATTACK_CRUCIFIED
+            damage = 18
         
         // Final safety check: never damage if parrying
         if p.parry_timer > 0 || p.movement == PLAYER_MOVING_PARRY

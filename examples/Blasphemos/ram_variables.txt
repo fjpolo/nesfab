@@ -16,8 +16,8 @@ scroll_coin_ppuaddr                      2        $0018-$0019
 raw_pads                                 1        $001A
 scroll_tiles                             1        $001C
 scroll_attrs                             1        $003A
-current_level_enemies                    3        $0042-$0043, $07B4
-current_level                            3        $0044-$0045, $07B5
+current_level_enemies                    3        $0042-$0043, $07B8
+current_level                            3        $0044-$0045, $07B9
 mt_ca                                    2        $0046-$0047
 mt_se                                    2        $0048-$0049
 mt_sw                                    2        $004A-$004B
@@ -97,43 +97,43 @@ key_x                                    1        $0353
 enraged_pilgrim_anim_state               5        $0363, $036B, $0373, $037B, $0383
 saved_following_eye__y                   1        $038B
 saved_following_eye__x                   1        $0393
-enemies_following_eye_anim_state         5        $039B, $03C3, $03D3, $0600, $0618
-saved_following_eye__state               1        $03A3
-wheelbroken_anim_state                   5        $03AB, $03B3, $03BB, $03E3, $03EB
-item_bones                               5        $03CB, $0648, $0670, $0678, $0680
-enemies_eye_anim_state                   5        $03DB, $0628, $0630, $0638, $0640
-item_bone_anim_state                     5        $03F3, $0650, $0658, $0660, $0668
-enraged_pilgrims                         10       $03FB, $06F2, $0708, $070C, $0710, $071C, $0730, $0734, $0738, $0768
+saved_following_eye__state               1        $039B
+enemies_following_eye_anim_state         5        $03A3, $03E3, $03EB, $0610, $0618
+wheelbroken_anim_state                   5        $03AB, $03B3, $03BB, $03F3, $0600
+following_eye_hurt_timer                 1        $03C3
+eye_hurt_timer                           1        $03CB
+item_bones                               5        $03D3, $0628, $0638, $0640, $0648
+following_eye_blocked_timer              1        $03DB
+enraged_pilgrims                         10       $03FB, $06F2, $0708, $070C, $071C, $0724, $0728, $072C, $0730, $076C
 warden_spike_wave_origin_y               3        $03FF, $06FE-$06FF
 destroyed                                1        $0400
 oam                                      1        $0500
-following_eye_blocked_timer              1        $0608
-eye_hurt_timer                           1        $0610
-following_eye_hurt_timer                 1        $0620
+item_bone_anim_state                     5        $0608, $0660, $0668, $0670, $0680
+enemies_eye_anim_state                   5        $0620, $0630, $0650, $0658, $0678
 eye_blocked_timer                        1        $0688
 warden_spike_anim                        5        $0690, $069C, $06A2, $06A8, $06AE
 warden_spike_active                      1        $0696
 warden_spike_timer                       1        $06B4
 warden_spike_y                           3        $06BA, $06C0, $06D2
 warden_spike_x                           3        $06C6, $06CC, $06D8
-crucifieds                               10       $06DE, $06EA, $06F6, $0718, $073C, $0740, $0750, $0754, $0758, $075C
-wheelbrokens                             10       $06E2, $06FA, $0700, $0704, $0714, $0720, $0724, $0728, $072C, $076C
-enemies_following_eye                    3        $06E6, $06EE, $077C
+wheelbrokens                             10       $06DE, $06FA, $0704, $0710, $0714, $0720, $0738, $073C, $0740, $0770
+crucifieds                               11       $06E2, $06EA, $06EE, $0700, $0718, $0734, $0750, $0754, $0758, $075C, $0768
+enemies_following_eye                    3        $06E6, $06F6, $0780
 crucified_anim_state                     5        $0744, $0748, $074C, $0760, $0764
-enemies_eye                              3        $0770, $0774, $0778
-warden_projectile_active                 1        $0780
-warden_projectile_anim                   5        $0783, $0786, $0789, $078C, $078F
-warden_projectile_ground_timer           1        $0792
-warden_projectile_y                      3        $0795, $0798, $07AD
-warden_projectile_x                      3        $079B, $079E, $07B0
-warden_projectile_vx                     2        $07A1, $07A4
-warden_projectile_vy                     2        $07A7, $07AA
-current_level_width                      1        $07B3
-warden_spike_wave_origin_x               3        $07B6, $07B8-$07B9
-current_level_height                     1        $07B7
+enemies_eye                              3        $0774, $0778, $077C
+warden_projectile_active                 1        $0784
+warden_projectile_anim                   5        $0787, $078A, $078D, $0790, $0793
+warden_projectile_ground_timer           1        $0796
+warden_projectile_y                      3        $0799, $079C, $07B1
+warden_projectile_x                      3        $079F, $07A2, $07B4
+warden_projectile_vx                     2        $07A5, $07AE
+warden_projectile_vy                     2        $07A8, $07AB
+current_level_width                      1        $07B7
+current_level_height                     1        $07BA
+warden_spike_wave_origin_x               3        $07BB-$07BD
 
 ================================================================================
-Variable Bytes: 287
+Variable Bytes: 288
 System Bytes:   477
-Free Bytes:     1284
-Total Usage:    764/2048 bytes (37.3%)
+Free Bytes:     1283
+Total Usage:    765/2048 bytes (37.4%)
