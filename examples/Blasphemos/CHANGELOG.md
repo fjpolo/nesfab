@@ -1,5 +1,9 @@
 # Changes
 
+## [14.05.2026] - v794
+- Crucified now attack, but inverted, but fuck it
+
+
 ## [13.05.2026] - v793
 - Start working on Damned enemy
 
