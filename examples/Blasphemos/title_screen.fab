@@ -104,6 +104,9 @@ mode title_screen(U level_index)
         hide_oam(o)
         ppu_upload_oam_poll_pads(0)
         update_pads()
+        // Consume SELECT press on title screen so it doesn't trigger map
+        is_select_pressed = false
+
 
         if is_start_pressed
             game_state = GAME_STATE_PLAY

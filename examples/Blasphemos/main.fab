@@ -11,6 +11,7 @@ ct Int START_BUTTON_DEBOUNCE_FRAMES = 5
 ct Int GAME_STATE_TITLE = 1
 ct Int GAME_STATE_PLAY = 2
 ct Int GAME_STATE_WIN = 3
+ct Int GAME_STATE_MAP = 4
 ct Int GAME_STATE_GAME_OVER = 63
 
 ct U GAME_MODE_NORMAL = 0
@@ -48,6 +49,7 @@ vars /game
     Bool spawn_from_bottom = false
     U[20] dead_pilgrims = U[20](0)
     U[20] dead_wheelbrokens = U[20](0)
+    U[4] explored_rooms = U[4](0, 0, 0, 0)
     U[20] dead_eyes = U[20](0)
     U[20] dead_following_eyes = U[20](0)
     U[20] dead_crucifieds = U[20](0)
@@ -65,6 +67,32 @@ data /game
         U[10](BUTTON_UP, BUTTON_UP, BUTTON_DOWN, BUTTON_DOWN, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_LEFT, BUTTON_RIGHT, BUTTON_B, BUTTON_A)
     [] level_cheat_code
         U[4](BUTTON_B, BUTTON_A, BUTTON_B, BUTTON_A)
+
+struct MapCoord
+    U x
+    U y
+
+ct MapCoord[] level_map_coords = MapCoord[](
+    MapCoord(0, 0),   // 0: Title
+    MapCoord(5, 10),  // 1: Level 1
+    MapCoord(6, 10),  // 2: Level 2
+    MapCoord(7, 10),  // 3: Level 3
+    MapCoord(8, 10),  // 4: Level 4
+    MapCoord(8, 11),  // 5: Level 4 Sub1
+    MapCoord(9, 10),  // 6: Level 5
+    MapCoord(10, 10), // 7: Level 6
+    MapCoord(11, 10), // 8: Level 7
+    MapCoord(11, 9),  // 9: Level 7over1
+    MapCoord(12, 10), // 10: Level 8
+    MapCoord(13, 10), // 11: Level 9
+    MapCoord(14, 10), // 12: Level 10
+    MapCoord(13, 11), // 13: Level 9sub1
+    MapCoord(13, 9),  // 14: Level 9over1
+    MapCoord(13, 8),  // 15: Level 9over2
+    MapCoord(14, 11), // 16: Level 10sub1
+    MapCoord(12, 9),  // 17: Level 8over1
+    MapCoord(15, 10)  // 18: Game Over
+)
 
 // NMI
 nmi game_nmi()
@@ -137,6 +165,10 @@ mode main()
                 goto mode title_screen(current_level_index)
                 : preserves /game
                 break
+            case GAME_STATE_MAP
+                goto mode map_screen(current_level_index)
+                : preserves /game
+                break
             default
                 current_level_index = p.level_index
                 p.is_initialised = false
@@ -151,6 +183,9 @@ mode play_level(U level_index)
     hide_oam(0)
     
     load_level(levels[level_index])
+    
+    // Mark as explored
+    explored_rooms[level_index >> 3] |= (U(1) << (level_index & 7))
 
     if !p.is_initialised
         p = make_player_penitent()
@@ -182,6 +217,12 @@ mode play_level(U level_index)
             check_cheats()
             update_sprites()
             update_scroll()
+
+            if is_select_pressed
+                is_select_pressed = false
+                game_state = GAME_STATE_MAP
+                goto mode map_screen(current_level_index)
+                : preserves /game
         else
             update_pause_sprites()
 
@@ -563,3 +604,48 @@ fn check_cheats()
     
     if cheat_shake_timer > 0
         cheat_shake_timer -= 1
+
+// MAP SCREEN
+mode map_screen(U previous_level)
+: nmi game_nmi
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    
+    // Save state so we can render the map properly at origin
+    SS saved_camera = p.camera_x
+    p.camera_x = 0
+    current_level_index = 255 // Dummy value to prevent level_init side effects
+    
+    // Load the map level graphics, palettes, and metatiles using the mapfab level
+    load_level(@lev_map)
+
+    // Ensure PPU control is turned back on if load_level disables it
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+
+    while true
+        nmi
+        
+        // Draw Player Marker over the map
+        MapCoord pc = level_map_coords[previous_level]
+        if (frame_counter & 16) != 0 // Flash every 16 frames
+            // Assuming 1 tile = 1 room. Scale appropriately if needed.
+            set_oam(0, pc.x << 3, pc.y << 3, $0B, 1) // Using Palette 1 (Red usually)
+        else
+            set_oam(0, 0, 240, 0, 0) // Hide
+        
+        ppu_upload_oam_poll_pads(0)
+        update_pads()
+        
+        if is_select_pressed || is_start_pressed
+            is_select_pressed = false
+            is_start_pressed = false
+            
+            // Restore state
+            current_level_index = previous_level
+            p.camera_x = saved_camera
+            
+            game_state = GAME_STATE_PLAY
+            goto mode play_level(previous_level)
+            : preserves /game
+
