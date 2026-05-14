@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlasNESmous - Instruction Manual</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Press+Start+2P&family=MedievalSharp&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nes-red: #E4000F;
+            --nes-blue: #004DFF;
+            --nes-grey: #D8D8D8;
+            --nes-dark: #202020;
+            --paper: #f4e4bc;
+            --ink: #2b2b2b;
+        }
+
+        @page {
+            size: A5;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #333;
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+        }
+
+        .manual-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .page {
+            width: 148mm;
+            height: 210mm;
+            background: var(--paper);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            padding: 15mm;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #c4b48c;
+        }
+
+        @media print {
+            body { background: none; }
+            .manual-container { padding: 0; gap: 0; }
+            .page { 
+                box-shadow: none; 
+                page-break-after: always; 
+                border: none;
+            }
+            .no-print { display: none; }
+        }
+
+        /* Texture Overlay */
+        .page::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'MedievalSharp', cursive;
+            text-transform: uppercase;
+            margin-top: 0;
+            border-bottom: 2px solid var(--ink);
+            padding-bottom: 5px;
+        }
+
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        /* Cover Page */
+        .page.cover {
+            padding: 0;
+            background: var(--nes-dark);
+            color: white;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .cover-art {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        .cover-overlay {
+            position: relative;
+            z-index: 1;
+            background: rgba(0,0,0,0.4);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            border: 10px solid #555;
+        }
+
+        .nes-border {
+            border: 4px solid white;
+            padding: 10px;
+        }
+
+        .nintendo-seal {
+            width: 60px;
+            margin: 0 auto;
+        }
+
+        /* Content Pages */
+        .page-number {
+            position: absolute;
+            bottom: 10mm;
+            right: 10mm;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .safety-warning {
+            border: 3px solid var(--nes-red);
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .safety-header {
+            background: var(--nes-red);
+            color: white;
+            font-weight: bold;
+            padding: 5px;
+            margin: -10px -10px 10px -10px;
+            text-align: center;
+        }
+
+        /* Controls Graphic */
+        .controller-map {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            background: #ddd;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #999;
+        }
+
+        .label-line {
+            position: absolute;
+            height: 2px;
+            background: var(--nes-red);
+        }
+
+        .control-label {
+            position: absolute;
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--nes-red);
+            text-transform: uppercase;
+        }
+
+        /* Enemies List */
+        .enemy-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: start;
+        }
+
+        .enemy-sprite {
+            width: 64px;
+            height: 64px;
+            background: #ccc;
+            border: 2px solid var(--nes-dark);
+            image-rendering: pixelated;
+        }
+
+        .enemy-info h3 {
+            margin: 0;
+            font-size: 16px;
+            border: none;
+        }
+
+        /* Utility */
+        .highlight { color: var(--nes-red); font-weight: bold; }
+        .center { text-align: center; }
+        .full-width { width: 100%; }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 30px;
+            background: var(--nes-red);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .print-btn:hover { background: #ff2a3a; }
+
+    </style>
+</head>
+<body>
+
+    <button class="print-btn no-print" onclick="window.print()">GENERATE PDF (PRINT)</button>
+
+    <div class="manual-container">
+
+        <!-- PAGE 1: COVER -->
+        <div class="page cover">
+            <img src="cover.png" alt="BlasNESmous Cover" class="cover-art">
+            <div class="cover-overlay">
+                <div>
+                    <p class="pixel-font">NES-BN-USA</p>
+                </div>
+                <div class="nes-border">
+                    <h1 style="border:none; margin:0; font-size: 32px;">BlasNESmous</h1>
+                    <p class="pixel-font" style="margin-top:10px;">INSTRUCTION BOOKLET</p>
+                </div>
+                <div>
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Official_Nintendo_Seal_of_Quality.svg/1200px-Official_Nintendo_Seal_of_Quality.svg.png" class="nintendo-seal" alt="Seal">
+                    <p class="pixel-font" style="font-size: 8px;">SOUTHPOLE ENTERTAINMENT SYSTEM</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: SAFETY & TOC -->
+        <div class="page">
+            <div class="safety-warning">
+                <div class="safety-header">PRECAUTIONS</div>
+                <p style="font-size: 11px; margin: 0;">
+                    1) This is a high precision Game Pak. It should not be stored in places that are very hot or cold. Never hit it or drop it.<br><br>
+                    2) Do not touch the connectors, do not get them wet or dirty. Doing so may damage the game.<br><br>
+                    3) Do not clean with benzene, paint thinner, alcohol or other such solvents.
+                </p>
+            </div>
+
+            <h2>TABLE OF CONTENTS</h2>
+            <ul class="pixel-font" style="list-style: none; padding: 0;">
+                <li>03. THE MIRACLE OF CUSTODIA</li>
+                <li>04. THE PENITENT ONE</li>
+                <li>05. CONTROLLING THE PENITENT</li>
+                <li>06. COMBAT & PENANCE</li>
+                <li>07. ITEMS OF THE MIRACLE</li>
+                <li>08. FOES OF THE SILENT SORROW</li>
+                <li>09. TIPS & HINTS</li>
+            </ul>
+            <div class="page-number">2</div>
+        </div>
+
+        <!-- PAGE 3: STORY -->
+        <div class="page">
+            <h1>THE MIRACLE OF CVSTODIA</h1>
+            <p style="font-style: italic; color: #555;">"For twisted are the paths of the Miracle."</p>
+            <p>
+                In the land of Cvstodia, a foul curse known as <b>The Miracle</b> has fallen upon its inhabitants, turning their deepest guilt and piety into physical manifestations of agony and horror.
+            </p>
+            <p>
+                You are the <b>Penitent One</b>, the sole survivor of the brotherhood of the Silent Sorrow. Trapped in an endless cycle of death and rebirth, you must take up your sword, <i>Mea Culpa</i>, and find the source of your torment.
+            </p>
+            <p>
+                Only by completing your pilgrimage through the peaks and depths of Cvstodia can you hope to break the cycle and find true absolution.
+            </p>
+            <img src="penitent.png" alt="Penitent One" style="width: 100%; border: 4px solid var(--nes-dark); margin-top: 10px;">
+            <div class="page-number">3</div>
+        </div>
+
+        <!-- PAGE 4: CONTROLS -->
+        <div class="page">
+            <h1>CONTROLLING THE PENITENT</h1>
+            <div class="controller-map">
+                <!-- Simple SVG Controller Mockup -->
+                <svg viewBox="0 0 200 100" style="width: 100%; height: 100%;">
+                    <rect x="20" y="20" width="160" height="60" rx="5" fill="#ccc" stroke="#666" />
+                    <!-- D-PAD -->
+                    <rect x="40" y="40" width="10" height="20" fill="#333" />
+                    <rect x="35" y="45" width="20" height="10" fill="#333" />
+                    <!-- Buttons -->
+                    <circle cx="150" cy="55" r="8" fill="#a00" />
+                    <circle cx="130" cy="55" r="8" fill="#a00" />
+                    <text x="147" y="75" font-family="monospace" font-size="8">A</text>
+                    <text x="127" y="75" font-family="monospace" font-size="8">B</text>
+                    <!-- Select/Start -->
+                    <rect x="80" y="55" width="15" height="5" rx="2" fill="#666" />
+                    <rect x="105" y="55" width="15" height="5" rx="2" fill="#666" />
+                </svg>
+            </div>
+            
+            <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
+                <tr><td class="highlight">D-PAD</td><td>Move Left / Right</td></tr>
+                <tr><td class="highlight">A BUTTON</td><td>Jump / Pogo (while in air)</td></tr>
+                <tr><td class="highlight">B BUTTON</td><td>Attack with Mea Culpa</td></tr>
+                <tr><td class="highlight">UP</td><td>Climb Ladders / Doors</td></tr>
+                <tr><td class="highlight">START</td><td>Pause Game</td></tr>
+                <tr><td class="highlight">SELECT</td><td>Hold to Run</td></tr>
+            </table>
+
+            <h3 style="margin-top: 20px;">SPECIAL MANEUVERS</h3>
+            <p style="font-size: 11px;">
+                <span class="highlight">DASH:</span> Double-tap <span class="highlight">LEFT</span> or <span class="highlight">RIGHT</span> on the ground to perform a quick slide.
+            </p>
+            <p style="font-size: 11px;">
+                <span class="highlight">PARRY:</span> Hold <span class="highlight">UP</span> and press <span class="highlight">B</span> while on the ground to brace for an attack.
+            </p>
+            <div class="page-number">4</div>
+        </div>
+
+        <!-- PAGE 5: COMBAT -->
+        <div class="page">
+            <h1>COMBAT & PENANCE</h1>
+            <h3>MEA CULPA</h3>
+            <p style="font-size: 12px;">
+                Your sword, the Mea Culpa, is your only companion. Press <span class="highlight">B</span> to strike. You can chain attacks into a three-hit combo by timing your presses.
+            </p>
+            <h3>THE POGO STRIKE</h3>
+            <p style="font-size: 12px;">
+                While jumping, press <span class="highlight">A</span> again to perform a downward strike. If you hit an enemy or certain objects, you will bounce upward, allowing you to reach new heights.
+            </p>
+            <h3>HEALING</h3>
+            <p style="font-size: 12px;">
+                When your health is low, double-tap <span class="highlight">DOWN</span> to consume a <b>Bile Vessel</b>. This will restore a portion of your health instantly.
+            </p>
+            <div style="background: rgba(228,0,15,0.1); padding: 10px; border-left: 5px solid var(--nes-red); font-size: 11px;">
+                <strong>NOTE:</strong> You can only carry a limited number of Bile Vessels. Refill them at any <b>Prie Dieu</b> (Checkpoint).
+            </div>
+            <div class="page-number">5</div>
+        </div>
+
+        <!-- PAGE 6: FOES -->
+        <div class="page">
+            <h1>FOES OF CVSTODIA</h1>
+            
+            <div class="enemy-box">
+                <img src="crucified.png" class="enemy-sprite" alt="Crucified">
+                <div class="enemy-info">
+                    <h3>THE CRUCIFIED</h3>
+                    <p style="font-size: 11px; margin: 5px 0;">Sorrowful souls bound to their crosses. They will charge at you if you draw near.</p>
+                </div>
+            </div>
+
+            <div class="enemy-box">
+                <img src="pilgrim.png" class="enemy-sprite" alt="Enraged Pilgrim">
+                <div class="enemy-info">
+                    <h3>ENRAGED PILGRIM</h3>
+                    <p style="font-size: 11px; margin: 5px 0;">Armed with heavy staves, these pilgrims wander the wastes looking for heretics to crush.</p>
+                </div>
+            </div>
+
+            <div class="enemy-box">
+                <img src="wheelbroken.png" class="enemy-sprite" alt="Wheelbroken">
+                <div class="enemy-info">
+                    <h3>WHEELBROKEN</h3>
+                    <p style="font-size: 11px; margin: 5px 0;">Victims of the wheel, they spin uncontrollably across the ground. Jump over them or parry!</p>
+                </div>
+            </div>
+
+            <h3 class="highlight">THE WARDEN</h3>
+            <div class="enemy-box">
+                <img src="warden.webp" class="enemy-sprite" style="width: 80px; height: 80px;" alt="The Warden">
+                <p style="font-size: 11px;">
+                    The Warden of the Silent Sorrow guards the first gate. He is massive and wields a heavy stone slab. Watch his movements and strike when he rests.
+                </p>
+            </div>
+            
+            <div class="page-number">6</div>
+        </div>
+
+        <!-- PAGE 7: TIPS & TRICKS -->
+        <div class="page">
+            <h1>SECRETS</h1>
+            
+            <h3>PRIE DIEU</h3>
+            <p style="font-size: 12px;">
+                These altars serve as checkpoints. Kneeling at a Prie Dieu will restore your health and refill your Bile Vessels, but be warned: <span class="highlight">all defeated enemies will respawn.</span>
+            </p>
+
+            <h3>SECRET CODES</h3>
+            <p style="font-size: 12px;">
+                Ancient scrolls speak of a "Konami" ritual. Perhaps holding <span class="highlight">SELECT</span> while pressing <span class="highlight">UP</span> might grant a divine blessing of invincibility?
+            </p>
+
+            <h3>MAP NAVIGATION</h3>
+            <p style="font-size: 12px;">
+                Cvstodia is vast. Look for ladders and hidden passages. If a jump seems too far, try the <span class="highlight">POGO STRIKE</span> on a flying enemy or background object.
+            </p>
+
+            <div style="margin-top: 30px; border-top: 1px dashed #999; padding-top: 10px; font-size: 10px; color: #777;">
+                © 2026 Southpole Entertainment. All Rights Reserved.<br>
+                Based on the BlasNESmous Engine.
+            </div>
+            <div class="page-number">7</div>
+        </div>
+
+        <!-- PAGE 8: BACK COVER -->
+        <div class="page cover" style="justify-content: flex-end; padding-bottom: 40px;">
+            <div class="nes-border" style="width: 80%; margin: 0 auto; background: rgba(0,0,0,0.8);">
+                <p class="pixel-font" style="font-size: 12px;">THANKS FOR PLAYING!</p>
+                <p style="font-size: 10px;">Visit <span class="highlight">fjpolo.itch.io</span> for more NES games.</p>
+            </div>
+            <div style="margin-top: 40px;">
+                <p class="pixel-font" style="font-size: 8px;">PRINTED IN CVSTODIA</p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
