@@ -1,5 +1,13 @@
 # Changes
 
+## [14.05.2026] - v799
+- Update manual
+
+
+## [14.05.2026] - v799
+- Update manual
+
+
 ## [14.05.2026] - v798
 - docs: Fix broken seal image with a custom local Southpole Seal
 

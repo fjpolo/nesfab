@@ -14,13 +14,17 @@ fn level4_init()
 fn level4_main()
     // Altar hit detection
     // Adjusted: 4 pixels left (128 - 4 = 124)
-    if current_level_index == 4 && (!prie_dieu_lit || last_prie_dieu_level != 4) && p.movement == PLAYER_MOVING_ATTACK
+    if current_level_index == 4 && p.movement == PLAYER_MOVING_ATTACK
         if player_sword_x < 132 && (player_sword_x + player_sword_w) > 116
-             prie_dieu_lit = true
-             last_prie_dieu_level = current_level_index
-             last_prie_dieu_x = p.x
-             last_prie_dieu_y = SS(p.y)
-             log(@"Prie Dieu Level 4 lit!"l)
+             if !prie_dieu_lit || last_prie_dieu_level != 4
+                 prie_dieu_lit = true
+                 last_prie_dieu_level = current_level_index
+                 last_prie_dieu_x = p.x
+                 last_prie_dieu_y = SS(p.y)
+                 log(@"Prie Dieu Level 4 lit!"l)
+             
+             p.health = U(PLAYER_MAX_HEALTH)
+             p.current_bile_vessels = p.max_bile_vessels
 
 fn draw_level4_sprites(U o) U
     if current_level_index == 4 && prie_dieu_lit && last_prie_dieu_level == 4

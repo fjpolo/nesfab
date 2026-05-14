@@ -16,8 +16,8 @@ scroll_coin_ppuaddr                      2        $0018-$0019
 raw_pads                                 1        $001A
 scroll_tiles                             1        $001C
 scroll_attrs                             1        $003A
-current_level_enemies                    3        $0042-$0043, $07B8
-current_level                            3        $0044-$0045, $07B9
+current_level_enemies                    3        $0042-$0043, $07B9
+current_level                            3        $0044-$0045, $06FF
 mt_ca                                    2        $0046-$0047
 mt_se                                    2        $0048-$0049
 mt_sw                                    2        $004A-$004B
@@ -105,7 +105,7 @@ eye_hurt_timer                           1        $03CB
 item_bones                               5        $03D3, $0628, $0638, $0640, $0648
 following_eye_blocked_timer              1        $03DB
 enraged_pilgrims                         10       $03FB, $06F2, $0708, $070C, $071C, $0724, $0728, $072C, $0730, $076C
-warden_spike_wave_origin_y               3        $03FF, $06FE-$06FF
+warden_spike_wave_origin_y               3        $03FF, $06FE, $07B7
 destroyed                                1        $0400
 oam                                      1        $0500
 item_bone_anim_state                     5        $0608, $0660, $0668, $0670, $0680
@@ -128,7 +128,7 @@ warden_projectile_y                      3        $0799, $079C, $07B1
 warden_projectile_x                      3        $079F, $07A2, $07B4
 warden_projectile_vx                     2        $07A5, $07AE
 warden_projectile_vy                     2        $07A8, $07AB
-current_level_width                      1        $07B7
+current_level_width                      1        $07B8
 current_level_height                     1        $07BA
 warden_spike_wave_origin_x               3        $07BB-$07BD
 
