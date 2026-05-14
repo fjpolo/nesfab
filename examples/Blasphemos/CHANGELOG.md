@@ -1,5 +1,21 @@
 # Changes
 
+## [14.05.2026] - v798
+- docs: Fix broken seal image with a custom local Southpole Seal
+
+
+## [14.05.2026] - v798
+- docs: Fix broken seal image with a custom local Southpole Seal
+
+
+## [14.05.2026] - v798
+- docs: Fix broken seal image with a custom local Southpole Seal
+
+
+## [14.05.2026] - v798
+- docs: Fix broken seal image with a custom local Southpole Seal
+
+
 ## [14.05.2026] - v794
 - Crucified now attack, but inverted, but fuck it
 
