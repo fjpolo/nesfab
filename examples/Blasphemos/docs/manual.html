@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlasNESmous - Instruction Manual</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Press+Start+2P&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Press+Start+2P&family=MedievalSharp&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --nes-red: #E4000F;
@@ -47,7 +50,7 @@
             background: var(--paper);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 15mm;
             display: flex;
             flex-direction: column;
@@ -55,28 +58,43 @@
         }
 
         @media print {
-            body { background: none; }
-            .manual-container { padding: 0; gap: 0; }
-            .page { 
-                box-shadow: none; 
-                page-break-after: always; 
+            body {
+                background: none;
+            }
+
+            .manual-container {
+                padding: 0;
+                gap: 0;
+            }
+
+            .page {
+                box-shadow: none;
+                page-break-after: always;
                 border: none;
             }
-            .no-print { display: none; }
+
+            .no-print {
+                display: none;
+            }
         }
 
         /* Texture Overlay */
         .page::before {
             content: "";
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
             opacity: 0.3;
             pointer-events: none;
         }
 
         /* Typography */
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             font-family: 'MedievalSharp', cursive;
             text-transform: uppercase;
             margin-top: 0;
@@ -104,13 +122,14 @@
             height: 100%;
             object-fit: cover;
             position: absolute;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
         }
 
         .cover-overlay {
             position: relative;
             z-index: 1;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.4);
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -201,9 +220,18 @@
         }
 
         /* Utility */
-        .highlight { color: var(--nes-red); font-weight: bold; }
-        .center { text-align: center; }
-        .full-width { width: 100%; }
+        .highlight {
+            color: var(--nes-red);
+            font-weight: bold;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .full-width {
+            width: 100%;
+        }
 
         .print-btn {
             position: fixed;
@@ -217,13 +245,15 @@
             font-weight: bold;
             cursor: pointer;
             z-index: 100;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .print-btn:hover { background: #ff2a3a; }
-
+        .print-btn:hover {
+            background: #ff2a3a;
+        }
     </style>
 </head>
+
 <body>
 
     <button class="print-btn no-print" onclick="window.print()">GENERATE PDF (PRINT)</button>
@@ -242,7 +272,8 @@
                     <p class="pixel-font" style="margin-top:10px;">INSTRUCTION BOOKLET</p>
                 </div>
                 <div>
-                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Official_Nintendo_Seal_of_Quality.svg/1200px-Official_Nintendo_Seal_of_Quality.svg.png" class="nintendo-seal" alt="Seal">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Official_Nintendo_Seal_of_Quality.svg/1200px-Official_Nintendo_Seal_of_Quality.svg.png"
+                        class="nintendo-seal" alt="Seal">
                     <p class="pixel-font" style="font-size: 8px;">SOUTHPOLE ENTERTAINMENT SYSTEM</p>
                 </div>
             </div>
@@ -253,7 +284,8 @@
             <div class="safety-warning">
                 <div class="safety-header">PRECAUTIONS</div>
                 <p style="font-size: 11px; margin: 0;">
-                    1) This is a high precision Game Pak. It should not be stored in places that are very hot or cold. Never hit it or drop it.<br><br>
+                    1) This is a high precision Game Pak. It should not be stored in places that are very hot or cold.
+                    Never hit it or drop it.<br><br>
                     2) Do not touch the connectors, do not get them wet or dirty. Doing so may damage the game.<br><br>
                     3) Do not clean with benzene, paint thinner, alcohol or other such solvents.
                 </p>
@@ -261,7 +293,7 @@
 
             <h2>TABLE OF CONTENTS</h2>
             <ul class="pixel-font" style="list-style: none; padding: 0;">
-                <li>03. THE MIRACLE OF CUSTODIA</li>
+                <li>03. THE MIRACLE OF CVSTODIA</li>
                 <li>04. THE PENITENT ONE</li>
                 <li>05. CONTROLLING THE PENITENT</li>
                 <li>06. COMBAT & PENANCE</li>
@@ -277,15 +309,20 @@
             <h1>THE MIRACLE OF CVSTODIA</h1>
             <p style="font-style: italic; color: #555;">"For twisted are the paths of the Miracle."</p>
             <p>
-                In the land of Cvstodia, a foul curse known as <b>The Miracle</b> has fallen upon its inhabitants, turning their deepest guilt and piety into physical manifestations of agony and horror.
+                In the land of Cvstodia, a foul curse known as <b>The Miracle</b> has fallen upon its inhabitants,
+                turning their deepest guilt and piety into physical manifestations of agony and horror.
             </p>
             <p>
-                You are the <b>Penitent One</b>, the sole survivor of the brotherhood of the Silent Sorrow. Trapped in an endless cycle of death and rebirth, you must take up your sword, <i>Mea Culpa</i>, and find the source of your torment.
+                You are the <b>Penitent One</b>, the sole survivor of the brotherhood of the Silent Sorrow. Trapped in
+                an endless cycle of death and rebirth, you must take up your sword, <i>Mea Culpa</i>, and find the
+                source of your torment.
             </p>
             <p>
-                Only by completing your pilgrimage through the peaks and depths of Cvstodia can you hope to break the cycle and find true absolution.
+                Only by completing your pilgrimage through the peaks and depths of Cvstodia can you hope to break the
+                cycle and find true absolution.
             </p>
-            <img src="penitent.png" alt="Penitent One" style="width: 100%; border: 4px solid var(--nes-dark); margin-top: 10px;">
+            <img src="penitent.png" alt="Penitent One"
+                style="width: 100%; border: 4px solid var(--nes-dark); margin-top: 10px;">
             <div class="page-number">3</div>
         </div>
 
@@ -309,22 +346,42 @@
                     <rect x="105" y="55" width="15" height="5" rx="2" fill="#666" />
                 </svg>
             </div>
-            
+
             <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
-                <tr><td class="highlight">D-PAD</td><td>Move Left / Right</td></tr>
-                <tr><td class="highlight">A BUTTON</td><td>Jump / Pogo (while in air)</td></tr>
-                <tr><td class="highlight">B BUTTON</td><td>Attack with Mea Culpa</td></tr>
-                <tr><td class="highlight">UP</td><td>Climb Ladders / Doors</td></tr>
-                <tr><td class="highlight">START</td><td>Pause Game</td></tr>
-                <tr><td class="highlight">SELECT</td><td>Hold to Run</td></tr>
+                <tr>
+                    <td class="highlight">D-PAD</td>
+                    <td>Move Left / Right</td>
+                </tr>
+                <tr>
+                    <td class="highlight">A BUTTON</td>
+                    <td>Jump</td>
+                </tr>
+                <tr>
+                    <td class="highlight">B BUTTON</td>
+                    <td>Attack / Pogo (mid-air)</td>
+                </tr>
+                <tr>
+                    <td class="highlight">UP</td>
+                    <td>Climb Ladders / Doors</td>
+                </tr>
+                <tr>
+                    <td class="highlight">START</td>
+                    <td>Pause Game</td>
+                </tr>
+                <tr>
+                    <td class="highlight">SELECT</td>
+                    <td>Hold to Run</td>
+                </tr>
             </table>
 
             <h3 style="margin-top: 20px;">SPECIAL MANEUVERS</h3>
             <p style="font-size: 11px;">
-                <span class="highlight">DASH:</span> Double-tap <span class="highlight">LEFT</span> or <span class="highlight">RIGHT</span> on the ground to perform a quick slide.
+                <span class="highlight">DASH:</span> Double-tap <span class="highlight">LEFT</span> or <span
+                    class="highlight">RIGHT</span> on the ground to perform a quick slide.
             </p>
             <p style="font-size: 11px;">
-                <span class="highlight">PARRY:</span> Hold <span class="highlight">UP</span> and press <span class="highlight">B</span> while on the ground to brace for an attack.
+                <span class="highlight">PARRY:</span> Hold <span class="highlight">UP</span> and press <span
+                    class="highlight">B</span> while on the ground to brace for an attack.
             </p>
             <div class="page-number">4</div>
         </div>
@@ -334,18 +391,23 @@
             <h1>COMBAT & PENANCE</h1>
             <h3>MEA CULPA</h3>
             <p style="font-size: 12px;">
-                Your sword, the Mea Culpa, is your only companion. Press <span class="highlight">B</span> to strike. You can chain attacks into a three-hit combo by timing your presses.
+                Your sword, the Mea Culpa, is your only companion. Press <span class="highlight">B</span> to strike. You
+                can chain attacks into a three-hit combo by timing your presses.
             </p>
             <h3>THE POGO STRIKE</h3>
             <p style="font-size: 12px;">
-                While jumping, press <span class="highlight">A</span> again to perform a downward strike. If you hit an enemy or certain objects, you will bounce upward, allowing you to reach new heights.
+                While jumping, press <span class="highlight">B</span> again to perform a downward strike. If you hit an
+                enemy or certain objects, you will bounce upward, allowing you to reach new heights.
             </p>
             <h3>HEALING</h3>
             <p style="font-size: 12px;">
-                When your health is low, double-tap <span class="highlight">DOWN</span> to consume a <b>Bile Vessel</b>. This will restore a portion of your health instantly.
+                When your health is low, double-tap <span class="highlight">DOWN</span> to consume a <b>Bile Vessel</b>.
+                This will restore a portion of your health instantly.
             </p>
-            <div style="background: rgba(228,0,15,0.1); padding: 10px; border-left: 5px solid var(--nes-red); font-size: 11px;">
-                <strong>NOTE:</strong> You can only carry a limited number of Bile Vessels. Refill them at any <b>Prie Dieu</b> (Checkpoint).
+            <div
+                style="background: rgba(228,0,15,0.1); padding: 10px; border-left: 5px solid var(--nes-red); font-size: 11px;">
+                <strong>NOTE:</strong> You can only carry a limited number of Bile Vessels. Refill them at any <b>Prie
+                    Dieu</b> (Checkpoint).
             </div>
             <div class="page-number">5</div>
         </div>
@@ -353,12 +415,13 @@
         <!-- PAGE 6: FOES -->
         <div class="page">
             <h1>FOES OF CVSTODIA</h1>
-            
+
             <div class="enemy-box">
                 <img src="crucified.png" class="enemy-sprite" alt="Crucified">
                 <div class="enemy-info">
                     <h3>THE CRUCIFIED</h3>
-                    <p style="font-size: 11px; margin: 5px 0;">Sorrowful souls bound to their crosses. They will charge at you if you draw near.</p>
+                    <p style="font-size: 11px; margin: 5px 0;">Sorrowful souls bound to their crosses. They will charge
+                        at you if you draw near.</p>
                 </div>
             </div>
 
@@ -366,7 +429,8 @@
                 <img src="pilgrim.png" class="enemy-sprite" alt="Enraged Pilgrim">
                 <div class="enemy-info">
                     <h3>ENRAGED PILGRIM</h3>
-                    <p style="font-size: 11px; margin: 5px 0;">Armed with heavy staves, these pilgrims wander the wastes looking for heretics to crush.</p>
+                    <p style="font-size: 11px; margin: 5px 0;">Armed with heavy staves, these pilgrims wander the wastes
+                        looking for heretics to crush.</p>
                 </div>
             </div>
 
@@ -374,7 +438,8 @@
                 <img src="wheelbroken.png" class="enemy-sprite" alt="Wheelbroken">
                 <div class="enemy-info">
                     <h3>WHEELBROKEN</h3>
-                    <p style="font-size: 11px; margin: 5px 0;">Victims of the wheel, they spin uncontrollably across the ground. Jump over them or parry!</p>
+                    <p style="font-size: 11px; margin: 5px 0;">Victims of the wheel, they spin uncontrollably across the
+                        ground. Jump over them or parry!</p>
                 </div>
             </div>
 
@@ -382,33 +447,38 @@
             <div class="enemy-box">
                 <img src="warden.webp" class="enemy-sprite" style="width: 80px; height: 80px;" alt="The Warden">
                 <p style="font-size: 11px;">
-                    The Warden of the Silent Sorrow guards the first gate. He is massive and wields a heavy stone slab. Watch his movements and strike when he rests.
+                    The Warden of the Silent Sorrow guards the first gate. He is massive and wields a heavy stone slab.
+                    Watch his movements and strike when he rests.
                 </p>
             </div>
-            
+
             <div class="page-number">6</div>
         </div>
 
         <!-- PAGE 7: TIPS & TRICKS -->
         <div class="page">
             <h1>SECRETS</h1>
-            
+
             <h3>PRIE DIEU</h3>
             <p style="font-size: 12px;">
-                These altars serve as checkpoints. Kneeling at a Prie Dieu will restore your health and refill your Bile Vessels, but be warned: <span class="highlight">all defeated enemies will respawn.</span>
+                These altars serve as checkpoints. Kneeling at a Prie Dieu will restore your health and refill your Bile
+                Vessels, but be warned: <span class="highlight">all defeated enemies will respawn.</span>
             </p>
 
             <h3>SECRET CODES</h3>
             <p style="font-size: 12px;">
-                Ancient scrolls speak of a "Konami" ritual. Perhaps holding <span class="highlight">SELECT</span> while pressing <span class="highlight">UP</span> might grant a divine blessing of invincibility?
+                Ancient scrolls speak of a "Konami" ritual. Perhaps holding <span class="highlight">SELECT</span> while
+                pressing <span class="highlight">UP</span> might grant a divine blessing of invincibility?
             </p>
 
             <h3>MAP NAVIGATION</h3>
             <p style="font-size: 12px;">
-                Cvstodia is vast. Look for ladders and hidden passages. If a jump seems too far, try the <span class="highlight">POGO STRIKE</span> on a flying enemy or background object.
+                Cvstodia is vast. Look for ladders and hidden passages. If a jump seems too far, try the <span
+                    class="highlight">POGO STRIKE</span> on a flying enemy or background object.
             </p>
 
-            <div style="margin-top: 30px; border-top: 1px dashed #999; padding-top: 10px; font-size: 10px; color: #777;">
+            <div
+                style="margin-top: 30px; border-top: 1px dashed #999; padding-top: 10px; font-size: 10px; color: #777;">
                 © 2026 Southpole Entertainment. All Rights Reserved.<br>
                 Based on the BlasNESmous Engine.
             </div>
@@ -429,4 +499,5 @@
     </div>
 
 </body>
+
 </html>
