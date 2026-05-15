@@ -1,5 +1,9 @@
 # Changes
 
+## [15.05.2026] - v806
+- Restore scanline IRQ HUD implementation
+
+
 ## [15.05.2026] - v804
 - HUD kind of working
 
