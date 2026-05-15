@@ -873,8 +873,8 @@ fn handle_input()
 
 fn is_on_ground() Bool
     UU y = UU(SS(p.y) + p.h)
-    UU x1 = UU(p.x)
-    UU x2 = UU(p.x + p.rw)
+    UU x1 = UU(p.x + 6)
+    UU x2 = UU(p.x + p.rw - 6)
     
     U t1 = collision_at(x1, y)
     U t2 = collision_at(x2, y)
@@ -944,8 +944,8 @@ fn handle_physics()
                 p.yspeed = 0
                 
                 UU feet_y = UU(SS(p.y) + p.h)
-                U t1 = collision_at(UU(p.x), feet_y)
-                U t2 = collision_at(UU(p.x + p.rw), feet_y)
+                U t1 = collision_at(UU(p.x + 6), feet_y)
+                U t2 = collision_at(UU(p.x + p.rw - 6), feet_y)
                 
                 SS snap_y = SS(feet_y & $F0)
                 if t1 == C_PLATFORM || t2 == C_PLATFORM
