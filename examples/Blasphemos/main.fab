@@ -71,27 +71,28 @@ data /game
 struct MapCoord
     U x
     U y
+    Bool is_vertical
 
 ct MapCoord[] level_map_coords = MapCoord[](
-    MapCoord(0, 0),   // 0: Title
-    MapCoord(5, 10),  // 1: Level 1
-    MapCoord(6, 10),  // 2: Level 2
-    MapCoord(7, 10),  // 3: Level 3
-    MapCoord(8, 10),  // 4: Level 4
-    MapCoord(8, 11),  // 5: Level 4 Sub1
-    MapCoord(9, 10),  // 6: Level 5
-    MapCoord(10, 10), // 7: Level 6
-    MapCoord(11, 10), // 8: Level 7
-    MapCoord(11, 9),  // 9: Level 7over1
-    MapCoord(12, 10), // 10: Level 8
-    MapCoord(13, 10), // 11: Level 9
-    MapCoord(14, 10), // 12: Level 10
-    MapCoord(13, 11), // 13: Level 9sub1
-    MapCoord(13, 9),  // 14: Level 9over1
-    MapCoord(13, 8),  // 15: Level 9over2
-    MapCoord(14, 11), // 16: Level 10sub1
-    MapCoord(12, 9),  // 17: Level 8over1
-    MapCoord(15, 10)  // 18: Game Over
+    MapCoord(0, 0, false),   // 0: Title
+    MapCoord(5, 10, false),  // 1: Level 1
+    MapCoord(6, 10, false),  // 2: Level 2
+    MapCoord(7, 10, false),  // 3: Level 3
+    MapCoord(8, 10, false),  // 4: Level 4
+    MapCoord(8, 11, true),   // 5: Level 4 Sub1
+    MapCoord(9, 10, false),  // 6: Level 5
+    MapCoord(10, 10, false), // 7: Level 6
+    MapCoord(11, 10, false), // 8: Level 7
+    MapCoord(11, 9, true),   // 9: Level 7over1
+    MapCoord(12, 10, false), // 10: Level 8
+    MapCoord(13, 10, false), // 11: Level 9
+    MapCoord(14, 10, false), // 12: Level 10
+    MapCoord(13, 11, true),  // 13: Level 9sub1
+    MapCoord(13, 9, true),   // 14: Level 9over1
+    MapCoord(13, 8, true),   // 15: Level 9over2
+    MapCoord(14, 11, true),  // 16: Level 10sub1
+    MapCoord(12, 9, true),   // 17: Level 8over1
+    MapCoord(15, 10, false)  // 18: Game Over
 )
 
 // NMI
@@ -620,19 +621,38 @@ mode map_screen(U previous_level)
     // Load the map level graphics, palettes, and metatiles using the mapfab level
     load_level(@lev_map)
 
-    // Ensure PPU control is turned back on if load_level disables it
+    // Ensure PPU is at 0,0 scroll before we start
+    ppu_reset_scroll(0, 0)
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+    {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
 
     while true
         nmi
         
+        U o = 0
+        
+        // Draw Explored Room Markers
+        for U i = 0; i < 19; i += 1
+            if (explored_rooms[i >> 3] & (U(1) << (i & 7))) != 0
+                MapCoord rc = level_map_coords[i]
+                if rc.x != 0 || rc.y != 0 // Don't draw title screen/invalid coords
+                    U tile = $2A
+                    if rc.is_vertical
+                        tile = $3A
+                    set_oam(o, rc.x << 3, (rc.y + 1) << 3, tile, 0)
+                    o += 4
+
         // Draw Player Marker over the map
         MapCoord pc = level_map_coords[previous_level]
         if (frame_counter & 16) != 0 // Flash every 16 frames
-            // Assuming 1 tile = 1 room. Scale appropriately if needed.
-            set_oam(0, pc.x << 3, pc.y << 3, $0B, 1) // Using Palette 1 (Red usually)
-        else
-            set_oam(0, 0, 240, 0, 0) // Hide
+            // Horizontal: 1/32 scale (8px per screen)
+            // Vertical: 1/16 scale (16px per screen)
+            SS map_px = (SS(pc.x) << 3) + (p.x >> 5)
+            SS map_py = ((SS(pc.y) + 1) << 3) + (SS(p.y) >> 4) - 11
+            set_oam(o, map_px.a, map_py.a, $3E, 1) // Using Palette 1
+            o += 4
+        
+        hide_oam(o)
         
         ppu_upload_oam_poll_pads(0)
         update_pads()
