@@ -1,5 +1,89 @@
 # Changes
 
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
+## [15.05.2026] - v803
+- Implement Map System fixes and Robust Sprite Rotation
+
+
 ## [15.05.2026] - v802
 - Map is kind of working
 

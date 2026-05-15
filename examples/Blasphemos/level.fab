@@ -141,6 +141,7 @@ fn load_level(CCC/levels level)
     if current_level_index == 7
         chr_bank += 16
     select_chr_8kb(chr_bank)
+    current_level_chr = chr_bank
 
     // Palette:
     load_palette(read CCC/palettes(level))

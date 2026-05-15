@@ -95,6 +95,80 @@ ct MapCoord[] level_map_coords = MapCoord[](
     MapCoord(15, 10, false)  // 18: Game Over
 )
 
+vars /hud
+    U last_hud_hp = 255
+    U last_hud_bile = 255
+    U last_hud_ap = 255
+    U last_hud_bones = 255
+
+    U current_level_chr = 0
+
+// HUD Bank Definition
+ct U CHR_HUD = 30 // Using bank 30 to be safely away from level data
+chrrom (CHR_HUD * $2000)
+    file(fmt, "assets/hud.png")
+    file(fmt, "assets/sprite.png")
+
+fn update_hud_tiles()
+    if p.health == last_hud_hp && p.current_bile_vessels == last_hud_bile && p.attack_power == last_hud_ap && total_bones_collected == last_hud_bones
+        return
+    
+    last_hud_hp = p.health
+    last_hud_bile = p.current_bile_vessels
+    last_hud_ap = p.attack_power
+    last_hud_bones = total_bones_collected
+
+    {PPUSTATUS}()
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+    
+    // Update both nametables to handle horizontal scrolling
+    for U nt = 0; nt < 2; nt += 1
+        UU base = UU($2000) + (UU(nt) << 10)
+        
+        // Clear Row 0 and Row 1 (Full 64 tiles)
+        ppu_set_addr(base)
+        for U i = 0; i < 64; i += 1
+            {PPUDATA}($00)
+
+        // Row 0: Health and Attack Power
+        ppu_set_addr(base + 1) // Row 0, Col 1
+        for U i = 0; i < 7; i += 1
+            if p.health >= U((i + 1) * 10)
+                {PPUDATA}($06) // Health icon
+            else
+                {PPUDATA}($00)
+        
+        // Attack Power at the end of Row 0
+        ppu_set_addr(base + 28)
+        U ap_tens = 0
+        U ap_ones = p.attack_power
+        while ap_ones >= 10
+            ap_ones -= 10
+            ap_tens += 1
+        {PPUDATA}(get_digit_tile(ap_tens))
+        {PPUDATA}(get_digit_tile(ap_ones))
+
+        // Row 1: Bile Vessels and Bones
+        ppu_set_addr(base + 32 + 1) // Row 1, Col 1
+        for U i = 0; i < p.max_bile_vessels; i += 1
+            if p.current_bile_vessels > i
+                {PPUDATA}($05) // Bile icon
+            else
+                {PPUDATA}($00)
+        
+        // Bones at the end of Row 1
+        ppu_set_addr(base + 32 + 28)
+        U b_tens = 0
+        U b_ones = total_bones_collected
+        while b_ones >= 10
+            b_ones -= 10
+            b_tens += 1
+        {PPUDATA}(get_digit_tile(b_tens))
+        {PPUDATA}(get_digit_tile(b_ones))
+
+fn force_hud_update()
+    last_hud_hp = 255
+
 // NMI
 nmi game_nmi()
     frame_counter = frame_counter + 1
@@ -105,28 +179,51 @@ nmi game_nmi()
         fps_ticks = 0
 
 
-    if game_state == GAME_STATE_TITLE
+    ppu_upload_oam_poll_pads(0)
+
+    if game_state == GAME_STATE_TITLE || game_state == GAME_STATE_MAP
         {PPUSCROLL}(0)
         {PPUSCROLL}(0)
         {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
     else
+        // Set HUD Bank for the top of the screen
+        mmc3_select(0, CHR_HUD << 3)
+        mmc3_select(1, (CHR_HUD << 3) + 2)
+
         ppu_upload_scroll()
-        U shake_x = 0
-        U shake_y = 0
-        if (warden_active && warden_hurt_timer > 0) || cheat_shake_timer > 0
-            shake_x = frame_counter & 3
-            shake_y = (frame_counter >> 1) & 3
+        update_hud_tiles() // Call after scroll upload to ensure priority
         
-        ppu_reset_scroll(p.camera_x.a + shake_x, shake_y)
-        {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | (p.camera_x.b & 1))
-        
+        // Set HUD scroll (0,0)
+        {PPUSCROLL}(0)
+        {PPUSCROLL}(0)
+        {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+
         // Flash red when hurt, solid red when dead
         if warden_active && (warden_state == WARDEN_STATE_DEAD || (warden_hurt_timer > 0 && (frame_counter & 2)))
             {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP | $20) // Tint screen red
         else
             {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
-    
-    ppu_upload_oam_poll_pads(0)
+
+        // Wait for Sprite 0 Hit (placed at Y=14 for the HUD split)
+        // With safety timeout to prevent hanging
+        for U timeout = 0; timeout < 200; timeout += 1
+            if ({PPUSTATUS}() & $40) != 0
+                break
+        
+        // Restore Level Bank for the gameplay area
+        mmc3_select(0, current_level_chr << 3)
+        mmc3_select(1, (current_level_chr << 3) + 2)
+
+        // Set Level Scroll
+        U shake_x = 0
+        U shake_y = 0
+        if (warden_active && warden_hurt_timer > 0) || cheat_shake_timer > 0
+            shake_x = frame_counter & 3
+            shake_y = (frame_counter >> 1) & 3
+            
+        {PPUSCROLL}(p.camera_x.a + shake_x)
+        {PPUSCROLL}(shake_y)
+        {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | (p.camera_x.b & 1))
 
     // Select pressed?
     if pads[0].held & BUTTON_SELECT
@@ -389,9 +486,7 @@ fn draw_eyes(U o) U
     return o
 
 fn get_digit_tile(U digit) U
-    if digit >= 5
-        return $DB + digit - 5
-    return $CB + digit
+    return $40 + digit
 
 fn draw_player_secondary(U o, U attr_xor) U
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
@@ -404,56 +499,10 @@ fn update_sprites()
         return
     U o = 0
 
-    // Draw Health (highest priority) - Each heart is 10 HP
-    for U i = 0; i < 7; i += 1
-        if p.health >= U((i + 1) * 10)
-            set_oam(o, 8 + (i << 3), 8, $0B, 0)
-            o += 4
-
-    // Draw Bile Vessels (below Health)
-    for U i = 0; i < p.max_bile_vessels; i += 1
-        if p.current_bile_vessels > i
-            set_oam(o, 8 + (i << 3), 16, $0B, 1)
-            o += 4
-
-    // Draw Attack Power (Cycle to prevent 9th sprite dropout on Y=8)
-    U ap_tens = 0
-    U ap_ones = p.attack_power
-    while ap_ones >= 10
-        ap_ones -= 10
-        ap_tens += 1
-    
-    if (frame_counter & 1) == 0
-        set_oam(o, 232, 8, get_digit_tile(ap_tens), 0) 
-        o += 4
-        set_oam(o, 240, 8, get_digit_tile(ap_ones), 0)
-        o += 4
-    else
-        set_oam(o, 240, 8, get_digit_tile(ap_ones), 0)
-        o += 4
-        set_oam(o, 232, 8, get_digit_tile(ap_tens), 0) 
-        o += 4
-
-    // Draw Collected Bones (Cycle to prevent sprite dropout on Y=16)
-    U b_tens = 0
-    U b_ones = total_bones_collected
-    while b_ones >= 10
-        b_ones -= 10
-        b_tens += 1
-
-    if (frame_counter & 1) == 0
-        set_oam(o, 232, 16, get_digit_tile(b_tens), 1) // Using palette 1 (gold/red)
-        o += 4
-        set_oam(o, 240, 16, get_digit_tile(b_ones), 1)
-        o += 4
-    else
-        set_oam(o, 240, 16, get_digit_tile(b_ones), 1)
-        o += 4
-        set_oam(o, 232, 16, get_digit_tile(b_tens), 1) 
-        o += 4
-
-
-
+    // Sprite 0 for HUD split (Must be at OAM index 0)
+    // Placed at X=240, Y=14. Set to be behind background ($20) to hide it.
+    set_oam(o, 240, 14, $00, $20)
+    o += 4
 
     // Stage 1: Player Primary (Always Stable)
     U attr_xor = 0

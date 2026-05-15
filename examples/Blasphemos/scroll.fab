@@ -76,7 +76,7 @@ fn update_scroll()
         n = mt_ne
         s = mt_se
 
-    scroll_tiles_ppuaddr = calc_scroll_tiles_ppuaddr(edge_x)
+    scroll_tiles_ppuaddr = calc_scroll_tiles_ppuaddr(edge_x) + $40 // Skip 16 pixels (2 rows)
     ptr += ((scroll_x & UU(~1)) << 3)
 
     // Calculate destroyed:
@@ -84,31 +84,33 @@ fn update_scroll()
     U mask = destroyed_masks[(edge_x.a << 3) & %01111111]
 
     // Set 'scroll_tiles':
-    for U y = 0; y < 15; y += 1
-        if destroyed[d] & mask
+    for U y = 0; y < 14; y += 1 // 14 metatiles (starting from level row 1)
+        if destroyed[d + 16] & mask // Offset d by 16 to skip first level row
             scroll_tiles[(y << 1) + 0] = $00
             scroll_tiles[(y << 1) + 1] = $00
         else
-            U tile = ptr[y]
+            U tile = ptr[y + 1] // Offset ptr by 1 to skip first level row
             scroll_tiles[(y << 1) + 0] = n[tile]
             scroll_tiles[(y << 1) + 1] = s[tile]
         d += 16
 
     // Set 'scroll_attrs':
     if edge_x & %11 == attrs_modulo
-        edge_x -= attrs_modulo
-        ptr -= (attrs_modulo & %10) << 3
-
-        scroll_attrs_ppuaddr = calc_scroll_attrs_ppuaddr(edge_x)
-        for U y = 0; y < 16; y += 2
-            U attr = mt_ca[ptr[y + 17]]
+        scroll_attrs_ppuaddr = calc_scroll_attrs_ppuaddr(edge_x) + 8 // Skip 1 attribute row (32 pixels)
+        // Adjust ptr to current column
+        ptr = current_level + UU(edge_x.a >> 4) * UU(current_level_height)
+        for U y = 0; y < 14; y += 2 // 14 metatiles = 7 attribute rows
+            U attr = mt_ca[ptr[y + 17]] // SE
             attr <<= 2
-            attr |= mt_ca[ptr[y + 1]] & %11
+            attr |= mt_ca[ptr[y + 1]] & %11 // NE
             attr <<= 2
-            attr |= mt_ca[ptr[y + 16]] & %11
+            attr |= mt_ca[ptr[y + 16]] & %11 // SW
             attr <<= 2
-            attr |= mt_ca[ptr[y + 0]] & %11
+            attr |= mt_ca[ptr[y + 0]] & %11 // NW
             scroll_attrs[y >> 1] = attr
+        // Clear remaining
+        for U i = 7; i < 8; i += 1
+            scroll_attrs[i] = 0
     else
         scroll_attrs_ppuaddr = 0
 
@@ -119,7 +121,7 @@ fn ppu_upload_scroll()
     {PPUCTRL}(PPUCTRL_VRAM_32_DOWN) // Used to writing columns of data.
     if scroll_tiles_ppuaddr
         ppu_set_addr(scroll_tiles_ppuaddr)
-        for U i = 0; i < len(scroll_tiles); i += 1
+        for U i = 0; i < 28; i += 1
             {PPUDATA}(scroll_tiles[i])
     if scroll_attrs_ppuaddr
         // Because we're using PPUCTRL_VRAM_32_DOWN, we'll upload attributes like this:
