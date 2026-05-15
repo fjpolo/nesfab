@@ -115,7 +115,7 @@ following_eye_hurt_timer                 1        $03E3
 item_bone_anim_state                     5        $03EB, $0630, $0670, $0678, $0680
 eye_hurt_timer                           1        $03F3
 enraged_pilgrims                         10       $03FB, $06FA, $0714, $0718, $071C, $0728, $0740, $0744, $0748, $0770
-warden_spike_wave_origin_x               3        $03FF, $07C3-$07C4
+current_level_height                     1        $03FF
 destroyed                                1        $0400
 oam                                      1        $0500
 item_bones                               5        $0628, $0650, $0658, $0660, $0668
@@ -128,7 +128,8 @@ warden_spike_y                           3        $06CE, $06D4, $06E0
 wheelbrokens                             10       $06E6, $0704, $070C, $0710, $0720, $072C, $0734, $0738, $073C, $0774
 crucifieds                               11       $06EA, $06F2, $0700, $0708, $0724, $0730, $074C, $0750, $0754, $0758, $076C
 enemies_following_eye                    3        $06EE, $06F6, $0788
-warden_spike_wave_origin_y               3        $06FE-$06FF, $07C5
+warden_spike_wave_origin_x               3        $06FE, $07C3-$07C4
+warden_spike_wave_origin_y               3        $06FF, $07BF, $07C5
 crucified_anim_state                     5        $075C, $0760, $0764, $0768, $0778
 enemies_eye                              3        $077C, $0780, $0784
 warden_projectile_active                 1        $078C
@@ -138,7 +139,6 @@ warden_projectile_y                      3        $07A1, $07A4, $07B9
 warden_projectile_x                      3        $07A7, $07AA, $07BC
 warden_projectile_vy                     2        $07AD, $07B0
 warden_projectile_vx                     2        $07B3, $07B6
-current_level_height                     1        $07BF
 current_level_width                      1        $07C2
 
 ================================================================================

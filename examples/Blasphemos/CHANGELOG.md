@@ -1,5 +1,33 @@
 # Changes
 
+## [15.05.2026] - v807
+- Fix scroll attributes and force HUD palette
+
+
+## [15.05.2026] - v807
+- Fix scroll attributes and force HUD palette
+
+
+## [15.05.2026] - v807
+- Fix scroll attributes and force HUD palette
+
+
+## [15.05.2026] - v807
+- Fix scroll attributes and force HUD palette
+
+
+## [15.05.2026] - v807
+- Fix scroll attributes and force HUD palette
+
+
+## [15.05.2026] - v807
+- Fix scroll attributes and force HUD palette
+
+
+## [15.05.2026] - v806
+- Restore scanline IRQ HUD implementation
+
+
 ## [15.05.2026] - v806
 - Restore scanline IRQ HUD implementation
 

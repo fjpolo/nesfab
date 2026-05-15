@@ -146,9 +146,11 @@ fn load_level(CCC/levels level)
     // Palette:
     load_palette(read CCC/palettes(level))
     // Force HUD Background Palette (Palette 0)
+    palette[0] = $0F // Black background for HUD
     palette[1] = $06 // Dark red for numbers
     palette[2] = $10 // Light grey for bars
     palette[3] = $30 // White for highlights
+
     // Sprite Palette 2 -> RED (for healing flash)
     palette[18] = $15 // Dark red
     palette[19] = $06 // Medium red
