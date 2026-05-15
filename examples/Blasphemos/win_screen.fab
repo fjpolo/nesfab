@@ -1,0 +1,34 @@
+data /strings
+    [] win_string
+        ( "VICTORY - PRESS START" )
+
+mode win_screen(U level_index)
+: nmi game_nmi
+    game_state = GAME_STATE_WIN
+    {PPUMASK}(0)
+    load_level(levels[level_index]) 
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+    
+    while true
+        nmi
+        
+        U o = 0
+        U cx = 48
+        U cy = 120
+        CCC/strings str = @win_string
+        for U i = 0; i < len(win_string); i += 1
+            U c = str[i]
+            if c != 0
+                set_oam(o, cx, cy, c + $80, 0)
+                o += 4
+            cx += 8
+            
+        hide_oam(o)
+
+        if is_start_pressed
+            is_start_pressed = false
+            // Reset game
+            game_state = GAME_STATE_START
+            goto mode main()
+            : preserves /game
+        update_pads()

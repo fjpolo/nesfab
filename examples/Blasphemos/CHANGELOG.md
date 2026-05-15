@@ -1,5 +1,17 @@
 # Changes
 
+## [15.05.2026] - v804
+- HUD kind of working
+
+
+## [15.05.2026] - v804
+- HUD kind of working
+
+
+## [15.05.2026] - v804
+- HUD kind of working
+
+
 ## [15.05.2026] - v803
 - Implement Map System fixes and Robust Sprite Rotation
 

@@ -4,7 +4,7 @@
  */
 
 // Button constants
-ct Int SELECT_BUTTON_DEBOUNCE_FRAMES = 5
+ct Int SELECT_BUTTON_DEBOUNCE_FRAMES = 70
 ct Int START_BUTTON_DEBOUNCE_FRAMES = 5
 
 // Game states
@@ -650,6 +650,7 @@ fn check_cheats()
         // "Shift" shortcuts (SELECT + Left/Right/Start)
         if (pads[0].held & BUTTON_SELECT)
             if pressed == BUTTON_START || pressed == BUTTON_RIGHT
+                select_counter = 0 // Prevent map screen opening
                 cheat_shake_timer = 30
                 current_level_index += 1
                 if current_level_index > LAST_LEVEL_INDEX
@@ -664,6 +665,7 @@ fn check_cheats()
                 : preserves /game
 
             else if pressed == BUTTON_LEFT
+                select_counter = 0 // Prevent map screen opening
                 cheat_shake_timer = 30
                 if current_level_index > FIRST_LEVEL_INDEX
                     current_level_index -= 1
