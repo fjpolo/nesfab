@@ -1,5 +1,45 @@
 # Changes
 
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
+## [15.05.2026] - v808
+- I think HUB now works properly with mMC3 scanline IRQ
+
+
 ## [15.05.2026] - v807
 - Fix scroll attributes and force HUD palette
 

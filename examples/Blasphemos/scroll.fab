@@ -56,8 +56,8 @@ fn update_scroll()
     U attrs_modulo
 
     if scroll_x < shifted_camera_x       // If we're scrolling right:
-        scroll_x += 1
         edge_x = scroll_x + 32
+        scroll_x += 1
         attrs_modulo = 0
         ptr += 256
     else if scroll_x > shifted_camera_x  // If we're scrolling left:

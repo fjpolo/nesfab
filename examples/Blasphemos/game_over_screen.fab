@@ -6,6 +6,7 @@ mode game_over_screen(U level_index)
 : nmi game_nmi
     {PPUMASK}(0)
     log(@"entered game_over_screen"l)
+    clear_hud_rows()
     load_level(levels[level_index]) 
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     

@@ -171,6 +171,14 @@ fn update_hud_tiles()
         {PPUDATA}(get_digit_tile(b_tens))
         {PPUDATA}(get_digit_tile(b_ones))
 
+fn clear_hud_rows()
+    {PPUSTATUS}()
+    for U nt = 0; nt < 2; nt += 1
+        UU base = UU($2000) + (UU(nt) << 10)
+        ppu_set_addr(base)
+        for U i = 0; i < 64; i += 1
+            {PPUDATA}($00)
+
 fn force_hud_update()
     last_hud_hp = 255
 
@@ -719,6 +727,9 @@ mode map_screen(U previous_level)
     p.camera_x = 0
     current_level_index = 255 // Dummy value to prevent level_init side effects
     
+    // Clear HUD rows from nametables so they don't show artifacts
+    clear_hud_rows()
+
     // Load the map level graphics, palettes, and metatiles using the mapfab level
     load_level(@lev_map)
 
