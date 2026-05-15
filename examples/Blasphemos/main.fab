@@ -314,6 +314,32 @@ fn export_hitboxes()
         {HITBOX_EXPORT_ADDR}(0)
 
 fn draw_enemies(U o) U
+    U type_cycle = (frame_counter >> 3) & 3 // Rotate every 8 frames
+    
+    if type_cycle == 0
+        o = draw_eyes(o)
+        o = draw_enraged_pilgrims(o)
+        o = draw_wheelbrokens(o)
+        o = draw_crucifieds(o)
+    else if type_cycle == 1
+        o = draw_enraged_pilgrims(o)
+        o = draw_wheelbrokens(o)
+        o = draw_crucifieds(o)
+        o = draw_eyes(o)
+    else if type_cycle == 2
+        o = draw_wheelbrokens(o)
+        o = draw_crucifieds(o)
+        o = draw_eyes(o)
+        o = draw_enraged_pilgrims(o)
+    else
+        o = draw_crucifieds(o)
+        o = draw_eyes(o)
+        o = draw_enraged_pilgrims(o)
+        o = draw_wheelbrokens(o)
+
+    return o
+
+fn draw_eyes(U o) U
     U e_start = frame_counter & 7
     if e_start >= enemies_eye_num
         e_start = 0
@@ -359,11 +385,7 @@ fn draw_enemies(U o) U
             o = push_oam_anim_a(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i], $03)
         else
             o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
-
-    o = draw_enraged_pilgrims(o)
-    o = draw_wheelbrokens(o)
-    o = draw_crucifieds(o)
-
+    
     return o
 
 fn get_digit_tile(U digit) U
@@ -444,7 +466,7 @@ fn update_sprites()
     o = draw_item_bones(o)
 
     // Stage 2: Rotating Priority (Flickering Group)
-    U cycle = frame_counter & 3
+    U cycle = frame_counter & 7
     if cycle == 0
         o = draw_enemies(o)
         o = level_draw_sprites(o)
@@ -457,10 +479,20 @@ fn update_sprites()
         o = draw_player_secondary(o, attr_xor)
         o = draw_enemies(o)
         o = level_draw_sprites(o)
-    else
+    else if cycle == 3
+        o = level_draw_sprites(o)
+        o = draw_enemies(o)
+        o = draw_player_secondary(o, attr_xor)
+    else if cycle == 4
         o = draw_enemies(o)
         o = draw_player_secondary(o, attr_xor)
         o = level_draw_sprites(o)
+    else
+        // Items and everything else
+        o = draw_item_bones(o)
+        o = draw_enemies(o)
+        o = level_draw_sprites(o)
+        o = draw_player_secondary(o, attr_xor)
 
 
 
