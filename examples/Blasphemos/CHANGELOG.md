@@ -1,5 +1,13 @@
 # Changes
 
+## [16.05.2026] - v812
+- Fix phantom tiles
+
+
+## [16.05.2026] - v812
+- Fix phantom tiles
+
+
 ## [16.05.2026] - v811
 - Let player climb topmost C_WALL
 

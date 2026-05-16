@@ -1,0 +1,80 @@
+
+vars /hud
+    U last_hud_hp = 255
+    U last_hud_bile = 255
+    U last_hud_ap = 255
+    U last_hud_bones = 255
+
+    U current_level_chr = 0
+
+// HUD Bank Definition
+ct U CHR_HUD = 30 // Using bank 30 to be safely away from level data
+chrrom (CHR_HUD * $2000)
+    file(fmt, "assets/hud.png")
+    file(fmt, "assets/sprite.png")
+
+fn get_digit_tile(U digit) U
+    return $40 + digit
+
+fn update_hud_tiles()
+    if p.health == last_hud_hp && p.current_bile_vessels == last_hud_bile && p.attack_power == last_hud_ap && total_bones_collected == last_hud_bones
+        return
+    
+    last_hud_hp = p.health
+    last_hud_bile = p.current_bile_vessels
+    last_hud_ap = p.attack_power
+    last_hud_bones = total_bones_collected
+
+    {PPUSTATUS}()
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+    
+    // Update both nametables to handle horizontal scrolling
+    for U nt = 0; nt < 2; nt += 1
+        UU base = UU($2000) + (UU(nt) << 10)
+        
+        // Row 0: Health and Attack Power
+        ppu_set_addr(base + 1) // Row 0, Col 1
+        for U i = 0; i < 7; i += 1
+            if p.health >= U((i + 1) * 10)
+                {PPUDATA}($06) // Health icon
+            else
+                {PPUDATA}($00)
+        
+        // Attack Power at the end of Row 0
+        ppu_set_addr(base + 28)
+        U ap_tens = 0
+        U ap_ones = p.attack_power
+        while ap_ones >= 10
+            ap_ones -= 10
+            ap_tens += 1
+        {PPUDATA}(get_digit_tile(ap_tens))
+        {PPUDATA}(get_digit_tile(ap_ones))
+
+        // Row 1: Bile Vessels and Bones
+        ppu_set_addr(base + 32 + 1) // Row 1, Col 1
+        for U i = 0; i < p.max_bile_vessels; i += 1
+            if p.current_bile_vessels > i
+                {PPUDATA}($05) // Bile icon
+            else
+                {PPUDATA}($00)
+        
+        // Bones at the end of Row 1
+        ppu_set_addr(base + 32 + 28)
+        U b_tens = 0
+        U b_ones = total_bones_collected
+        while b_ones >= 10
+            b_ones -= 10
+            b_tens += 1
+        {PPUDATA}(get_digit_tile(b_tens))
+        {PPUDATA}(get_digit_tile(b_ones))
+
+fn clear_hud_rows()
+    {PPUSTATUS}()
+    for U nt = 0; nt < 2; nt += 1
+        UU base = UU($2000) + (UU(nt) << 10)
+        ppu_set_addr(base)
+        for U i = 0; i < 64; i += 1
+            {PPUDATA}($00)
+
+fn force_hud_update()
+    last_hud_hp = 255
