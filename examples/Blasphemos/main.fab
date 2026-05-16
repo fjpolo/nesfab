@@ -233,7 +233,7 @@ mode play_level(U level_index)
         p = make_player_penitent()
     
     if spawn_from_right
-        p.x = (SS(current_level_width) << 4) - 32
+        p.x = (SS(current_level_width) << 4) - 48
         p.camera_x = p.x - 128
         spawn_from_right = false
     if spawn_from_top || spawn_from_bottom
@@ -431,9 +431,9 @@ fn draw_eyes(U o) U
     return o
 
 
-fn draw_player_secondary(U o, U attr_xor) U
+fn draw_player_secondary(U o, SS draw_x, U attr_xor) U
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
-        o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 1, attr_xor)
+        o = push_oam_anim_palette(o, draw_x, SS(p.y) + p.h, p.anim_state, 1, attr_xor)
     return o
 
 fn update_sprites()
@@ -450,8 +450,14 @@ fn update_sprites()
     U attr_xor = 0
     if p.heal_timer > 0
         attr_xor = 2
+    
+    // Calculate player draw X with facing correction (metasprite is -8..16)
+    SS draw_x = p.x - p.camera_x + 8
+    if p.facing_left
+        draw_x += 8
+
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
-        o = push_oam_anim_palette(o, p.x - p.camera_x + 8, SS(p.y) + p.h, p.anim_state, 0, attr_xor)
+        o = push_oam_anim_palette(o, draw_x, SS(p.y) + p.h, p.anim_state, 0, attr_xor)
 
     // Stage 1.5: Items (High priority to avoid 64-sprite limit drops)
     o = draw_item_bones(o)
@@ -461,29 +467,29 @@ fn update_sprites()
     if cycle == 0
         o = draw_enemies(o)
         o = level_draw_sprites(o)
-        o = draw_player_secondary(o, attr_xor)
+        o = draw_player_secondary(o, draw_x, attr_xor)
     else if cycle == 1
         o = level_draw_sprites(o)
-        o = draw_player_secondary(o, attr_xor)
+        o = draw_player_secondary(o, draw_x, attr_xor)
         o = draw_enemies(o)
     else if cycle == 2
-        o = draw_player_secondary(o, attr_xor)
+        o = draw_player_secondary(o, draw_x, attr_xor)
         o = draw_enemies(o)
         o = level_draw_sprites(o)
     else if cycle == 3
         o = level_draw_sprites(o)
         o = draw_enemies(o)
-        o = draw_player_secondary(o, attr_xor)
+        o = draw_player_secondary(o, draw_x, attr_xor)
     else if cycle == 4
         o = draw_enemies(o)
-        o = draw_player_secondary(o, attr_xor)
+        o = draw_player_secondary(o, draw_x, attr_xor)
         o = level_draw_sprites(o)
     else
         // Items and everything else
         o = draw_item_bones(o)
         o = draw_enemies(o)
         o = level_draw_sprites(o)
-        o = draw_player_secondary(o, attr_xor)
+        o = draw_player_secondary(o, draw_x, attr_xor)
 
 
 
