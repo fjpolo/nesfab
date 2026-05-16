@@ -1,5 +1,25 @@
 # Changes
 
+## [16.05.2026] - v815
+- Level transitioning was broken, now fixed
+
+
+## [16.05.2026] - v815
+- Level transitioning was broken, now fixed
+
+
+## [16.05.2026] - v815
+- Level transitioning was broken, now fixed
+
+
+## [16.05.2026] - v815
+- Level transitioning was broken, now fixed
+
+
+## [16.05.2026] - v815
+- Level transitioning was broken, now fixed
+
+
 ## [16.05.2026] - v814
 - Bugfix session
 

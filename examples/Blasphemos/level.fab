@@ -330,6 +330,9 @@ fn load_level(CCC/levels level)
                     destroy(LEVEL_3_DOOR_1_X, LEVEL_3_DOOR_1_Y)
         break
 
+    load_level_counter += 1
+
+fn load_level_finish()
     // Set the scroll off-screen, then run the scroll code several times
     // to fill the screen with tiles.
     scroll_x = calc_shifted_camera_x() + 32
@@ -338,8 +341,6 @@ fn load_level(CCC/levels level)
         ppu_upload_scroll()
         if scroll_x == calc_shifted_camera_x()
             break
-
-    load_level_counter += 1
 
 fn load_chrrom_bank(CCC/levels level, U bank)
     // CHR:
