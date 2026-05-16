@@ -130,11 +130,6 @@ fn update_hud_tiles()
     for U nt = 0; nt < 2; nt += 1
         UU base = UU($2000) + (UU(nt) << 10)
         
-        // Clear Row 0 and Row 1 (Full 64 tiles)
-        ppu_set_addr(base)
-        for U i = 0; i < 64; i += 1
-            {PPUDATA}($00)
-
         // Row 0: Health and Attack Power
         ppu_set_addr(base + 1) // Row 0, Col 1
         for U i = 0; i < 7; i += 1

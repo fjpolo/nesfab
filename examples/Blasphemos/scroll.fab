@@ -59,7 +59,6 @@ fn update_scroll()
         edge_x = scroll_x + 32
         scroll_x += 1
         attrs_modulo = 0
-        ptr += 256
     else if scroll_x > shifted_camera_x  // If we're scrolling left:
         scroll_x -= 1
         edge_x = scroll_x
@@ -76,8 +75,8 @@ fn update_scroll()
         n = mt_ne
         s = mt_se
 
-    scroll_tiles_ppuaddr = calc_scroll_tiles_ppuaddr(edge_x) + $40 // Skip 16 pixels (2 rows)
-    ptr += ((scroll_x & UU(~1)) << 3)
+    UU next_tiles_ppuaddr = calc_scroll_tiles_ppuaddr(edge_x) + $40 // Skip 16 pixels (2 rows)
+    ptr = current_level + UU(edge_x >> 1) * UU(current_level_height)
 
     // Calculate destroyed:
     U d = U(edge_x.a >> 4) & %1111
@@ -94,30 +93,39 @@ fn update_scroll()
             scroll_tiles[(y << 1) + 1] = s[tile]
         d += 16
 
+    UU next_attrs_ppuaddr = 0
     // Set 'scroll_attrs':
     if edge_x & %11 == attrs_modulo
-        scroll_attrs_ppuaddr = calc_scroll_attrs_ppuaddr(edge_x)
+        next_attrs_ppuaddr = calc_scroll_attrs_ppuaddr(edge_x)
         U h = current_level_height
         // Calculate the exact start of the 32x32 attribute column
-        U col = U((edge_x.a >> 1) & $FE)
-        ptr = current_level + UU(col) * UU(h)
+        U col_l = U((edge_x.a >> 1) & $FE)
+        U col_r = col_l + 1
+        if col_r >= current_level_width
+            col_r = col_l
+        
+        CCC/levels ptr_l = current_level + UU(col_l) * UU(h)
+        CCC/levels ptr_r = current_level + UU(col_r) * UU(h)
+
         for U y = 0; y < 16; y += 2 // 16 metatiles = 8 attribute rows
             U attr = 0
             // Standard NES packing: %SESE SWSW NENE NWNW
             if y + 1 < h
-                attr = mt_ca[ptr[y + h + 1]] & %11 // SE
+                attr = mt_ca[ptr_r[y + 1]] & %11 // SE
             attr <<= 2
             if y + 1 < h
-                attr |= mt_ca[ptr[y + 1]] & %11 // SW
+                attr |= mt_ca[ptr_l[y + 1]] & %11 // SW
             attr <<= 2
             if y > 0 && y < h
-                attr |= mt_ca[ptr[y + h]] & %11 // NE
+                attr |= mt_ca[ptr_r[y + 0]] & %11 // NE
             attr <<= 2
             if y > 0 && y < h
-                attr |= mt_ca[ptr[y + 0]] & %11 // NW
+                attr |= mt_ca[ptr_l[y + 0]] & %11 // NW
             scroll_attrs[y >> 1] = attr
-    else
-        scroll_attrs_ppuaddr = 0
+    
+    // Commit PPU addresses last to avoid NMI race condition
+    scroll_tiles_ppuaddr = next_tiles_ppuaddr
+    scroll_attrs_ppuaddr = next_attrs_ppuaddr
 
 
 fn ppu_upload_scroll()
@@ -128,6 +136,7 @@ fn ppu_upload_scroll()
         ppu_set_addr(scroll_tiles_ppuaddr)
         for U i = 0; i < 28; i += 1
             {PPUDATA}(scroll_tiles[i])
+        scroll_tiles_ppuaddr = 0
     if scroll_attrs_ppuaddr
         // Because we're using PPUCTRL_VRAM_32_DOWN, we'll upload attributes like this:
         UU addr = scroll_attrs_ppuaddr
@@ -136,6 +145,7 @@ fn ppu_upload_scroll()
             addr += 8
             {PPUDATA}(scroll_attrs[0 + i])
             {PPUDATA}(scroll_attrs[4 + i])
+        scroll_attrs_ppuaddr = 0
     if scroll_coin_ppuaddr
         ppu_set_addr(scroll_coin_ppuaddr)
         {PPUDATA}($00)

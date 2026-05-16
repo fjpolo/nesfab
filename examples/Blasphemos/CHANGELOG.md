@@ -1,5 +1,37 @@
 # Changes
 
+## [16.05.2026] - v811
+- Let player climb topmost C_WALL
+
+
+## [15.05.2026] - v811
+- Let player climb topmost C_WALL
+
+
+## [15.05.2026] - v811
+- Let player climb topmost C_WALL
+
+
+## [15.05.2026] - v811
+- Let player climb topmost C_WALL
+
+
+## [15.05.2026] - v811
+- Let player climb topmost C_WALL
+
+
+## [15.05.2026] - v811
+- Let player climb topmost C_WALL
+
+
+## [15.05.2026] - v811
+- Let player climb topmost C_WALL
+
+
+## [15.05.2026] - v811
+- Let player climb topmost C_WALL
+
+
 ## [15.05.2026] - v809
 - Fix some tile issues
 

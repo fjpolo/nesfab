@@ -24,9 +24,9 @@ mt_ne                                    2        $0046-$0047
 mt_sw                                    2        $0048-$0049
 mt_se                                    2        $004A-$004B
 mt_ca                                    2        $004C-$004D
-current_level                            3        $004E-$004F, $07C0
+current_level                            3        $004E-$004F, $07C1
 mt_nw                                    2        $0050-$0051
-current_level_enemies                    3        $0052-$0053, $07C1
+current_level_enemies                    3        $0052-$0053, $07C2
 palette                                  1        $0200
 game_state                               1        $0219
 show_key                                 1        $021A
@@ -129,7 +129,7 @@ wheelbrokens                             10       $06E6, $0704, $070C, $0710, $0
 crucifieds                               11       $06EA, $06F2, $0700, $0708, $0724, $0730, $074C, $0750, $0754, $0758, $076C
 enemies_following_eye                    3        $06EE, $06F6, $0788
 warden_spike_wave_origin_x               3        $06FE, $07C3-$07C4
-warden_spike_wave_origin_y               3        $06FF, $07BF, $07C5
+warden_spike_wave_origin_y               3        $06FF, $07C0, $07C5
 crucified_anim_state                     5        $075C, $0760, $0764, $0768, $0778
 enemies_eye                              3        $077C, $0780, $0784
 warden_projectile_active                 1        $078C
@@ -139,7 +139,7 @@ warden_projectile_y                      3        $07A1, $07A4, $07B9
 warden_projectile_x                      3        $07A7, $07AA, $07BC
 warden_projectile_vy                     2        $07AD, $07B0
 warden_projectile_vx                     2        $07B3, $07B6
-current_level_width                      1        $07C2
+current_level_width                      1        $07BF
 
 ================================================================================
 Variable Bytes: 297
