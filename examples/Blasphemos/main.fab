@@ -657,6 +657,7 @@ mode map_screen(U previous_level)
 
     // Load the map level graphics, palettes, and metatiles using the mapfab level
     load_level(@lev_map)
+    load_level_finish()
 
     // Ensure PPU is at 0,0 scroll before we start
     ppu_reset_scroll(0, 0)

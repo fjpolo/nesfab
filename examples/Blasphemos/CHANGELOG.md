@@ -1,5 +1,17 @@
 # Changes
 
+## [16.05.2026] - v816
+- Some broken tiles are fixed
+
+
+## [16.05.2026] - v816
+- Some broken tiles are fixed
+
+
+## [16.05.2026] - v816
+- Some broken tiles are fixed
+
+
 ## [16.05.2026] - v815
 - Level transitioning was broken, now fixed
 

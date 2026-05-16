@@ -6,7 +6,7 @@ NesPrgRom:03C232:load_palette@15_0:
 NesPrgRom:06C000:push_oam_metasprite@27_0:
 NesPrgRom:06C082:push_oam_metasprite_a@27_0:
 NesPrgRom:06C16B:make_anim_state@27_0:
-NesPrgRom:01C208:irq_enable@7_0:
+NesPrgRom:030204:irq_enable@12_0:
 NesPrgRom:024188:game_irq@9_2:
 NesPrgRom:04C000:game_nmi@19_1:
 NesPrgRom:024000:main@9_0:
@@ -17,7 +17,7 @@ NesPrgRom:010195:draw_player_secondary@4_0:
 NesPrgRom:06C597:update_sprites@27_0:
 NesPrgRom:004000:check_cheats@1_0:
 NesPrgRom:004058:check_cheats@1_0_entry:
-NesPrgRom:044039:map_screen@17_0:
+NesPrgRom:048039:map_screen@18_0:
 NesPrgRom:020000:update_hud_tiles@8_1:
 NesPrgRom:03864A:load_metatiles@14_0:
 NesPrgRom:02818E:select_chr_8kb@10_0:
@@ -27,7 +27,7 @@ NesPrgRom:075004:tile_at@29_0:
 NesPrgRom:0386BA:collision_at@14_0:
 NesPrgRom:0146CA:destroy@5_0:
 NesPrgRom:01C16D:level_draw_sprites@7_0:
-NesPrgRom:0181C2:calc_scroll_coin_ppuaddr@6_0:
+NesPrgRom:0301BC:calc_scroll_coin_ppuaddr@12_0:
 NesPrgRom:075067:update_scroll@29_0:
 NesPrgRom:0341E8:log@13_0:
 NesPrgRom:058000:title_upload_nametable_and_attrs@22_0:
@@ -49,7 +49,7 @@ NesPrgRom:02C000:hurt_player@11_0:
 NesPrgRom:00C1E2:following_eye_set_initial_state@3_0:
 NesPrgRom:03C000:following_eye_update@15_0:
 NesPrgRom:03C040:following_eye_update@15_0_entry:
-NesPrgRom:048000:warden_init@18_0:
+NesPrgRom:044000:warden_init@17_0:
 NesPrgRom:018000:level1_init@6_0:
 NesPrgRom:01801D:level1_init@6_0_entry:
 NesPrgRom:034000:update_warden@13_0:
@@ -63,7 +63,7 @@ NesPrgRom:020174:draw_level2_sprites@8_0:
 NesPrgRom:01812E:level4_main@6_0:
 NesPrgRom:00016D:draw_level4_sprites@0_0:
 NesPrgRom:02C192:level4sub1_main@11_0:
-NesPrgRom:0301D9:game_over@12_0:
+NesPrgRom:0181C2:game_over@6_0:
 NesPrgRom:064000:enraged_pilgrim_update@25_0:
 NesPrgRom:06D4ED:draw_enraged_pilgrims@27_0:
 NesPrgRom:060000:crucified_update@24_0:
