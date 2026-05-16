@@ -39,7 +39,7 @@ ct Int PLAYER_INITIAL_X = 16
 ct Int PLAYER_INITIAL_Y = 160
 
 // Player width and height (32x32 metasprite)
-ct Int pw = 16 // Collision width (tighter than visual)
+ct Int pw = 24 // Collision width (matched to 24px character body)
 ct Int ph = 30 // Collision height
 ct Int rw = pw - 1
 ct Int rh = ph - 1
@@ -49,7 +49,7 @@ ct Int PLAYER_PARRY_BOSS_PUSH = 24
 
 ct Int PLAYER_MAX_HEALTH = 50
 ct Int PLAYER_STARTING_BILE_VESSELS = 1
-ct Int PLATFORM_OFFSET = 13 // Pixels from top of tile to platform surface
+ct Int PLATFORM_OFFSET = 8 // Pixels from top of tile to platform surface
 
 // Player data struct
 struct Player
@@ -807,21 +807,22 @@ fn handle_input()
         // Limited horizontal movement on ladder
         if pads[0].held & BUTTON_LEFT
             SS nx = p.x - 1
-            if collision_at(UU(nx + 4), UU(SS(p.y) + 4)) != C_WALL
+            if collision_at(UU(nx), UU(SS(p.y) + 4)) != C_WALL
                 p.x = nx
             p.facing_left = true
         else if pads[0].held & BUTTON_RIGHT
             SS nx = p.x + 1
-            if collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + 4)) != C_WALL
+            if collision_at(UU(nx + p.rw), UU(SS(p.y) + 4)) != C_WALL
                 p.x = nx
             p.facing_left = false
 
     if p.movement != PLAYER_MOVING_CLIMB
         if pads[0].held & BUTTON_LEFT
             SS nx = p.x - speed
-            U t1 = collision_at(UU(nx + 4), UU(SS(p.y) + 4))
-            U t2 = collision_at(UU(nx + 4), UU(SS(p.y) + p.h - 4))
-            if t1 != C_WALL && t2 != C_WALL
+            U t1 = collision_at(UU(nx), UU(SS(p.y)))
+            U t2 = collision_at(UU(nx), UU(SS(p.y) + (p.h >> 1)))
+            U t3 = collision_at(UU(nx), UU(SS(p.y) + p.h - 1))
+            if t1 != C_WALL && t2 != C_WALL && t3 != C_WALL
                 p.x = nx
             
             if !p.facing_left || p.movement != PLAYER_MOVING_LEFT
@@ -830,9 +831,10 @@ fn handle_input()
                 p.anim_state = make_anim_state(@penitent_animation_walk_left)
         else if pads[0].held & BUTTON_RIGHT
             SS nx = p.x + speed
-            U t1 = collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + 4))
-            U t2 = collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + p.h - 4))
-            if t1 != C_WALL && t2 != C_WALL
+            U t1 = collision_at(UU(nx + p.rw), UU(SS(p.y)))
+            U t2 = collision_at(UU(nx + p.rw), UU(SS(p.y) + (p.h >> 1)))
+            U t3 = collision_at(UU(nx + p.rw), UU(SS(p.y) + p.h - 1))
+            if t1 != C_WALL && t2 != C_WALL && t3 != C_WALL
                 p.x = nx
 
             if p.facing_left || p.movement != PLAYER_MOVING_RIGHT
@@ -873,8 +875,8 @@ fn handle_input()
 
 fn is_on_ground() Bool
     UU y = UU(SS(p.y) + p.h)
-    UU x1 = UU(p.x + 4)
-    UU x2 = UU(p.x + p.rw - 4)
+    UU x1 = UU(p.x)
+    UU x2 = UU(p.x + p.rw)
     
     U t1 = collision_at(x1, y)
     U t2 = collision_at(x2, y)
@@ -901,17 +903,19 @@ fn handle_physics()
     if p.movement == PLAYER_MOVING_DASH
         if p.facing_left
             SS nx = p.x - DASH_SPEED
-            U t1 = collision_at(UU(nx + 4), UU(SS(p.y) + 4))
-            U t2 = collision_at(UU(nx + 4), UU(SS(p.y) + p.h - 4))
-            if t1 != C_WALL && t2 != C_WALL
+            U t1 = collision_at(UU(nx), UU(SS(p.y)))
+            U t2 = collision_at(UU(nx), UU(SS(p.y) + (p.h >> 1)))
+            U t3 = collision_at(UU(nx), UU(SS(p.y) + p.h - 1))
+            if t1 != C_WALL && t2 != C_WALL && t3 != C_WALL
                 p.x = nx
             else
                 p.dash_timer = 0 // Stop dash on impact
         else
             SS nx = p.x + DASH_SPEED
-            U t1 = collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + 4))
-            U t2 = collision_at(UU(nx + p.rw - 4), UU(SS(p.y) + p.h - 4))
-            if t1 != C_WALL && t2 != C_WALL
+            U t1 = collision_at(UU(nx + p.rw), UU(SS(p.y)))
+            U t2 = collision_at(UU(nx + p.rw), UU(SS(p.y) + (p.h >> 1)))
+            U t3 = collision_at(UU(nx + p.rw), UU(SS(p.y) + p.h - 1))
+            if t1 != C_WALL && t2 != C_WALL && t3 != C_WALL
                 p.x = nx
             else
                 p.dash_timer = 0 // Stop dash on impact
@@ -948,8 +952,8 @@ fn handle_physics()
                 p.yspeed = 0
                 
                 UU feet_y = UU(SS(p.y) + p.h)
-                U t1 = collision_at(UU(p.x + 4), feet_y)
-                U t2 = collision_at(UU(p.x + p.rw - 4), feet_y)
+                U t1 = collision_at(UU(p.x), feet_y)
+                U t2 = collision_at(UU(p.x + p.rw), feet_y)
                 
                 SS snap_y = SS(feet_y & $F0)
                 if t1 == C_PLATFORM || t2 == C_PLATFORM

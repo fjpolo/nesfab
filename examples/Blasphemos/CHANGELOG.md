@@ -1,5 +1,37 @@
 # Changes
 
+## [16.05.2026] - v813
+- Move HUD code to hud.fab
+
+
+## [16.05.2026] - v813
+- Move HUD code to hud.fab
+
+
+## [16.05.2026] - v813
+- Move HUD code to hud.fab
+
+
+## [16.05.2026] - v813
+- Move HUD code to hud.fab
+
+
+## [16.05.2026] - v813
+- Move HUD code to hud.fab
+
+
+## [16.05.2026] - v813
+- Move HUD code to hud.fab
+
+
+## [16.05.2026] - v813
+- Move HUD code to hud.fab
+
+
+## [16.05.2026] - v813
+- Move HUD code to hud.fab
+
+
 ## [16.05.2026] - v812
 - Fix phantom tiles
 

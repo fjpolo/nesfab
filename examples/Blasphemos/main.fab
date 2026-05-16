@@ -451,7 +451,7 @@ fn update_sprites()
     if p.heal_timer > 0
         attr_xor = 2
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
-        o = push_oam_anim_palette(o, p.center_x - p.camera_x - 8, SS(p.y) + p.h, p.anim_state, 0, attr_xor)
+        o = push_oam_anim_palette(o, p.x - p.camera_x + 8, SS(p.y) + p.h, p.anim_state, 0, attr_xor)
 
     // Stage 1.5: Items (High priority to avoid 64-sprite limit drops)
     o = draw_item_bones(o)
