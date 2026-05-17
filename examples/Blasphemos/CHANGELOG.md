@@ -1,8 +1,25 @@
 # Changes
 
-## [17.05.2026] - v818
-- Level2 tiles and attributes still wrong
+## [17.05.2026] - v819
+- Add 3 hit combo
 
+
+## [17.05.2026] - v825
+- Fix Python-style indentation alignment of enemy death/deletion blocks inside EnragedPilgrim.fab, Crucified.fab, and Wheelbroken.fab to prevent enemies from being prematurely deleted on the very first hit
+
+## [17.05.2026] - v824
+- Uncomment CPU port $4018 hitbox/health debug exports in main.fab and introduce `damage_numbers.lua` to track and draw floating damage numbers over hit enemies in the emulator
+
+## [17.05.2026] - v819
+- Add 3 hit combo
+
+
+## [17.05.2026] - v819
+- Add 3 hit combo
+
+
+## [17.05.2026] - v823
+- Explicitly reset `swing_is_combo_hit` to `false` when resetting combo count (on swing end, player hurt, or level load) to prevent subsequent standard hits from dealing double damage
 
 ## [17.05.2026] - v822
 - Change the player sword combo finisher subpalette color from sky blue ($2C) to vivid red ($15) for a more intense and matching strike aesthetic

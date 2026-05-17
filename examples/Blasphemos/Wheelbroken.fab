@@ -112,13 +112,13 @@ fn wheelbroken_update(U ix) Bool
                  if wheelbrokens[ix].health > power
                      wheelbrokens[ix].health -= power
                  else
-                     wheelbrokens[ix].health = 0
-                 U global_ix = (current_level_index << 3) + wheelbrokens[ix].local_index
-                 U byte_ix = global_ix >> 3
-                 U bit_ix = global_ix & 7
-                 dead_wheelbrokens[byte_ix] |= (U(1) << bit_ix)
-                 wheelbrokens_delete(ix)
-                 return false
+                      wheelbrokens[ix].health = 0
+                      U global_ix = (current_level_index << 3) + wheelbrokens[ix].local_index
+                      U byte_ix = global_ix >> 3
+                      U bit_ix = global_ix & 7
+                      dead_wheelbrokens[byte_ix] |= (U(1) << bit_ix)
+                      wheelbrokens_delete(ix)
+                      return false
 
     if wheelbrokens[ix].blocked_timer > 0
         wheelbrokens[ix].blocked_timer -= 1

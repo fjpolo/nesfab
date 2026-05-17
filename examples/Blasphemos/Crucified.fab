@@ -116,13 +116,13 @@ fn crucified_update(U ix) Bool
                  if crucifieds[ix].health > power
                      crucifieds[ix].health -= power
                  else
-                     crucifieds[ix].health = 0
-                 U global_ix = (current_level_index << 3) + crucifieds[ix].local_index
-                 U byte_ix = global_ix >> 3
-                 U bit_ix = global_ix & 7
-                 dead_pilgrims[byte_ix] |= (U(1) << bit_ix)
-                 crucifieds_delete(ix)
-                 return false
+                      crucifieds[ix].health = 0
+                      U global_ix = (current_level_index << 3) + crucifieds[ix].local_index
+                      U byte_ix = global_ix >> 3
+                      U bit_ix = global_ix & 7
+                      dead_pilgrims[byte_ix] |= (U(1) << bit_ix)
+                      crucifieds_delete(ix)
+                      return false
 
     // State machine logic
     switch crucifieds[ix].ai_state

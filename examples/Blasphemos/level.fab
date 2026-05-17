@@ -134,6 +134,7 @@ fn disable_nmi()
 fn load_level(CCC/levels level)
     warden_active = false
     player_combo_count = 0
+    swing_is_combo_hit = false
     for UU i = 0; i < 256; i += 1
         destroyed[U(i)] = 0
     

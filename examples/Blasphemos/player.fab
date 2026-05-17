@@ -707,6 +707,7 @@ fn handle_input()
                 // Combo reset/progress logic at the end of swing:
                 if swing_is_combo_hit || !attack_has_hit
                     player_combo_count = 0
+                    swing_is_combo_hit = false
                     update_combo_palette()
         return // Prevent other input during attack
     
@@ -1339,6 +1340,7 @@ fn hurt_player(U attack_type, SS ex) Bool
         else
             p.health = 0
         player_combo_count = 0
+        swing_is_combo_hit = false
         update_combo_palette()
         p.hurt_timer = 120 // 2 seconds of immunity
         p.dash_timer = 0
