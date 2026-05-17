@@ -49,6 +49,12 @@ fn calc_scroll_attrs_ppuaddr(UU scroll_x) UU
 fn calc_shifted_camera_x() UU
     return UU(p.camera_x) >> 3
 
+fn get_mt_palette(U mt_index) U
+    U c = mt_ca[mt_index] & %11
+    if c == 0 && current_level_index >= 1 && current_level_index <= 17
+        c = 2 // Map Palette 0 to Palette 2
+    return c
+
 fn update_scroll()
     CCC/levels ptr = current_level
     UU shifted_camera_x = calc_shifted_camera_x()
@@ -111,17 +117,18 @@ fn update_scroll()
             U attr = 0
             // Standard NES packing: %SESE SWSW NENE NWNW
             if y + 1 < h
-                attr = mt_ca[ptr_r[y + 1]] & %11 // SE
+                attr = get_mt_palette(ptr_r[y + 1]) // SE
             attr <<= 2
             if y + 1 < h
-                attr |= mt_ca[ptr_l[y + 1]] & %11 // SW
+                attr |= get_mt_palette(ptr_l[y + 1]) // SW
             attr <<= 2
             if y > 0 && y < h
-                attr |= mt_ca[ptr_r[y + 0]] & %11 // NE
+                attr |= get_mt_palette(ptr_r[y + 0]) // NE
             attr <<= 2
             if y > 0 && y < h
-                attr |= mt_ca[ptr_l[y + 0]] & %11 // NW
+                attr |= get_mt_palette(ptr_l[y + 0]) // NW
             scroll_attrs[y >> 1] = attr
+
     
     // Commit PPU addresses last to avoid NMI race condition
     scroll_tiles_ppuaddr = next_tiles_ppuaddr

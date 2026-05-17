@@ -5,10 +5,10 @@
 
 fn level4_init()
     // Level 4 initialization logic here
-    // SPR2 palette: ($2D, $17, $32)
-    palette[18] = $2D
-    palette[19] = $17
-    palette[20] = $32
+    // SPR1 palette: ($2D, $17, $32)
+    palette[15] = $2D
+    palette[16] = $17
+    palette[17] = $32
     ppu_upload_palette()
 
 fn level4_main()

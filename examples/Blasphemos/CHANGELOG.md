@@ -1,5 +1,20 @@
 # Changes
 
+## [17.05.2026] - v818
+- Remap background metatiles using palette 0 to palette 2 in gameplay levels to resolve HUD palette conflicts and fix broken tiles/attributes on Level 2
+
+## [17.05.2026] - v817
+- Fix game over screen
+
+
+## [17.05.2026] - v817
+- Fix game over screen
+
+
+## [16.05.2026] - v817
+- Fix game over screen
+
+
 ## [16.05.2026] - v816
 - Some broken tiles are fixed
 

@@ -15,12 +15,14 @@ fn game_over_sprites(U o) U
 mode game_over(U level_index)
 : nmi game_nmi
     current_level_index = 18
+    game_state = GAME_STATE_GAME_OVER
 
     // Load level
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)
     load_level(levels[current_level_index])
+    load_level_finish()
 
     // NMI ON
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_NT_2000)
