@@ -87,21 +87,25 @@ fn enraged_pilgrim_update(U ix) Bool
         enraged_pilgrims[ix].attack_timer = 0 // Stay idle while blocked
 
     // Player hit Pilgrim (Hitbox logic)
-    if player_sword_active && enraged_pilgrims[ix].hurt_timer == 0
+    if player_sword_active
         SS sx = player_sword_x
         SS sy = player_sword_y
         // Body bounds: (ex-12, ey-16) to (ex+4, ey)
         if sx < (ex + 4) && (sx + player_sword_w) > (ex - 12) && sy < ey && (sy + player_sword_h) > (ey - 16)
-             enraged_pilgrims[ix].hurt_timer = 30 // I-frames
-             player_pogo()
-             U power = p.attack_power
-             if enraged_pilgrims[ix].blocked_timer > 0
-                 power = power << 1 // Double damage when blocked
-             
-             if enraged_pilgrims[ix].health > power
-                 enraged_pilgrims[ix].health -= power
-             else
-                 enraged_pilgrims[ix].health = 0
+             Bool is_combo = register_sword_hit()
+             if enraged_pilgrims[ix].hurt_timer == 0
+                 enraged_pilgrims[ix].hurt_timer = 30 // I-frames
+                 player_pogo()
+                 U power = p.attack_power
+                 if is_combo
+                     power = power << 1 // Double damage on combo hit!
+                 if enraged_pilgrims[ix].blocked_timer > 0
+                     power = power << 1 // Double damage when blocked
+                 
+                 if enraged_pilgrims[ix].health > power
+                     enraged_pilgrims[ix].health -= power
+                 else
+                     enraged_pilgrims[ix].health = 0
                  U global_ix = (current_level_index << 3) + enraged_pilgrims[ix].local_index
                  U byte_ix = global_ix >> 3
                  U bit_ix = global_ix & 7

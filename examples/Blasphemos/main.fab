@@ -133,6 +133,10 @@ nmi game_nmi()
 
     ppu_upload_oam_poll_pads(0)
 
+    if palette_dirty
+        ppu_upload_palette()
+        palette_dirty = false
+
     // Update button counters before potential early return
     if pads[0].held & BUTTON_SELECT
         select_counter += 1
@@ -397,6 +401,7 @@ fn draw_eyes(U o) U
         if player_sword_active && eye_hurt_timer[i] == 0
             if player_sword_x < SS(enemies_eye[i].x + 16) && (player_sword_x + player_sword_w) > SS(enemies_eye[i].x) && player_sword_y < SS(enemies_eye[i].y) && (player_sword_y + player_sword_h) > SS(enemies_eye[i].y - 8)
                 eye_hurt_timer[i] = 30
+                register_sword_hit()
                 player_pogo()
 
         if eye_hurt_timer[i] > 0
@@ -421,6 +426,7 @@ fn draw_eyes(U o) U
         if player_sword_active && following_eye_hurt_timer[i] == 0
             if player_sword_x < SS(enemies_following_eye[i].x + 16) && (player_sword_x + player_sword_w) > SS(enemies_following_eye[i].x) && player_sword_y < SS(enemies_following_eye[i].y + 16) && (player_sword_y + player_sword_h) > SS(enemies_following_eye[i].y)
                 following_eye_hurt_timer[i] = 30
+                register_sword_hit()
                 player_pogo()
 
         if following_eye_hurt_timer[i] > 0

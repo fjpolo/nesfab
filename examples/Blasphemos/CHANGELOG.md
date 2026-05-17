@@ -1,6 +1,22 @@
 # Changes
 
 ## [17.05.2026] - v818
+- Level2 tiles and attributes still wrong
+
+
+## [17.05.2026] - v822
+- Change the player sword combo finisher subpalette color from sky blue ($2C) to vivid red ($15) for a more intense and matching strike aesthetic
+
+## [17.05.2026] - v821
+- Refine player sword combo subpalette timing so that the sword turns sky-blue ONLY during the 3rd swing (the combo finisher itself) instead of turning blue immediately when the 2nd hit lands
+
+## [17.05.2026] - v820
+- Fix combo hit registration during enemy/boss I-frames (invincibility flashing) to prevent hitting flashing targets from incorrectly resetting the combo count to 0
+
+## [17.05.2026] - v819
+- Implement a 3-hit player sword combo mechanic: the third hit deals double damage, and the sword dynamically turns blue when the combo is primed (after the second hit)
+
+## [17.05.2026] - v818
 - Remap background metatiles using palette 0 to palette 2 in gameplay levels to resolve HUD palette conflicts and fix broken tiles/attributes on Level 2
 
 ## [17.05.2026] - v817

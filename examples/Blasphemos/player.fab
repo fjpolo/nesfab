@@ -94,6 +94,10 @@ vars /game
     SS player_sword_y = 0
     SS player_sword_w = 32
     SS player_sword_h = 29
+    U player_combo_count = 0
+    Bool palette_dirty = false
+    Bool attack_has_hit = false
+    Bool swing_is_combo_hit = false
 
 // Sprites and animations
 data /sprites
@@ -588,15 +592,20 @@ fn update_player()
 
 
         // --- WARDEN BOSS HITBOX TEST ---
-        if warden_active && warden_hurt_timer == 0
+        if warden_active
             if player_sword_x < (warden_x + warden_w) && (player_sword_x + player_sword_w) > warden_x
                 if player_sword_y < (warden_y + warden_h) && (player_sword_y + player_sword_h) > warden_y
-                    if warden_health > p.attack_power
-                        warden_health -= p.attack_power
-                    else
-                        warden_health = 0
-                    warden_hurt_timer = 30 // IFrames
-                    player_pogo()
+                    Bool is_combo = register_sword_hit()
+                    if warden_hurt_timer == 0
+                        U power = p.attack_power
+                        if is_combo
+                            power = power << 1 // Double damage on combo hit!
+                        if warden_health > power
+                            warden_health -= power
+                        else
+                            warden_health = 0
+                        warden_hurt_timer = 30 // IFrames
+                        player_pogo()
                     logf(@"Warden HP: %d"l, warden_health)
                     if warden_health == 0
                         warden_state = WARDEN_STATE_DEAD
@@ -627,8 +636,7 @@ fn update_player()
             p.dash_cooldown = DASH_COOLDOWN
             if p.buffered_attack
                 p.buffered_attack = false
-                p.attack_timer = 20
-                p.movement = PLAYER_MOVING_ATTACK
+                start_player_attack()
                 if p.facing_left
                     p.anim_state = make_anim_state(@penitent_animation_attack_left)
                 else
@@ -695,6 +703,11 @@ fn handle_input()
                     p.anim_state = make_anim_state(@penitent_animation_standing_left)
                 else
                     p.anim_state = make_anim_state(@penitent_animation_standing)
+                
+                // Combo reset/progress logic at the end of swing:
+                if swing_is_combo_hit || !attack_has_hit
+                    player_combo_count = 0
+                    update_combo_palette()
         return // Prevent other input during attack
     
     // Prevent input during dash or parry
@@ -857,8 +870,7 @@ fn handle_input()
 
     // Attack
     if pads[0].pressed & BUTTON_B
-        p.attack_timer = 20
-        p.movement = PLAYER_MOVING_ATTACK
+        start_player_attack()
         if p.facing_left
             p.anim_state = make_anim_state(@penitent_animation_attack_left)
         else
@@ -1326,6 +1338,8 @@ fn hurt_player(U attack_type, SS ex) Bool
             p.health -= damage
         else
             p.health = 0
+        player_combo_count = 0
+        update_combo_palette()
         p.hurt_timer = 120 // 2 seconds of immunity
         p.dash_timer = 0
         p.attack_timer = 0
@@ -1342,4 +1356,28 @@ fn hurt_player(U attack_type, SS ex) Bool
         return false // Damage taken, not parried
     
     return false // I-frames active, not parried
+
+fn update_combo_palette()
+    if player_combo_count == 2
+        palette[17] = $15 // Vivid Red
+    else
+        palette[17] = $32 // Original White
+    palette_dirty = true
+
+fn start_player_attack()
+    p.attack_timer = 20
+    p.movement = PLAYER_MOVING_ATTACK
+    attack_has_hit = false
+    if player_combo_count == 2
+        swing_is_combo_hit = true
+    else
+        swing_is_combo_hit = false
+    update_combo_palette()
+
+fn register_sword_hit() Bool
+    if !attack_has_hit
+        attack_has_hit = true
+        if player_combo_count < 2
+            player_combo_count += 1
+    return swing_is_combo_hit
 

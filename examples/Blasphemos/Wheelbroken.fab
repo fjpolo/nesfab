@@ -94,21 +94,25 @@ fn wheelbroken_update(U ix) Bool
         wheelbrokens[ix].hurt_timer -= 1
 
     // Body Hitbox (Player attacks Enemy)
-    if player_sword_active && wheelbrokens[ix].hurt_timer == 0
+    if player_sword_active
         SS sx = player_sword_x
         SS sy = player_sword_y
         // Body bounds: (ex-8, ey-24) to (ex+8, ey)
         if sx < (ex + 8) && (sx + player_sword_w) > (ex - 8) && sy < ey && (sy + player_sword_h) > (ey - 24)
-             wheelbrokens[ix].hurt_timer = 30 // I-frames
-             player_pogo()
-             U power = p.attack_power
-             if wheelbrokens[ix].blocked_timer > 0
-                 power = power << 1 // Double damage when blocked
-             
-             if wheelbrokens[ix].health > power
-                 wheelbrokens[ix].health -= power
-             else
-                 wheelbrokens[ix].health = 0
+             Bool is_combo = register_sword_hit()
+             if wheelbrokens[ix].hurt_timer == 0
+                 wheelbrokens[ix].hurt_timer = 30 // I-frames
+                 player_pogo()
+                 U power = p.attack_power
+                 if is_combo
+                     power = power << 1 // Double damage on combo hit!
+                 if wheelbrokens[ix].blocked_timer > 0
+                     power = power << 1 // Double damage when blocked
+                 
+                 if wheelbrokens[ix].health > power
+                     wheelbrokens[ix].health -= power
+                 else
+                     wheelbrokens[ix].health = 0
                  U global_ix = (current_level_index << 3) + wheelbrokens[ix].local_index
                  U byte_ix = global_ix >> 3
                  U bit_ix = global_ix & 7
