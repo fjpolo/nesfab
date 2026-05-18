@@ -86,6 +86,21 @@ fn wheelbroken_update(U ix) Bool
     SS ex = wheelbrokens[ix].x
     SS ey = wheelbrokens[ix].y
     
+    // Gravity check
+    U ground_tile = collision_at(UU(ex), UU(ey))
+    if ground_tile != C_WALL && ground_tile != C_PLATFORM && ground_tile != C_JAIL
+        wheelbrokens[ix].y += 2
+        // Snap to floor if we landed
+        U landed_tile = collision_at(UU(ex), UU(wheelbrokens[ix].y))
+        if landed_tile == C_WALL || landed_tile == C_PLATFORM || landed_tile == C_JAIL
+            wheelbrokens[ix].y = wheelbrokens[ix].y & -16
+        ey = wheelbrokens[ix].y // refresh local copy of ey
+
+    // Out of bounds check: delete if fallen into bottomless pit
+    if ey > (SS(current_level_height) << 4)
+        wheelbroken_delete_with_patrol(ix)
+        return false
+
     if (frame_counter & 63) == 0
         logf3(@"WB ix:%d x:%d center:%d"l, ix, UU(ex), UU(wheelbroken_patrol_center[ix]))
         logf2(@"WB dir:%d blocked:%d"l, UU(wheelbroken_patrol_dir[ix]), UU(wheelbrokens[ix].blocked_timer))
@@ -97,13 +112,21 @@ fn wheelbroken_update(U ix) Bool
             U dir = wheelbroken_patrol_dir[ix]
             if dir == 1  // moving left
                 wheelbrokens[ix].x -= 1
-                if collision_at(UU(wheelbrokens[ix].x - 8), UU(ey - 8)) == C_WALL
+                U check_wall = collision_at(UU(wheelbrokens[ix].x - 8), UU(ey - 8))
+                U check_floor = collision_at(UU(wheelbrokens[ix].x - 8), UU(ey))
+                if check_wall == C_WALL
+                    dir = 0
+                else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
                     dir = 0
                 else if wheelbrokens[ix].x <= (center - SS(32))
                     dir = 0
             else                            // moving right
                 wheelbrokens[ix].x += 1
-                if collision_at(UU(wheelbrokens[ix].x + 8), UU(ey - 8)) == C_WALL
+                U check_wall = collision_at(UU(wheelbrokens[ix].x + 8), UU(ey - 8))
+                U check_floor = collision_at(UU(wheelbrokens[ix].x + 8), UU(ey))
+                if check_wall == C_WALL
+                    dir = 1
+                else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
                     dir = 1
                 else if wheelbrokens[ix].x >= (center + SS(32))
                     dir = 1

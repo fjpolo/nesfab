@@ -67,19 +67,42 @@ fn enraged_pilgrim_update(U ix) Bool
     SS ex = enraged_pilgrims[ix].x
     SS ey = enraged_pilgrims[ix].y
 
+    // Gravity check
+    U ground_tile = collision_at(UU(ex), UU(ey))
+    if ground_tile != C_WALL && ground_tile != C_PLATFORM && ground_tile != C_JAIL
+        enraged_pilgrims[ix].y += 2
+        // Snap to floor if we landed
+        U landed_tile = collision_at(UU(ex), UU(enraged_pilgrims[ix].y))
+        if landed_tile == C_WALL || landed_tile == C_PLATFORM || landed_tile == C_JAIL
+            enraged_pilgrims[ix].y = enraged_pilgrims[ix].y & -16
+        ey = enraged_pilgrims[ix].y // refresh local copy of ey
+
+    // Out of bounds check: delete if fallen into bottomless pit
+    if ey > (SS(current_level_height) << 4)
+        enraged_pilgrims_delete(ix)
+        return false
+
     // Patrol: move 1px/frame, flip on wall or 2-tile boundary
     if enraged_pilgrims[ix].blocked_timer == 0
         if enraged_pilgrims[ix].patrol_dir  // moving left
             enraged_pilgrims[ix].x -= 1
-            // Flip on wall collision or patrol boundary
-            if collision_at(UU(enraged_pilgrims[ix].x - 8), UU(ey - 8)) == C_WALL
+            // Flip on wall collision, pit ahead, or patrol boundary
+            U check_wall = collision_at(UU(enraged_pilgrims[ix].x - 8), UU(ey - 8))
+            U check_floor = collision_at(UU(enraged_pilgrims[ix].x - 8), UU(ey))
+            if check_wall == C_WALL
+                enraged_pilgrims[ix].patrol_dir = false
+            else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
                 enraged_pilgrims[ix].patrol_dir = false
             else if enraged_pilgrims[ix].x <= (enraged_pilgrims[ix].patrol_center - SS(32))
                 enraged_pilgrims[ix].patrol_dir = false
         else                                // moving right
             enraged_pilgrims[ix].x += 1
-            // Flip on wall collision or patrol boundary
-            if collision_at(UU(enraged_pilgrims[ix].x + 8), UU(ey - 8)) == C_WALL
+            // Flip on wall collision, pit ahead, or patrol boundary
+            U check_wall = collision_at(UU(enraged_pilgrims[ix].x + 8), UU(ey - 8))
+            U check_floor = collision_at(UU(enraged_pilgrims[ix].x + 8), UU(ey))
+            if check_wall == C_WALL
+                enraged_pilgrims[ix].patrol_dir = true
+            else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
                 enraged_pilgrims[ix].patrol_dir = true
             else if enraged_pilgrims[ix].x >= (enraged_pilgrims[ix].patrol_center + SS(32))
                 enraged_pilgrims[ix].patrol_dir = true

@@ -1,5 +1,9 @@
 # Changes
 
+## [18.05.2026] - v833
+- Wheelbroken now moves
+
+
 ## [18.05.2026] - v832
 - Pilgrim now moves
 
