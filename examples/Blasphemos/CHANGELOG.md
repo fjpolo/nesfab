@@ -1,5 +1,9 @@
 # Changes
 
+## [18.05.2026] - v834
+- Wheelbroken and Pilgrim affected by gravity and detect pits
+
+
 ## [18.05.2026] - v833
 - Wheelbroken now moves
 

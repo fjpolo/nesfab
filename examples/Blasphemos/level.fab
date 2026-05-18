@@ -273,6 +273,8 @@ fn load_level(CCC/levels level)
             if (dead_crucifieds[byte_ix] & (U(1) << bit_ix)) == 0
                 crucifieds_new(c)
                 crucified_anim_state[crucifieds_num - 1] = make_anim_state(@crucified_animation_standing)
+                crucified_patrol_center[crucifieds_num - 1] = c.x
+                crucified_patrol_dir[crucifieds_num - 1] = 0
 
         // Enemies: Wheelbroken
         U wheel_num = read U(level)
