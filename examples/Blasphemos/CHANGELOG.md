@@ -1,5 +1,25 @@
 # Changes
 
+## [18.05.2026] - v829
+- Fix the issue of garbage tiles when scrolling
+
+
+## [18.05.2026] - v829
+- Fix the issue of garbage tiles when scrolling
+
+
+## [18.05.2026] - v829
+- Fix the issue of garbage tiles when scrolling
+
+
+## [18.05.2026] - v829
+- Fix the issue of garbage tiles when scrolling
+
+
+## [18.05.2026] - v829
+- Fix the issue of garbage tiles when scrolling
+
+
 ## [18.05.2026] - v828
 - Fix level indexing
 

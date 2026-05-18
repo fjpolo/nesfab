@@ -175,6 +175,7 @@ fn load_level(CCC/levels level)
         destroyed[U(i)] = 0
     
     clear_nametables()
+    force_hud_update()
     
     // CHR:
     U chr_bank = read U(level)

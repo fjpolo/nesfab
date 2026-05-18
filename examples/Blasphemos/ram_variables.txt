@@ -24,9 +24,9 @@ mt_ne                                    2        $0046-$0047
 mt_sw                                    2        $0048-$0049
 mt_se                                    2        $004A-$004B
 mt_ca                                    2        $004C-$004D
-current_level                            3        $004E-$004F, $07E8
+current_level                            3        $004E-$004F, $07E7
 mt_nw                                    2        $0050-$0051
-current_level_enemies                    3        $0052-$0053, $07E7
+current_level_enemies                    3        $0052-$0053, $07E8
 palette                                  1        $0200
 p                                        49       $0219-$0249
 frame_counter                            1        $024A
