@@ -1,5 +1,57 @@
 # Changes
 
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
+## [18.05.2026] - v827
+- Add dead screen
+
+
 ## [18.05.2026] - v826
 - Fix some level tiles
 

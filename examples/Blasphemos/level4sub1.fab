@@ -8,7 +8,7 @@ fn level4sub1_init()
     
 fn level4sub1_main()
     // Mea Culpa Altar hit detection
-    if current_level_index == 5 && !mea_culpa_upgraded && p.movement == PLAYER_MOVING_ATTACK
+    if current_level_index == LEVEL_L4SUB1 && !mea_culpa_upgraded && p.movement == PLAYER_MOVING_ATTACK
         // Hitbox for the Mea Culpa altar in l4sub1
         // Roughly around x=128 (moved 4 tiles right from original 64)
         if player_sword_x < 144 && (player_sword_x + player_sword_w) > 112

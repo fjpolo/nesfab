@@ -1,1 +1,1 @@
-cls && python update_version.py && c:\Workspace\NES\nesfab_1_8\nesfab.exe .\BlasNESmous.cfg & python analyzeROM.py
+cls && python update_version.py && c:\Workspace\NES\nesfab_1_8\nesfab.exe .\BlasNESmous.cfg & python analyzeROM.py & python analyzeCHR.py

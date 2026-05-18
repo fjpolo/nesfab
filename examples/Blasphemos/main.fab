@@ -36,7 +36,7 @@ vars /game
     U game_state = GAME_STATE_TITLE
     U frame_counter = 0
     Bool[NUMBER_OF_KEYS] keys
-    Bool[NUMBER_OF_KEYS] show_key = Bool[NUMBER_OF_KEYS](true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true)
+    Bool[NUMBER_OF_KEYS] show_key = Bool[NUMBER_OF_KEYS](true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true)
     U[NUMBER_OF_KEYS] key_x
     U[NUMBER_OF_KEYS] key_y
     Bool is_game_paused = false
@@ -53,12 +53,12 @@ vars /game
     Bool spawn_from_right = false
     Bool spawn_from_top = false
     Bool spawn_from_bottom = false
-    U[20] dead_pilgrims = U[20](0)
-    U[20] dead_wheelbrokens = U[20](0)
+    U[22] dead_pilgrims = U[22](0)
+    U[22] dead_wheelbrokens = U[22](0)
     U[4] explored_rooms = U[4](0, 0, 0, 0)
-    U[20] dead_eyes = U[20](0)
-    U[20] dead_following_eyes = U[20](0)
-    U[20] dead_crucifieds = U[20](0)
+    U[22] dead_eyes = U[22](0)
+    U[22] dead_following_eyes = U[22](0)
+    U[22] dead_crucifieds = U[22](0)
     Bool warden_defeated = false
     Bool warden_arrow_dismissed = false
     Bool mea_culpa_upgraded = false
@@ -82,23 +82,26 @@ struct MapCoord
 ct MapCoord[] level_map_coords = MapCoord[](
     MapCoord(0, 0, false),   // 0: Title
     MapCoord(5, 10, false),  // 1: Level 1
-    MapCoord(6, 10, false),  // 2: Level 2
-    MapCoord(7, 10, false),  // 3: Level 3
-    MapCoord(8, 10, false),  // 4: Level 4
-    MapCoord(8, 11, true),   // 5: Level 4 Sub1
-    MapCoord(9, 10, false),  // 6: Level 5
-    MapCoord(10, 10, false), // 7: Level 6
-    MapCoord(11, 10, false), // 8: Level 7
-    MapCoord(11, 9, true),   // 9: Level 7over1
-    MapCoord(12, 10, false), // 10: Level 8
-    MapCoord(13, 10, false), // 11: Level 9
-    MapCoord(14, 10, false), // 12: Level 10
-    MapCoord(13, 11, true),  // 13: Level 9sub1
-    MapCoord(13, 9, true),   // 14: Level 9over1
-    MapCoord(13, 8, true),   // 15: Level 9over2
-    MapCoord(14, 11, true),  // 16: Level 10sub1
-    MapCoord(12, 9, true),   // 17: Level 8over1
-    MapCoord(15, 10, false)  // 18: Game Over
+    MapCoord(6, 10, false),  // 2: Level 2a
+    MapCoord(7, 10, false),  // 3: Level 2b
+    MapCoord(8, 10, false),  // 4: Level 3a
+    MapCoord(9, 10, false),  // 5: Level 3b
+    MapCoord(10, 10, false), // 6: Level 4
+    MapCoord(10, 11, true),  // 7: Level 4 Sub1
+    MapCoord(11, 10, false), // 8: Level 5
+    MapCoord(12, 10, false), // 9: Level 6a
+    MapCoord(13, 10, false), // 10: Level 6b
+    MapCoord(14, 10, false), // 11: Level 7
+    MapCoord(14, 9, true),   // 12: Level 7over1
+    MapCoord(15, 10, false), // 13: Level 8
+    MapCoord(16, 10, false), // 14: Level 9
+    MapCoord(17, 10, false), // 15: Level 10
+    MapCoord(16, 11, true),  // 16: Level 9sub1
+    MapCoord(16, 9, true),   // 17: Level 9over1
+    MapCoord(16, 8, true),   // 18: Level 9over2
+    MapCoord(17, 11, true),  // 19: Level 10sub1
+    MapCoord(15, 9, true),   // 20: Level 8over1
+    MapCoord(0, 0, false)    // 21: Game Over
 )
 
 // IRQ
@@ -155,7 +158,7 @@ nmi game_nmi()
     else
         start_counter = 0
 
-    if current_level_index == 18 || game_state != GAME_STATE_PLAY
+    if current_level_index == LEVEL_GAME_OVER || game_state != GAME_STATE_PLAY
         hide_oam(0) // Hide all sprites (in case HUD uses them)
         {MMC3_IRQ_DISABLE}(0)
         if game_state == GAME_STATE_GAME_OVER || game_state == GAME_STATE_MAP || game_state == GAME_STATE_WIN
@@ -207,7 +210,7 @@ mode main()
     while true
         switch game_state
             case GAME_STATE_TITLE
-                current_level_index = 0
+                current_level_index = LEVEL_TITLE
                 goto mode title_screen(current_level_index)
                 : preserves /game
                 break
@@ -447,7 +450,7 @@ fn draw_player_secondary(U o, SS draw_x, U attr_xor) U
     return o
 
 fn update_sprites()
-    if current_level_index == 18
+    if current_level_index == LEVEL_GAME_OVER
         hide_oam(0)
         return
     U o = 0
@@ -504,7 +507,7 @@ fn update_sprites()
 
 
     // Draw Warden Defeated Arrow
-    if warden_defeated && !warden_arrow_dismissed && current_level_index == 1 && (frame_counter & 16)
+    if warden_defeated && !warden_arrow_dismissed && current_level_index == LEVEL_L1 && (frame_counter & 16)
         set_oam(o, 240, 120, $3F, 0)
         o += 4
 
@@ -677,7 +680,7 @@ mode map_screen(U previous_level)
         U o = 0
         
         // Draw Explored Room Markers
-        for U i = 0; i < 19; i += 1
+        for U i = 0; i < 22; i += 1
             if (explored_rooms[i >> 3] & (U(1) << (i & 7))) != 0
                 MapCoord rc = level_map_coords[i]
                 if rc.x != 0 || rc.y != 0 // Don't draw title screen/invalid coords
