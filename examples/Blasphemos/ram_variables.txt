@@ -127,25 +127,25 @@ warden_spike_active                      1        $0670
 warden_spike_timer                       1        $068E
 warden_spike_x                           3        $0694, $069A, $06B2
 warden_spike_y                           3        $06A0, $06A6, $06AC
-enraged_pilgrims                         13       $06B8, $06BC, $06CC, $06D0, $06D4, $06D8, $06DC, $06E0, $06E4, $06E8, $0764, $0768, $076C
-wheelbrokens                             10       $06C0, $06F8, $06FC, $0700, $0704, $0708, $0714, $0718, $0724, $0788
-crucifieds                               11       $06C4, $06C8, $06F4, $070C, $071C, $0720, $0728, $072C, $0730, $074C, $078C
+enraged_pilgrims                         13       $06B8, $06BC, $06CC, $06D0, $06D4, $06D8, $06DC, $06E0, $06E4, $06E8, $0764, $076C, $0770
+wheelbrokens                             10       $06C0, $06F8, $06FC, $0700, $0704, $0708, $0714, $0718, $0724, $0780
+crucifieds                               11       $06C4, $06C8, $06F4, $070C, $071C, $0720, $0728, $072C, $0730, $074C, $0794
 enemies_following_eye                    3        $06EC, $06F0, $07A8
 enraged_pilgrim_anim_state               5        $0710, $0734, $0738, $073C, $0740
 wheelbroken_patrol_dir                   1        $0744
 crucified_patrol_dir                     1        $0748
-wheelbroken_anim_state                   5        $0750, $0754, $075C, $0778, $0794
-crucified_anim_state                     5        $0758, $0760, $0770, $077C, $0790
-wheelbroken_patrol_center                2        $0774, $0780
-crucified_patrol_center                  2        $0784, $0798
+wheelbroken_anim_state                   5        $0750, $0754, $075C, $0784, $0788
+crucified_anim_state                     5        $0758, $0760, $0768, $078C, $0790
+wheelbroken_patrol_center                2        $0774, $077C
+crucified_patrol_center                  2        $0778, $0798
 enemies_eye                              3        $079C, $07A0, $07A4
 warden_projectile_active                 1        $07AC
 warden_projectile_anim                   5        $07AF, $07B2, $07B5, $07B8, $07BB
 warden_projectile_ground_timer           1        $07BE
 warden_projectile_y                      3        $07C1, $07C4, $07CD
 warden_projectile_x                      3        $07C7, $07CA, $07DC
-warden_projectile_vx                     2        $07D0, $07D3
-warden_projectile_vy                     2        $07D6, $07D9
+warden_projectile_vx                     2        $07D0, $07D9
+warden_projectile_vy                     2        $07D3, $07D6
 current_level_width                      1        $07DF
 warden_spike_wave_origin_x               3        $07E0, $07E5-$07E6
 warden_spike_wave_origin_y               3        $07E1-$07E2, $07E7

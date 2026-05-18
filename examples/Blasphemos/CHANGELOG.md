@@ -1,5 +1,13 @@
 # Changes
 
+## [18.05.2026] - v835
+- Crucified now moves
+
+
+## [18.05.2026] - v835
+- Crucified now moves
+
+
 ## [18.05.2026] - v834
 - Wheelbroken and Pilgrim affected by gravity and detect pits
 

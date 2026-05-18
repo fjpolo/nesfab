@@ -85,7 +85,11 @@ fn wheelbroken_delete_with_patrol(U ix)
 fn wheelbroken_update(U ix) Bool
     SS ex = wheelbrokens[ix].x
     SS ey = wheelbrokens[ix].y
-    
+
+    // Only update if enemy is on screen
+    if ex < (p.camera_x - 16) || ex > (p.camera_x + 272)
+        return true
+
     // Gravity check
     U ground_tile = collision_at(UU(ex), UU(ey))
     if ground_tile != C_WALL && ground_tile != C_PLATFORM && ground_tile != C_JAIL
