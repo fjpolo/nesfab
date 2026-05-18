@@ -1,5 +1,57 @@
 # Changes
 
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
+## [18.05.2026] - v830
+- Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
+
+
 ## [18.05.2026] - v829
 - Fix the issue of garbage tiles when scrolling
 
