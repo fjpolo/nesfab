@@ -1,5 +1,25 @@
 # Changes
 
+## [18.05.2026] - v832
+- Pilgrim now moves
+
+
+## [18.05.2026] - v832
+- Pilgrim now moves
+
+
+## [18.05.2026] - v832
+- Pilgrim now moves
+
+
+## [18.05.2026] - v832
+- Pilgrim now moves
+
+
+## [18.05.2026] - v832
+- Pilgrim now moves
+
+
 ## [18.05.2026] - v831
 - fix l5->l6 transition
 

@@ -285,6 +285,8 @@ fn load_level(CCC/levels level)
             if (dead_wheelbrokens[byte_ix] & (U(1) << bit_ix)) == 0
                 wheelbrokens_new(wb)
                 wheelbroken_anim_state[wheelbrokens_num - 1] = make_anim_state(@wheelbroken_animation_standing)
+                wheelbroken_patrol_center[wheelbrokens_num - 1] = wb.x
+                wheelbroken_patrol_dir[wheelbrokens_num - 1] = 0
 
         // Items: Bone
         U bone_num = read U(level)

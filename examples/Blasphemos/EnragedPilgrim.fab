@@ -12,7 +12,7 @@ struct EnragedPilgrim
 
 
 vars /enemies
-    AnimState[8] enraged_pilgrim_anim_state
+    AnimState[4] enraged_pilgrim_anim_state
 
 data /sprites
     [] sprite_enraged_pilgrim_standing
