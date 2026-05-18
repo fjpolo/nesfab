@@ -105,7 +105,9 @@ fn update_scroll()
         next_attrs_ppuaddr = calc_scroll_attrs_ppuaddr(edge_x)
         U h = current_level_height
         // Calculate the exact start of the 32x32 attribute column
-        U col_l = U((edge_x.a >> 1) & $FE)
+        U col_l = U((edge_x >> 1).a & $FE)
+        if col_l >= current_level_width
+            col_l = current_level_width - 1
         U col_r = col_l + 1
         if col_r >= current_level_width
             col_r = col_l

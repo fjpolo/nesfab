@@ -166,9 +166,9 @@ nmi game_nmi()
         {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
         return
     else
-        // Set IRQ for scanline 15 (end of HUD split)
+        // Set IRQ for scanline 14 (end of HUD split)
         // Set as early as possible to ensure it starts counting from scanline 0
-        mmc3_timer(15)
+        mmc3_timer(14)
 
         // Set HUD Bank for the top of the screen
         mmc3_select(0, CHR_HUD << 3)
@@ -260,7 +260,7 @@ mode play_level(U level_index)
         fps_ticks += 1
         update_pads()
         check_pause()
-        export_hitboxes()
+        // export_hitboxes()
         if !is_game_paused
             update_player()
             level_update()

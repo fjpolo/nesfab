@@ -1,5 +1,49 @@
 # Changes
 
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
+## [18.05.2026] - v820
+- Fix enemies dissapearing after one hit
+
+
 ## [17.05.2026] - v819
 - Add 3 hit combo
 
