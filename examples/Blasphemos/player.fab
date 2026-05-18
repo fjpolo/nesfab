@@ -1147,7 +1147,19 @@ fn handle_collisions()
         p.y = SSF(PLAYER_INITIAL_Y)
         goto mode play_level(current_level_index)
         : preserves /game
+    // Level 6a -> Level 6b transition via right bound
     else if player_right > level_right_bound && current_level_index == 7
+        current_level_index = 21
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        p.y = SSF(PLAYER_INITIAL_Y)
+        goto mode play_level(current_level_index)
+        : preserves /game
+    
+    // Level 6b -> Level 7 transition via right bound
+    else if player_right > level_right_bound && current_level_index == 21
         current_level_index = 8
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1164,7 +1176,19 @@ fn handle_collisions()
         p.y = SSF(PLAYER_INITIAL_Y)
         goto mode play_level(current_level_index)
         : preserves /game
+    
+    // Level 7 -> Level 6b transition via left bound
     else if p.x < 8 && current_level_index == 8
+        current_level_index = 21
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        spawn_from_right = true
+        p.y = SSF(PLAYER_INITIAL_Y)
+        goto mode play_level(current_level_index)
+        : preserves /game
+
+    // Level 6b -> Level 6a transition via left bound
+    else if p.x < 8 && current_level_index == 21
         current_level_index = 7
         p.level_index = current_level_index
         player_prepare_level_transition()

@@ -139,10 +139,10 @@ enemies_eye                              3        $0780, $0784, $078C
 warden_projectile_active                 1        $0790
 warden_projectile_anim                   5        $0793, $0796, $0799, $079C, $079F
 warden_projectile_ground_timer           1        $07A2
-warden_projectile_y                      3        $07A5, $07A8, $07BD
+warden_projectile_y                      3        $07A5, $07A8, $07B1
 warden_projectile_x                      3        $07AB, $07AE, $07C0
-warden_projectile_vy                     2        $07B1, $07B4
-warden_projectile_vx                     2        $07B7, $07BA
+warden_projectile_vy                     2        $07B4, $07B7
+warden_projectile_vx                     2        $07BA, $07BD
 warden_spike_wave_origin_x               3        $07C7-$07C9
 
 ================================================================================
