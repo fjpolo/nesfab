@@ -143,7 +143,7 @@ fn load_level(CCC/levels level)
     
     // CHR:
     U chr_bank = read U(level)
-    if current_level_index == 7
+    if current_level_index == 7 || current_level_index == 21
         chr_bank += 16
     select_chr_8kb(chr_bank)
     current_level_chr = chr_bank
@@ -292,7 +292,7 @@ fn load_level(CCC/levels level)
         level4_init()
     else if current_level_index == 5
         level4sub1_init()
-    else if current_level_index == 7
+    else if current_level_index == 7 || current_level_index == 21
         level6_init()
     else if current_level_index == 8
         level7_init()
@@ -437,7 +437,7 @@ fn level_update()
         level4_main()
     else if current_level_index == 5
         level4sub1_main()
-    else if current_level_index == 7
+    else if current_level_index == 7 || current_level_index == 21
         level6_main()
     else if current_level_index == 8
         level7_main()
@@ -471,7 +471,7 @@ fn level_draw_sprites(U o) U
         o = draw_level4_sprites(o)
     else if current_level_index == 5
         o = draw_level4sub1_sprites(o)
-    else if current_level_index == 7
+    else if current_level_index == 7 || current_level_index == 21
         o = draw_level6_sprites(o)
     else if current_level_index == 8
         o = draw_level7_sprites(o)

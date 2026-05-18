@@ -1,5 +1,13 @@
 # Changes
 
+## [18.05.2026] - v825
+- level6 was split into 2 levels each
+
+
+## [18.05.2026] - v825
+- level6 was split into 2 levels each
+
+
 ## [18.05.2026] - v824
 - level3 was split into 2 levels each
 
