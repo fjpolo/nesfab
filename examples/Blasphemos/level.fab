@@ -158,12 +158,23 @@ fn select_chr_8kb(U bank)
 
 fn disable_nmi()
     
+fn clear_nametables()
+    {PPUSTATUS}()
+    for U nt = 0; nt < 2; nt += 1
+        UU base = UU($2000) + (UU(nt) << 10)
+        ppu_set_addr(base)
+        for U i = 0; i < 4; i += 1
+            for UU j = 0; j < 256; j += 1
+                {PPUDATA}($00)
+
 fn load_level(CCC/levels level)
     warden_active = false
     player_combo_count = 0
     swing_is_combo_hit = false
     for UU i = 0; i < 256; i += 1
         destroyed[U(i)] = 0
+    
+    clear_nametables()
     
     // CHR:
     U chr_bank = read U(level)
@@ -364,7 +375,7 @@ fn load_level(CCC/levels level)
 fn load_level_finish()
     // Set the scroll off-screen, then run the scroll code several times
     // to fill the screen with tiles.
-    scroll_x = calc_shifted_camera_x() + 32
+    scroll_x = calc_shifted_camera_x() + 64
     while true
         update_scroll()
         ppu_upload_scroll()

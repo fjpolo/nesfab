@@ -1,5 +1,33 @@
 # Changes
 
+## [18.05.2026] - v828
+- Fix level indexing
+
+
+## [18.05.2026] - v828
+- Fix level indexing
+
+
+## [18.05.2026] - v828
+- Fix level indexing
+
+
+## [18.05.2026] - v828
+- Fix level indexing
+
+
+## [18.05.2026] - v828
+- Fix level indexing
+
+
+## [18.05.2026] - v828
+- Fix level indexing
+
+
+## [18.05.2026] - v828
+- Fix level indexing
+
+
 ## [18.05.2026] - v827
 - Add dead screen
 

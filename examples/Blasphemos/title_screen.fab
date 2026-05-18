@@ -63,10 +63,6 @@ fn title_load_palette()
         {PPUDATA}($0F)
 
 
-
-
-
-
 mode title_screen(U level_index)
 : nmi game_nmi
     {PPUCTRL}(0)

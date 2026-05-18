@@ -82,7 +82,10 @@ fn update_scroll()
         s = mt_se
 
     UU next_tiles_ppuaddr = calc_scroll_tiles_ppuaddr(edge_x) + $40 // Skip 16 pixels (2 rows)
-    ptr = current_level + UU(edge_x >> 1) * UU(current_level_height)
+    UU col = edge_x >> 1
+    if col >= UU(current_level_width)
+        col = UU(current_level_width - 1)
+    ptr = current_level + col * UU(current_level_height)
 
     // Calculate destroyed:
     U d = U(edge_x.a >> 4) & %1111
