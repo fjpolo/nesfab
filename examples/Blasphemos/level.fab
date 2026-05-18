@@ -4,8 +4,8 @@
  * See LICENSE_1_0.txt or https://www.boost.org/LICENSE_1_0.txt 
  */
 
-// Load the .mapfab file, calling the macros for each definition.
-mapfab(raw, "BlasNESmous.mapfab", "chr", "palette", "metatiles", "level")
+// Load the .json file, calling the macros for each definition.
+mapfab(raw, "blasnesmous.json", "chr", "palette", "metatiles", "level")
 
 macro("pool_contiguous", "Enemy_eye", "4", "enemies_eye", "/game")
 macro("pool_contiguous", "Enemy_following_eye", "4", "enemies_following_eye", "/game")
@@ -100,9 +100,10 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l10sub1,       // 16
                                         @lev_l8over1,       // 17
                                         @lev_game_over,     // 18
+                                        @lev_l2b,           // 19
                                     )
 ct U FIRST_LEVEL_INDEX =  1
-ct U LAST_LEVEL_INDEX =  18
+ct U LAST_LEVEL_INDEX =  19
 
 // Sets the 'mt_' pointers to offsets of 'mt'.
 fn load_metatiles(CC/metatiles mt)
@@ -283,7 +284,7 @@ fn load_level(CCC/levels level)
             read ItemBone(level)
     if current_level_index == 1
         level1_init()
-    else if current_level_index == 2
+    else if current_level_index == 2 || current_level_index == 19
         level2_init()
     else if current_level_index == 4
         level4_init()

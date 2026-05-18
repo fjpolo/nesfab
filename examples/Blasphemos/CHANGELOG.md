@@ -1,5 +1,13 @@
 # Changes
 
+## [18.05.2026] - v821
+- I don't think I could fix anything
+
+
+## [18.05.2026] - v821
+- I don't think I could fix anything
+
+
 ## [18.05.2026] - v820
 - Fix enemies dissapearing after one hit
 
