@@ -20,8 +20,8 @@ scroll_coin_ppuaddr                      2        $001C-$001D
 raw_pads                                 1        $001E
 scroll_tiles                             1        $0020
 scroll_attrs                             1        $003E
-current_level_enemies                    3        $0046-$0047, $07C4
-current_level                            3        $0048-$0049, $07C5
+current_level_enemies                    3        $0046-$0047, $07C6
+current_level                            3        $0048-$0049, $07C4
 mt_ca                                    2        $004A-$004B
 mt_se                                    2        $004C-$004D
 mt_sw                                    2        $004E-$004F
@@ -92,11 +92,11 @@ wheelbrokens_num                         1        $0314
 rng_state                                1        $0315
 following_eye_set_initial_state_current_level_flag 1        $0317
 following_eye_set_initial_state_level_flag 1        $0318
-pads                                     3        $0320, $0322, $0324
-is_start_pressed                         1        $0326
-start_counter                            1        $0327
-is_select_pressed                        1        $0328
-select_counter                           1        $0329
+is_start_pressed                         1        $0320
+start_counter                            1        $0321
+is_select_pressed                        1        $0322
+select_counter                           1        $0323
+pads                                     3        $0324, $0326, $0328
 following_eye_state                      1        $032A
 following_eye_state_counter              1        $0332
 current_level_chr                        1        $033A
@@ -131,11 +131,11 @@ warden_spike_x                           3        $06C8, $06CE, $06DA
 enraged_pilgrims                         10       $06E6, $0704, $0714, $0718, $0724, $0734, $0738, $073C, $0740, $0778
 wheelbrokens                             10       $06EA, $0708, $070C, $0710, $0728, $072C, $0730, $0744, $0748, $076C
 crucifieds                               11       $06EE, $06F2, $06FA, $071C, $0720, $074C, $0754, $0758, $075C, $0760, $077C
-enemies_following_eye                    3        $06F6, $0700, $0788
+enemies_following_eye                    3        $06F6, $0700, $078C
 current_level_width                      1        $06FE
-warden_spike_wave_origin_y               3        $06FF, $07C3, $07C6
+warden_spike_wave_origin_y               3        $06FF, $07C3, $07C5
 crucified_anim_state                     5        $0750, $0764, $0768, $0770, $0774
-enemies_eye                              3        $0780, $0784, $078C
+enemies_eye                              3        $0780, $0784, $0788
 warden_projectile_active                 1        $0790
 warden_projectile_anim                   5        $0793, $0796, $0799, $079C, $079F
 warden_projectile_ground_timer           1        $07A2

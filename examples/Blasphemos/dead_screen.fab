@@ -1,0 +1,102 @@
+// Dead screen - uses raw CHR from assets/dead_screen_CHR.chr
+// Nametable and palette from assets/dead_screen.nss (via dead_screen_data.fab)
+
+fn dead_upload_nametable_and_attrs()
+    // Write nametable (960 bytes) starting at $2000
+    {PPUSTATUS}()
+    {PPUADDR}($20)
+    {PPUADDR}($00)
+    CCC/dead ptr = @dead_nam
+    // First 960 bytes = nametable
+    for UU i = 0; i < 960; i += 1
+        {PPUDATA}(read U(ptr))
+    // Attribute table at $23C0 (64 bytes follow immediately in .nam)
+    // Reset PPU address to attribute table location
+    {PPUSTATUS}()
+    {PPUADDR}($23)
+    {PPUADDR}($C0)
+    // Bytes 960-1023 = attribute table
+    for U i = 0; i < 64; i += 1
+        {PPUDATA}(read U(ptr))
+
+fn dead_load_palette()
+    {PPUSTATUS}()
+    {PPUADDR}($3F)
+    {PPUADDR}($00)
+    // Palette 0
+    {PPUDATA}(DEAD_UBC)
+    {PPUDATA}(dead_bg_palette[0])
+    {PPUDATA}(dead_bg_palette[1])
+    {PPUDATA}(dead_bg_palette[2])
+    // Palette 1
+    {PPUDATA}(DEAD_UBC)
+    {PPUDATA}(dead_bg_palette[3])
+    {PPUDATA}(dead_bg_palette[4])
+    {PPUDATA}(dead_bg_palette[5])
+    // Palette 2
+    {PPUDATA}(DEAD_UBC)
+    {PPUDATA}(dead_bg_palette[6])
+    {PPUDATA}(dead_bg_palette[7])
+    {PPUDATA}(dead_bg_palette[8])
+    // Palette 3
+    {PPUDATA}(DEAD_UBC)
+    {PPUDATA}(dead_bg_palette[9])
+    {PPUDATA}(dead_bg_palette[10])
+    {PPUDATA}(dead_bg_palette[11])
+    // Sprite palettes: Palette 0 = All White for visibility
+    {PPUDATA}(DEAD_UBC) // UBC Mirror
+    {PPUDATA}($30)       // White
+    {PPUDATA}($30)       // White
+    {PPUDATA}($30)       // White
+    // Remaining sprite palettes
+    for U i = 0; i < 12; i += 1
+        {PPUDATA}($0F)
+
+
+mode dead_screen(U previous_level_index)
+: nmi game_nmi
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    game_state = GAME_STATE_DEAD_SCREEN
+
+    // Bank-switch MMC3 to the dead CHR bank
+    select_chr_8kb(DEAD_CHR_BANK)
+    // Map font (bank 8) to sprites just in case
+    mmc3_select(2, 64)
+    mmc3_select(3, 65)
+    mmc3_select(4, 66)
+    mmc3_select(5, 67)
+
+    // Upload dead palette
+    dead_load_palette()
+
+    // Upload nametable + attribute table
+    dead_upload_nametable_and_attrs()
+
+    // Reset button states
+    is_start_pressed = false
+    is_select_pressed = false
+
+    // Enable BG and Sprite rendering
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | PPUCTRL_NT_2000)
+    {PPUMASK}(PPUMASK_BG_ON | PPUMASK_SPR_ON | PPUMASK_NO_CLIP)
+
+    // Wait a brief moment before allowing input to prevent accidental skips
+    U wait_timer = 60
+
+    while true
+        nmi
+        U o = 0
+        hide_oam(o)
+        ppu_upload_oam_poll_pads(0)
+        update_pads()
+        
+        is_select_pressed = false
+        
+        if wait_timer > 0
+            wait_timer -= 1
+        else
+            if pads[0].pressed != 0
+                // Player pressed a button, time to respawn
+                player_respawn()

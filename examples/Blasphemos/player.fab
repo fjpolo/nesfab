@@ -519,6 +519,7 @@ fn player_respawn()
 
     p.is_initialised = true
     p.level_index = current_level_index
+    game_state = GAME_STATE_PLAY
     goto mode play_level(current_level_index)
     : preserves /game
 
@@ -908,8 +909,20 @@ fn is_on_ground() Bool
             SS surface_y = SS(y & $F0) + PLATFORM_OFFSET
             SS old_y_feet = SS(p.y - SSF(p.yspeed)) + p.h
             if old_y_feet <= surface_y && (SS(p.y) + p.h) <= surface_y + 3
-                return true
+                return true        
     
+    return false
+
+fn is_on_pinchos_de_la_muerte() Bool
+    UU y = UU(SS(p.y) + p.h)
+    UU x1 = UU(p.x)
+    UU x2 = UU(p.x + p.rw)
+    
+    U t1 = collision_at(x1, y)
+    U t2 = collision_at(x2, y)
+
+    if t1 == C_PINCHOS || t2 == C_PINCHOS
+        return true
     return false
 
 fn handle_physics()
@@ -942,6 +955,11 @@ fn handle_physics()
         p.yspeed = 0
     else
         p.y += SSF(p.yspeed)
+
+        if is_on_pinchos_de_la_muerte()
+            p.health = 0
+            goto mode dead_screen(current_level_index)
+            : preserves /game
         
         // Ledge detection
         if p.movement == PLAYER_MOVING_JUMP && p.yspeed >= 0
@@ -989,7 +1007,8 @@ fn handle_physics()
                 : preserves /game
             else
                 p.health = 0
-                player_respawn()
+                goto mode dead_screen(current_level_index)
+                : preserves /game
         else if SS(p.y) < -16
             if current_level_index == 5
                 current_level_index = 4
@@ -1425,7 +1444,8 @@ fn hurt_player(U attack_type, SS ex) Bool
             p.anim_state = make_anim_state(@penitent_animation_hit)
         
         if p.health == 0
-            player_respawn()
+            goto mode dead_screen(current_level_index)
+            : preserves /game
         
         return false // Damage taken, not parried
     

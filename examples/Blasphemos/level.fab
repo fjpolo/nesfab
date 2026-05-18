@@ -58,6 +58,7 @@ ct U C_CEILING_SCALE    = 5
 ct U C_KEY              = 6
 ct U C_JAIL             = 7
 ct U C_PLATFORM         = 8
+ct U C_PINCHOS         = 9
 
 vars /metatiles
     // Pointers to our metatile data.

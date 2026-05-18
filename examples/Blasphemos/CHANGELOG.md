@@ -1,5 +1,45 @@
 # Changes
 
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
+## [18.05.2026] - v826
+- Fix some level tiles
+
+
 ## [18.05.2026] - v825
 - level6 was split into 2 levels each
 
