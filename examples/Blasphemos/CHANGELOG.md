@@ -1,5 +1,9 @@
 # Changes
 
+## [18.05.2026] - v831
+- fix l5->l6 transition
+
+
 ## [18.05.2026] - v830
 - Try to fix scrolling garbage tiles when transitioning to previous levels. Did not work
 

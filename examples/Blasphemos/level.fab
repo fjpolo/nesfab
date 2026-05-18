@@ -31,7 +31,7 @@ ct fn enemies_following_eye_vec(Int{} x, Int{} y) Enemy_following_eye{}
 ct fn enraged_pilgrims_vec(Int{} x, Int{} y) EnragedPilgrim{}
     EnragedPilgrim{} out = EnragedPilgrim{}()
     for UU i = 0; i < len(x); i += 1
-        push(out, EnragedPilgrim(SS(x{i}), SS(y{i}), false, 0, 30, 0, 0, 0))
+        push(out, EnragedPilgrim(SS(x{i}), SS(y{i}), false, 0, 30, 0, 0, 0, SS(x{i}), false))
     return out
 
 // Used in level.macrofab to format the enemies:

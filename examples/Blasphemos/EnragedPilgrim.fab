@@ -7,6 +7,8 @@ struct EnragedPilgrim
     U hurt_timer
     U blocked_timer
     U local_index
+    SS patrol_center 
+    Bool patrol_dir
 
 
 vars /enemies
@@ -64,8 +66,26 @@ data /sprites
 fn enraged_pilgrim_update(U ix) Bool
     SS ex = enraged_pilgrims[ix].x
     SS ey = enraged_pilgrims[ix].y
-    
-    // Facing logic: Face player if within 5 tiles (40 pixels)
+
+    // Patrol: move 1px/frame, flip on wall or 2-tile boundary
+    if enraged_pilgrims[ix].blocked_timer == 0
+        if enraged_pilgrims[ix].patrol_dir  // moving left
+            enraged_pilgrims[ix].x -= 1
+            // Flip on wall collision or patrol boundary
+            if collision_at(UU(enraged_pilgrims[ix].x - 8), UU(ey - 8)) == C_WALL
+                enraged_pilgrims[ix].patrol_dir = false
+            else if enraged_pilgrims[ix].x <= (enraged_pilgrims[ix].patrol_center - SS(32))
+                enraged_pilgrims[ix].patrol_dir = false
+        else                                // moving right
+            enraged_pilgrims[ix].x += 1
+            // Flip on wall collision or patrol boundary
+            if collision_at(UU(enraged_pilgrims[ix].x + 8), UU(ey - 8)) == C_WALL
+                enraged_pilgrims[ix].patrol_dir = true
+            else if enraged_pilgrims[ix].x >= (enraged_pilgrims[ix].patrol_center + SS(32))
+                enraged_pilgrims[ix].patrol_dir = true
+        ex = enraged_pilgrims[ix].x  // refresh local copy after moving
+
+    // Facing logic: Face player if within 100 pixels
     SS dist_x = p.x - ex
     if dist_x < 0
         dist_x = -dist_x
@@ -78,6 +98,9 @@ fn enraged_pilgrim_update(U ix) Bool
             enraged_pilgrims[ix].facing_left = true
         else
             enraged_pilgrims[ix].facing_left = false
+    else
+        // Outside detection range: face the patrol direction
+        enraged_pilgrims[ix].facing_left = enraged_pilgrims[ix].patrol_dir
 
     if enraged_pilgrims[ix].hurt_timer > 0
         enraged_pilgrims[ix].hurt_timer -= 1
