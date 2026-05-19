@@ -1,5 +1,33 @@
 # Changes
 
+## [19.05.2026] - v836
+- Enemy AI only runs when on screen
+
+
+## [19.05.2026] - v836
+- Enemy AI only runs when on screen
+
+
+## [19.05.2026] - v836
+- Enemy AI only runs when on screen
+
+
+## [19.05.2026] - v836
+- Enemy AI only runs when on screen
+
+
+## [19.05.2026] - v836
+- Enemy AI only runs when on screen
+
+
+## [19.05.2026] - v836
+- Enemy AI only runs when on screen
+
+
+## [19.05.2026] - v836
+- Enemy AI only runs when on screen
+
+
 ## [18.05.2026] - v835
 - Crucified now moves
 
