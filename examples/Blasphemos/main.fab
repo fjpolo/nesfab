@@ -3,6 +3,9 @@
  * Based on LuciYFer engine
  */
 
+audio(puf1_music, "assets/blasphemous_music.txt")
+audio(puf1_sfx)
+
 // Button constants
 ct Int SELECT_BUTTON_DEBOUNCE_FRAMES = 70
 ct Int START_BUTTON_DEBOUNCE_FRAMES = 5
@@ -136,6 +139,7 @@ nmi game_nmi()
 
 
     ppu_upload_oam_poll_pads(0)
+    puf.process(PUF_DEFAULT)
 
     if palette_dirty
         ppu_upload_palette()
@@ -197,6 +201,8 @@ nmi game_nmi()
 // MAIN
 mode main()  
     mmc3_reset()
+    puf.init(system)
+    puf.play_track(0)
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)    
