@@ -51,7 +51,9 @@ fn calc_shifted_camera_x() UU
 
 fn get_mt_palette(U mt_index) U
     U c = mt_ca[mt_index] & %11
-    if c == 0 && current_level_index >= 1 && current_level_index <= 17
+    // Remap palette 0 to palette 2 for bg2/bg3 levels.
+    // LEVEL_L1 uses metatiles_bg1 which legitimately uses palette 0, so exclude it.
+    if c == 0 && current_level_index >= 2 && current_level_index <= 17
         c = 2 // Map Palette 0 to Palette 2
     return c
 
