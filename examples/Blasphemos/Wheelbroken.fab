@@ -181,6 +181,7 @@ fn wheelbroken_update(U ix) Bool
                       U byte_ix = global_ix >> 3
                       U bit_ix = global_ix & 7
                       dead_wheelbrokens[byte_ix] |= (U(1) << bit_ix)
+                      total_tears_collected += 13
                       wheelbroken_delete_with_patrol(ix)
                       return false
 

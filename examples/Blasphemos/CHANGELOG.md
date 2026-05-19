@@ -1,5 +1,25 @@
 # Changes
 
+## [19.05.2026] - v848
+- Update manual
+
+
+## [19.05.2026] - v848
+- Update manual
+
+
+## [19.05.2026] - v848
+- Update manual
+
+
+## [19.05.2026] - v848
+- Update manual
+
+
+## [19.05.2026] - v848
+- Update manual
+
+
 ## [19.05.2026] - v847
 - Do some more optimizations to get >50FPS all the time!
 

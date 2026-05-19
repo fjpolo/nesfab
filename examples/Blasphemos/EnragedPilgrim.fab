@@ -169,6 +169,7 @@ fn enraged_pilgrim_update(U ix) Bool
                       U byte_ix = global_ix >> 3
                       U bit_ix = global_ix & 7
                       dead_pilgrims[byte_ix] |= (U(1) << bit_ix)
+                      total_tears_collected += 3
                       enraged_pilgrims_delete(ix)
                       return false
 

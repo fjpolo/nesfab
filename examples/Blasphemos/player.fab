@@ -608,9 +608,10 @@ fn update_player()
                         warden_hurt_timer = 30 // IFrames
                         player_pogo()
                     logf(@"Warden HP: %d"l, warden_health)
-                    if warden_health == 0
+                    if warden_health == 0 && warden_state != WARDEN_STATE_DEAD
                         warden_state = WARDEN_STATE_DEAD
                         warden_defeated = true
+                        total_tears_collected += 300
                         warden_hurt_timer = 0 // Stop shaking immediately
                         for U i = 0; i < 3; i += 1
                             warden_projectile_active[i] = false

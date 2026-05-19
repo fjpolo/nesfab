@@ -7,13 +7,13 @@ data /strings
     [] altar_rest
         ( "REST & REFILL" )
     [] altar_sword
-        ( "SWORD UPGRADE (5 BONES)" )
+        ( "SWORD UPGRADE (100 TEARS)" )
     [] altar_bile
-        ( "BILE UPGRADE (10 BONES)" )
+        ( "BILE UPGRADE (200 TEARS)" )
     [] altar_exit
         ( "EXIT" )
-    [] altar_bones
-        ( "BONES:" )
+    [] altar_tears
+        ( "TEARS:" )
     [] altar_atk
         ( "ATK:" )
     [] altar_bile_stat
@@ -69,7 +69,7 @@ mode mea_culpa_altar_screen(U previous_level)
     write_altar_string_to_bg($2186, @altar_sword)
     write_altar_string_to_bg($21C6, @altar_bile)
     write_altar_string_to_bg($2206, @altar_exit)
-    write_altar_string_to_bg($2283, @altar_bones)
+    write_altar_string_to_bg($2283, @altar_tears)
     write_altar_string_to_bg($228D, @altar_atk)
     write_altar_string_to_bg($2295, @altar_bile_stat)
 
@@ -91,17 +91,30 @@ mode mea_culpa_altar_screen(U previous_level)
         set_oam(o, 36, cursor_y, 30, 0) // '>' is tile 30 in global charmap
         o += 4
 
-        // Draw dynamic stat values
-        U b_tens = 0
-        U b_ones = total_bones_collected
-        while b_ones >= 10
-            b_ones -= 10
-            b_tens += 1
+        // Draw dynamic stat values (Tears of Atonement: 4 digits)
+        UU tears = total_tears_collected
+        U thousands = 0
+        while tears >= 1000
+            tears -= 1000
+            thousands += 1
+        U hundreds = 0
+        while tears >= 100
+            tears -= 100
+            hundreds += 1
+        U tens = 0
+        U ones = U(tears)
+        while ones >= 10
+            ones -= 10
+            tens += 1
         
-        // BONES tens and ones (offset 16 for digits in global charmap)
-        set_oam(o, 80, 159, 16 + b_tens, 0)
+        // TEARS thousands, hundreds, tens, and ones (offset 16 for digits in global charmap)
+        set_oam(o, 72, 159, 16 + thousands, 0)
         o += 4
-        set_oam(o, 88, 159, 16 + b_ones, 0)
+        set_oam(o, 80, 159, 16 + hundreds, 0)
+        o += 4
+        set_oam(o, 88, 159, 16 + tens, 0)
+        o += 4
+        set_oam(o, 96, 159, 16 + ones, 0)
         o += 4
 
         // ATK power (mea_culpa_level)
@@ -138,8 +151,8 @@ mode mea_culpa_altar_screen(U previous_level)
                 break
             else if prie_dieu_selected_option == 1
                 // SWORD UPGRADE
-                if total_bones_collected >= 5 && mea_culpa_level < 5
-                    total_bones_collected -= 5
+                if total_tears_collected >= 100 && mea_culpa_level < 5
+                    total_tears_collected -= 100
                     mea_culpa_level += 1
                     mea_culpa_upgraded = true
                     force_hud_update()
@@ -148,8 +161,8 @@ mode mea_culpa_altar_screen(U previous_level)
                     break
             else if prie_dieu_selected_option == 2
                 // BILE UPGRADE
-                if total_bones_collected >= 10 && p.max_bile_vessels < 3
-                    total_bones_collected -= 10
+                if total_tears_collected >= 200 && p.max_bile_vessels < 3
+                    total_tears_collected -= 200
                     p.max_bile_vessels += 1
                     p.current_bile_vessels = p.max_bile_vessels
                     force_hud_update()

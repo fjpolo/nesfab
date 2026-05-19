@@ -71,6 +71,7 @@ vars /game
     U fps_display = 60
     U fps_timer = 0
     U total_bones_collected = 0
+    UU total_tears_collected = 0
 
 data /game
     [] konami_code
