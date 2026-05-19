@@ -98,6 +98,8 @@ vars /game
     Bool palette_dirty = false
     Bool attack_has_hit = false
     Bool swing_is_combo_hit = false
+    U t_floor_left = 0
+    U t_floor_right = 0
 
 // Sprites and animations
 data /sprites
@@ -723,19 +725,27 @@ fn handle_input()
         p.is_invincible = !p.is_invincible
         cheat_shake_timer = 20
 
-    // Ladder detection
-    U center_tile = collision_at(UU(p.center_x), UU(p.center_y))
-    U top_tile = collision_at(UU(p.center_x), UU(SS(p.y)))
-    U bottom_tile = collision_at(UU(p.center_x), UU(SS(p.y) + p.h))
-    U feet_tile = collision_at(UU(p.center_x), UU(SS(p.y) + p.h + 2))
+    // Ladder detection (Deferred and optimized to run only when needed)
+    U center_tile = C_OPEN
+    U top_tile = C_OPEN
+    U bottom_tile = C_OPEN
+    U feet_tile = C_OPEN
+
+    if p.movement == PLAYER_MOVING_CLIMB
+        center_tile = collision_at(UU(p.center_x), UU(p.center_y))
+        top_tile = collision_at(UU(p.center_x), UU(SS(p.y)))
+        bottom_tile = collision_at(UU(p.center_x), UU(SS(p.y) + p.h))
 
     // Try to grab ladder
     if p.movement != PLAYER_MOVING_CLIMB
         Bool grab_ladder = false
         if pads[0].held & BUTTON_UP
+            center_tile = collision_at(UU(p.center_x), UU(p.center_y))
             if center_tile == C_LADDER
                 grab_ladder = true
         else if pads[0].held & BUTTON_DOWN
+            center_tile = collision_at(UU(p.center_x), UU(p.center_y))
+            feet_tile = collision_at(UU(p.center_x), UU(SS(p.y) + p.h + 2))
             if center_tile == C_LADDER || feet_tile == C_LADDER
                 grab_ladder = true
                 p.y += SSF(4) // Move into the ladder tile if grabbing down
@@ -905,22 +915,26 @@ fn handle_input()
             else
                 p.anim_state = make_anim_state(@penitent_animation_jump)
 
+fn query_floor_collisions()
+    UU y = UU(SS(p.y) + p.h)
+    UU x1 = UU(p.x)
+    UU x2 = UU(p.x + p.rw)
+    t_floor_left = collision_at(x1, y)
+    t_floor_right = collision_at(x2, y)
+
 fn is_on_ground() Bool
     UU y = UU(SS(p.y) + p.h)
     UU x1 = UU(p.x)
     UU x2 = UU(p.x + p.rw)
     
-    U t1 = collision_at(x1, y)
-    U t2 = collision_at(x2, y)
-    
-    if t1 == C_WALL
+    if t_floor_left == C_WALL
         if collision_at(x1, y - 16) != C_WALL
             return true
-    if t2 == C_WALL
+    if t_floor_right == C_WALL
         if collision_at(x2, y - 16) != C_WALL
             return true
         
-    if t1 == C_PLATFORM || t2 == C_PLATFORM
+    if t_floor_left == C_PLATFORM || t_floor_right == C_PLATFORM
         // Land on platform if moving down, were previously above its surface, 
         // and are currently within the 3-pixel landing window.
         if p.yspeed >= 0
@@ -932,14 +946,7 @@ fn is_on_ground() Bool
     return false
 
 fn is_on_pinchos_de_la_muerte() Bool
-    UU y = UU(SS(p.y) + p.h)
-    UU x1 = UU(p.x)
-    UU x2 = UU(p.x + p.rw)
-    
-    U t1 = collision_at(x1, y)
-    U t2 = collision_at(x2, y)
-
-    if t1 == C_PINCHOS || t2 == C_PINCHOS
+    if t_floor_left == C_PINCHOS || t_floor_right == C_PINCHOS
         return true
     return false
 
@@ -973,6 +980,7 @@ fn handle_physics()
         p.yspeed = 0
     else
         p.y += SSF(p.yspeed)
+        query_floor_collisions()
 
         if is_on_pinchos_de_la_muerte()
             p.health = 0
@@ -1001,11 +1009,8 @@ fn handle_physics()
                 p.yspeed = 0
                 
                 UU feet_y = UU(SS(p.y) + p.h)
-                U t1 = collision_at(UU(p.x), feet_y)
-                U t2 = collision_at(UU(p.x + p.rw), feet_y)
-                
                 SS snap_y = SS(feet_y & $F0)
-                if t1 == C_PLATFORM || t2 == C_PLATFORM
+                if t_floor_left == C_PLATFORM || t_floor_right == C_PLATFORM
                     snap_y += PLATFORM_OFFSET
                 
                 p.y = SSF(snap_y) - SSF(p.h)

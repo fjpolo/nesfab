@@ -1,5 +1,25 @@
 # Changes
 
+## [19.05.2026] - v846
+- Fix show_fps.lua
+
+
+## [19.05.2026] - v846
+- Fix show_fps.lua
+
+
+## [19.05.2026] - v846
+- Fix show_fps.lua
+
+
+## [19.05.2026] - v846
+- Fix show_fps.lua
+
+
+## [19.05.2026] - v846
+- Fix show_fps.lua
+
+
 ## [19.05.2026] - v845
 - Optimize FPS and remove older enemies
 
