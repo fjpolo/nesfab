@@ -69,7 +69,7 @@ fn update_hud_tiles()
             b_tens += 1
         {PPUDATA}(get_digit_tile(b_tens))
         {PPUDATA}(get_digit_tile(b_ones))
-        {PPUDATA}($3A) // '/' character tile
+        {PPUDATA}($4A) // '/' character tile
         {PPUDATA}(get_digit_tile(0))
         {PPUDATA}(get_digit_tile(7))
 

@@ -1,5 +1,25 @@
 # Changes
 
+## [19.05.2026] - v849
+- Change currency to Tears
+
+
+## [19.05.2026] - v849
+- Change currency to Tears
+
+
+## [19.05.2026] - v849
+- Change currency to Tears
+
+
+## [19.05.2026] - v849
+- Change currency to Tears
+
+
+## [19.05.2026] - v849
+- Change currency to Tears
+
+
 ## [19.05.2026] - v848
 - Update manual
 
