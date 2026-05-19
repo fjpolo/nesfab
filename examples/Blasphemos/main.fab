@@ -262,7 +262,7 @@ mode play_level(U level_index)
     p.camera_x = min(max(0, p.camera_x), (SS(current_level_width) << 4) - 256)
 
     // Quick fix: force spawn position when entering Level 6
-    if current_level_index == LEVEL_L6
+    if current_level_index == LEVEL_L6 && !spawn_from_right
         p.y = SSF(128)
         p.yspeed = 0
 
