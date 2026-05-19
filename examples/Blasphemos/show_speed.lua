@@ -12,6 +12,40 @@ if not memory and emu then
     end
 end
 
+-- Helper to dynamically find variable addresses from ram_variables.txt
+function get_var_address(var_name, fallback)
+    local paths = {
+        "ram_variables.txt",
+        "C:\\Workspace\\nesfab\\nesfab\\examples\\Blasphemos\\ram_variables.txt",
+        "c:\\Workspace\\nesfab\\nesfab\\examples\\Blasphemos\\ram_variables.txt"
+    }
+    for _, path in ipairs(paths) do
+        local file = io.open(path, "r")
+        if file then
+            for line in file:lines() do
+                local name, addr_hex = line:match("^([%w_]+)%s+%d+%s+%$(%x+)")
+                if name == var_name then
+                    file:close()
+                    local addr = tonumber(addr_hex, 16)
+                    print(string.format("[Speed Script] Found %s at address: 0x%04X", var_name, addr))
+                    return addr
+                end
+            end
+            file:close()
+        end
+    end
+    print(string.format("[Speed Script] Warning: Could not find %s in ram_variables.txt, using fallback: 0x%04X", var_name, fallback))
+    return fallback
+end
+
+-- Resolve player base address dynamically
+local ADDR_P_BASE = get_var_address("p", 0x023A)
+
+-- Calculate dynamic absolute addresses based on struct layout offsets
+local ADDR_PX = ADDR_P_BASE + 0     -- Offset 0: player world x (s16)
+local ADDR_PY = ADDR_P_BASE + 3     -- Offset 3: player world y (s16)
+local ADDR_CAMX = ADDR_P_BASE + 33   -- Offset 33: camera x (s16)
+
 function read_s16(addr)
     local low = memory.readbyte(addr)
     local high = memory.readbyte(addr + 1)
@@ -27,12 +61,12 @@ local current_speed = 0.0
 local frame_count = 0
 
 function draw_status()
-    -- Player coordinates (0x023A is px, 0x023C is py fraction, 0x023D is py integer)
-    local px = read_s16(0x023A)
-    local py = read_s16(0x023D)
+    -- Player coordinates read dynamically
+    local px = read_s16(ADDR_PX)
+    local py = read_s16(ADDR_PY)
     
-    -- Camera coordinate
-    local cam_x = read_s16(0x025B)
+    -- Camera coordinate read dynamically
+    local cam_x = read_s16(ADDR_CAMX)
     
     -- Calculate speed based on frame-by-frame delta
     if prev_px ~= nil then
@@ -52,7 +86,7 @@ function draw_status()
 
     -- 2. Draw info block at the top center of the screen
     if emu.drawString then
-        -- Mesen API
+        -- Mesen API (Yellow text with black background card)
         emu.drawString(10, 48, text, 0xFFFFFF, 0xFF000000)
     elseif gui.text then
         -- Fceux API

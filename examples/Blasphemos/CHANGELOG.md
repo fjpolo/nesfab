@@ -1,5 +1,29 @@
 # Changes
 
+## [19.05.2026] - v845
+- Optimize FPS and remove older enemies
+
+
+## [19.05.2026] - v845
+- Optimize FPS and remove older enemies
+
+
+## [19.05.2026] - v845
+- Optimize FPS and remove older enemies
+
+
+## [19.05.2026] - v845
+- Optimize FPS and remove older enemies
+
+
+## [19.05.2026] - v845
+- Optimize FPS and remove older enemies
+
+
+## [19.05.2026] - v845
+- Optimize FPS and remove older enemies
+
+
 ## [19.05.2026] - v844
 - Fix Albero Prie Dieu altar acting as Mea Culpa Altar
 
