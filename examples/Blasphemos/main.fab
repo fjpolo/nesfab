@@ -61,8 +61,6 @@ vars /game
     U[22] dead_pilgrims = U[22](0)
     U[22] dead_wheelbrokens = U[22](0)
     U[4] explored_rooms = U[4](0, 0, 0, 0)
-    U[22] dead_eyes = U[22](0)
-    U[22] dead_following_eyes = U[22](0)
     U[22] dead_crucifieds = U[22](0)
     Bool warden_defeated = false
     Bool warden_arrow_dismissed = false
@@ -391,77 +389,22 @@ fn draw_enemies(U o) U
     U type_cycle = (frame_counter >> 3) & 3 // Rotate every 8 frames
     
     if type_cycle == 0
-        o = draw_eyes(o)
         o = draw_enraged_pilgrims(o)
         o = draw_wheelbrokens(o)
         o = draw_crucifieds(o)
     else if type_cycle == 1
-        o = draw_enraged_pilgrims(o)
         o = draw_wheelbrokens(o)
         o = draw_crucifieds(o)
-        o = draw_eyes(o)
+        o = draw_enraged_pilgrims(o)
     else if type_cycle == 2
-        o = draw_wheelbrokens(o)
         o = draw_crucifieds(o)
-        o = draw_eyes(o)
         o = draw_enraged_pilgrims(o)
+        o = draw_wheelbrokens(o)
     else
-        o = draw_crucifieds(o)
-        o = draw_eyes(o)
         o = draw_enraged_pilgrims(o)
+        o = draw_crucifieds(o)
         o = draw_wheelbrokens(o)
 
-    return o
-
-fn draw_eyes(U o) U
-    U e_start = frame_counter & 7
-    if e_start >= enemies_eye_num
-        e_start = 0
-    for U j = 0; j < enemies_eye_num; j += 1
-        U i = (e_start + j)
-        if i >= enemies_eye_num
-            i -= enemies_eye_num
-        
-        // Eye hit detection
-        if player_sword_active && eye_hurt_timer[i] == 0
-            if player_sword_x < SS(enemies_eye[i].x + 16) && (player_sword_x + player_sword_w) > SS(enemies_eye[i].x) && player_sword_y < SS(enemies_eye[i].y) && (player_sword_y + player_sword_h) > SS(enemies_eye[i].y - 8)
-                eye_hurt_timer[i] = 30
-                register_sword_hit()
-                player_pogo()
-
-        if eye_hurt_timer[i] > 0
-            eye_hurt_timer[i] -= 1
-            o = push_oam_anim_a(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i], $01) // Palette 2 XOR 1 = 3 (White)
-        else if eye_blocked_timer[i] > 0
-            eye_blocked_timer[i] -= 1
-            o = push_oam_anim_a(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i], $03) // Palette 2 XOR 3 = 1
-        else
-            o = push_oam_anim(o, enemies_eye[i].x, enemies_eye[i].y, enemies_eye_anim_state[i])
-
-    U fe_start = frame_counter & 7
-    if fe_start >= enemies_following_eye_num
-        fe_start = 0
-    for U j = 0; j < enemies_following_eye_num; j += 1
-        U i = (fe_start + j)
-        if i >= enemies_following_eye_num
-            i -= enemies_following_eye_num
-        following_eye_update(i)
-
-        // Following Eye hit detection
-        if player_sword_active && following_eye_hurt_timer[i] == 0
-            if player_sword_x < SS(enemies_following_eye[i].x + 16) && (player_sword_x + player_sword_w) > SS(enemies_following_eye[i].x) && player_sword_y < SS(enemies_following_eye[i].y + 16) && (player_sword_y + player_sword_h) > SS(enemies_following_eye[i].y)
-                following_eye_hurt_timer[i] = 30
-                register_sword_hit()
-                player_pogo()
-
-        if following_eye_hurt_timer[i] > 0
-            following_eye_hurt_timer[i] -= 1
-            o = push_oam_anim_a(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i], $01) // White
-        else if following_eye_blocked_timer[i] > 0
-            o = push_oam_anim_a(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i], $03)
-        else
-            o = push_oam_anim(o, enemies_following_eye[i].x, enemies_following_eye[i].y, enemies_following_eye_anim_state[i])
-    
     return o
 
 
@@ -539,10 +482,6 @@ fn update_sprites()
         // Pause climb animation when not moving
     else
         p.anim_state = tick_anim(p.anim_state, true)
-    for U i = 0; i < enemies_eye_num; i += 1
-        enemies_eye_anim_state[i] = tick_anim(enemies_eye_anim_state[i], true)
-    for U i = 0; i < enemies_following_eye_num; i += 1
-        enemies_following_eye_anim_state[i] = tick_anim(enemies_following_eye_anim_state[i], true)
     for U i = 0; i < enraged_pilgrims_num; i += 1
         enraged_pilgrim_anim_state[i] = tick_anim(enraged_pilgrim_anim_state[i], true)
     for U i = 0; i < wheelbrokens_num; i += 1

@@ -1,5 +1,105 @@
 # Changes
 
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
+## [19.05.2026] - v844
+- Fix Albero Prie Dieu altar acting as Mea Culpa Altar
+
+
 ## [19.05.2026] - v843
 - Update some levels
 

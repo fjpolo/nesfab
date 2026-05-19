@@ -512,8 +512,6 @@ fn player_respawn()
     for U i = 0; i < 20; i += 1
         dead_pilgrims[i] = 0
         dead_wheelbrokens[i] = 0
-        dead_eyes[i] = 0
-        dead_following_eyes[i] = 0
 
     p.current_bile_vessels = p.max_bile_vessels
 

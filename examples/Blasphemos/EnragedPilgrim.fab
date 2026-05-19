@@ -71,15 +71,16 @@ fn enraged_pilgrim_update(U ix) Bool
     if ex < (p.camera_x - 16) || ex > (p.camera_x + 272)
         return true
 
-    // Gravity check
-    U ground_tile = collision_at(UU(ex), UU(ey))
-    if ground_tile != C_WALL && ground_tile != C_PLATFORM && ground_tile != C_JAIL
-        enraged_pilgrims[ix].y += 2
-        // Snap to floor if we landed
-        U landed_tile = collision_at(UU(ex), UU(enraged_pilgrims[ix].y))
-        if landed_tile == C_WALL || landed_tile == C_PLATFORM || landed_tile == C_JAIL
-            enraged_pilgrims[ix].y = enraged_pilgrims[ix].y & -16
-        ey = enraged_pilgrims[ix].y // refresh local copy of ey
+    // Gravity check (optimized to run once every 4 frames)
+    if (frame_counter & 3) == (ix & 3)
+        U ground_tile = collision_at(UU(ex), UU(ey))
+        if ground_tile != C_WALL && ground_tile != C_PLATFORM && ground_tile != C_JAIL
+            enraged_pilgrims[ix].y += 8 // 2px per frame * 4 frames
+            // Snap to floor if we landed
+            U landed_tile = collision_at(UU(ex), UU(enraged_pilgrims[ix].y))
+            if landed_tile == C_WALL || landed_tile == C_PLATFORM || landed_tile == C_JAIL
+                enraged_pilgrims[ix].y = enraged_pilgrims[ix].y & -16
+            ey = enraged_pilgrims[ix].y // refresh local copy of ey
 
     // Out of bounds check: delete if fallen into bottomless pit
     if ey > (SS(current_level_height) << 4)

@@ -20,34 +20,33 @@ scroll_coin_ppuaddr                      2        $001C-$001D
 raw_pads                                 1        $001E
 scroll_tiles                             1        $0020
 scroll_attrs                             1        $003E
-mt_se                                    2        $0046-$0047
-mt_ca                                    2        $0048-$0049
-current_level                            3        $004A-$004B, $07E7
-current_level_enemies                    3        $004C-$004D, $07E6
-puf_triangle_pattern_ptr                 2        $004E-$004F
-puf_ptr_temp                             2        $0050-$0051
-puf_trackv_ptr                           2        $0052-$0053
-puf_note_table_ptr                       2        $0054-$0055
-puf_square1_pattern_ptr                  2        $0056-$0057
-puf_square2_pattern_ptr                  2        $0058-$0059
-mt_sw                                    2        $005A-$005B
+mt_sw                                    2        $0046-$0047
+mt_se                                    2        $0048-$0049
+mt_ca                                    2        $004A-$004B
+current_level                            3        $004C-$004D, $0702
+mt_ne                                    2        $004E-$004F
+puf_triangle_pattern_ptr                 2        $0050-$0051
+puf_ptr_temp                             2        $0052-$0053
+puf_trackv_ptr                           2        $0054-$0055
+puf_note_table_ptr                       2        $0056-$0057
+puf_square1_pattern_ptr                  2        $0058-$0059
+puf_square2_pattern_ptr                  2        $005A-$005B
 puf_noise_pattern_ptr                    2        $005C-$005D
 puf_dpcm_pattern_ptr                     2        $005E-$005F
 mt_nw                                    2        $0060-$0061
-mt_ne                                    2        $0062-$0063
 palette                                  1        $0200
 game_state                               1        $0219
 show_key                                 1        $021A
 mea_culpa_level                          1        $0230
 bile_vessel_hp                           1        $0231
 fps_display                              1        $0232
-player_sword_w                           2        $0233, $02FB
-player_sword_h                           2        $0234, $02FC
+player_sword_w                           2        $0233, $02CF
+player_sword_h                           2        $0234, $02D0
 warden_health                            1        $0235
-warden_x                                 2        $0236, $0302
-warden_y                                 2        $0237, $0303
-warden_w                                 2        $0238, $0304
-warden_h                                 2        $0239, $0305
+warden_x                                 2        $0236, $02D6
+warden_y                                 2        $0237, $02D7
+warden_w                                 2        $0238, $02D8
+warden_h                                 2        $0239, $02D9
 p                                        50       $023A-$026B
 frame_counter                            1        $026C
 is_game_paused                           1        $026D
@@ -68,100 +67,81 @@ spawn_from_bottom                        1        $027D
 dead_pilgrims                            1        $027E
 dead_wheelbrokens                        1        $0294
 explored_rooms                           1        $02AA
-dead_eyes                                1        $02AE
-dead_following_eyes                      1        $02C4
-dead_crucifieds                          1        $02DA
-warden_defeated                          1        $02F0
-warden_arrow_dismissed                   1        $02F1
-mea_culpa_upgraded                       1        $02F2
-fps_ticks                                1        $02F3
-fps_timer                                1        $02F4
-total_bones_collected                    1        $02F5
-player_sword_active                      1        $02F6
-player_sword_x                           2        $02F7-$02F8
-player_sword_y                           2        $02F9-$02FA
-player_combo_count                       1        $02FD
-palette_dirty                            1        $02FE
-attack_has_hit                           1        $02FF
-swing_is_combo_hit                       1        $0300
-warden_active                            1        $0301
-warden_hurt_timer                        1        $0306
-warden_state                             1        $0307
-warden_timer                             1        $0308
-warden_enraged                           1        $0309
-warden_spike_wave_timer                  1        $030A
-warden_spike_wave_count                  1        $030B
-warden_spike_wave_dir                    1        $030C
-item_bones_collected_flags               1        $030D
-enemies_eye_num                          1        $0321
-enemies_following_eye_num                1        $0322
-enraged_pilgrims_num                     1        $0323
-crucifieds_num                           1        $0324
-item_bones_num                           1        $0325
-wheelbrokens_num                         1        $0326
-rng_state                                1        $0327
-following_eye_set_initial_state_current_level_flag 1        $0329
-following_eye_set_initial_state_level_flag 1        $032A
-is_start_pressed                         1        $0332
-start_counter                            1        $0333
-is_select_pressed                        1        $0334
-select_counter                           1        $0335
-pads                                     3        $0336, $0338, $033A
-puf_lock                                 1        $033C
-following_eye_state                      1        $033D
-following_eye_state_counter              1        $0345
-current_level_chr                        1        $034D
-last_hud_hp                              1        $034E
-last_hud_bile                            1        $034F
-last_hud_ap                              1        $0350
-last_hud_bones                           1        $0351
-keys                                     1        $0352
-key_y                                    1        $0368
-key_x                                    1        $037E
-saved_following_eye__x                   1        $0394
-saved_following_eye__y                   1        $039C
-saved_following_eye__state               1        $03A4
-enemies_following_eye_anim_state         5        $03AC, $03E4, $03EC, $03F4, $0600
-eye_hurt_timer                           1        $03B4
-enemies_eye_anim_state                   5        $03BC, $0638, $0640, $0658, $0660
-item_bone_anim_state                     5        $03C4, $0610, $0618, $0620, $0628
-item_bones                               5        $03CC, $0608, $0630, $0648, $0650
-following_eye_hurt_timer                 1        $03D4
-following_eye_blocked_timer              1        $03DC
-enraged_pilgrims                         13       $03FC, $06BE, $06C6, $06D2, $06D6, $06DA, $06DE, $06E2, $06E6, $06EA, $0764, $0768, $076C
-destroyed                                1        $0400
+dead_crucifieds                          1        $02AE
+warden_defeated                          1        $02C4
+warden_arrow_dismissed                   1        $02C5
+mea_culpa_upgraded                       1        $02C6
+fps_ticks                                1        $02C7
+fps_timer                                1        $02C8
+total_bones_collected                    1        $02C9
+player_sword_active                      1        $02CA
+player_sword_x                           2        $02CB-$02CC
+player_sword_y                           2        $02CD-$02CE
+player_combo_count                       1        $02D1
+palette_dirty                            1        $02D2
+attack_has_hit                           1        $02D3
+swing_is_combo_hit                       1        $02D4
+warden_active                            1        $02D5
+warden_hurt_timer                        1        $02DA
+warden_state                             1        $02DB
+warden_timer                             1        $02DC
+warden_enraged                           1        $02DD
+warden_spike_wave_timer                  1        $02DE
+warden_spike_wave_count                  1        $02DF
+warden_spike_wave_dir                    1        $02E0
+item_bones_collected_flags               1        $02E1
+enraged_pilgrims_num                     1        $02F5
+crucifieds_num                           1        $02F6
+item_bones_num                           1        $02F7
+wheelbrokens_num                         1        $02F8
+rng_state                                1        $02F9
+is_start_pressed                         1        $02FB
+start_counter                            1        $02FC
+is_select_pressed                        1        $02FD
+select_counter                           1        $02FE
+puf_lock                                 1        $02FF
+destroyed                                1        $0300
+pads                                     3        $0400, $0402, $0404
+current_level_chr                        1        $0406
+last_hud_hp                              1        $0407
+last_hud_bile                            1        $0408
+last_hud_ap                              1        $0409
+last_hud_bones                           1        $040A
+keys                                     1        $040B
+key_y                                    1        $0421
+key_x                                    1        $0437
+item_bones                               5        $044D, $045D, $0465, $046D, $0475
+item_bone_anim_state                     5        $0455, $047D, $0485, $048D, $0495
+warden_spike_anim                        5        $049D, $04A9, $04AF, $04B5, $04BB
+warden_spike_active                      1        $04A3
+warden_spike_timer                       1        $04C1
+warden_spike_x                           3        $04C7, $04D9, $04E5
+warden_spike_y                           3        $04CD, $04D3, $04DF
+enraged_pilgrims                         13       $04EB, $04EF, $0600, $0604, $0608, $060C, $0610, $0614, $0618, $061C, $068C, $0690, $0698
+crucifieds                               11       $04F3, $04F7, $0630, $0644, $0648, $064C, $0654, $0658, $065C, $0674, $06A0
+wheelbrokens                             10       $04FB, $0620, $0624, $0628, $062C, $0634, $0638, $063C, $0640, $06A4
+current_level_width                      1        $04FF
 oam                                      1        $0500
-eye_blocked_timer                        1        $0668
-warden_spike_anim                        5        $0670, $067C, $0682, $0688, $068E
-warden_spike_active                      1        $0676
-warden_spike_timer                       1        $0694
-warden_spike_x                           3        $069A, $06AC, $06B8
-warden_spike_y                           3        $06A0, $06A6, $06B2
-wheelbrokens                             10       $06C2, $06F2, $06F6, $06FA, $0704, $0710, $071C, $0720, $072C, $0778
-crucifieds                               11       $06CA, $06CE, $0708, $070C, $0718, $0724, $0728, $0730, $0734, $0748, $079C
-enemies_following_eye                    3        $06EE, $0700, $07AC
-current_level_height                     1        $06FE
-current_level_width                      1        $06FF
-enraged_pilgrim_anim_state               5        $0714, $0738, $073C, $0740, $0744
-wheelbroken_patrol_dir                   1        $074C
-crucified_patrol_dir                     1        $0750
-wheelbroken_anim_state                   5        $0754, $0758, $075C, $078C, $0790
-crucified_anim_state                     5        $0760, $0770, $0774, $077C, $0780
-crucified_patrol_center                  2        $0784, $0788
-wheelbroken_patrol_center                2        $0794, $0798
-enemies_eye                              3        $07A0, $07A4, $07A8
-warden_projectile_active                 1        $07B0
-warden_projectile_anim                   5        $07B3, $07B6, $07B9, $07BC, $07BF
-warden_projectile_ground_timer           1        $07C2
-warden_projectile_y                      3        $07C5, $07C8, $07D7
-warden_projectile_x                      3        $07CB, $07CE, $07E0
-warden_projectile_vy                     2        $07D1, $07D4
-warden_projectile_vx                     2        $07DA, $07DD
-warden_spike_wave_origin_y               3        $07E3-$07E5
-warden_spike_wave_origin_x               3        $07E8-$07EA
+enraged_pilgrim_anim_state               5        $0650, $0660, $0664, $0668, $066C
+crucified_patrol_dir                     1        $0670
+wheelbroken_patrol_dir                   1        $0678
+wheelbroken_anim_state                   5        $067C, $0694, $069C, $06B0, $06B4
+crucified_anim_state                     5        $0680, $0684, $0688, $06C0, $06C4
+wheelbroken_patrol_center                2        $06A8, $06AC
+crucified_patrol_center                  2        $06B8, $06BC
+warden_projectile_active                 1        $06C8
+warden_projectile_anim                   5        $06CB, $06CE, $06D1, $06D4, $06D7
+warden_projectile_ground_timer           1        $06DA
+warden_projectile_y                      3        $06DD, $06E0, $06EC
+warden_projectile_x                      3        $06E3, $06E6, $06F8
+warden_projectile_vx                     2        $06E9, $06EF
+warden_projectile_vy                     2        $06F2, $06F5
+current_level_height                     1        $06FB
+warden_spike_wave_origin_y               3        $06FC-$06FE
+warden_spike_wave_origin_x               3        $06FF-$0701
 
 ================================================================================
-Variable Bytes: 329
-System Bytes:   457
-Free Bytes:     1262
-Total Usage:    786/2048 bytes (38.4%)
+Variable Bytes: 295
+System Bytes:   459
+Free Bytes:     1294
+Total Usage:    754/2048 bytes (36.8%)

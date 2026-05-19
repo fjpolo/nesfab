@@ -7,25 +7,9 @@
 // Load the .json file, calling the macros for each definition.
 mapfab(raw, "blasnesmous.json", "chr", "palette", "metatiles", "level")
 
-macro("pool_contiguous", "Enemy_eye", "4", "enemies_eye", "/game")
-macro("pool_contiguous", "Enemy_following_eye", "4", "enemies_following_eye", "/game")
 macro("pool_contiguous", "EnragedPilgrim", "4", "enraged_pilgrims", "/game")
 macro("pool_contiguous", "Crucified", "4", "crucifieds", "/game")
 macro("pool_contiguous", "ItemBone", "8", "item_bones", "/game")
-
-// Used in level.macrofab to format the enemies:
-ct fn enemies_eye_vec(Int{} x, Int{} y) Enemy_eye{}
-    Enemy_eye{} out = Enemy_eye{}()
-    for UU i = 0; i < len(x); i += 1
-        push(out, Enemy_eye(U(x{i}), U(y{i}), 0))
-    return out
-
-// Used in level.macrofab to format the enemies:
-ct fn enemies_following_eye_vec(Int{} x, Int{} y) Enemy_following_eye{}
-    Enemy_following_eye{} out = Enemy_following_eye{}()
-    for UU i = 0; i < len(x); i += 1
-        push(out, Enemy_following_eye(U(x{i}), U(y{i}), 0))
-    return out
 
 // Used in level.macrofab to format the enemies:
 ct fn enraged_pilgrims_vec(Int{} x, Int{} y) EnragedPilgrim{}
@@ -75,7 +59,6 @@ vars /game
 
 vars /levels
     CCC/levels current_level
-    CCC/levels current_level_enemies
     U current_level_width
     U current_level_height
     U[256] destroyed = U[256](0)
@@ -213,9 +196,6 @@ fn load_level(CCC/levels level)
 
     // Check if key was grabbed
     // Clear all enemy and item pools to prevent stale data in non-gameplay levels
-    enemies_eye_clear()
-    clear_following_eye_set_initial_state_level_flag()
-    enemies_following_eye_clear()
     enraged_pilgrims_clear()
     crucifieds_clear()
     wheelbrokens_clear()
@@ -223,32 +203,6 @@ fn load_level(CCC/levels level)
 
     // Check if key was grabbed
     if current_level_index != 255
-        // Enemies: Eye
-        U eye_num = read U(level)
-        for U i = 0; i < eye_num; i += 1
-            Enemy_eye e = read Enemy_eye(level)
-            e.local_index = i
-            U global_ix = (current_level_index << 3) + i
-            U byte_ix = global_ix >> 3
-            U bit_ix = global_ix & 7
-            if (dead_eyes[byte_ix] & (U(1) << bit_ix)) == 0
-                enemies_eye_new(e)
-                enemies_eye_anim_state[enemies_eye_num - 1] = make_anim_state(@eye_animation)
-            
-        // Enemies: Following Eye
-        U following_eye_num = read U(level)
-        for U i = 0; i < following_eye_num; i += 1
-            Enemy_following_eye fe = read Enemy_following_eye(level)
-            fe.local_index = i
-            U global_ix = (current_level_index << 3) + i
-            U byte_ix = global_ix >> 3
-            U bit_ix = global_ix & 7
-            if (dead_following_eyes[byte_ix] & (U(1) << bit_ix)) == 0
-                enemies_following_eye_new(fe)
-                U new_idx = enemies_following_eye_num - 1
-                current_level_enemies = current_level
-                following_eye_set_initial_state_current_level_flag = true
-                following_eye_set_initial_state(new_idx, enemies_following_eye[new_idx].x, enemies_following_eye[new_idx].y)
 
         // Enemies: Enraged Pilgrim
         U pilgrim_num = read U(level)
@@ -306,12 +260,6 @@ fn load_level(CCC/levels level)
                 destroy(key_x[current_level_index], key_y[current_level_index])
     else
         // Just skip enemy/item data for non-standard levels (like Map)
-        U eye_num = read U(level)
-        for U i = 0; i < eye_num; i += 1
-            read Enemy_eye(level)
-        U following_eye_num = read U(level)
-        for U i = 0; i < following_eye_num; i += 1
-            read Enemy_following_eye(level)
         U pilgrim_num = read U(level)
         for U i = 0; i < pilgrim_num; i += 1
             read EnragedPilgrim(level)
@@ -418,9 +366,16 @@ fn load_chrrom_bank(CCC/levels level, U bank)
 
 // Returns the tile at a pixel position:
 fn tile_at(UU pixel_x, UU pixel_y) U
+: +inline // Crucial to avoid using JSR and RTS instructions which costs cycles
     if pixel_y.b
         return 0
-    return (current_level + UU(pixel_x >> 4) * UU(current_level_height))[pixel_y.a >> 4]
+    U col = (pixel_x.a >> 4) | (pixel_x.b << 4)
+    UU offset = UU(col) << 4
+    CCC/levels far_ptr = current_level + offset
+    CC/levels near_ptr
+    near_ptr.a = far_ptr.a
+    near_ptr.b = far_ptr.b
+    return near_ptr[pixel_y.a >> 4]
 
 // Returns the collision at a pixel position:
 fn collision_at(UU pixel_x, UU pixel_y) U
