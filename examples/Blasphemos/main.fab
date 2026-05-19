@@ -139,7 +139,6 @@ nmi game_nmi()
 
 
     ppu_upload_oam_poll_pads(0)
-    puf.process(PUF_DEFAULT)
 
     if palette_dirty
         ppu_upload_palette()
@@ -172,6 +171,7 @@ nmi game_nmi()
         {PPUSCROLL}(0)
         {PPUSCROLL}(0)
         {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+        puf.process(PUF_DEFAULT)
         return
     else
         // Set IRQ for scanline 14 (end of HUD split)
@@ -195,6 +195,7 @@ nmi game_nmi()
             {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP | $20) // Tint screen red
         else
             {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+        puf.process(PUF_DEFAULT)
 
 
 

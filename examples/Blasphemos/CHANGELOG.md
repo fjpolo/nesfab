@@ -1,5 +1,13 @@
 # Changes
 
+## [19.05.2026] - v839
+- Fix l6<->l7 transition
+
+
+## [19.05.2026] - v839
+- Fix l6<->l7 transition
+
+
 ## [19.05.2026] - v838
 - Add some music
 
