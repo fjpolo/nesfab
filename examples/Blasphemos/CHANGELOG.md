@@ -1,5 +1,9 @@
 # Changes
 
+## [19.05.2026] - v847
+- Do some more optimizations to get >50FPS all the time!
+
+
 ## [19.05.2026] - v846
 - Fix show_fps.lua
 
