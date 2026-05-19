@@ -1,5 +1,45 @@
 # Changes
 
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
+## [19.05.2026] - v840
+- Fix audio breaking scrolling
+
+
 ## [19.05.2026] - v839
 - Fix l6<->l7 transition
 

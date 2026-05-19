@@ -1,0 +1,176 @@
+// Mea Culpa Altar Screen and Logic
+// Clean, modular, and overflow-proof
+
+data /strings
+    [] altar_title
+        ( "MEA CULPA ALTAR" )
+    [] altar_rest
+        ( "REST & REFILL" )
+    [] altar_sword
+        ( "SWORD UPGRADE (5 BONES)" )
+    [] altar_bile
+        ( "BILE UPGRADE (10 BONES)" )
+    [] altar_exit
+        ( "EXIT" )
+    [] altar_bones
+        ( "BONES:" )
+    [] altar_atk
+        ( "ATK:" )
+    [] altar_bile_stat
+        ( "BILE:" )
+
+fn write_altar_string_to_bg(UU addr, CCC/strings str)
+    {PPUSTATUS}()
+    {PPUADDR}(addr.b)
+    {PPUADDR}(addr.a)
+    U i = 0
+    while true
+        U c = str[i]
+        if c == 95 // 95 is '\0' in the default global charmap
+            break
+        {PPUDATA}(c) // Draw direct unshifted tile index
+        i += 1
+
+mode mea_culpa_altar_screen(U previous_level)
+: nmi game_nmi
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    {MMC3_IRQ_DISABLE}(0)
+
+    // Set the state immediately so NMI respects the custom font mapping
+    game_state = GAME_STATE_MEA_CULPA_ALTAR
+
+    // Save camera scroll state so we can restore it on exit
+    SS saved_camera = p.camera_x
+
+    // Map font to background
+    mmc3_select(0, 64)
+    mmc3_select(1, 66)
+
+    // Map font to sprites
+    mmc3_select(2, 64)
+    mmc3_select(3, 65)
+    mmc3_select(4, 66)
+    mmc3_select(5, 67)
+
+    // Clear the screen area where we draw the menu
+    {PPUSTATUS}()
+    for U nt = 0; nt < 2; nt += 1
+        UU base = UU($2000) + (UU(nt) << 10)
+        // Clear all nametable bytes to blank tile ($00 / space)
+        ppu_set_addr(base)
+        for UU i = 0; i < 960; i += 1
+            {PPUDATA}($00)
+
+    // Draw static text strings to background nametable
+    write_altar_string_to_bg($20C8, @altar_title)
+    write_altar_string_to_bg($2146, @altar_rest)
+    write_altar_string_to_bg($2186, @altar_sword)
+    write_altar_string_to_bg($21C6, @altar_bile)
+    write_altar_string_to_bg($2206, @altar_exit)
+    write_altar_string_to_bg($2283, @altar_bones)
+    write_altar_string_to_bg($228D, @altar_atk)
+    write_altar_string_to_bg($2295, @altar_bile_stat)
+
+    // Restore PPU scroll and turn rendering on
+    {PPUSCROLL}(0)
+    {PPUSCROLL}(0)
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_NT_2000)
+    {PPUMASK}(PPUMASK_BG_ON | PPUMASK_SPR_ON | PPUMASK_NO_CLIP)
+
+    is_start_pressed = false
+    is_select_pressed = false
+
+    while true
+        nmi
+        U o = 0
+
+        // Draw cursor '>'
+        U cursor_y = 79 + U(prie_dieu_selected_option * 16)
+        set_oam(o, 36, cursor_y, 30, 0) // '>' is tile 30 in global charmap
+        o += 4
+
+        // Draw dynamic stat values
+        U b_tens = 0
+        U b_ones = total_bones_collected
+        while b_ones >= 10
+            b_ones -= 10
+            b_tens += 1
+        
+        // BONES tens and ones (offset 16 for digits in global charmap)
+        set_oam(o, 80, 159, 16 + b_tens, 0)
+        o += 4
+        set_oam(o, 88, 159, 16 + b_ones, 0)
+        o += 4
+
+        // ATK power (mea_culpa_level)
+        set_oam(o, 144, 159, 16 + mea_culpa_level, 0)
+        o += 4
+
+        // BILE vessels (p.max_bile_vessels)
+        set_oam(o, 208, 159, 16 + p.max_bile_vessels, 0)
+        o += 4
+
+        hide_oam(o)
+        ppu_upload_oam_poll_pads(0)
+        update_pads()
+
+        U pressed = pads[0].pressed
+        if pressed & BUTTON_UP
+            if prie_dieu_selected_option == 0
+                prie_dieu_selected_option = 3
+            else
+                prie_dieu_selected_option -= 1
+        else if pressed & BUTTON_DOWN
+            if prie_dieu_selected_option == 3
+                prie_dieu_selected_option = 0
+            else
+                prie_dieu_selected_option += 1
+        else if pressed & BUTTON_A
+            if prie_dieu_selected_option == 0
+                // REST & REFILL
+                p.health = U(PLAYER_MAX_HEALTH)
+                p.current_bile_vessels = p.max_bile_vessels
+                force_hud_update()
+                // Exit menu
+                prie_dieu_selected_option = 0
+                break
+            else if prie_dieu_selected_option == 1
+                // SWORD UPGRADE
+                if total_bones_collected >= 5 && mea_culpa_level < 5
+                    total_bones_collected -= 5
+                    mea_culpa_level += 1
+                    mea_culpa_upgraded = true
+                    force_hud_update()
+                    cheat_shake_timer = 15
+                    prie_dieu_selected_option = 0
+                    break
+            else if prie_dieu_selected_option == 2
+                // BILE UPGRADE
+                if total_bones_collected >= 10 && p.max_bile_vessels < 3
+                    total_bones_collected -= 10
+                    p.max_bile_vessels += 1
+                    p.current_bile_vessels = p.max_bile_vessels
+                    force_hud_update()
+                    cheat_shake_timer = 15
+                    prie_dieu_selected_option = 0
+                    break
+            else if prie_dieu_selected_option == 3
+                // EXIT
+                prie_dieu_selected_option = 0
+                break
+        else if (pressed & BUTTON_B) || (pressed & BUTTON_START)
+            prie_dieu_selected_option = 0
+            break
+
+    // Clean exit: restore state
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+
+    current_level_index = previous_level
+    p.camera_x = saved_camera
+    game_state = GAME_STATE_PLAY
+    goto mode play_level(previous_level)
+    : preserves /game

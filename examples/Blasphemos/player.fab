@@ -559,9 +559,9 @@ fn update_player()
     if !p.is_initialised
         p = make_player_penitent()
     
-    p.attack_power = PLAYER_INITIAL_ATTACK_POWER
-    if mea_culpa_upgraded
-        p.attack_power <<= 1
+    if mea_culpa_upgraded && mea_culpa_level == 1
+        mea_culpa_level = 2
+    p.attack_power = U(U(PLAYER_INITIAL_ATTACK_POWER) * mea_culpa_level)
 
     p.center_x = p.x + (p.w >> 1)
     p.center_y = SS(p.y) + (p.h >> 1)
@@ -749,6 +749,18 @@ fn handle_input()
             p.anim_state = make_anim_state(@penitent_animation_standing)
             return
     
+
+    // Altar Interaction (Prie Dieu and Mea Culpa)
+    if (pads[0].pressed & BUTTON_UP)
+        if (current_level_index == LEVEL_L2 || current_level_index == LEVEL_L4 || current_level_index == LEVEL_L4SUB1) && p.x >= 90 && p.x <= 160
+            prie_dieu_lit = true
+            last_prie_dieu_level = current_level_index
+            last_prie_dieu_x = p.x
+            last_prie_dieu_y = SS(p.y)
+            prie_dieu_selected_option = 0
+            
+            goto mode mea_culpa_altar_screen(current_level_index)
+            : preserves /game
 
     // Parry activation
     if (pads[0].pressed & BUTTON_UP) && p.parry_cooldown == 0 && is_on_ground()

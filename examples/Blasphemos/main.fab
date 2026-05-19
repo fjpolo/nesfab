@@ -16,6 +16,7 @@ ct Int GAME_STATE_PLAY = 2
 ct Int GAME_STATE_WIN = 3
 ct Int GAME_STATE_MAP = 4
 ct Int GAME_STATE_DEAD_SCREEN = 5
+ct Int GAME_STATE_MEA_CULPA_ALTAR = 6
 ct Int GAME_STATE_GAME_OVER = 63
 
 ct U GAME_MODE_NORMAL = 0
@@ -43,6 +44,7 @@ vars /game
     U[NUMBER_OF_KEYS] key_x
     U[NUMBER_OF_KEYS] key_y
     Bool is_game_paused = false
+    U prie_dieu_selected_option = 0
     U load_level_counter = 0
     U game_mode = GAME_MODE_NORMAL
     U cheat_index = 0
@@ -65,6 +67,7 @@ vars /game
     Bool warden_defeated = false
     Bool warden_arrow_dismissed = false
     Bool mea_culpa_upgraded = false
+    U mea_culpa_level = 1
     U bile_vessel_hp = 18
     U fps_ticks = 0
     U fps_display = 60
@@ -162,11 +165,16 @@ nmi game_nmi()
         start_counter = 0
 
     if current_level_index == LEVEL_GAME_OVER || game_state != GAME_STATE_PLAY
-        hide_oam(0) // Hide all sprites (in case HUD uses them)
+        if game_state != GAME_STATE_MEA_CULPA_ALTAR
+            hide_oam(0) // Hide all sprites (in case HUD uses them)
         {MMC3_IRQ_DISABLE}(0)
-        if game_state == GAME_STATE_GAME_OVER || game_state == GAME_STATE_MAP || game_state == GAME_STATE_WIN
-            mmc3_select(0, current_level_chr << 3)
-            mmc3_select(1, (current_level_chr << 3) + 2)
+        if game_state == GAME_STATE_GAME_OVER || game_state == GAME_STATE_MAP || game_state == GAME_STATE_WIN || game_state == GAME_STATE_MEA_CULPA_ALTAR
+            if game_state == GAME_STATE_MEA_CULPA_ALTAR
+                mmc3_select(0, 64)
+                mmc3_select(1, 66)
+            else
+                mmc3_select(0, current_level_chr << 3)
+                mmc3_select(1, (current_level_chr << 3) + 2)
         {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
         {PPUSCROLL}(0)
         {PPUSCROLL}(0)
@@ -254,7 +262,7 @@ mode play_level(U level_index)
     if spawn_from_top || spawn_from_bottom
         p.camera_x = max(0, min(p.center_x - 128, (SS(current_level_width) << 4) - 256))
         if spawn_from_top
-            p.y = 2
+            p.y = SSF(48)
             spawn_from_top = false
         else
             p.y = SSF((SS(current_level_height) << 4) - SS(p.h) - 2)
@@ -729,4 +737,5 @@ mode map_screen(U previous_level)
             game_state = GAME_STATE_PLAY
             goto mode play_level(previous_level)
             : preserves /game
+
 
