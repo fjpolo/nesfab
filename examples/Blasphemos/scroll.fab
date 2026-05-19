@@ -79,7 +79,7 @@ fn update_scroll()
     // Determine if we're scrolling the west or east side of our metatiles:
     CC/metatiles n = mt_nw
     CC/metatiles s = mt_sw
-    if scroll_x & 1
+    if edge_x & 1
         n = mt_ne
         s = mt_se
 

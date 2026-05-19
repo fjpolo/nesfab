@@ -1,5 +1,41 @@
 # Changes
 
+## [19.05.2026] - v843
+- Update some levels
+
+
+## [19.05.2026] - v843
+- Update some levels
+
+
+## [19.05.2026] - v843
+- Update some levels
+
+
+## [19.05.2026] - v843
+- Update some levels
+
+
+## [19.05.2026] - v843
+- Update some levels
+
+
+## [19.05.2026] - v843
+- Update some levels
+
+
+## [19.05.2026] - v843
+- Update some levels
+
+
+## [19.05.2026] - v843
+- Update some levels
+
+
+## [19.05.2026] - v843
+- Update some levels
+
+
 ## [19.05.2026] - v842
 - Fix Prie Dieu opening Mea Culpa Menu
 

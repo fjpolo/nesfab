@@ -758,14 +758,14 @@ fn handle_input()
             last_prie_dieu_x = p.x
             last_prie_dieu_y = SS(p.y)
             
-            if current_level_index == LEVEL_L2
-                // Prie Dieu (Level 2): Rest, refill, and save checkpoint (no menu!)
+            if current_level_index == LEVEL_L2 || current_level_index == LEVEL_L4
+                // Prie Dieu (Level 2 & 4): Rest, refill, and save checkpoint (no menu!)
                 p.health = U(PLAYER_MAX_HEALTH)
                 p.current_bile_vessels = p.max_bile_vessels
                 force_hud_update()
                 cheat_shake_timer = 15
             else
-                // Mea Culpa Altar (Level 4): Open the upgrade menu!
+                // Mea Culpa Altar (Level 4 Sub 1): Open the upgrade menu!
                 prie_dieu_selected_option = 0
                 goto mode mea_culpa_altar_screen(current_level_index)
                 : preserves /game
