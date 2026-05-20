@@ -1,5 +1,37 @@
 # Changes
 
+## [20.05.2026] - v852
+- Now attacking while enemy is parried interrupts parry state
+
+
+## [20.05.2026] - v852
+- Now attacking while enemy is parried interrupts parry state
+
+
+## [20.05.2026] - v852
+- Now attacking while enemy is parried interrupts parry state
+
+
+## [20.05.2026] - v852
+- Now attacking while enemy is parried interrupts parry state
+
+
+## [20.05.2026] - v852
+- Now attacking while enemy is parried interrupts parry state
+
+
+## [20.05.2026] - v852
+- Now attacking while enemy is parried interrupts parry state
+
+
+## [20.05.2026] - v852
+- Now attacking while enemy is parried interrupts parry state
+
+
+## [20.05.2026] - v852
+- Now attacking while enemy is parried interrupts parry state
+
+
 ## [20.05.2026] - v851
 - A lot done
 

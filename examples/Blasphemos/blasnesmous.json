@@ -19518,9 +19518,9 @@
         {
           "fields": {},
           "name": "",
-          "object_class": "wheelbroken",
-          "x": 226,
-          "y": 206
+          "object_class": "crucified",
+          "x": 225,
+          "y": 205
         }
       ],
       "palette": 2,
@@ -24790,22 +24790,22 @@
           "fields": {},
           "name": "",
           "object_class": "crucified",
-          "x": 7,
-          "y": 175
+          "x": 39,
+          "y": 174
         },
         {
           "fields": {},
           "name": "",
           "object_class": "damned",
-          "x": 111,
+          "x": 107,
           "y": 159
         },
         {
           "fields": {},
           "name": "",
-          "object_class": "wheelbroken",
-          "x": 175,
-          "y": 173
+          "object_class": "crucified",
+          "x": 177,
+          "y": 175
         }
       ],
       "palette": 2,

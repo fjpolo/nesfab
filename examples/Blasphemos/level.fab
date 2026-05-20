@@ -162,7 +162,7 @@ fn load_level(CCC/levels level)
     
     // CHR:
     U chr_bank = read U(level)
-    if current_level_index == LEVEL_L6 || current_level_index == LEVEL_L6B || current_level_index == LEVEL_L10
+    if current_level_index == LEVEL_L6 || current_level_index == LEVEL_L6B || current_level_index == LEVEL_L10 || current_level_index == LEVEL_L10SUB1
         chr_bank += 16
     select_chr_8kb(chr_bank)
     current_level_chr = chr_bank
