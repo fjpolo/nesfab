@@ -81,6 +81,7 @@ struct Player
     U last_input_dir
     U parry_timer
     U parry_cooldown
+    Bool parry_success
     Bool buffered_attack
     Bool is_invincible
     U pogo_count
@@ -548,6 +549,7 @@ fn make_player_penitent() Player
     p.last_input_dir = 0
     p.parry_timer = 0
     p.parry_cooldown = 0
+    p.parry_success = false
     p.buffered_attack = false
     p.attack_power = PLAYER_INITIAL_ATTACK_POWER
     p.max_bile_vessels = 1
@@ -720,6 +722,16 @@ fn handle_input()
         return
 
     if p.parry_timer > 0
+        if p.parry_success && (pads[0].pressed & BUTTON_B)
+            p.parry_timer = 0
+            p.parry_success = false
+            p.parry_cooldown = PARRY_COOLDOWN
+            start_player_attack()
+            if p.facing_left
+                p.anim_state = make_anim_state(@penitent_animation_attack_left)
+            else
+                p.anim_state = make_anim_state(@penitent_animation_attack)
+            return
         return
 
     if (pads[0].pressed & BUTTON_UP) && (pads[0].held & BUTTON_SELECT)
@@ -782,6 +794,7 @@ fn handle_input()
     if (pads[0].pressed & BUTTON_UP) && p.parry_cooldown == 0 && is_on_ground()
         p.movement = PLAYER_MOVING_PARRY
         p.parry_timer = PARRY_DURATION
+        p.parry_success = false
         if p.facing_left
             p.anim_state = make_anim_state(@penitent_animation_parry_left)
         else
@@ -1453,6 +1466,7 @@ fn hurt_player(U attack_type, SS ex) Bool
                     p.x += PLAYER_PARRY_BOSS_PUSH
                 else
                     p.x -= PLAYER_PARRY_BOSS_PUSH
+            p.parry_success = true
             return true // Signal that a parry occurred
     
     // If not parrying (or facing the wrong way), check for damage
