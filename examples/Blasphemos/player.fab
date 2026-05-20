@@ -647,11 +647,11 @@ fn update_player()
             if p.charge_timer >= 45
                 // Big charge sword hit! Wide arc, purple flash.
                 player_sword_w = 56 // Wider hitbox for charge hit
-                p.heal_timer = 20  // Purple flash (palette[17] used for tint)
-                palette[17] = $14  // NES purple color
-                palette_dirty = true
                 start_player_attack()
                 p.attack_timer = 35 // Longer active window
+                p.heal_timer = 20  // Trigger sprite palette XOR (palette 2)
+                palette[17] = $14  // NES purple — set AFTER start_player_attack() to avoid overwrite
+                palette_dirty = true
                 if p.facing_left
                     p.anim_state = make_anim_state(@penitent_animation_attack_left)
                 else

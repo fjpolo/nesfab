@@ -665,7 +665,11 @@
                     </tr>
                     <tr class="control-row" onmouseover="highlightBtn('btn-b')" onmouseout="clearBtn('btn-b')">
                         <td class="highlight">B BUTTON</td>
-                        <td>Slash with sword. Perform a mid-air Downward thrust by pressing Down + B.</td>
+                        <td>Slash with Mea Culpa. Hold <span class="highlight">B</span> to charge — release after a full charge for a devastating wide arc strike.</td>
+                    </tr>
+                    <tr class="control-row" onmouseover="highlightBtn('dpad-down', 'btn-b')" onmouseout="clearBtn('dpad-down', 'btn-b')">
+                        <td class="highlight">DOWN + B</td>
+                        <td>While on the ground: spend <span class="highlight">25 Fervour</span> to unleash the Lorquiana piercing wave. In mid-air: Downward Pogo Thrust.</td>
                     </tr>
                     <tr class="control-row" onmouseover="highlightBtn('btn-select')" onmouseout="clearBtn('btn-select')">
                         <td class="highlight">SELECT</td>
@@ -685,31 +689,37 @@
 
             <!-- PAGE 6: COMBAT -->
             <div class="page">
-                <h1>COMBAT & COUNTERPLAY</h1>
+                <h1>COMBAT &amp; COUNTERPLAY</h1>
                 
                 <h3>SWORD COMBOS</h3>
                 <p style="font-size: 0.82rem;">
                     Time your presses of the <span class="highlight">B</span> button sequentially to unleash a devastating three-hit chain. The third swing deals massive combo damage and is critical for destroying tougher heretics.
                 </p>
-                
+
+                <h3>FERVOUR &amp; THE PRAYER</h3>
+                <p style="font-size: 0.82rem;">
+                    Strike enemies with Mea Culpa to build <span class="highlight">Fervour</span> — shown as orbs on your HUD. When you have accumulated <strong>25 or more Fervour</strong>, press <span class="highlight">DOWN + B</span> while standing to spend it and unleash the <em>Lorquiana</em>, a piercing magical wave that deals heavy damage to all enemies in its path.
+                </p>
+
+                <h3>CHARGE ATTACK</h3>
+                <p style="font-size: 0.82rem; border-left: 2px solid var(--crimson); padding-left: 8px;">
+                    Unlocked via the <strong>Mea Culpa Altar</strong>. Hold the <span class="highlight">B</span> button without releasing — after a full charge (roughly 1 second), your blade begins to glow. Release to unleash a massive wide-arc slash that hits with <strong style="color: purple;">devastating purple fury</strong>, covering a larger area than any normal strike.
+                </p>
+
                 <h3>THE POGO BOUNCE</h3>
                 <p style="font-size: 0.82rem;">
-                    Strike enemies, hazards, or specific background objects from directly above using your downward air thrust (<span class="highlight">Down + B</span>). This gives you an aerial leap, letting you cross large instant-death spike pits.
+                    Strike enemies or hazards from directly above using your downward air thrust (<span class="highlight">Down + B</span> in mid-air). This gives you an aerial leap, letting you cross large instant-death spike pits.
                 </p>
 
                 <h3>SUCCESSFUL PARRY CANCEL</h3>
-                <p style="font-size: 0.82rem; border-left: 2px solid var(--crimson); padding-left: 8px;">
-                    When you parry a physical attack, the impact sparks and pushes you back. <strong>Do not wait for the recovery phase to finish!</strong> Immediately press <span class="highlight">B</span> to cancel the recovery animation and execute an instant, lethal counterstrike!
+                <p style="font-size: 0.82rem;">
+                    When you parry, immediately press <span class="highlight">B</span> to cancel recovery and execute an instant counterstrike!
                 </p>
 
                 <h3>BILE VESSEL HEALING</h3>
                 <p style="font-size: 0.82rem;">
-                    When your health is critically low, double-tap <span class="highlight">DOWN</span> while standing on flat ground to consume a Bile Vessel. This quickly recovers a portion of your HP.
+                    Double-tap <span class="highlight">DOWN</span> while on flat ground to consume a Bile Vessel and recover HP.
                 </p>
-                
-                <div style="background: rgba(212,175,55,0.1); padding: 8px; border-left: 4px solid var(--gold); border-radius: 4px; font-size: 11px; margin-top: auto;">
-                    <strong>COMBAT NOTE:</strong> Parrying is essential for neutralizing rapid charges and overhead swings. Practice timing it against the Enraged Pilgrims!
-                </div>
                 <div class="page-number">6</div>
             </div>
 
