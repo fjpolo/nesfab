@@ -117,24 +117,30 @@ fn wheelbroken_update(U ix) Bool
             U dir = wheelbroken_patrol_dir[ix]
             if dir == 1  // moving left
                 wheelbrokens[ix].x -= 1
-                U check_wall = collision_at(UU(wheelbrokens[ix].x - 8), UU(ey - 8))
-                U check_floor = collision_at(UU(wheelbrokens[ix].x - 8), UU(ey))
-                if check_wall == C_WALL
+                if wheelbrokens[ix].x <= 8
                     dir = 0
-                else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
-                    dir = 0
-                else if wheelbrokens[ix].x <= (center - SS(32))
-                    dir = 0
+                else
+                    U check_wall = collision_at(UU(wheelbrokens[ix].x - 8), UU(ey - 8))
+                    U check_floor = collision_at(UU(wheelbrokens[ix].x - 8), UU(ey))
+                    if check_wall == C_WALL
+                        dir = 0
+                    else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
+                        dir = 0
+                    else if wheelbrokens[ix].x <= (center - SS(32))
+                        dir = 0
             else                            // moving right
                 wheelbrokens[ix].x += 1
-                U check_wall = collision_at(UU(wheelbrokens[ix].x + 8), UU(ey - 8))
-                U check_floor = collision_at(UU(wheelbrokens[ix].x + 8), UU(ey))
-                if check_wall == C_WALL
+                if wheelbrokens[ix].x >= (SS(current_level_width) << 4) - 8
                     dir = 1
-                else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
-                    dir = 1
-                else if wheelbrokens[ix].x >= (center + SS(32))
-                    dir = 1
+                else
+                    U check_wall = collision_at(UU(wheelbrokens[ix].x + 8), UU(ey - 8))
+                    U check_floor = collision_at(UU(wheelbrokens[ix].x + 8), UU(ey))
+                    if check_wall == C_WALL
+                        dir = 1
+                    else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
+                        dir = 1
+                    else if wheelbrokens[ix].x >= (center + SS(32))
+                        dir = 1
             wheelbroken_patrol_dir[ix] = dir
             ex = wheelbrokens[ix].x  // refresh local copy after moving
 

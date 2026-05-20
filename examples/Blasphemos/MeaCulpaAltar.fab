@@ -7,7 +7,9 @@ data /strings
     [] altar_rest
         ( "REST & REFILL" )
     [] altar_sword
-        ( "SWORD UPGRADE (100 TEARS)" )
+        ( "CHARGE ATTACK (400 TEARS)" )
+    [] altar_sword_bought
+        ( "CHARGE ATTACK (UNLOCKED)" )
     [] altar_bile
         ( "BILE UPGRADE (200 TEARS)" )
     [] altar_exit
@@ -66,7 +68,10 @@ mode mea_culpa_altar_screen(U previous_level)
     // Draw static text strings to background nametable
     write_altar_string_to_bg($20C8, @altar_title)
     write_altar_string_to_bg($2146, @altar_rest)
-    write_altar_string_to_bg($2186, @altar_sword)
+    if p.has_charge_attack
+        write_altar_string_to_bg($2186, @altar_sword_bought)
+    else
+        write_altar_string_to_bg($2186, @altar_sword)
     write_altar_string_to_bg($21C6, @altar_bile)
     write_altar_string_to_bg($2206, @altar_exit)
     write_altar_string_to_bg($2283, @altar_tears)
@@ -150,11 +155,10 @@ mode mea_culpa_altar_screen(U previous_level)
                 prie_dieu_selected_option = 0
                 break
             else if prie_dieu_selected_option == 1
-                // SWORD UPGRADE
-                if total_tears_collected >= 100 && mea_culpa_level < 5
-                    total_tears_collected -= 100
-                    mea_culpa_level += 1
-                    mea_culpa_upgraded = true
+                // CHARGE ATTACK UPGRADE
+                if total_tears_collected >= 400 && !p.has_charge_attack
+                    total_tears_collected -= 400
+                    p.has_charge_attack = true
                     force_hud_update()
                     cheat_shake_timer = 15
                     prie_dieu_selected_option = 0

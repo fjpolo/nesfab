@@ -495,3 +495,21 @@ fn level_draw_sprites(U o) U
     
     // o = draw_item_bones(o) // Moved to main.fab for higher priority
     return o
+
+fn respawn_all_enemies()
+    for U i = 0; i < 22; i += 1
+        dead_pilgrims[i] = 0
+        dead_wheelbrokens[i] = 0
+        dead_crucifieds[i] = 0
+    
+    // Disable NMI & rendering safely to prevent graphic corruption!
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+
+    load_level(levels[current_level_index])
+    load_level_finish()
+
+    // Re-enable NMI & rendering!
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+    {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)

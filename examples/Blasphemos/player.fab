@@ -88,6 +88,8 @@ struct Player
     U max_bile_vessels
     U current_bile_vessels
     U heal_timer
+    Bool has_charge_attack
+    U charge_timer
 
 vars /game
     Bool player_sword_active = false
@@ -102,8 +104,24 @@ vars /game
     U t_floor_left = 0
     U t_floor_right = 0
 
+    // Player projectile
+    Bool player_projectile_active = false
+    SS player_projectile_x = 0
+    SS player_projectile_y = 0
+    SS player_projectile_vx = 0
+
 // Sprites and animations
 data /sprites
+    [] sprite_player_projectile_right
+        (make_metasprite(0, Ms{}(
+            Ms(-4, -8, $33, $03),
+            Ms(-4,  0, $34, $03)
+        )))
+    [] sprite_player_projectile_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-4, -8, $33, $03),
+            Ms(-4,  0, $34, $03)
+        )))
     // THE PENITENT ONE metasprites (32x32)
     // Standing: x=0..31, y=0..31 (Primary) and x=32..63, y=0..31 (Secondary)
     [] sprite_penitent_standing_right
@@ -555,6 +573,8 @@ fn make_player_penitent() Player
     p.max_bile_vessels = 1
     p.current_bile_vessels = 1
     p.heal_timer = 0
+    p.has_charge_attack = false
+    p.charge_timer = 0
     return p
 
 fn update_player()
@@ -576,11 +596,32 @@ fn update_player()
 
     if p.heal_timer > 0
         p.heal_timer -= 1
+
+    // Update Charge Attack timer
+    if p.charge_timer > 0
+        p.charge_timer -= 1
+        p.heal_timer = 2 // Intense flashing
+        p.movement = PLAYER_MOVING_REST
+        if p.charge_timer == 0
+            player_projectile_active = true
+            if p.facing_left
+                player_projectile_x = p.x - 8
+                player_projectile_vx = -6
+                p.anim_state = make_anim_state(@penitent_animation_attack_left)
+            else
+                player_projectile_x = p.x + 8
+                player_projectile_vx = 6
+                p.anim_state = make_anim_state(@penitent_animation_attack)
+            player_projectile_y = SS(p.y) + 12
+            start_player_attack()
     
     handle_input()
     handle_physics()
     handle_collisions()
     update_camera()
+
+    // Update player projectile
+    update_player_projectile()
 
     // Update sword hitbox
     if p.movement == PLAYER_MOVING_ATTACK
@@ -715,7 +756,10 @@ fn handle_input()
                     update_combo_palette()
         return // Prevent other input during attack
     
-    // Prevent input during dash or parry
+    // Prevent input during dash, parry, or charge
+    if p.charge_timer > 0
+        return
+
     if p.dash_timer > 0
         if pads[0].pressed & BUTTON_B
             p.buffered_attack = true
@@ -784,6 +828,7 @@ fn handle_input()
                 p.current_bile_vessels = p.max_bile_vessels
                 force_hud_update()
                 cheat_shake_timer = 15
+                respawn_all_enemies()
             else
                 // Mea Culpa Altar (Level 4 Sub 1): Open the upgrade menu!
                 prie_dieu_selected_option = 0
@@ -913,11 +958,19 @@ fn handle_input()
 
     // Attack
     if pads[0].pressed & BUTTON_B
-        start_player_attack()
-        if p.facing_left
-            p.anim_state = make_anim_state(@penitent_animation_attack_left)
+        if p.has_charge_attack
+            p.charge_timer = 45
+            p.movement = PLAYER_MOVING_REST
+            if p.facing_left
+                p.anim_state = make_anim_state(@penitent_animation_parry_left)
+            else
+                p.anim_state = make_anim_state(@penitent_animation_parry_right)
         else
-            p.anim_state = make_anim_state(@penitent_animation_attack)
+            start_player_attack()
+            if p.facing_left
+                p.anim_state = make_anim_state(@penitent_animation_attack_left)
+            else
+                p.anim_state = make_anim_state(@penitent_animation_attack)
         return
     // Switch to jump animation if airborne (priority over walking/rest)
     if !is_on_ground() && p.movement != PLAYER_MOVING_CLIMB
@@ -1531,4 +1584,101 @@ fn register_sword_hit() Bool
         if player_combo_count < 2
             player_combo_count += 1
     return swing_is_combo_hit
+
+fn update_player_projectile()
+    if !player_projectile_active
+        return
+
+    player_projectile_x += player_projectile_vx
+
+    // Offscreen check
+    SS screen_x = player_projectile_x - p.camera_x
+    if screen_x < -16 || screen_x > 272
+        player_projectile_active = false
+        return
+
+    // Hit checks: Warden
+    if warden_active && warden_state != WARDEN_STATE_DEAD
+        if player_projectile_x < (warden_x + warden_w) && (player_projectile_x + 16) > warden_x
+            if (player_projectile_y - 8) < (warden_y + warden_h) && (player_projectile_y + 8) > warden_y
+                if warden_hurt_timer == 0
+                    U power = p.attack_power << 1
+                    if warden_health > power
+                        warden_health -= power
+                    else
+                        warden_health = 0
+                    warden_hurt_timer = 30
+                player_projectile_active = false
+                logf(@"Warden HP: %d"l, warden_health)
+                if warden_health == 0 && warden_state != WARDEN_STATE_DEAD
+                    warden_state = WARDEN_STATE_DEAD
+                    warden_defeated = true
+                    total_tears_collected += 300
+                    warden_hurt_timer = 0
+                    for U i = 0; i < 3; i += 1
+                        warden_projectile_active[i] = false
+                return
+
+    // Hit checks: Enraged Pilgrims
+    for U i = 0; i < enraged_pilgrims_num; i += 1
+        SS ex = enraged_pilgrims[i].x
+        SS ey = enraged_pilgrims[i].y
+        if player_projectile_x < (ex + 4) && (player_projectile_x + 16) > (ex - 12) && (player_projectile_y - 8) < ey && (player_projectile_y + 8) > (ey - 16)
+            if enraged_pilgrims[i].hurt_timer == 0
+                enraged_pilgrims[i].hurt_timer = 30
+                U power = p.attack_power << 1
+                if enraged_pilgrims[i].health > power
+                    enraged_pilgrims[i].health -= power
+                else
+                    enraged_pilgrims[i].health = 0
+                    U global_ix = (current_level_index << 3) + enraged_pilgrims[i].local_index
+                    U byte_ix = global_ix >> 3
+                    U bit_ix = global_ix & 7
+                    dead_pilgrims[byte_ix] |= (U(1) << bit_ix)
+                    total_tears_collected += 3
+                    enraged_pilgrims_delete(i)
+            player_projectile_active = false
+            return
+
+    // Hit checks: Wheelbrokens
+    for U i = 0; i < wheelbrokens_num; i += 1
+        SS ex = wheelbrokens[i].x
+        SS ey = wheelbrokens[i].y
+        if player_projectile_x < (ex + 8) && (player_projectile_x + 16) > (ex - 8) && (player_projectile_y - 8) < ey && (player_projectile_y + 8) > (ey - 24)
+            if wheelbrokens[i].hurt_timer == 0
+                wheelbrokens[i].hurt_timer = 30
+                U power = p.attack_power << 1
+                if wheelbrokens[i].health > power
+                    wheelbrokens[i].health -= power
+                else
+                    wheelbrokens[i].health = 0
+                    U global_ix = (current_level_index << 3) + wheelbrokens[i].local_index
+                    U byte_ix = global_ix >> 3
+                    U bit_ix = global_ix & 7
+                    dead_wheelbrokens[byte_ix] |= (U(1) << bit_ix)
+                    total_tears_collected += 5
+                    wheelbrokens_delete(i)
+            player_projectile_active = false
+            return
+
+    // Hit checks: Crucifieds
+    for U i = 0; i < crucifieds_num; i += 1
+        SS ex = crucifieds[i].x
+        SS ey = crucifieds[i].y
+        if player_projectile_x < (ex + 8) && (player_projectile_x + 16) > (ex - 8) && (player_projectile_y - 8) < ey && (player_projectile_y + 8) > (ey - 24)
+            if crucifieds[i].hurt_timer == 0
+                crucifieds[i].hurt_timer = 30
+                U power = p.attack_power << 1
+                if crucifieds[i].health > power
+                    crucifieds[i].health -= power
+                else
+                    crucifieds[i].health = 0
+                    U global_ix = (current_level_index << 3) + crucifieds[i].local_index
+                    U byte_ix = global_ix >> 3
+                    U bit_ix = global_ix & 7
+                    dead_crucifieds[byte_ix] |= (U(1) << bit_ix)
+                    total_tears_collected += 6
+                    crucifieds_delete(i)
+            player_projectile_active = false
+            return
 

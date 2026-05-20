@@ -471,6 +471,13 @@ fn update_sprites()
 
 
 
+    // Draw player projectile
+    if player_projectile_active
+        if player_projectile_vx < 0
+            o = push_oam_metasprite(o, player_projectile_x - p.camera_x, player_projectile_y, @sprite_player_projectile_left)
+        else
+            o = push_oam_metasprite(o, player_projectile_x - p.camera_x, player_projectile_y, @sprite_player_projectile_right)
+
     // Draw Warden Defeated Arrow
     if warden_defeated && !warden_arrow_dismissed && current_level_index == LEVEL_L1 && (frame_counter & 16)
         set_oam(o, 240, 120, $3F, 0)

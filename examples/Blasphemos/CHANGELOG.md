@@ -1,5 +1,53 @@
 # Changes
 
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
+## [20.05.2026] - v853
+- Fix broken crucifieds
+
+
 ## [20.05.2026] - v852
 - Now attacking while enemy is parried interrupts parry state
 

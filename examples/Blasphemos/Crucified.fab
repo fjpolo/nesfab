@@ -112,24 +112,30 @@ fn crucified_update(U ix) Bool
             U dir = crucified_patrol_dir[ix]
             if dir == 1  // moving left
                 crucifieds[ix].x -= 1
-                U check_wall = collision_at(UU(crucifieds[ix].x - 8), UU(ey - 8))
-                U check_floor = collision_at(UU(crucifieds[ix].x - 8), UU(ey))
-                if check_wall == C_WALL
+                if crucifieds[ix].x <= 8
                     dir = 0
-                else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
-                    dir = 0
-                else if crucifieds[ix].x <= (center - SS(16)) // 1-tile boundary
-                    dir = 0
+                else
+                    U check_wall = collision_at(UU(crucifieds[ix].x - 8), UU(ey - 8))
+                    U check_floor = collision_at(UU(crucifieds[ix].x - 8), UU(ey))
+                    if check_wall == C_WALL
+                        dir = 0
+                    else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
+                        dir = 0
+                    else if crucifieds[ix].x <= (center - SS(16)) // 1-tile boundary
+                        dir = 0
             else                            // moving right
                 crucifieds[ix].x += 1
-                U check_wall = collision_at(UU(crucifieds[ix].x + 8), UU(ey - 8))
-                U check_floor = collision_at(UU(crucifieds[ix].x + 8), UU(ey))
-                if check_wall == C_WALL
+                if crucifieds[ix].x >= (SS(current_level_width) << 4) - 8
                     dir = 1
-                else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
-                    dir = 1
-                else if crucifieds[ix].x >= (center + SS(16)) // 1-tile boundary
-                    dir = 1
+                else
+                    U check_wall = collision_at(UU(crucifieds[ix].x + 8), UU(ey - 8))
+                    U check_floor = collision_at(UU(crucifieds[ix].x + 8), UU(ey))
+                    if check_wall == C_WALL
+                        dir = 1
+                    else if check_floor != C_WALL && check_floor != C_PLATFORM && check_floor != C_JAIL
+                        dir = 1
+                    else if crucifieds[ix].x >= (center + SS(16)) // 1-tile boundary
+                        dir = 1
             crucified_patrol_dir[ix] = dir
             ex = crucifieds[ix].x  // refresh local copy after moving
     
