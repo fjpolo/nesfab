@@ -762,13 +762,12 @@ fn handle_input()
     // Altar Interaction (Prie Dieu and Mea Culpa)
     if (pads[0].pressed & BUTTON_UP)
         if (current_level_index == LEVEL_L2 || current_level_index == LEVEL_L4 || current_level_index == LEVEL_L4SUB1) && p.x >= 90 && p.x <= 160
-            prie_dieu_lit = true
-            last_prie_dieu_level = current_level_index
-            last_prie_dieu_x = p.x
-            last_prie_dieu_y = SS(p.y)
-            
             if current_level_index == LEVEL_L2 || current_level_index == LEVEL_L4
                 // Prie Dieu (Level 2 & 4): Rest, refill, and save checkpoint (no menu!)
+                prie_dieu_lit = true
+                last_prie_dieu_level = current_level_index
+                last_prie_dieu_x = p.x
+                last_prie_dieu_y = SS(p.y)
                 p.health = U(PLAYER_MAX_HEALTH)
                 p.current_bile_vessels = p.max_bile_vessels
                 force_hud_update()
@@ -1029,6 +1028,13 @@ fn handle_physics()
                 spawn_from_top = true
                 goto mode play_level(current_level_index)
                 : preserves /game
+            else if current_level_index == LEVEL_L10
+                current_level_index = LEVEL_L10SUB1
+                p.level_index = current_level_index
+                player_prepare_level_transition()
+                spawn_from_top = true
+                goto mode play_level(current_level_index)
+                : preserves /game
             else
                 p.health = 0
                 goto mode dead_screen(current_level_index)
@@ -1036,6 +1042,13 @@ fn handle_physics()
         else if SS(p.y) < -16
             if current_level_index == LEVEL_L4SUB1
                 current_level_index = LEVEL_L4
+                p.level_index = current_level_index
+                player_prepare_level_transition()
+                spawn_from_bottom = true
+                goto mode play_level(current_level_index)
+                : preserves /game
+            else if current_level_index == LEVEL_L10SUB1
+                current_level_index = LEVEL_L10
                 p.level_index = current_level_index
                 player_prepare_level_transition()
                 spawn_from_bottom = true

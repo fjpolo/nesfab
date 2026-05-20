@@ -162,7 +162,7 @@ fn load_level(CCC/levels level)
     
     // CHR:
     U chr_bank = read U(level)
-    if current_level_index == LEVEL_L6 || current_level_index == LEVEL_L6B
+    if current_level_index == LEVEL_L6 || current_level_index == LEVEL_L6B || current_level_index == LEVEL_L10
         chr_bank += 16
     select_chr_8kb(chr_bank)
     current_level_chr = chr_bank
@@ -368,6 +368,8 @@ fn load_chrrom_bank(CCC/levels level, U bank)
 fn tile_at(UU pixel_x, UU pixel_y) U
 : +inline // Crucial to avoid using JSR and RTS instructions which costs cycles
     if pixel_y.b
+        return 0
+    if (pixel_y.a >> 4) >= current_level_height
         return 0
     U col = (pixel_x.a >> 4) | (pixel_x.b << 4)
     UU offset = UU(col) << 4
