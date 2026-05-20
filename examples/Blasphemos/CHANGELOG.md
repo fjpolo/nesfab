@@ -1,5 +1,49 @@
 # Changes
 
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
+## [20.05.2026] - v855
+- Fix charge attack
+
+
 ## [20.05.2026] - v854
 - Add charge attack
 

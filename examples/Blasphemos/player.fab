@@ -90,6 +90,8 @@ struct Player
     U heal_timer
     Bool has_charge_attack
     U charge_timer
+    U fervour
+    U max_fervour
 
 vars /game
     Bool player_sword_active = false
@@ -110,6 +112,13 @@ vars /game
     SS player_projectile_y = 0
     SS player_projectile_vx = 0
 
+    // Lorquiana Prayer Active Variables
+    Bool prayer_active = false
+    SS prayer_x = 0
+    SS prayer_y = 0
+    SS prayer_vx = 0
+    U prayer_timer = 0
+
 // Sprites and animations
 data /sprites
     [] sprite_player_projectile_right
@@ -121,6 +130,24 @@ data /sprites
         (make_metasprite(ATTR_H_FLIP, Ms{}(
             Ms(-4, -8, $33, $03),
             Ms(-4,  0, $34, $03)
+        )))
+    [] sprite_prayer_projectile_right
+        (make_metasprite(0, Ms{}(
+            Ms(-8, -16, $33, $02),
+            Ms(-8,  0,  $34, $02),
+            Ms( 0, -16, $33, $02),
+            Ms( 0,  0,  $34, $02),
+            Ms( 8, -16, $33, $02),
+            Ms( 8,  0,  $34, $02)
+        )))
+    [] sprite_prayer_projectile_left
+        (make_metasprite(ATTR_H_FLIP, Ms{}(
+            Ms(-8, -16, $33, $02),
+            Ms(-8,  0,  $34, $02),
+            Ms( 0, -16, $33, $02),
+            Ms( 0,  0,  $34, $02),
+            Ms( 8, -16, $33, $02),
+            Ms( 8,  0,  $34, $02)
         )))
     // THE PENITENT ONE metasprites (32x32)
     // Standing: x=0..31, y=0..31 (Primary) and x=32..63, y=0..31 (Secondary)
@@ -575,6 +602,8 @@ fn make_player_penitent() Player
     p.heal_timer = 0
     p.has_charge_attack = false
     p.charge_timer = 0
+    p.fervour = 0
+    p.max_fervour = 50
     return p
 
 fn update_player()
@@ -616,18 +645,17 @@ fn update_player()
         else
             // B was released!
             if p.charge_timer >= 45
-                // Fire projectile!
-                player_projectile_active = true
+                // Big charge sword hit! Wide arc, purple flash.
+                player_sword_w = 56 // Wider hitbox for charge hit
+                p.heal_timer = 20  // Purple flash (palette[17] used for tint)
+                palette[17] = $14  // NES purple color
+                palette_dirty = true
+                start_player_attack()
+                p.attack_timer = 35 // Longer active window
                 if p.facing_left
-                    player_projectile_x = p.x - 8
-                    player_projectile_vx = -6
                     p.anim_state = make_anim_state(@penitent_animation_attack_left)
                 else
-                    player_projectile_x = p.x + 8
-                    player_projectile_vx = 6
                     p.anim_state = make_anim_state(@penitent_animation_attack)
-                player_projectile_y = SS(p.y) + 12
-                start_player_attack()
             p.charge_timer = 0
     
     handle_input()
@@ -637,6 +665,7 @@ fn update_player()
 
     // Update player projectile
     update_player_projectile()
+    update_prayer_projectile()
 
     // Update sword hitbox
     if p.movement == PLAYER_MOVING_ATTACK
@@ -759,6 +788,7 @@ fn handle_input()
         if p.attack_timer == 0
             if p.movement == PLAYER_MOVING_ATTACK
                 p.movement = PLAYER_MOVING_REST
+                player_sword_w = 32 // Reset to normal sword width
                 if p.facing_left
                     p.anim_state = make_anim_state(@penitent_animation_standing_left)
                 else
@@ -829,6 +859,26 @@ fn handle_input()
             p.anim_state = make_anim_state(@penitent_animation_standing)
             return
     
+
+    // Prayer casting (Down + B)
+    if (pads[0].held & BUTTON_DOWN) && (pads[0].pressed & BUTTON_B) && is_on_ground() && p.movement != PLAYER_MOVING_ATTACK && p.movement != PLAYER_MOVING_HURT
+        if p.fervour >= 25 && !prayer_active
+            p.fervour -= 25
+            p.movement = PLAYER_MOVING_REST
+            p.charge_timer = 0 // cancel physical charge
+            
+            // Trigger Lorquiana piercing magic wave!
+            prayer_active = true
+            prayer_x = p.x
+            prayer_y = SS(p.y) + 12
+            if p.facing_left
+                prayer_vx = -5
+                p.anim_state = make_anim_state(@penitent_animation_parry_left)
+            else
+                prayer_vx = 5
+                p.anim_state = make_anim_state(@penitent_animation_parry_right)
+            prayer_timer = 45 // active for 45 frames
+            return
 
     // Altar Interaction (Prie Dieu and Mea Culpa)
     if (pads[0].pressed & BUTTON_UP)
@@ -1593,6 +1643,12 @@ fn register_sword_hit() Bool
         attack_has_hit = true
         if player_combo_count < 2
             player_combo_count += 1
+        
+        // Earn Fervour upon sword impact!
+        if p.fervour < p.max_fervour
+            p.fervour += 5
+            if p.fervour > p.max_fervour
+                p.fervour = p.max_fervour
     return swing_is_combo_hit
 
 fn update_player_projectile()
@@ -1691,4 +1747,84 @@ fn update_player_projectile()
                     crucifieds_delete(i)
             player_projectile_active = false
             return
+
+fn update_prayer_projectile()
+    if !prayer_active
+        return
+
+    prayer_x += prayer_vx
+
+    // Offscreen check
+    SS screen_x = prayer_x - p.camera_x
+    if screen_x < -24 || screen_x > 280
+        prayer_active = false
+        return
+
+    if prayer_timer > 0
+        prayer_timer -= 1
+        if prayer_timer == 0
+            prayer_active = false
+            return
+
+    // Hit checks: Warden
+    if warden_active && warden_state != WARDEN_STATE_DEAD
+        if prayer_x < (warden_x + warden_w) && (prayer_x + 24) > warden_x
+            if (prayer_y - 16) < (warden_y + warden_h) && (prayer_y + 16) > warden_y
+                if warden_hurt_timer == 0
+                    U power = U(p.attack_power * 3)
+                    if warden_health > power
+                        warden_health -= power
+                    else
+                        warden_health = 0
+                    warden_hurt_timer = 20
+                    logf(@"Warden HP: %d"l, warden_health)
+                    if warden_health == 0 && warden_state != WARDEN_STATE_DEAD
+                        warden_state = WARDEN_STATE_DEAD
+                        warden_defeated = true
+                        total_tears_collected += 300
+                        warden_hurt_timer = 0
+                        for U i = 0; i < 3; i += 1
+                            warden_projectile_active[i] = false
+
+    // Hit checks: Enraged Pilgrims
+    for U i = 0; i < enraged_pilgrims_num; i += 1
+        SS ex = enraged_pilgrims[i].x
+        SS ey = enraged_pilgrims[i].y
+        if prayer_x < (ex + 8) && (prayer_x + 24) > (ex - 12) && (prayer_y - 16) < ey && (prayer_y + 16) > (ey - 16)
+            enraged_pilgrims[i].health = 0
+            U global_ix = (current_level_index << 3) + enraged_pilgrims[i].local_index
+            U byte_ix = global_ix >> 3
+            U bit_ix = global_ix & 7
+            dead_pilgrims[byte_ix] |= (U(1) << bit_ix)
+            total_tears_collected += 3
+            enraged_pilgrims_delete(i)
+            i -= 1
+
+    // Hit checks: Wheelbrokens
+    for U i = 0; i < wheelbrokens_num; i += 1
+        SS ex = wheelbrokens[i].x
+        SS ey = wheelbrokens[i].y
+        if prayer_x < (ex + 8) && (prayer_x + 24) > (ex - 8) && (prayer_y - 16) < ey && (prayer_y + 16) > (ey - 24)
+            wheelbrokens[i].health = 0
+            U global_ix = (current_level_index << 3) + wheelbrokens[i].local_index
+            U byte_ix = global_ix >> 3
+            U bit_ix = global_ix & 7
+            dead_wheelbrokens[byte_ix] |= (U(1) << bit_ix)
+            total_tears_collected += 5
+            wheelbrokens_delete(i)
+            i -= 1
+
+    // Hit checks: Crucifieds
+    for U i = 0; i < crucifieds_num; i += 1
+        SS ex = crucifieds[i].x
+        SS ey = crucifieds[i].y
+        if prayer_x < (ex + 8) && (prayer_x + 24) > (ex - 8) && (prayer_y - 16) < ey && (prayer_y + 16) > (ey - 24)
+            crucifieds[i].health = 0
+            U global_ix = (current_level_index << 3) + crucifieds[i].local_index
+            U byte_ix = global_ix >> 3
+            U bit_ix = global_ix & 7
+            dead_crucifieds[byte_ix] |= (U(1) << bit_ix)
+            total_tears_collected += 6
+            crucifieds_delete(i)
+            i -= 1
 

@@ -1,6 +1,7 @@
 
 vars /hud
     U last_hud_hp = 255
+    U last_hud_fervour = 255
     U last_hud_bile = 255
     U last_hud_ap = 255
     UU last_hud_tears = 65535
@@ -18,10 +19,11 @@ fn get_digit_tile(U digit) U
     return $40 + digit
 
 fn update_hud_tiles()
-    if p.health == last_hud_hp && p.current_bile_vessels == last_hud_bile && p.attack_power == last_hud_ap && total_tears_collected == last_hud_tears && total_bones_collected == last_hud_bones
+    if p.health == last_hud_hp && p.fervour == last_hud_fervour && p.current_bile_vessels == last_hud_bile && p.attack_power == last_hud_ap && total_tears_collected == last_hud_tears && total_bones_collected == last_hud_bones
         return
     
     last_hud_hp = p.health
+    last_hud_fervour = p.fervour
     last_hud_bile = p.current_bile_vessels
     last_hud_ap = p.attack_power
     last_hud_tears = total_tears_collected
@@ -41,6 +43,14 @@ fn update_hud_tiles()
                 {PPUDATA}($06) // Health icon
             else
                 {PPUDATA}($00)
+        
+        // Fervour Bar on Row 0, Col 11 to 15 (5 units max, each unit = 10 Fervour)
+        ppu_set_addr(base + 11)
+        for U i = 0; i < 5; i += 1
+            if p.fervour >= U((i + 1) * 10)
+                {PPUDATA}($27) // Filled fervour orb icon
+            else
+                {PPUDATA}($00) // Empty
         
         // Attack Power at the end of Row 0
         ppu_set_addr(base + 28)
@@ -104,3 +114,4 @@ fn clear_hud_rows()
 
 fn force_hud_update()
     last_hud_hp = 255
+    last_hud_fervour = 255
