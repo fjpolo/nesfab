@@ -1,5 +1,17 @@
 # Changes
 
+## [20.05.2026] - v854
+- Add charge attack
+
+
+## [20.05.2026] - v854
+- Add charge attack
+
+
+## [20.05.2026] - v854
+- Add charge attack
+
+
 ## [20.05.2026] - v853
 - Fix broken crucifieds
 

@@ -598,22 +598,37 @@ fn update_player()
         p.heal_timer -= 1
 
     // Update Charge Attack timer
-    if p.charge_timer > 0
-        p.charge_timer -= 1
-        p.heal_timer = 2 // Intense flashing
-        p.movement = PLAYER_MOVING_REST
-        if p.charge_timer == 0
-            player_projectile_active = true
-            if p.facing_left
-                player_projectile_x = p.x - 8
-                player_projectile_vx = -6
-                p.anim_state = make_anim_state(@penitent_animation_attack_left)
-            else
-                player_projectile_x = p.x + 8
-                player_projectile_vx = 6
-                p.anim_state = make_anim_state(@penitent_animation_attack)
-            player_projectile_y = SS(p.y) + 12
-            start_player_attack()
+    // Update Charge Attack held logic
+    if p.has_charge_attack
+        if pads[0].held & BUTTON_B
+            if p.charge_timer > 0
+                if p.charge_timer < 255
+                    p.charge_timer += 1
+                
+                // If held past normal swing (20 frames), start charging/flashing in place!
+                if p.charge_timer >= 20
+                    p.heal_timer = 2 // Intense color flashing
+                    p.movement = PLAYER_MOVING_REST
+                    if p.facing_left
+                        p.anim_state = make_anim_state(@penitent_animation_parry_left)
+                    else
+                        p.anim_state = make_anim_state(@penitent_animation_parry_right)
+        else
+            // B was released!
+            if p.charge_timer >= 45
+                // Fire projectile!
+                player_projectile_active = true
+                if p.facing_left
+                    player_projectile_x = p.x - 8
+                    player_projectile_vx = -6
+                    p.anim_state = make_anim_state(@penitent_animation_attack_left)
+                else
+                    player_projectile_x = p.x + 8
+                    player_projectile_vx = 6
+                    p.anim_state = make_anim_state(@penitent_animation_attack)
+                player_projectile_y = SS(p.y) + 12
+                start_player_attack()
+            p.charge_timer = 0
     
     handle_input()
     handle_physics()
@@ -958,19 +973,13 @@ fn handle_input()
 
     // Attack
     if pads[0].pressed & BUTTON_B
-        if p.has_charge_attack
-            p.charge_timer = 45
-            p.movement = PLAYER_MOVING_REST
-            if p.facing_left
-                p.anim_state = make_anim_state(@penitent_animation_parry_left)
-            else
-                p.anim_state = make_anim_state(@penitent_animation_parry_right)
+        start_player_attack()
+        if p.facing_left
+            p.anim_state = make_anim_state(@penitent_animation_attack_left)
         else
-            start_player_attack()
-            if p.facing_left
-                p.anim_state = make_anim_state(@penitent_animation_attack_left)
-            else
-                p.anim_state = make_anim_state(@penitent_animation_attack)
+            p.anim_state = make_anim_state(@penitent_animation_attack)
+        if p.has_charge_attack
+            p.charge_timer = 1
         return
     // Switch to jump animation if airborne (priority over walking/rest)
     if !is_on_ground() && p.movement != PLAYER_MOVING_CLIMB
@@ -1546,6 +1555,7 @@ fn hurt_player(U attack_type, SS ex) Bool
         p.hurt_timer = 120 // 2 seconds of immunity
         p.dash_timer = 0
         p.attack_timer = 0
+        p.charge_timer = 0
         p.buffered_attack = false
         p.movement = PLAYER_MOVING_HURT
         if p.facing_left
