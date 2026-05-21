@@ -92,6 +92,7 @@ struct Player
     U charge_timer
     U fervour
     U max_fervour
+    Bool has_fervour_attack
 
 vars /game
     Bool player_sword_active = false
@@ -604,6 +605,7 @@ fn make_player_penitent() Player
     p.charge_timer = 0
     p.fervour = 0
     p.max_fervour = 50
+    p.has_fervour_attack = false
     return p
 
 fn update_player()
@@ -861,7 +863,7 @@ fn handle_input()
     
 
     // Prayer casting (Down + B)
-    if (pads[0].held & BUTTON_DOWN) && (pads[0].pressed & BUTTON_B) && is_on_ground() && p.movement != PLAYER_MOVING_ATTACK && p.movement != PLAYER_MOVING_HURT
+    if p.has_fervour_attack && (pads[0].held & BUTTON_DOWN) && (pads[0].pressed & BUTTON_B) && is_on_ground() && p.movement != PLAYER_MOVING_ATTACK && p.movement != PLAYER_MOVING_HURT
         if p.fervour >= 25 && !prayer_active
             p.fervour -= 25
             p.movement = PLAYER_MOVING_REST

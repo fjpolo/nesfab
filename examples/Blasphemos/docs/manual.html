@@ -31,7 +31,7 @@
             margin: 0;
             padding: 0;
             background-color: hsl(0, 0%, 12%);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 50% 50%, rgba(20, 20, 20, 0.8), rgba(10, 10, 10, 0.95)),
                 url('https://www.transparenttextures.com/patterns/black-linen.png');
             font-family: 'Inter', sans-serif;
@@ -52,7 +52,7 @@
             transform: translateX(-50%);
             width: 80vw;
             height: 60vh;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
             pointer-events: none;
             z-index: 0;
         }
@@ -81,7 +81,7 @@
             letter-spacing: 2px;
             font-weight: 700;
             margin: 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .nav-controls {
@@ -188,16 +188,19 @@
         }
 
         @media (max-width: 1200px) {
+
             /* On tablet/mobile, default to stack view seamlessly */
             .book {
                 flex-direction: column !important;
                 gap: 30px !important;
             }
+
             .page {
                 width: 100%;
                 max-width: 148mm;
                 border-radius: 12px !important;
             }
+
             .top-nav {
                 flex-direction: column;
                 gap: 10px;
@@ -234,7 +237,9 @@
         }
 
         /* Typography */
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             font-family: 'MedievalSharp', cursive;
             text-transform: uppercase;
             margin-top: 0;
@@ -292,7 +297,7 @@
         .cover-overlay {
             position: relative;
             z-index: 5;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%);
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.65) 100%);
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -312,7 +317,7 @@
         .nintendo-seal {
             width: 65px;
             margin: 0 auto;
-            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
             transition: transform 0.3s ease;
         }
 
@@ -327,7 +332,7 @@
             padding: 10px;
             margin-bottom: 20px;
             background: rgba(228, 0, 15, 0.05);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .safety-header {
@@ -351,7 +356,7 @@
             font-weight: bold;
             color: var(--ink-muted);
             font-family: 'Cinzel', serif;
-            border-top: 1px solid rgba(0,0,0,0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
             width: 30px;
             text-align: center;
             padding-top: 4px;
@@ -376,7 +381,7 @@
         .controller-svg {
             width: 100%;
             max-width: 360px;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
         }
 
         /* Glow buttons on hover */
@@ -440,7 +445,7 @@
             border-radius: 4px;
             image-rendering: pixelated;
             object-fit: contain;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .enemy-info {
@@ -474,7 +479,7 @@
             border-radius: 8px;
             padding: 20px;
             color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             margin-top: auto;
         }
 
@@ -484,7 +489,8 @@
                 background: none !important;
             }
 
-            .top-nav, .no-print {
+            .top-nav,
+            .no-print {
                 display: none !important;
             }
 
@@ -512,7 +518,8 @@
                 transform: none !important;
             }
 
-            .page::before, .page::after {
+            .page::before,
+            .page::after {
                 display: none !important;
             }
         }
@@ -538,11 +545,14 @@
                 <img src="cover.png" alt="BlasNESmous Cover" class="cover-art">
                 <div class="cover-overlay">
                     <div style="text-align: right;">
-                        <p class="pixel-font" style="font-size: 7px; color: var(--gold); letter-spacing: 1px;">NES-BN-USA</p>
+                        <p class="pixel-font" style="font-size: 7px; color: var(--gold); letter-spacing: 1px;">
+                            NES-BN-USA</p>
                     </div>
                     <div>
                         <img src="seal.png" class="nintendo-seal" alt="Seal of Quality">
-                        <p class="pixel-font" style="font-size: 8px; margin-top: 10px; color: white; letter-spacing: 1px;">SOUTHPOLE ENTERTAINMENT</p>
+                        <p class="pixel-font"
+                            style="font-size: 8px; margin-top: 10px; color: white; letter-spacing: 1px;">SOUTHPOLE
+                            ENTERTAINMENT</p>
                     </div>
                 </div>
             </div>
@@ -550,19 +560,23 @@
             <!-- PAGE 2: PHYSICAL MEDIA -->
             <div class="page center" style="text-align: center; align-items: center; justify-content: space-between;">
                 <h1>PHYSICAL MEDIA</h1>
-                <p style="font-size: 11px; margin-bottom: 5px; font-style: italic;">Absolve your sins on original hardware.</p>
+                <p style="font-size: 11px; margin-bottom: 5px; font-style: italic;">Absolve your sins on original
+                    hardware.</p>
 
-                <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-around; width: 100%; padding: 10px 0;">
+                <div
+                    style="flex: 1; display: flex; flex-direction: column; justify-content: space-around; width: 100%; padding: 10px 0;">
                     <div>
                         <img src="nes_cart.png" alt="NES Cartridge"
                             style="max-width: 80%; max-height: 120px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));">
-                        <p class="pixel-font" style="font-size: 7px; margin-top: 8px; color: var(--crimson);">72-PIN NES Game Pak</p>
+                        <p class="pixel-font" style="font-size: 7px; margin-top: 8px; color: var(--crimson);">72-PIN NES
+                            Game Pak</p>
                     </div>
 
                     <div style="margin-top: 15px;">
                         <img src="famicom_cart.png" alt="Famicom Cartridge"
                             style="max-width: 75%; max-height: 105px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));">
-                        <p class="pixel-font" style="font-size: 7px; margin-top: 8px; color: var(--crimson);">60-PIN FAMICOM cartridge</p>
+                        <p class="pixel-font" style="font-size: 7px; margin-top: 8px; color: var(--crimson);">60-PIN
+                            FAMICOM cartridge</p>
                     </div>
                 </div>
                 <div class="page-number">2</div>
@@ -573,19 +587,26 @@
                 <div class="safety-warning">
                     <div class="safety-header">PRECAUTIONS</div>
                     <p style="font-size: 0.8rem; margin: 0; line-height: 1.4;">
-                        1) This is a high-precision Game Pak. Do not store it in places of extreme temperature. Never drop or hit the cartridge.<br><br>
-                        2) Avoid touching the metal contacts. Keep them free from moisture and dirt to ensure proper operation.<br><br>
+                        1) This is a high-precision Game Pak. Do not store it in places of extreme temperature. Never
+                        drop or hit the cartridge.<br><br>
+                        2) Avoid touching the metal contacts. Keep them free from moisture and dirt to ensure proper
+                        operation.<br><br>
                         3) Never clean the shell with strong chemical solvents such as benzene or paint thinner.
                     </p>
                 </div>
 
                 <h2>TABLE OF CONTENTS</h2>
                 <ul class="pixel-font" style="list-style: none; padding: 0; margin-top: 20px; font-size: 8px;">
-                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>04. THE MIRACLE OF CVSTODIA</span> <span style="color: var(--crimson);">P. 4</span></li>
-                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>05. CONTROLLING THE PENITENT</span> <span style="color: var(--crimson);">P. 5</span></li>
-                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>06. COMBAT & COUNTERPLAY</span> <span style="color: var(--crimson);">P. 6</span></li>
-                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>07. FOES OF THE LAND</span> <span style="color: var(--crimson);">P. 7</span></li>
-                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>08. THE SACRED SECRETS</span> <span style="color: var(--crimson);">P. 8</span></li>
+                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>04. THE
+                            MIRACLE OF CVSTODIA</span> <span style="color: var(--crimson);">P. 4</span></li>
+                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>05.
+                            CONTROLLING THE PENITENT</span> <span style="color: var(--crimson);">P. 5</span></li>
+                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>06. COMBAT &
+                            COUNTERPLAY</span> <span style="color: var(--crimson);">P. 6</span></li>
+                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>07. FOES OF
+                            THE LAND</span> <span style="color: var(--crimson);">P. 7</span></li>
+                    <li style="margin-bottom: 12px; display: flex; justify-content: space-between;"><span>08. THE SACRED
+                            SECRETS</span> <span style="color: var(--crimson);">P. 8</span></li>
                 </ul>
                 <div class="page-number">3</div>
             </div>
@@ -593,17 +614,24 @@
             <!-- PAGE 4: STORY -->
             <div class="page">
                 <h1>THE MIRACLE OF CVSTODIA</h1>
-                <p style="font-style: italic; color: var(--ink-muted); border-left: 3px solid var(--gold); padding-left: 10px; margin-bottom: 15px;">
-                    "In the silent cloisters of the Silent Sorrow, the brotherhood lies slain... only the Penitent One remains..."
+                <p
+                    style="font-style: italic; color: var(--ink-muted); border-left: 3px solid var(--gold); padding-left: 10px; margin-bottom: 15px;">
+                    "In the silent cloisters of the Silent Sorrow, the brotherhood lies slain... only the Penitent One
+                    remains..."
                 </p>
                 <p>
-                    In the sacred land of Cvstodia, a mysterious force known as <strong>The Miracle</strong> has transformed the citizens' deepest guilt, faith, and remorse into terrifying physical forms and endless penance.
+                    In the sacred land of Cvstodia, a mysterious force known as <strong>The Miracle</strong> has
+                    transformed the citizens' deepest guilt, faith, and remorse into terrifying physical forms and
+                    endless penance.
                 </p>
                 <p>
-                    You wake as the <strong>Penitent One</strong>, the only survivor of the Brotherhood of the Silent Sorrow. Trapped in a curse of eternal rebirth, you must lift your legendary blade, <em>Mea Culpa</em>, and put an end to the nightmare.
+                    You wake as the <strong>Penitent One</strong>, the only survivor of the Brotherhood of the Silent
+                    Sorrow. Trapped in a curse of eternal rebirth, you must lift your legendary blade, <em>Mea
+                        Culpa</em>, and put an end to the nightmare.
                 </p>
                 <p>
-                    Navigate the dark ruins, claim the Tears of Atonement, and search for the final truth behind the Curse.
+                    Navigate the dark ruins, claim the Tears of Atonement, and search for the final truth behind the
+                    Curse.
                 </p>
                 <div style="margin-top: auto; display: flex; justify-content: center;">
                     <img src="penitent.png" alt="Penitent One"
@@ -615,37 +643,46 @@
             <!-- PAGE 5: CONTROLS -->
             <div class="page">
                 <h1>CONTROLLING THE PENITENT ONE</h1>
-                
+
                 <div class="controller-section">
                     <!-- High Fidelity Interactive NES Controller SVG -->
                     <svg viewBox="0 0 200 86" class="controller-svg">
                         <!-- Controller Body -->
-                        <rect x="2" y="2" width="196" height="82" rx="6" fill="#D3D3D3" stroke="#5F5F5F" stroke-width="3" />
+                        <rect x="2" y="2" width="196" height="82" rx="6" fill="#D3D3D3" stroke="#5F5F5F"
+                            stroke-width="3" />
                         <rect x="8" y="8" width="184" height="70" rx="3" fill="#202020" />
                         <rect x="14" y="14" width="172" height="58" rx="2" fill="#808080" />
-                        
+
                         <!-- Top Red Accents -->
                         <rect x="20" y="20" width="160" height="4" fill="#B22222" />
                         <rect x="20" y="28" width="160" height="4" fill="#B22222" />
 
                         <!-- D-PAD Base -->
-                        <path d="M 40,31 L 47,31 L 47,38 L 54,38 L 54,45 L 47,45 L 47,52 L 40,52 L 40,45 L 33,45 L 33,38 L 40,38 Z" fill="#151515" />
-                        
+                        <path
+                            d="M 40,31 L 47,31 L 47,38 L 54,38 L 54,45 L 47,45 L 47,52 L 40,52 L 40,45 L 33,45 L 33,38 L 40,38 Z"
+                            fill="#151515" />
+
                         <!-- D-PAD Buttons -->
-                        <rect id="dpad-up" class="interactive-btn dpad" x="40" y="31" width="7" height="7" fill="black" />
-                        <rect id="dpad-down" class="interactive-btn dpad" x="40" y="45" width="7" height="7" fill="black" />
-                        <rect id="dpad-left" class="interactive-btn dpad" x="33" y="38" width="7" height="7" fill="black" />
-                        <rect id="dpad-right" class="interactive-btn dpad" x="47" y="38" width="7" height="7" fill="black" />
-                        
+                        <rect id="dpad-up" class="interactive-btn dpad" x="40" y="31" width="7" height="7"
+                            fill="black" />
+                        <rect id="dpad-down" class="interactive-btn dpad" x="40" y="45" width="7" height="7"
+                            fill="black" />
+                        <rect id="dpad-left" class="interactive-btn dpad" x="33" y="38" width="7" height="7"
+                            fill="black" />
+                        <rect id="dpad-right" class="interactive-btn dpad" x="47" y="38" width="7" height="7"
+                            fill="black" />
+
                         <!-- Select & Start Buttons -->
-                        <rect id="btn-select" class="interactive-btn" x="78" y="41" width="16" height="6" rx="2" fill="#202020" />
-                        <rect id="btn-start" class="interactive-btn" x="106" y="41" width="16" height="6" rx="2" fill="#202020" />
-                        
+                        <rect id="btn-select" class="interactive-btn" x="78" y="41" width="16" height="6" rx="2"
+                            fill="#202020" />
+                        <rect id="btn-start" class="interactive-btn" x="106" y="41" width="16" height="6" rx="2"
+                            fill="#202020" />
+
                         <!-- Action Buttons (A & B) -->
                         <rect x="134" y="30" width="46" height="28" rx="2" fill="#202020" />
                         <circle id="btn-b" class="interactive-btn" cx="145" cy="44" r="9" fill="#8B0000" />
                         <circle id="btn-a" class="interactive-btn" cx="169" cy="44" r="9" fill="#8B0000" />
-                        
+
                         <!-- Button Labels -->
                         <text x="142" y="66" font-family="'Press Start 2P'" font-size="5" fill="black">B</text>
                         <text x="166" y="66" font-family="'Press Start 2P'" font-size="5" fill="black">A</text>
@@ -655,9 +692,11 @@
                 </div>
 
                 <table style="margin-top: 5px;">
-                    <tr class="control-row" onmouseover="highlightBtn('dpad-left', 'dpad-right')" onmouseout="clearBtn('dpad-left', 'dpad-right')">
+                    <tr class="control-row" onmouseover="highlightBtn('dpad-left', 'dpad-right')"
+                        onmouseout="clearBtn('dpad-left', 'dpad-right')">
                         <td class="highlight" style="width: 30%;">D-PAD</td>
-                        <td>Move Left and Right. Press <span class="highlight">UP</span> to climb ladders or cross doorways.</td>
+                        <td>Move Left and Right. Press <span class="highlight">UP</span> to climb ladders or cross
+                            doorways.</td>
                     </tr>
                     <tr class="control-row" onmouseover="highlightBtn('btn-a')" onmouseout="clearBtn('btn-a')">
                         <td class="highlight">A BUTTON</td>
@@ -665,13 +704,17 @@
                     </tr>
                     <tr class="control-row" onmouseover="highlightBtn('btn-b')" onmouseout="clearBtn('btn-b')">
                         <td class="highlight">B BUTTON</td>
-                        <td>Slash with Mea Culpa. Hold <span class="highlight">B</span> to charge — release after a full charge for a devastating wide arc strike.</td>
+                        <td>Slash with Mea Culpa. Hold <span class="highlight">B</span> to charge — release after a full
+                            charge for a devastating wide arc strike.</td>
                     </tr>
-                    <tr class="control-row" onmouseover="highlightBtn('dpad-down', 'btn-b')" onmouseout="clearBtn('dpad-down', 'btn-b')">
+                    <tr class="control-row" onmouseover="highlightBtn('dpad-down', 'btn-b')"
+                        onmouseout="clearBtn('dpad-down', 'btn-b')">
                         <td class="highlight">DOWN + B</td>
-                        <td>While on the ground: spend <span class="highlight">25 Fervour</span> to unleash the Lorquiana piercing wave. In mid-air: Downward Pogo Thrust.</td>
+                        <td>While on the ground: spend <span class="highlight">25 Fervour</span> to unleash the
+                            Lorquiana piercing wave. In mid-air: Downward Pogo Thrust.</td>
                     </tr>
-                    <tr class="control-row" onmouseover="highlightBtn('btn-select')" onmouseout="clearBtn('btn-select')">
+                    <tr class="control-row" onmouseover="highlightBtn('btn-select')"
+                        onmouseout="clearBtn('btn-select')">
                         <td class="highlight">SELECT</td>
                         <td>Hold for over a second to toggle your map.</td>
                     </tr>
@@ -679,10 +722,12 @@
 
                 <h3 style="margin-top: 12px; font-size: 0.95rem;">SPECIAL MANEUVERS</h3>
                 <p style="font-size: 11px; margin-bottom: 4px;">
-                    <strong class="highlight">SLIDE DASH:</strong> Double-tap <strong class="highlight">LEFT</strong> or <strong class="highlight">RIGHT</strong> while on flat ground to perform a fast dodge.
+                    <strong class="highlight">SLIDE DASH:</strong> Double-tap <strong class="highlight">LEFT</strong> or
+                    <strong class="highlight">RIGHT</strong> while on flat ground to perform a fast dodge.
                 </p>
                 <p style="font-size: 11px; margin-bottom: 0;">
-                    <strong class="highlight">ACTIVE PARRY:</strong> Hold <strong class="highlight">UP</strong> and press <strong class="highlight">B</strong> on the ground to brace for incoming physical attacks.
+                    <strong class="highlight">ACTIVE PARRY:</strong> Hold <strong class="highlight">UP</strong> and
+                    press <strong class="highlight">B</strong> on the ground to brace for incoming physical attacks.
                 </p>
                 <div class="page-number">5</div>
             </div>
@@ -690,35 +735,45 @@
             <!-- PAGE 6: COMBAT -->
             <div class="page">
                 <h1>COMBAT &amp; COUNTERPLAY</h1>
-                
+
                 <h3>SWORD COMBOS</h3>
                 <p style="font-size: 0.82rem;">
-                    Time your presses of the <span class="highlight">B</span> button sequentially to unleash a devastating three-hit chain. The third swing deals massive combo damage and is critical for destroying tougher heretics.
+                    Use <span class="highlight">B</span> button to unleash a
+                    devastating three-hit chain. The third swing is critical for
+                    destroying tougher heretics.
                 </p>
 
                 <h3>FERVOUR &amp; THE PRAYER</h3>
                 <p style="font-size: 0.82rem;">
-                    Strike enemies with Mea Culpa to build <span class="highlight">Fervour</span> — shown as orbs on your HUD. When you have accumulated <strong>25 or more Fervour</strong>, press <span class="highlight">DOWN + B</span> while standing to spend it and unleash the <em>Lorquiana</em>, a piercing magical wave that deals heavy damage to all enemies in its path.
+                    Strike enemies to build <span class="highlight">Fervour</span>.
+                    Press <span class="highlight">DOWN + B</span> to spend it and unleash the <em>Lorquiana</em>,
+                    a piercing magical wave that deals heavy damage to all enemies in its path.
                 </p>
 
                 <h3>CHARGE ATTACK</h3>
                 <p style="font-size: 0.82rem; border-left: 2px solid var(--crimson); padding-left: 8px;">
-                    Unlocked via the <strong>Mea Culpa Altar</strong>. Hold the <span class="highlight">B</span> button without releasing — after a full charge (roughly 1 second), your blade begins to glow. Release to unleash a massive wide-arc slash that hits with <strong style="color: purple;">devastating purple fury</strong>, covering a larger area than any normal strike.
+                    Unlocked via the <strong>Mea Culpa Altar</strong>.Hold the <span class="highlight">B</span> button
+                    and release to unleash a slash that hits with <strong style="color: purple;">devastating purple
+                        fury</strong>, covering a larger area than any normal strike.
                 </p>
 
                 <h3>THE POGO BOUNCE</h3>
                 <p style="font-size: 0.82rem;">
-                    Strike enemies or hazards from directly above using your downward air thrust (<span class="highlight">Down + B</span> in mid-air). This gives you an aerial leap, letting you cross large instant-death spike pits.
+                    Strike enemies or hazards from directly above using your downward air thrust (<span
+                        class="highlight">Down + B</span> in mid-air). This gives you an aerial leap, letting you cross
+                    large instant-death spike pits.
                 </p>
 
                 <h3>SUCCESSFUL PARRY CANCEL</h3>
                 <p style="font-size: 0.82rem;">
-                    When you parry, immediately press <span class="highlight">B</span> to cancel recovery and execute an instant counterstrike!
+                    When you parry, immediately press <span class="highlight">B</span> to cancel recovery and execute an
+                    instant counterstrike!
                 </p>
 
                 <h3>BILE VESSEL HEALING</h3>
                 <p style="font-size: 0.82rem;">
-                    Double-tap <span class="highlight">DOWN</span> while on flat ground to consume a Bile Vessel and recover HP.
+                    Double-tap <span class="highlight">DOWN</span> while on flat ground to consume a Bile Vessel and
+                    recover HP.
                 </p>
                 <div class="page-number">6</div>
             </div>
@@ -731,7 +786,9 @@
                     <img src="crucified.png" class="enemy-sprite" alt="Crucified">
                     <div class="enemy-info">
                         <h3>THE CRUCIFIED</h3>
-                        <p style="font-size: 11px; margin: 4px 0 0 0; color: var(--ink-muted);">Lost souls bound to massive wooden crosses. Watch their overhead frames! They hoist their cross back and swing it forward with giant reach. Parry their strike or jump over them.</p>
+                        <p style="font-size: 11px; margin: 4px 0 0 0; color: var(--ink-muted);">Lost souls bound to
+                            massive wooden crosses. Watch their overhead frames! They hoist their cross back and swing
+                            it forward with giant reach. Parry their strike or jump over them.</p>
                     </div>
                 </div>
 
@@ -739,7 +796,9 @@
                     <img src="pilgrim.png" class="enemy-sprite" alt="Enraged Pilgrim">
                     <div class="enemy-info">
                         <h3>ENRAGED PILGRIM</h3>
-                        <p style="font-size: 11px; margin: 4px 0 0 0; color: var(--ink-muted);">Wandering wastes in deep prayer, carrying heavy stone staves. They walk continuously and strike heretics with overhead swings. Attack them from behind or execute an Active Parry.</p>
+                        <p style="font-size: 11px; margin: 4px 0 0 0; color: var(--ink-muted);">Wandering wastes in deep
+                            prayer, carrying heavy stone staves. They walk continuously and strike heretics with
+                            overhead swings. Attack them from behind or execute an Active Parry.</p>
                     </div>
                 </div>
 
@@ -747,7 +806,9 @@
                     <img src="wheelbroken.png" class="enemy-sprite" alt="Wheelbroken">
                     <div class="enemy-info">
                         <h3>WHEELBROKEN</h3>
-                        <p style="font-size: 11px; margin: 4px 0 0 0; color: var(--ink-muted);">Spirits bound to spiked execution wheels, spinning uncontrollably across platforms. Standard attacks will bounce off their front. Jump over them or perform a mid-air Pogo Strike.</p>
+                        <p style="font-size: 11px; margin: 4px 0 0 0; color: var(--ink-muted);">Spirits bound to spiked
+                            execution wheels, spinning uncontrollably across platforms. Standard attacks will bounce off
+                            their front. Jump over them or perform a mid-air Pogo Strike.</p>
                     </div>
                 </div>
 
@@ -755,7 +816,9 @@
                 <div class="enemy-box" style="margin-bottom: 0;">
                     <img src="warden.webp" class="enemy-sprite" style="width: 60px; height: 60px;" alt="The Warden">
                     <p style="font-size: 11px; margin: 0; padding-left: 5px;">
-                        The Warden of the Silent Sorrow guards the first gate. He swings a massive stone slab. Slide-dash under him when he leaps into the air to avoid the shockwave, then strike his back while he recovers.
+                        The Warden of the Silent Sorrow guards the first gate. He swings a massive stone slab.
+                        Slide-dash under him when he leaps into the air to avoid the shockwave, then strike his back
+                        while he recovers.
                     </p>
                 </div>
 
@@ -768,27 +831,28 @@
 
                 <h3>PRIE DIEU ALTARS</h3>
                 <p style="font-size: 11px; margin-bottom: 6px;">
-                    These stone shrines serve as checkpoints. Kneeling fully restores health and refuels empty Bile Vessels. However, doing so <span class="highlight">causes all defeated heretics in the level to respawn.</span>
+                    These stone shrines serve as checkpoints. Kneeling fully restores health and refuels empty Bile
+                    Vessels. However, doing so <span class="highlight">causes all defeated heretics in the level to
+                        respawn.</span>
                 </p>
 
                 <h3>MEA CULPA ALTARS</h3>
                 <p style="font-size: 11px; margin-bottom: 6px;">
-                    Spent your collected Tears of Atonement here. Spent them to permanently double your sword damage or expand your capacity to carry additional Bile Vessels.
+                    Spent your collected Tears of Atonement here. Spent them to permanently double your sword damage or
+                    expand your capacity to carry additional Bile Vessels.
                 </p>
 
-                <h3>KONAMI "ENRAGED" MODE</h3>
-                <p style="font-size: 11px; margin-bottom: 6px; border-left: 3px solid var(--gold); padding-left: 8px;">
-                    Input the sacred sequence: <strong>UP, UP, DOWN, DOWN, LEFT, RIGHT, LEFT, RIGHT, B, A</strong> during gameplay. The screen will shake, toggling the world into **Hard Mode**! Enraged Pilgrims become three times as tanky, and the Warden boss activates aggressive phases immediately. Toggle it again to return to normal and receive a bonus max health pool of 70 HP!
-                </p>
-
-                <h3>PLAYTEST GRACE CHEAT</h3>
-                <p style="font-size: 11px; margin-bottom: 6px;">
-                    Need a hand? Hold <span class="highlight">SELECT</span> and press <span class="highlight">UP</span> during gameplay to toggle absolute invincibility!
+                <h3>SECRET CODES</h3>
+                <p style="font-size: 11px; margin-bottom: 8px;">
+                    Ancient scrolls speak of a "Qo nai mei" ritual. It might have something to do with a certain button
+                    ritual.
                 </p>
 
                 <h3>VERTICAL ABYSS CONNECTIONS</h3>
                 <p style="font-size: 11px; margin-bottom: 0;">
-                    Not all falls are lethal! Certain pits, such as the bottom of Level 10, will drop you into hidden sub-levels (like Level 10 Sub 1) rather than killing you. Use these vertical paths to discover lost items and Tears!
+                    Not all falls are lethal! Certain pits, such as the bottom of Level 10, will drop you into hidden
+                    sub-levels rather than killing you. Use these vertical paths to discover lost
+                    items and Tears!
                 </p>
                 <div class="page-number">8</div>
             </div>
@@ -796,10 +860,15 @@
             <!-- PAGE 9: BACK COVER -->
             <div class="page cover" style="justify-content: flex-end; padding-bottom: 40px; border-color: var(--gold);">
                 <div class="back-cover-box">
-                    <p class="pixel-font" style="font-size: 11px; margin-top: 0; color: var(--gold);">THANKS FOR PLAYING!</p>
-                    <p style="font-size: 10px; margin-bottom: 15px; color: var(--nes-grey);">Download latest ROM updates at <span class="highlight" style="color: white; text-decoration: underline;">fjpolo.itch.io</span></p>
-                    <p style="font-size: 8px; border-top: 1px dashed #555; padding-top: 10px; margin: 0; line-height: 1.4; color: #aaa;">
-                        Our sincere respect and gratitude to <strong>The Game Kitchen</strong> for making the incredible masterpiece <em>Blasphemous</em>. This demake is a non-profit fan-made labor of love.
+                    <p class="pixel-font" style="font-size: 11px; margin-top: 0; color: var(--gold);">THANKS FOR
+                        PLAYING!</p>
+                    <p style="font-size: 10px; margin-bottom: 15px; color: var(--nes-grey);">Download latest ROM updates
+                        at <span class="highlight"
+                            style="color: white; text-decoration: underline;">fjpolo.itch.io</span></p>
+                    <p
+                        style="font-size: 8px; border-top: 1px dashed #555; padding-top: 10px; margin: 0; line-height: 1.4; color: #aaa;">
+                        Our sincere respect and gratitude to <strong>The Game Kitchen</strong> for making the incredible
+                        masterpiece <em>Blasphemous</em>. This demake is a non-profit fan-made labor of love.
                     </p>
                 </div>
                 <div style="margin-top: 25px;">
@@ -842,7 +911,7 @@
         function toggleBookMode() {
             const book = document.getElementById('manual-book');
             const btn = document.getElementById('toggle-view');
-            
+
             if (book.classList.contains('spread-mode')) {
                 book.classList.remove('spread-mode');
                 book.classList.add('stack-mode');

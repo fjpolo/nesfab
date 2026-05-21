@@ -1,5 +1,21 @@
 # Changes
 
+## [21.05.2026] - v858
+- Fix charge attack
+
+
+## [21.05.2026] - v858
+- Fix charge attack
+
+
+## [21.05.2026] - v858
+- Fix charge attack
+
+
+## [21.05.2026] - v858
+- Fix charge attack
+
+
 ## [20.05.2026] - v857
 - Fix charge attack purple flash; fervour attack Down+B; update manual
 

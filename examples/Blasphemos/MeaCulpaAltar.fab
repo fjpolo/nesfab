@@ -10,6 +10,10 @@ data /strings
         ( "CHARGE ATTACK (400 TEARS)" )
     [] altar_sword_bought
         ( "CHARGE ATTACK (UNLOCKED)" )
+    [] altar_fervour
+        ( "FERVOUR ATTACK (300 TEARS)" )
+    [] altar_fervour_bought
+        ( "FERVOUR ATTACK (UNLOCKED)" )
     [] altar_bile
         ( "BILE UPGRADE (200 TEARS)" )
     [] altar_exit
@@ -72,8 +76,12 @@ mode mea_culpa_altar_screen(U previous_level)
         write_altar_string_to_bg($2186, @altar_sword_bought)
     else
         write_altar_string_to_bg($2186, @altar_sword)
-    write_altar_string_to_bg($21C6, @altar_bile)
-    write_altar_string_to_bg($2206, @altar_exit)
+    if p.has_fervour_attack
+        write_altar_string_to_bg($21C6, @altar_fervour_bought)
+    else
+        write_altar_string_to_bg($21C6, @altar_fervour)
+    write_altar_string_to_bg($2206, @altar_bile)
+    write_altar_string_to_bg($2246, @altar_exit)
     write_altar_string_to_bg($2283, @altar_tears)
     write_altar_string_to_bg($228D, @altar_atk)
     write_altar_string_to_bg($2295, @altar_bile_stat)
@@ -137,11 +145,11 @@ mode mea_culpa_altar_screen(U previous_level)
         U pressed = pads[0].pressed
         if pressed & BUTTON_UP
             if prie_dieu_selected_option == 0
-                prie_dieu_selected_option = 3
+                prie_dieu_selected_option = 4
             else
                 prie_dieu_selected_option -= 1
         else if pressed & BUTTON_DOWN
-            if prie_dieu_selected_option == 3
+            if prie_dieu_selected_option == 4
                 prie_dieu_selected_option = 0
             else
                 prie_dieu_selected_option += 1
@@ -164,6 +172,15 @@ mode mea_culpa_altar_screen(U previous_level)
                     prie_dieu_selected_option = 0
                     break
             else if prie_dieu_selected_option == 2
+                // FERVOUR ATTACK UPGRADE
+                if total_tears_collected >= 300 && !p.has_fervour_attack
+                    total_tears_collected -= 300
+                    p.has_fervour_attack = true
+                    force_hud_update()
+                    cheat_shake_timer = 15
+                    prie_dieu_selected_option = 0
+                    break
+            else if prie_dieu_selected_option == 3
                 // BILE UPGRADE
                 if total_tears_collected >= 200 && p.max_bile_vessels < 3
                     total_tears_collected -= 200
@@ -173,7 +190,7 @@ mode mea_culpa_altar_screen(U previous_level)
                     cheat_shake_timer = 15
                     prie_dieu_selected_option = 0
                     break
-            else if prie_dieu_selected_option == 3
+            else if prie_dieu_selected_option == 4
                 // EXIT
                 prie_dieu_selected_option = 0
                 break
