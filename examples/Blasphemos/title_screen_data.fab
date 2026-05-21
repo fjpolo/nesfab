@@ -4,6 +4,10 @@
 // Title CHR bank index (MMC3 bank 0, separate from level CHR at bank 2)
 ct U TITLE_CHR_BANK = 0
 
+ct U TITLE_UBC = $0F
+
+
+
 // Load the raw title screen CHR tiles into MMC3 bank 0 (BG slot, $0000-$0FFF)
 // And load the Game Kitchen logo into the sprite slot ($1000-$1FFF)
 chrrom (0 * $2000)
@@ -15,8 +19,8 @@ chrrom ($E000)
     file(raw, "assets/dead_screen_bg.chr")
     file(fmt, "assets/font.png")
 
-// Universal Background Color
-ct U TITLE_UBC = $0F
+
+
 
 // BG sub-palette colors (3 colors per palette x 4 palettes = 12 values)
 ct U[12] title_bg_palette = U[12](

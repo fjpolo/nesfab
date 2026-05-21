@@ -169,8 +169,8 @@ nmi game_nmi()
         {MMC3_IRQ_DISABLE}(0)
         if game_state == GAME_STATE_GAME_OVER || game_state == GAME_STATE_MAP || game_state == GAME_STATE_WIN || game_state == GAME_STATE_MEA_CULPA_ALTAR
             if game_state == GAME_STATE_MEA_CULPA_ALTAR
-                mmc3_select(0, 64)
-                mmc3_select(1, 66)
+                mmc3_select(0, 60) // Font BG (1KB banks 60-61, font.png first 2KB)
+                mmc3_select(1, 62) // Font BG (1KB banks 62-63, font.png second 2KB)
             else
                 mmc3_select(0, current_level_chr << 3)
                 mmc3_select(1, (current_level_chr << 3) + 2)

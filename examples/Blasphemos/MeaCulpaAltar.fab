@@ -51,22 +51,23 @@ mode mea_culpa_altar_screen(U previous_level)
     SS saved_camera = p.camera_x
 
     // Map font to background
-    mmc3_select(0, 56)
-    mmc3_select(1, 58)
+    // font.png is at 1KB banks 60-63 (dead_screen_bg.chr occupies banks 56-59)
+    mmc3_select(0, 60)
+    mmc3_select(1, 62)
 
-    // Map font to sprites
-    mmc3_select(2, 56)
-    mmc3_select(3, 57)
-    mmc3_select(4, 58)
-    mmc3_select(5, 59)
+    // Map font to sprites (same 4KB block)
+    mmc3_select(2, 60)
+    mmc3_select(3, 61)
+    mmc3_select(4, 62)
+    mmc3_select(5, 63)
 
-    // Clear the screen area where we draw the menu
+    // Clear nametable + attribute table (960 tile bytes + 64 attr bytes = 1024)
+    // Attribute table MUST be cleared so text tiles use BG palette 0 (white)
     {PPUSTATUS}()
     for U nt = 0; nt < 2; nt += 1
         UU base = UU($2000) + (UU(nt) << 10)
-        // Clear all nametable bytes to blank tile ($00 / space)
         ppu_set_addr(base)
-        for UU i = 0; i < 960; i += 1
+        for UU i = 0; i < 1024; i += 1
             {PPUDATA}($00)
 
     // Draw static text strings to background nametable
@@ -86,10 +87,45 @@ mode mea_culpa_altar_screen(U previous_level)
     write_altar_string_to_bg($228D, @altar_atk)
     write_altar_string_to_bg($2295, @altar_bile_stat)
 
+    // Set up palette for the altar screen (white text on black background)
+    {PPUSTATUS}()
+    {PPUADDR}($3F)
+    {PPUADDR}($00)
+    // BG Palette 0: black bg, white text
+    {PPUDATA}($0F) // Universal background color (black)
+    {PPUDATA}($30) // White
+    {PPUDATA}($10) // Light gray
+    {PPUDATA}($00) // Dark gray
+    // BG Palette 1: black bg, gold text (for title)
+    {PPUDATA}($0F)
+    {PPUDATA}($28) // Yellow/gold
+    {PPUDATA}($18) // Orange
+    {PPUDATA}($08) // Dark orange
+    // BG Palette 2 & 3: unused, set to black
+    {PPUDATA}($0F)
+    {PPUDATA}($0F)
+    {PPUDATA}($0F)
+    {PPUDATA}($0F)
+    {PPUDATA}($0F)
+    {PPUDATA}($0F)
+    {PPUDATA}($0F)
+    {PPUDATA}($0F)
+    // Sprite Palette 0: cursor in white
+    {PPUDATA}($0F)
+    {PPUDATA}($30) // White
+    {PPUDATA}($10)
+    {PPUDATA}($00)
+    // Sprite Palettes 1-3: unused
+    for U pi = 0; pi < 12; pi += 1
+        {PPUDATA}($0F)
+
     // Restore PPU scroll and turn rendering on
+    {PPUSTATUS}()
+    {PPUADDR}($20)
+    {PPUADDR}($00)
     {PPUSCROLL}(0)
     {PPUSCROLL}(0)
-    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_NT_2000)
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | PPUCTRL_NT_2000)
     {PPUMASK}(PPUMASK_BG_ON | PPUMASK_SPR_ON | PPUMASK_NO_CLIP)
 
     is_start_pressed = false
