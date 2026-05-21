@@ -1,5 +1,21 @@
 # Changes
 
+## [21.05.2026] - v862
+- Optimize CHR Bank some more
+
+
+## [21.05.2026] - v862
+- Optimize CHR Bank some more
+
+
+## [21.05.2026] - v862
+- Optimize CHR Bank some more
+
+
+## [21.05.2026] - v862
+- Optimize CHR Bank some more
+
+
 ## [21.05.2026] - v861
 - Add cinematics and optimize CHR banks
 

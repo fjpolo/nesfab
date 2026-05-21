@@ -8,3 +8,4 @@ chrrom ((_index + 8) * $2000)
     file(fmt, #"path"#)
 chrrom ((_index + 8) * $2000 + $1000)
     file(fmt, "assets/sprite.png")
+
