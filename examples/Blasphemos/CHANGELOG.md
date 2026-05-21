@@ -1,5 +1,41 @@
 # Changes
 
+## [21.05.2026] - v861
+- Add cinematics and optimize CHR banks
+
+
+## [21.05.2026] - v861
+- Add cinematics and optimize CHR banks
+
+
+## [21.05.2026] - v861
+- Add cinematics and optimize CHR banks
+
+
+## [21.05.2026] - v861
+- Add cinematics and optimize CHR banks
+
+
+## [21.05.2026] - v861
+- Add cinematics and optimize CHR banks
+
+
+## [21.05.2026] - v861
+- Add cinematics and optimize CHR banks
+
+
+## [21.05.2026] - v861
+- Add cinematics and optimize CHR banks
+
+
+## [21.05.2026] - v861
+- Add cinematics and optimize CHR banks
+
+
+## [21.05.2026] - v861
+- Add cinematics and optimize CHR banks
+
+
 ## [21.05.2026] - v860
 - Fix HUD
 

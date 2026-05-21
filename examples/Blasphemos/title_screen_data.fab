@@ -10,8 +10,9 @@ chrrom (0 * $2000)
     file(raw, "assets/title_bg.chr")
     file(fmt, "assets/game_kitchen_logo.png")
 
-// Load font into a separate bank (Index 8 = $10000)
-chrrom ($10000)
+// Load Dead Screen background and font into MMC3 Bank 7 (Index 7 = $E000)
+chrrom ($E000)
+    file(raw, "assets/dead_screen_bg.chr")
     file(fmt, "assets/font.png")
 
 // Universal Background Color

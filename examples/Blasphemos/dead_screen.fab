@@ -62,11 +62,11 @@ mode dead_screen(U previous_level_index)
 
     // Bank-switch MMC3 to the dead CHR bank
     select_chr_8kb(DEAD_CHR_BANK)
-    // Map font (bank 8) to sprites just in case
-    mmc3_select(2, 64)
-    mmc3_select(3, 65)
-    mmc3_select(4, 66)
-    mmc3_select(5, 67)
+    // Map font (bank 7) to sprites just in case
+    mmc3_select(2, 56)
+    mmc3_select(3, 57)
+    mmc3_select(4, 58)
+    mmc3_select(5, 59)
 
     // Upload dead palette
     dead_load_palette()

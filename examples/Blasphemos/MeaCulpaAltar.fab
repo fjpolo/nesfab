@@ -51,14 +51,14 @@ mode mea_culpa_altar_screen(U previous_level)
     SS saved_camera = p.camera_x
 
     // Map font to background
-    mmc3_select(0, 64)
-    mmc3_select(1, 66)
+    mmc3_select(0, 56)
+    mmc3_select(1, 58)
 
     // Map font to sprites
-    mmc3_select(2, 64)
-    mmc3_select(3, 65)
-    mmc3_select(4, 66)
-    mmc3_select(5, 67)
+    mmc3_select(2, 56)
+    mmc3_select(3, 57)
+    mmc3_select(4, 58)
+    mmc3_select(5, 59)
 
     // Clear the screen area where we draw the menu
     {PPUSTATUS}()

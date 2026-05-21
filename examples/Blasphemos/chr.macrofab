@@ -1,10 +1,10 @@
 #:name:# 
 #:path:# 
 
-ct U chr_#name#_index = _index + 9 // Level CHR banks start at Bank 9, right after Bank 8 (Font)
+ct U chr_#name#_index = _index + 8 // Level CHR banks start at Bank 8, right after Bank 7 (Font)
 
 // Standard bank
-chrrom ((_index + 9) * $2000)
+chrrom ((_index + 8) * $2000)
     file(fmt, #"path"#)
-chrrom ((_index + 9) * $2000 + $1000)
+chrrom ((_index + 8) * $2000 + $1000)
     file(fmt, "assets/sprite.png")
