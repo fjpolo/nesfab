@@ -513,3 +513,10 @@ fn respawn_all_enemies()
     // Re-enable NMI & rendering!
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
     {PPUMASK}(PPUMASK_ON | PPUMASK_NO_CLIP)
+
+// Manually compile alternate Bank 26 for chr_2 (bg2.png + sprite2.png)
+// Saves 16KB of ROM space by skipping alternate banks for chr_1 and font!
+chrrom (26 * $2000)
+    file(fmt, "assets/bg2.png")
+chrrom (26 * $2000 + $1000)
+    file(fmt, "assets/sprite2.png")

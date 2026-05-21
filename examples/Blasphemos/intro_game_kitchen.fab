@@ -1,0 +1,102 @@
+// Boot Intro: The Game Kitchen logo splash screen
+// Displays centered in widescreen 160x96 pixels for exactly 3 seconds,
+// and then transitions to the Title Screen.
+
+
+fn logo_load_palette()
+    {PPUSTATUS}()
+    {PPUADDR}($3F)
+    {PPUADDR}($00)
+    // Palette 0: Black, Deep Crimson ($05), Cold Silver-Blue ($2C), White ($30)
+    {PPUDATA}($0F)
+    {PPUDATA}($05)
+    {PPUDATA}($2C)
+    {PPUDATA}($30)
+    
+    // Remaining palettes cleared to black
+    for U i = 0; i < 28; i += 1
+        {PPUDATA}($0F)
+
+fn logo_setup_nametable()
+    // Clear entire nametable at $2000 to solid black (tile 0)
+    {PPUSTATUS}()
+    {PPUADDR}($20)
+    {PPUADDR}($00)
+    for UU i = 0; i < 960; i += 1
+        {PPUDATA}(0)
+        
+    // Clear attribute table at $23C0 to 0
+    {PPUSTATUS}()
+    {PPUADDR}($23)
+    {PPUADDR}($C0)
+    for U i = 0; i < 64; i += 1
+        {PPUDATA}(0)
+
+    // Map the 20x12 widescreen window centered (Column 6, Row 9)
+    U tile_index = 0
+    for U r = 9; r < 21; r += 1
+        {PPUSTATUS}()
+        UU addr = $2000 + (UU(r) << 5) + 6
+        {PPUADDR}(addr.b)
+        {PPUADDR}(addr.a)
+        for U c = 0; c < 20; c += 1
+            {PPUDATA}(tile_index)
+            tile_index += 1
+
+mode play_intro_game_kitchen()
+: nmi game_nmi
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+
+    // Select background 4KB ($0000-$0FFF) from Bank 0's sprite half (pages 4 and 6)
+    mmc3_select(0, 4)
+    mmc3_select(1, 6)
+    
+    // Keep sprite banks safely set to standard level values to avoid corruption
+    mmc3_select(2, 0)
+    mmc3_select(3, 1)
+    mmc3_select(4, 2)
+    mmc3_select(5, 3)
+    
+    // Load palette and nametable
+    logo_load_palette()
+    logo_setup_nametable()
+
+    // Reset scroll and turn on rendering (BG only, no sprites)
+    {PPUSTATUS}()
+    {PPUADDR}($20)
+    {PPUSCROLL}(0)
+    {PPUSCROLL}(0)
+    {PPUADDR}($00)
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_NT_2000)
+    {PPUMASK}(PPUMASK_BG_ON | PPUMASK_NO_CLIP)
+
+    is_start_pressed = false
+    palette_dirty = false // Stop NMI from overriding our custom palette
+
+    // Wait exactly 3 seconds (180 NMI frames)
+    U post_pause = 0
+    while post_pause < 180
+        hide_oam(0) // Keep sprites fully hidden
+        palette_dirty = false // Actively prevent NMI palette overrides
+        nmi
+        ppu_upload_oam_poll_pads(0)
+        update_pads()
+        
+        // Skip with START, A, or B
+        if is_start_pressed || (pads[0].pressed & (BUTTON_A | BUTTON_B))
+            is_start_pressed = false
+            break
+            
+        post_pause += 1
+
+    // Disable rendering before switching to Title Screen
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    
+    game_state = GAME_STATE_TITLE
+    current_level_index = LEVEL_TITLE
+    goto mode title_screen(current_level_index)
+    : preserves /game

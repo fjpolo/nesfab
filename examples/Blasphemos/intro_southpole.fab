@@ -1,0 +1,111 @@
+// Intro boot cinematic for BlasNESmous using MMC3 CHR bank switching
+// Displays ONLY the widescreen static corpses frame (Slide 10) for exactly 5 seconds,
+// and then transitions to the Title Screen.
+
+// We don't define the CHRROM here because silent_sorrow_10.png is already defined in intro_silent_sorrow.fab in Bank 14!
+
+fn intro_load_palette()
+    {PPUSTATUS}()
+    {PPUADDR}($3F)
+    {PPUADDR}($00)
+    // Palette 0: Black, Deep Crimson ($05), Cold Silver-Blue ($2C), White ($30)
+    {PPUDATA}($0F)
+    {PPUDATA}($05)
+    {PPUDATA}($2C)
+    {PPUDATA}($30)
+    
+    // Remaining palettes cleared to black
+    for U i = 0; i < 28; i += 1
+        {PPUDATA}($0F)
+
+fn intro_setup_nametable()
+    // 1. Clear the entire nametable at $2000 to tile 0 (which is the top-left tile of the screen - pure black)
+    // This prevents dither pattern noise on the rest of the screen.
+    {PPUSTATUS}()
+    {PPUADDR}($20)
+    {PPUADDR}($00)
+    for UU i = 0; i < 960; i += 1
+        {PPUDATA}(0)
+        
+    // Clear attribute table at $23C0 to 0
+    {PPUSTATUS}()
+    {PPUADDR}($23)
+    {PPUADDR}($C0)
+    for U i = 0; i < 64; i += 1
+        {PPUDATA}(0)
+
+    // 2. Map the 20x12 sequential tile window centered on the screen (cinematic widescreen 160x96)
+    // Horizontal offset: column 6 ((32 - 20) / 2 = 6)
+    // Vertical offset: row 9 ((30 - 12) / 2 = 9)
+    U tile_index = 0
+    for U r = 9; r < 21; r += 1
+        {PPUSTATUS}()
+        UU addr = $2000 + (UU(r) << 5) + 6
+        {PPUADDR}(addr.b)
+        {PPUADDR}(addr.a)
+        for U c = 0; c < 20; c += 1
+            {PPUDATA}(tile_index)
+            tile_index += 1
+
+// Custom frame selector function
+fn select_southpole_corpses_frame()
+    // Select background 4KB ($0000-$0FFF) from Bank 14 (where corpses frame is loaded)
+    mmc3_select(0, 14 << 3)
+    mmc3_select(1, (14 << 3) + 2)
+    
+    // Keep sprite banks safely set to standard level values to avoid corruption
+    mmc3_select(2, 0)
+    mmc3_select(3, 1)
+    mmc3_select(4, 2)
+    mmc3_select(5, 3)
+
+mode play_intro_southpole()
+: nmi game_nmi
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+
+    // Select the CHR bank for the corpses frame
+    select_southpole_corpses_frame()
+    
+    // Load palette and nametable
+    intro_load_palette()
+    intro_setup_nametable()
+
+    // Reset scroll and turn on rendering (BG only, no sprites)
+    {PPUSTATUS}()
+    {PPUADDR}($20)
+    {PPUSCROLL}(0)
+    {PPUSCROLL}(0)
+    {PPUADDR}($00)
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_NT_2000)
+    {PPUMASK}(PPUMASK_BG_ON | PPUMASK_NO_CLIP)
+
+    is_start_pressed = false
+    palette_dirty = false // Stop NMI from overriding our custom palette
+
+    // Wait exactly 5 seconds (300 NMI frames)
+    UU post_pause = 0
+    while post_pause < 300
+        hide_oam(0) // Keep sprites fully hidden from any boot remnants
+        palette_dirty = false // Actively prevent NMI palette overrides
+        nmi
+        ppu_upload_oam_poll_pads(0)
+        update_pads()
+        
+        // Skip with START, A, or B
+        if is_start_pressed || (pads[0].pressed & (BUTTON_A | BUTTON_B))
+            is_start_pressed = false
+            break
+            
+        post_pause += 1
+
+    // Fade out / disable rendering before switching to Title Screen
+    {PPUCTRL}(0)
+    {PPUMASK}(0)
+    hide_oam(0)
+    
+    game_state = GAME_STATE_TITLE
+    current_level_index = LEVEL_TITLE
+    goto mode title_screen(current_level_index)
+    : preserves /game

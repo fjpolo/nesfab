@@ -10,7 +10,7 @@ vars /hud
     U current_level_chr = 0
 
 // HUD Bank Definition
-ct U CHR_HUD = 30 // Using bank 30 to be safely away from level data
+ct U CHR_HUD = 7 // Place HUD right after the cinematic banks (1 to 6)
 chrrom (CHR_HUD * $2000)
     file(fmt, "assets/hud.png")
     file(fmt, "assets/sprite.png")

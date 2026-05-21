@@ -217,30 +217,9 @@ mode main()
     {PPUCTRL}(0)
     {PPUMASK}(0)
     hide_oam(0)    
-    p.level_index = FIRST_LEVEL_INDEX
-    current_level_index = FIRST_LEVEL_INDEX
-    p.is_initialised = false
-    p.camera_x = 0
-    load_level(levels[current_level_index])
-    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
-
-    while true
-        switch game_state
-            case GAME_STATE_TITLE
-                current_level_index = LEVEL_TITLE
-                goto mode title_screen(current_level_index)
-                : preserves /game
-                break
-            case GAME_STATE_MAP
-                goto mode map_screen(current_level_index)
-                : preserves /game
-                break
-            default
-                current_level_index = p.level_index
-                p.is_initialised = false
-                goto mode play_level(current_level_index)
-                : preserves /game
-                break
+    game_state = GAME_STATE_TITLE
+    goto mode play_intro_game_kitchen()
+    : preserves /game
 
 mode play_level(U level_index)
 : nmi game_nmi

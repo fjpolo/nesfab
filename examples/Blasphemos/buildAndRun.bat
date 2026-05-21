@@ -1,1 +1,1 @@
-cls && python scratch/mapfab_to_json.py && python scratch/split_maps.py && python update_version.py && c:\Workspace\NES\nesfab_1_8\nesfab.exe .\BlasNESmous.cfg & python analyzeROM.py & c:\Workspace\NES\Mesen\Mesen.exe BlasNESmous.nes
+cls && python scratch/mapfab_to_json.py && python scratch/split_maps.py && python update_version.py && c:\Workspace\NES\nesfab_1_8\nesfab.exe .\BlasNESmous.cfg & python analyzeROM.py & python analyzeCHR.py & c:\Workspace\NES\Mesen\Mesen.exe BlasNESmous.nes
