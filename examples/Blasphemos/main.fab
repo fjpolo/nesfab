@@ -145,6 +145,7 @@ nmi game_nmi()
     if palette_dirty
         ppu_upload_palette()
         palette_dirty = false
+        {PPUSTATUS}()
 
     // Update button counters before potential early return
     if pads[0].held & BUTTON_SELECT
@@ -192,13 +193,13 @@ nmi game_nmi()
         ppu_upload_scroll()
         update_hud_tiles() // Call after scroll upload to ensure priority
         
-        // Set HUD scroll (0,0) and properly reset PPUADDR
+        // Reset scroll to (0,0) for the HUD split
+        // PPUSTATUS resets the latch, then two PPUSCROLL writes set X and Y scroll.
+        // Do NOT mix PPUADDR and PPUSCROLL writes — they share internal state.
         {PPUSTATUS}()
-        {PPUADDR}($20)
         {PPUSCROLL}(0)
         {PPUSCROLL}(0)
-        {PPUADDR}($00)
-        {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+        {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | PPUCTRL_NT_2000)
 
         // Flash red when hurt, solid red when dead
         if warden_active && (warden_state == WARDEN_STATE_DEAD || (warden_hurt_timer > 0 && (frame_counter & 2)))

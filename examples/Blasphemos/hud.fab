@@ -23,7 +23,7 @@ fn update_hud_tiles()
         return
     
     {PPUSTATUS}()
-    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
+    {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000 | PPUCTRL_NT_2000)
 
     if p.health != last_hud_hp
         last_hud_hp = p.health
