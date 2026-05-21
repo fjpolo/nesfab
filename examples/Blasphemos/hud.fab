@@ -22,87 +22,104 @@ fn update_hud_tiles()
     if p.health == last_hud_hp && p.fervour == last_hud_fervour && p.current_bile_vessels == last_hud_bile && p.attack_power == last_hud_ap && total_tears_collected == last_hud_tears && total_bones_collected == last_hud_bones
         return
     
-    last_hud_hp = p.health
-    last_hud_fervour = p.fervour
-    last_hud_bile = p.current_bile_vessels
-    last_hud_ap = p.attack_power
-    last_hud_tears = total_tears_collected
-    last_hud_bones = total_bones_collected
-
     {PPUSTATUS}()
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
-    
-    // Update both nametables to handle horizontal scrolling
-    for U nt = 0; nt < 2; nt += 1
-        UU base = UU($2000) + (UU(nt) << 10)
-        
-        // Row 0: Health and Attack Power
-        ppu_set_addr(base + 1) // Row 0, Col 1
-        for U i = 0; i < 7; i += 1
-            if p.health >= U((i + 1) * 10)
-                {PPUDATA}($06) // Health icon
-            else
-                {PPUDATA}($00)
-        
-        // Fervour Bar on Row 0, Col 11 to 15 (5 units max, each unit = 10 Fervour)
-        ppu_set_addr(base + 11)
-        for U i = 0; i < 5; i += 1
-            if p.fervour >= U((i + 1) * 10)
-                {PPUDATA}($27) // Filled fervour orb icon
-            else
-                {PPUDATA}($00) // Empty
-        
-        // Attack Power at the end of Row 0
-        ppu_set_addr(base + 28)
+
+    if p.health != last_hud_hp
+        last_hud_hp = p.health
+        U hp_units = 0
+        U temp_hp = p.health
+        while temp_hp >= 10
+            temp_hp -= 10
+            hp_units += 1
+        for U nt = 0; nt < 2; nt += 1
+            UU base = UU($2000) + (UU(nt) << 10)
+            ppu_set_addr(base + 1)
+            for U i = 0; i < 7; i += 1
+                if hp_units > i
+                    {PPUDATA}($06)
+                else
+                    {PPUDATA}($00)
+
+    if p.fervour != last_hud_fervour
+        last_hud_fervour = p.fervour
+        U fervour_units = 0
+        U temp_fervour = p.fervour
+        while temp_fervour >= 10
+            temp_fervour -= 10
+            fervour_units += 1
+        for U nt = 0; nt < 2; nt += 1
+            UU base = UU($2000) + (UU(nt) << 10)
+            ppu_set_addr(base + 11)
+            for U i = 0; i < 5; i += 1
+                if fervour_units > i
+                    {PPUDATA}($27)
+                else
+                    {PPUDATA}($00)
+
+    if p.attack_power != last_hud_ap
+        last_hud_ap = p.attack_power
         U ap_tens = 0
         U ap_ones = p.attack_power
         while ap_ones >= 10
             ap_ones -= 10
             ap_tens += 1
-        {PPUDATA}(get_digit_tile(ap_tens))
-        {PPUDATA}(get_digit_tile(ap_ones))
+        for U nt = 0; nt < 2; nt += 1
+            UU base = UU($2000) + (UU(nt) << 10)
+            ppu_set_addr(base + 28)
+            {PPUDATA}(get_digit_tile(ap_tens))
+            {PPUDATA}(get_digit_tile(ap_ones))
 
-        // Row 1: Bile Vessels and Bones
-        ppu_set_addr(base + 32 + 1) // Row 1, Col 1
-        for U i = 0; i < p.max_bile_vessels; i += 1
-            if p.current_bile_vessels > i
-                {PPUDATA}($05) // Bile icon
-            else
-                {PPUDATA}($00)
-        
-        // Bones in the middle of Row 1 (Bones collected / Total bones (07)) at Col 21
-        ppu_set_addr(base + 32 + 21)
+    if p.current_bile_vessels != last_hud_bile
+        last_hud_bile = p.current_bile_vessels
+        for U nt = 0; nt < 2; nt += 1
+            UU base = UU($2000) + (UU(nt) << 10)
+            ppu_set_addr(base + 32 + 1)
+            for U i = 0; i < p.max_bile_vessels; i += 1
+                if p.current_bile_vessels > i
+                    {PPUDATA}($05)
+                else
+                    {PPUDATA}($00)
+
+    if total_bones_collected != last_hud_bones
+        last_hud_bones = total_bones_collected
         U b_tens = 0
         U b_ones = total_bones_collected
         while b_ones >= 10
             b_ones -= 10
             b_tens += 1
-        {PPUDATA}(get_digit_tile(b_tens))
-        {PPUDATA}(get_digit_tile(b_ones))
-        {PPUDATA}($4A) // '/' character tile
-        {PPUDATA}(get_digit_tile(0))
-        {PPUDATA}(get_digit_tile(7))
+        for U nt = 0; nt < 2; nt += 1
+            UU base = UU($2000) + (UU(nt) << 10)
+            ppu_set_addr(base + 32 + 21)
+            {PPUDATA}(get_digit_tile(b_tens))
+            {PPUDATA}(get_digit_tile(b_ones))
+            {PPUDATA}($4A) // '/'
+            {PPUDATA}(get_digit_tile(0))
+            {PPUDATA}(get_digit_tile(7))
 
-        // Tears of Atonement at the end of Row 1 (4 digits starting at Col 28)
-        ppu_set_addr(base + 32 + 28)
+    if total_tears_collected != last_hud_tears
+        last_hud_tears = total_tears_collected
         UU tears = total_tears_collected
-        U thousands = 0
+        U t_thousands = 0
         while tears >= 1000
             tears -= 1000
-            thousands += 1
-        U hundreds = 0
+            t_thousands += 1
+        U t_hundreds = 0
         while tears >= 100
             tears -= 100
-            hundreds += 1
-        U tens = 0
-        U ones = U(tears)
-        while ones >= 10
-            ones -= 10
-            tens += 1
-        {PPUDATA}(get_digit_tile(thousands))
-        {PPUDATA}(get_digit_tile(hundreds))
-        {PPUDATA}(get_digit_tile(tens))
-        {PPUDATA}(get_digit_tile(ones))
+            t_hundreds += 1
+        U t_tens = 0
+        U t_ones = U(tears)
+        while t_ones >= 10
+            t_ones -= 10
+            t_tens += 1
+        for U nt = 0; nt < 2; nt += 1
+            UU base = UU($2000) + (UU(nt) << 10)
+            ppu_set_addr(base + 32 + 28)
+            {PPUDATA}(get_digit_tile(t_thousands))
+            {PPUDATA}(get_digit_tile(t_hundreds))
+            {PPUDATA}(get_digit_tile(t_tens))
+            {PPUDATA}(get_digit_tile(t_ones))
 
 fn clear_hud_rows()
     {PPUSTATUS}()
@@ -115,3 +132,7 @@ fn clear_hud_rows()
 fn force_hud_update()
     last_hud_hp = 255
     last_hud_fervour = 255
+    last_hud_bile = 255
+    last_hud_ap = 255
+    last_hud_tears = 65535
+    last_hud_bones = 255

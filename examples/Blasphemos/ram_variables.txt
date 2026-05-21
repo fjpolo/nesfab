@@ -113,13 +113,13 @@ is_select_pressed                        1        $0316
 select_counter                           1        $0317
 pads                                     3        $0318, $031A, $031C
 puf_lock                                 1        $031E
-current_level_chr                        1        $031F
-last_hud_hp                              1        $0320
-last_hud_fervour                         1        $0321
-last_hud_bile                            1        $0322
-last_hud_ap                              1        $0323
-last_hud_tears                           2        $0324-$0325
-last_hud_bones                           1        $0326
+last_hud_hp                              1        $031F
+last_hud_fervour                         1        $0320
+last_hud_bile                            1        $0321
+last_hud_ap                              1        $0322
+last_hud_tears                           2        $0323-$0324
+last_hud_bones                           1        $0325
+current_level_chr                        1        $0326
 keys                                     1        $0327
 key_y                                    1        $033D
 key_x                                    1        $0353

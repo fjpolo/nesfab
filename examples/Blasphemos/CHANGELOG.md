@@ -1,5 +1,45 @@
 # Changes
 
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
+## [21.05.2026] - v859
+- Make Fervour attack purchasable
+
+
 ## [21.05.2026] - v858
 - Fix charge attack
 

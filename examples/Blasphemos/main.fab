@@ -192,9 +192,12 @@ nmi game_nmi()
         ppu_upload_scroll()
         update_hud_tiles() // Call after scroll upload to ensure priority
         
-        // Set HUD scroll (0,0)
+        // Set HUD scroll (0,0) and properly reset PPUADDR
+        {PPUSTATUS}()
+        {PPUADDR}($20)
         {PPUSCROLL}(0)
         {PPUSCROLL}(0)
+        {PPUADDR}($00)
         {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
 
         // Flash red when hurt, solid red when dead
