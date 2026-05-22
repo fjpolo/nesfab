@@ -1,5 +1,37 @@
 # Changes
 
+## [22.05.2026] - v877
+- Fix build
+
+
+## [22.05.2026] - v877
+- Fix build
+
+
+## [22.05.2026] - v877
+- Fix build
+
+
+## [22.05.2026] - v877
+- Fix build
+
+
+## [22.05.2026] - v877
+- Fix build
+
+
+## [22.05.2026] - v877
+- Fix build
+
+
+## [22.05.2026] - v877
+- Fix build
+
+
+## [22.05.2026] - v877
+- Fix build
+
+
 ## [22.05.2026] - v876
 - Move scripts and screenshots
 

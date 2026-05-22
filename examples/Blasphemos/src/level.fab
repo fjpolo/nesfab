@@ -5,7 +5,7 @@
  */
 
 // Load the .json file, calling the macros for each definition.
-mapfab(raw, "blasnesmous.json", "chr", "palette", "metatiles", "level")
+mapfab(raw, "../blasnesmous.json", "chr", "palette", "metatiles", "level")
 
 macro("pool_contiguous", "EnragedPilgrim", "4", "enraged_pilgrims", "/game")
 macro("pool_contiguous", "Crucified", "4", "crucifieds", "/game")
@@ -517,6 +517,6 @@ fn respawn_all_enemies()
 // Manually compile alternate Bank 25 for chr_2 (bg2.png + sprite2.png)
 // Saves 16KB of ROM space by skipping alternate banks for chr_1 and font!
 chrrom (25 * $2000)
-    file(fmt, "assets/bg2.png")
+    file(fmt, "../assets/bg2.png")
 chrrom (25 * $2000 + $1000)
-    file(fmt, "assets/sprite2.png")
+    file(fmt, "../assets/sprite2.png")

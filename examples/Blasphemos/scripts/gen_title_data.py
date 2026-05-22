@@ -13,7 +13,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.join(SCRIPT_DIR, '..')
 NSS_PATH  = os.path.join(BASE_DIR, 'assets', 'TitleScreen.nss')
 NAM_PATH  = os.path.join(BASE_DIR, 'assets', 'TitleScreen.nam')
-FAB_PATH  = os.path.join(BASE_DIR, 'title_screen_data.fab')
+FAB_PATH  = os.path.join(BASE_DIR, 'src/title_screen_data.fab')
 
 
 def decode_nss_bytes(s):

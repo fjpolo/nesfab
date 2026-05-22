@@ -57,7 +57,7 @@ def analyze_nes_memory(labels_file="BlasNESmous.mlb"):
                         continue
 
     # 2. --- SAVE VARIABLE LIST ---
-    list_path = "ram_variables.txt"
+    list_path = "analysis/ram_variables.txt"
     with open(list_path, "w") as f:
         f.write(f"{'Variable Name':<40} {'Size':<8} {'Address Range(s)'}\n")
         f.write("=" * 80 + "\n")
@@ -111,7 +111,7 @@ def analyze_nes_memory(labels_file="BlasNESmous.mlb"):
         plt.text(65, 6, "White: Free RAM", color='gray')
 
         # SAVE
-        output_path = "memory_usage.png"
+        output_path = "analysis/memory_usage.png"
         plt.savefig(output_path, bbox_inches='tight')
         print(f"Success! Heatmap saved to: {os.path.join(os.getcwd(), output_path)}")
         

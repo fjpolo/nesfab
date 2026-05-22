@@ -7,5 +7,5 @@ ct U chr_#name#_index = _index + 8 // Level CHR banks start at Bank 8, right aft
 chrrom ((_index + 8) * $2000)
     file(fmt, #"path"#)
 chrrom ((_index + 8) * $2000 + $1000)
-    file(fmt, "assets/sprite.png")
+    file(fmt, "../assets/sprite.png")
 

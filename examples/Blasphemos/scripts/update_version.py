@@ -65,7 +65,7 @@ def main():
 
     update_changelog(version_string, commit_message)
 
-    files_to_update = ["title_screen.fab"]
+    files_to_update = ["src/title_screen.fab"]
     
     for filename in files_to_update:
         if os.path.exists(filename):

@@ -17,9 +17,9 @@ end
 -- Helper to dynamically find variable addresses from ram_variables.txt
 function get_var_address(var_name, fallback)
     local paths = {
-        "ram_variables.txt",
-        "C:\\Workspace\\nesfab\\nesfab\\examples\\Blasphemos\\ram_variables.txt",
-        "c:\\Workspace\\nesfab\\nesfab\\examples\\Blasphemos\\ram_variables.txt"
+        "analysis/ram_variables.txt",
+        "C:\\Workspace\\nesfab\\nesfab\\examples\\Blasphemos\\analysis\\ram_variables.txt",
+        "c:\\Workspace\\nesfab\\nesfab\\examples\\Blasphemos\\analysis\\ram_variables.txt"
     }
     for _, path in ipairs(paths) do
         local file = io.open(path, "r")

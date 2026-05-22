@@ -86,7 +86,7 @@ def analyze_scanline_density(sprites):
     return len(sprites), max_density, densest_y, width, height
 
 def main():
-    player_fab = "player.fab"
+    player_fab = "src/player.fab"
     print(f"Parsing player metasprites in {player_fab}...")
     metasprites = parse_metasprites(player_fab)
     

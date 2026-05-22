@@ -22,4 +22,4 @@ ct U[12] dead_bg_palette = U[12](
 // Nametable + attributes loaded from binary .nam file
 data /dead
     [] dead_nam
-        file(raw, "assets/dead_screen.nam")
+        file(raw, "../assets/dead_screen.nam")

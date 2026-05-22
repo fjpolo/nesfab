@@ -39,7 +39,7 @@ def parse_physics_constants(file_path):
     return constants
 
 def main():
-    player_fab = "player.fab"
+    player_fab = "src/player.fab"
     print(f"Parsing kinematic bounds from {player_fab}...")
     phys = parse_physics_constants(player_fab)
     

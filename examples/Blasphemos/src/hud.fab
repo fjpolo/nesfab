@@ -12,8 +12,8 @@ vars /hud
 // HUD Bank Definition
 ct U CHR_HUD = 6 // Place HUD right after the cinematic banks (1 to 5)
 chrrom (CHR_HUD * $2000)
-    file(fmt, "assets/hud.png")
-    file(fmt, "assets/sprite.png")
+    file(fmt, "../assets/hud.png")
+    file(fmt, "../assets/sprite.png")
 
 fn get_digit_tile(U digit) U
     return $40 + digit

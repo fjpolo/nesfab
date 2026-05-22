@@ -9,31 +9,31 @@ ct U[11] SORROW_OFFSETS        = U[11](0, 0, 0, 0, 4, 0, 0, 4, 0, 4, 0)
 
 // Bank 1: Widescreen Text Frames (0, 1, 3, 5 - heavily deduplicated!)
 chrrom (1 * $2000)
-    file(raw, "assets/silent_sorrow_text.chr")
+    file(raw, "../assets/silent_sorrow_text.chr")
 
 // Bank 2: Artwork 2 & 4
 chrrom (2 * $2000)
-    file(fmt, "assets/silent_sorrow_2.png")
+    file(fmt, "../assets/silent_sorrow_2.png")
 chrrom (2 * $2000 + $1000)
-    file(fmt, "assets/silent_sorrow_4.png")
+    file(fmt, "../assets/silent_sorrow_4.png")
 
 // Bank 3: Artwork 6 & 7
 chrrom (3 * $2000)
-    file(fmt, "assets/silent_sorrow_6.png")
+    file(fmt, "../assets/silent_sorrow_6.png")
 chrrom (3 * $2000 + $1000)
-    file(fmt, "assets/silent_sorrow_7.png")
+    file(fmt, "../assets/silent_sorrow_7.png")
 
 // Bank 4: Artwork 8 & 9
 chrrom (4 * $2000)
-    file(fmt, "assets/silent_sorrow_8.png")
+    file(fmt, "../assets/silent_sorrow_8.png")
 chrrom (4 * $2000 + $1000)
-    file(fmt, "assets/silent_sorrow_9.png")
+    file(fmt, "../assets/silent_sorrow_9.png")
 
 // Bank 5: Artwork 10 & Sprite
 chrrom (5 * $2000)
-    file(fmt, "assets/silent_sorrow_10.png")
+    file(fmt, "../assets/silent_sorrow_10.png")
 chrrom (5 * $2000 + $1000)
-    file(fmt, "assets/sprite.png") // Align block 5 offset 4KB with standard sprites
+    file(fmt, "../assets/sprite.png") // Align block 5 offset 4KB with standard sprites
 
 
 fn sorrow_load_palette()

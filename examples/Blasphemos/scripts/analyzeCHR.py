@@ -105,8 +105,8 @@ def analyze_chr():
     # Footer
     draw.text((padding_x, img_h - 25), "Legend:   [ Turquoise ] Used Graphic Tile      [ Dark Gray ] Empty / Available Space", fill="#A3A3AC", font=font_sub)
     
-    usage_img.save("chr_usage.png")
-    print("Success! Heatmap saved to: chr_usage.png")
+    usage_img.save("analysis/chr_usage.png")
+    print("Success! Heatmap saved to: analysis/chr_usage.png")
     
     # ----------------------------------------------------
     # IMAGE 2: chr_sheet.png (Rendered 2bpp CHR Tile Sheet)
@@ -171,8 +171,8 @@ def analyze_chr():
     for c in range(1, 8):
         draw_sheet.line([(c * 128, 0), (c * 128, sheet_h - 1)], fill="#8B0000", width=1)
         
-    sheet_img.save("chr_sheet.png")
-    print("Success! Rendered tile sheet saved to: chr_sheet.png")
+    sheet_img.save("analysis/chr_sheet.png")
+    print("Success! Rendered tile sheet saved to: analysis/chr_sheet.png")
     
 if __name__ == "__main__":
     analyze_chr()

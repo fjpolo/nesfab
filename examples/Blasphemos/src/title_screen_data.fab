@@ -11,13 +11,13 @@ ct U TITLE_UBC = $0F
 // Load the raw title screen CHR tiles into MMC3 bank 0 (BG slot, $0000-$0FFF)
 // And load the Game Kitchen logo into the sprite slot ($1000-$1FFF)
 chrrom (0 * $2000)
-    file(raw, "assets/title_bg.chr")
-    file(fmt, "assets/game_kitchen_logo.png")
+    file(raw, "../assets/title_bg.chr")
+    file(fmt, "../assets/game_kitchen_logo.png")
 
 // Load Dead Screen background and font into MMC3 Bank 7 (Index 7 = $E000)
 chrrom ($E000)
-    file(raw, "assets/dead_screen_bg.chr")
-    file(fmt, "assets/font.png")
+    file(raw, "../assets/dead_screen_bg.chr")
+    file(fmt, "../assets/font.png")
 
 
 
@@ -37,4 +37,4 @@ ct U[12] title_bg_palette = U[12](
 // Nametable + attributes loaded from binary .nam file (960 + 64 = 1024 bytes)
 data /title
     [] title_nam
-        file(raw, "assets/TitleScreen.nam")
+        file(raw, "../assets/TitleScreen.nam")

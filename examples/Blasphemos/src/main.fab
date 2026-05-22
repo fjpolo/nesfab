@@ -3,7 +3,7 @@
  * Based on LuciYFer engine
  */
 
-audio(puf1_music, "assets/blasphemous_music.txt")
+audio(puf1_music, "../assets/blasphemous_music.txt")
 audio(puf1_sfx)
 
 // Button constants

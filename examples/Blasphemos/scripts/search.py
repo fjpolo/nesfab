@@ -2,7 +2,7 @@ import os
 
 keywords = ["frame_counter"]
 
-path = "ram_variables.txt"
+path = "analysis/ram_variables.txt"
 try:
     with open(path, "r", encoding="utf-8", errors="ignore") as f:
         for line_num, line in enumerate(f, 1):
