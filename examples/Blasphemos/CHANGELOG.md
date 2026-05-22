@@ -1,5 +1,13 @@
 # Changes
 
+## [22.05.2026] - v871
+- Fix last commit
+
+
+## [22.05.2026] - v871
+- Fix last commit
+
+
 ## [22.05.2026] - v870
 - Add metasprite scanline overlap analyzer to build scripts
 
