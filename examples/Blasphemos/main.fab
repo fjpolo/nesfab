@@ -73,7 +73,6 @@ vars /game
     U total_bones_collected = 0
     UU total_tears_collected = 0
     U invincibility_text_timer = 0
-    U spawn_scale_timer = 0         // Counts 64->0 on Level 1 entry for grow-in animation
 
 data /game
     [] konami_code
@@ -259,10 +258,6 @@ mode play_level(U level_index)
         p.y = SSF(128)
         p.yspeed = 0
 
-    // Trigger grow-in spawn animation on Level 1 entry
-    if current_level_index == LEVEL_L1
-        spawn_scale_timer = 64
-
     load_level_finish()
 
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_SPR_PT_1000)
@@ -424,14 +419,7 @@ fn update_sprites()
         draw_x += 8
 
     if p.hurt_timer == 0 || (frame_counter & 2) == 0
-        if spawn_scale_timer > 0
-            spawn_scale_timer -= 1
-            // y_scale: 8 = fully squashed to feet, 0 = full size
-            // Timer starts at 64 → high compression. Counts down → grows to full.
-            U y_scale = min(U(8), spawn_scale_timer >> 2)
-            o = push_oam_anim_palette_scaled(o, draw_x, SS(p.y) + p.h, p.anim_state, 0, attr_xor, y_scale)
-        else
-            o = push_oam_anim_palette(o, draw_x, SS(p.y) + p.h, p.anim_state, 0, attr_xor)
+        o = push_oam_anim_palette(o, draw_x, SS(p.y) + p.h, p.anim_state, 0, attr_xor)
 
     // Stage 1.5: Items (High priority to avoid 64-sprite limit drops)
     o = draw_item_bones(o)
@@ -685,8 +673,13 @@ mode map_screen(U previous_level)
             // Sub-room pixel offset: normalize p.x by the GAMEPLAY level's pixel width
             // (saved before load_level(@lev_map) overwrote current_level_width).
             // saved_level_width cols × 16px/col = total pixel span. Scale to 0..7 map pixels.
-            SS level_total_px = SS(saved_level_width) << 4
-            SS sub_x = SS(p.x) * 8 / level_total_px   // 0..7
+            U divisor = saved_level_width << 1
+            U sub_x_int = 0
+            SS temp_x = p.x
+            while temp_x >= SS(divisor)
+                temp_x -= SS(divisor)
+                sub_x_int += 1
+            SS sub_x = SS(sub_x_int)
             SS map_px = (SS(pc.x) << 3) + sub_x
             SS map_py = ((SS(pc.y) + 1) << 3) + (SS(p.y) >> 4) - 11
             set_oam(o, map_px.a, map_py.a, $3E, 1) // Using Palette 1

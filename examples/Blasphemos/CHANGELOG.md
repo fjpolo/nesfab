@@ -1,5 +1,29 @@
 # Changes
 
+## [22.05.2026] - v876
+- Move scripts and screenshots
+
+
+## [22.05.2026] - v876
+- Move scripts and screenshots
+
+
+## [22.05.2026] - v876
+- Move scripts and screenshots
+
+
+## [22.05.2026] - v876
+- Move scripts and screenshots
+
+
+## [22.05.2026] - v876
+- Move scripts and screenshots
+
+
+## [22.05.2026] - v876
+- Move scripts and screenshots
+
+
 ## [22.05.2026] - v874
 - Fix jump wall clip
 
