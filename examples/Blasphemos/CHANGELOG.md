@@ -1,5 +1,13 @@
 # Changes
 
+## [22.05.2026] - v872
+- Add more analysis tools
+
+
+## [22.05.2026] - v872
+- Add more analysis tools
+
+
 ## [22.05.2026] - v871
 - Fix last commit
 

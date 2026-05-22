@@ -3,4 +3,5 @@ clear && python3 scratch/mapfab_to_json.py && python3 scratch/split_maps.py && p
 python3 analyzeROM.py
 python3 scratch/analyze_metasprites.py
 python3 scratch/analyze_prg_banks.py
+python3 scratch/verify_physics.py
 ~/Downloads/Mesen/Mesen.app/Contents/MacOS/Mesen BlasNESmous.nes &
