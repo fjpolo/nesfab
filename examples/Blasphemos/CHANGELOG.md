@@ -1,5 +1,17 @@
 # Changes
 
+## [22.05.2026] - v868
+- Fix intro dialog
+
+
+## [22.05.2026] - v868
+- Fix intro dialog
+
+
+## [22.05.2026] - v868
+- Fix intro dialog
+
+
 ## [22.05.2026] - v867
 - Update font for a more gothic look
 

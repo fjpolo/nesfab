@@ -72,6 +72,7 @@ vars /game
     U fps_timer = 0
     U total_bones_collected = 0
     UU total_tears_collected = 0
+    U invincibility_text_timer = 0
 
 data /game
     [] konami_code
@@ -472,6 +473,21 @@ fn update_sprites()
     if warden_defeated && !warden_arrow_dismissed && current_level_index == LEVEL_L1 && (frame_counter & 16)
         set_oam(o, 240, 120, $3F, 0)
         o += 4
+
+    // Tick down and draw invincibility text if active
+    if invincibility_text_timer > 0
+        invincibility_text_timer -= 1
+        
+        // Mapped tile indices for "INVINCIBILITY!" inside Bank 5:
+        // 'I' -> $F8, 'N' -> $F9, 'V' -> $FA, 'C' -> $FB, 'B' -> $FC, 'L' -> $FD, 'T' -> $FE, 'Y' -> $FF, '!' -> $F2
+        ct U[14] INVINC_CHARS = U[14]($F8, $F9, $FA, $F8, $F9, $FB, $F8, $FC, $F8, $FD, $F8, $FE, $FF, $F2)
+        
+        U cx = 72
+        U cy = 80 // Center-aligned vertically
+        for U i = 0; i < 14; i += 1
+            set_oam(o, cx, cy, INVINC_CHARS[i], 2) // Attribute 2 selects sprite palette 2 (Red!)
+            o += 4
+            cx += 8
 
     hide_oam(o)
 
