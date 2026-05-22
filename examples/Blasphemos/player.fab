@@ -1108,6 +1108,18 @@ fn handle_physics()
         p.yspeed = 0
     else
         p.y += SSF(p.yspeed)
+
+        // Ceiling / upward wall check: if moving up, test both top corners of the
+        // player's bounding box and push back to the tile boundary below the wall.
+        if p.yspeed < 0
+            SS head_y = SS(p.y)
+            U cl = collision_at(UU(p.x + 2),        UU(head_y))
+            U cr = collision_at(UU(p.x + p.rw - 2), UU(head_y))
+            if cl == C_WALL || cr == C_WALL
+                // Snap head to the bottom edge of the blocking tile
+                p.y = SSF((head_y & $F0) + 16)
+                p.yspeed = 0
+
         query_floor_collisions()
 
         if is_on_pinchos_de_la_muerte()
