@@ -1,5 +1,29 @@
 # Changes
 
+## [22.05.2026] - v866
+- Improve Warden tiles a bit
+
+
+## [22.05.2026] - v866
+- Improve Warden tiles a bit
+
+
+## [22.05.2026] - v866
+- Improve Warden tiles a bit
+
+
+## [22.05.2026] - v866
+- Improve Warden tiles a bit
+
+
+## [22.05.2026] - v866
+- Improve Warden tiles a bit
+
+
+## [22.05.2026] - v866
+- Improve Warden tiles a bit
+
+
 ## [21.05.2026] - v865
 - Fix HUD again...
 
