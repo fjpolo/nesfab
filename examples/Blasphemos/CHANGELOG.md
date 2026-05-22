@@ -1,5 +1,9 @@
 # Changes
 
+## [22.05.2026] - v869
+- Remove some unused sprites
+
+
 ## [22.05.2026] - v868
 - Fix intro dialog
 
