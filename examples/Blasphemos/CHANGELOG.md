@@ -1,5 +1,9 @@
 # Changes
 
+## [22.05.2026] - v870
+- Add metasprite scanline overlap analyzer to build scripts
+
+
 ## [22.05.2026] - v869
 - Remove some unused sprites
 
