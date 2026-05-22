@@ -1,5 +1,21 @@
 # Changes
 
+## [22.05.2026] - v867
+- Update font for a more gothic look
+
+
+## [22.05.2026] - v867
+- Update font for a more gothic look
+
+
+## [22.05.2026] - v867
+- Update font for a more gothic look
+
+
+## [22.05.2026] - v867
+- Update font for a more gothic look
+
+
 ## [22.05.2026] - v866
 - Improve Warden tiles a bit
 

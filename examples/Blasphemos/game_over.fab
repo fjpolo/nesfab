@@ -28,16 +28,5 @@ mode game_over(U level_index)
     {PPUCTRL}(PPUCTRL_NMI_ON | PPUCTRL_NT_2000)
     {PPUMASK}(PPUMASK_BG_ON | PPUMASK_NO_CLIP)
 
-    is_start_pressed = false
-
     while true
         nmi
-        ppu_upload_oam_poll_pads(0)
-        update_pads()
-        is_select_pressed = false
-
-        if is_start_pressed
-            is_start_pressed = false
-            game_state = GAME_STATE_TITLE
-            goto mode main()
-            : preserves /game
