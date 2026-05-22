@@ -530,6 +530,41 @@ fn push_oam_anim_palette(U index, SS x, SS y, AnimState anim_state, U palette_ta
                     set_oam_x(index, sprite_x.a)
                     index += 4
     return U(index)
+
+// Scaled version: y_scale=0 → normal, y_scale=8 → all sprites collapsed to feet.
+// Each sprite's Y offset (negative, toward head) is multiplied by (8 - y_scale) / 8,
+// creating a "grow from feet upward" entrance animation.
+fn push_oam_anim_palette_scaled(U index, SS x, SS y, AnimState anim_state, U palette_target, U attr_xor, U y_scale) U
+    anim_state.frames += U(2 + (anim_state.frame_index * sizeof Fs))
+    CCC/sprites metasprite = read CCC/sprites(anim_state.frames)
+
+    U scale_num = U(8) - min(U(8), y_scale)   // 0 = collapsed, 8 = full
+
+    U size = metasprite[0]
+    do for U i = 0; i != size;
+        i += 1
+        U oy = metasprite[i]
+        i += 1
+        U pattern = metasprite[i]
+        i += 1
+        U attr = metasprite[i]
+        i += 1
+        U ox = metasprite[i]
+
+        if (attr & 3) == palette_target
+            SS sprite_x = x + SS(S(ox))
+            if sprite_x.b == 0
+                // Scale the Y offset: oy is signed negative (toward head).
+                // (SS(S(oy)) * scale_num) >> 3 gives the scaled offset.
+                SS scaled_oy = (SS(S(oy)) * SS(scale_num)) >> 3
+                SS sprite_y = y + scaled_oy
+                if sprite_y.b == 0 && sprite_y.a <= 240
+                    set_oam_p(index, pattern)
+                    set_oam_a(index, attr ^ attr_xor)
+                    set_oam_y(index, sprite_y.a)
+                    set_oam_x(index, sprite_x.a)
+                    index += 4
+    return U(index)
     
 fn player_pogo()
     if p.pogo_count < 2 && !is_on_ground()
