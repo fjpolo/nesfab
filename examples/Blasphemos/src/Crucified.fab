@@ -13,6 +13,27 @@ struct Crucified
     U ai_state
 
 
+ct Int CRUCIFIED_HP = 45 // Increased health
+ct Int CRUCIFIED_DETECTION_RANGE = 100
+ct Int CRUCIFIED_ATTACK_TRIGGER_RANGE = 40
+ct Int CRUCIFIED_ATTACK_TOTAL_CYCLE = 210
+ct Int CRUCIFIED_ATTACK_WINDOW_START = 150
+ct Int CRUCIFIED_HIT_WINDOW_START = 145
+ct Int CRUCIFIED_HIT_WINDOW_END = 180
+ct Int CRUCIFIED_BLOCKED_DURATION = 120
+ct Int CRUCIFIED_HURT_DURATION = 30
+
+ct Int CRUCIFIED_HITBOX_W = 16
+ct Int CRUCIFIED_HITBOX_H = 16
+ct Int CRUCIFIED_HITBOX_OFF_X = -4
+ct Int CRUCIFIED_HITBOX_OFF_Y = -16
+
+ct Int CRUCIFIED_SWING_W = 32
+ct Int CRUCIFIED_SWING_H = 32
+ct Int CRUCIFIED_SWING_OFF_X_RIGHT = -8
+ct Int CRUCIFIED_SWING_OFF_X_LEFT = -24
+ct Int CRUCIFIED_SWING_OFF_Y = -24
+
 vars /enemies
     AnimState[4] crucified_anim_state
 
@@ -168,10 +189,10 @@ fn crucified_update(U ix) Bool
         SS sx = player_sword_x
         SS sy = player_sword_y
         // Body bounds: (ex-4, ey-16) to (ex+12, ey)
-        if sx < (ex + 12) && (sx + player_sword_w) > (ex - 4) && sy < ey && (sy + player_sword_h) > (ey - 16)
+        if sx < (ex + (CRUCIFIED_HITBOX_OFF_X + CRUCIFIED_HITBOX_W)) && (sx + player_sword_w) > (ex + CRUCIFIED_HITBOX_OFF_X) && sy < ey && (sy + player_sword_h) > (ey + CRUCIFIED_HITBOX_OFF_Y)
              Bool is_combo = register_sword_hit()
              if crucifieds[ix].hurt_timer == 0
-                 crucifieds[ix].hurt_timer = 30 // I-frames
+                 crucifieds[ix].hurt_timer = CRUCIFIED_HURT_DURATION // I-frames
                  player_pogo()
                  U power = p.attack_power
                  if is_combo
@@ -206,24 +227,23 @@ fn crucified_update(U ix) Bool
                 crucifieds[ix].ai_state = CRUCIFIED_STATE_IDLE
                 crucifieds[ix].attack_timer = 0
 
-            // Proper attack lasts 1 second (final 60 frames of cycle, when it flips)
-            if crucifieds[ix].attack_timer > 150
-                SS swx
-                if crucifieds[ix].facing_left
-                    swx = ex - 24
-                else
-                    swx = ex - 8
-                SS swy = ey - 24 // Lowered origin for taller box
-                SS sww = 32
-                SS swh = 32 // Large 32x32 hit area for the swing
-                
-                // Hit window starts slightly before the visual flip to ensure it feels responsive
-                if crucifieds[ix].attack_timer >= 145 && crucifieds[ix].attack_timer < 180
-                    if p.hitbox_x < (swx + sww) && (p.hitbox_x + p.w) > swx && SS(p.y) < (swy + swh) && (SS(p.y) + p.h) > swy
-                        if hurt_player(ATTACK_CRUCIFIED, ex)
-                            crucifieds[ix].blocked_timer = 120
-                            crucifieds[ix].ai_state = CRUCIFIED_STATE_IDLE
-                            crucifieds[ix].attack_timer = 0
+                if crucifieds[ix].attack_timer > CRUCIFIED_ATTACK_WINDOW_START
+                    SS swx
+                    if crucifieds[ix].facing_left
+                        swx = ex + CRUCIFIED_SWING_OFF_X_LEFT
+                    else
+                        swx = ex + CRUCIFIED_SWING_OFF_X_RIGHT
+                    SS swy = ey + CRUCIFIED_SWING_OFF_Y 
+                    SS sww = CRUCIFIED_SWING_W
+                    SS swh = CRUCIFIED_SWING_H 
+                    
+                    // Hit window starts slightly before the visual flip to ensure it feels responsive
+                    if crucifieds[ix].attack_timer >= CRUCIFIED_HIT_WINDOW_START && crucifieds[ix].attack_timer < CRUCIFIED_HIT_WINDOW_END
+                        if p.hitbox_x < (swx + sww) && (p.hitbox_x + p.w) > swx && SS(p.y) < (swy + swh) && (SS(p.y) + p.h) > swy
+                            if hurt_player(ATTACK_CRUCIFIED, ex)
+                                crucifieds[ix].blocked_timer = CRUCIFIED_BLOCKED_DURATION
+                                crucifieds[ix].ai_state = CRUCIFIED_STATE_IDLE
+                                crucifieds[ix].attack_timer = 0
             break
 
     // Animation selection
@@ -243,9 +263,9 @@ fn crucified_update(U ix) Bool
         crucified_anim_state[ix] = make_anim_state(anim_to_set)
 
     // Basic collision with player (contact damage)
-    if p.hitbox_x < (ex + 12) && (p.hitbox_x + p.w) > (ex - 4) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey - 16)
+    if p.hitbox_x < (ex + (CRUCIFIED_HITBOX_OFF_X + CRUCIFIED_HITBOX_W)) && (p.hitbox_x + p.w) > (ex + CRUCIFIED_HITBOX_OFF_X) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey + CRUCIFIED_HITBOX_OFF_Y)
         if hurt_player(ATTACK_CRUCIFIED, ex)
-            crucifieds[ix].blocked_timer = 120
+            crucifieds[ix].blocked_timer = CRUCIFIED_BLOCKED_DURATION
             crucifieds[ix].ai_state = CRUCIFIED_STATE_IDLE
             crucifieds[ix].attack_timer = 0
     

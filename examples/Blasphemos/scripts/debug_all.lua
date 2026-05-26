@@ -4,7 +4,7 @@
 
 local hitbox_data = {}
 local current_packet = nil
-local PACKET_SIZE = 120
+local PACKET_SIZE = 161
 local frames_since_data = 0
 local data_index = 0
 local total_writes = 0
@@ -74,7 +74,7 @@ function on_frame()
     if current_packet then
         local d = current_packet
         local cam_x = to_signed(d[22], d[23])
-        local is_konami = d[116] == 1
+        local is_konami = d[157] == 1
         
         -- 1. Player
         local px = to_signed(d[5], d[6])
@@ -125,6 +125,20 @@ function on_frame()
                 draw_rect(ex - cam_x - 8, ey - 24, 16, 24, 0xFFFF00, false) -- Yellow
                 draw_health_bar(ex - cam_x - 12, ey - 44, 24, hp, max_hp, 0xFFFF00)
                 emu.drawString(ex - cam_x + 10, ey - 15, string.format("(%d,%d)", ex, ey), 0xFFFF00, 0x000000)
+            end
+        end
+
+        -- 6. Crucifieds
+        local c_num = d[116] or 0
+        for i = 0, 7 do
+            if i < c_num then
+                local b = 117 + (i * 5)
+                local ex, ey = to_signed(d[b], d[b+1]), to_signed(d[b+2], d[b+3])
+                local hp = d[b+4]
+                local max_hp = is_konami and 90 or 45
+                draw_rect(ex - cam_x - 4, ey - 16, 16, 16, 0xFF00FF, false) -- Magenta
+                draw_health_bar(ex - cam_x - 12, ey - 36, 24, hp, max_hp, 0xFF00FF)
+                emu.drawString(ex - cam_x + 6, ey - 10, string.format("(%d,%d)", ex, ey), 0xFF00FF, 0x000000)
             end
         end
     end

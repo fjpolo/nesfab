@@ -3,7 +3,7 @@ macro("pool_contiguous", "Wheelbroken", "4", "wheelbrokens", "/game")
 ct fn wheelbroken_vec(Int{} x, Int{} y) Wheelbroken{}
     Wheelbroken{} out = Wheelbroken{}()
     for UU i = 0; i < len(x); i += 1
-        push(out, Wheelbroken(SS(x{i}), SS(y{i}), false, 0, 40, 0, 0, 0)) // 40 HP, 0 blocked_timer
+        push(out, Wheelbroken(SS(x{i}), SS(y{i}), false, 0, U(WHEELBROKEN_HP), 0, 0, 0)) 
     return out
 
 struct Wheelbroken
@@ -17,6 +17,27 @@ struct Wheelbroken
     U blocked_timer
     U local_index
 
+
+ct Int WHEELBROKEN_HP = 40
+ct Int WHEELBROKEN_DETECTION_RANGE = 40
+ct Int WHEELBROKEN_ATTACK_RANGE_X = 64
+ct Int WHEELBROKEN_ATTACK_RANGE_Y = 32
+ct Int WHEELBROKEN_ATTACK_TOTAL_CYCLE = 120
+ct Int WHEELBROKEN_ATTACK_START = 31
+ct Int WHEELBROKEN_ATTACK_END = 60
+ct Int WHEELBROKEN_BLOCKED_DURATION = 120
+ct Int WHEELBROKEN_HURT_DURATION = 30
+
+ct Int WHEELBROKEN_HITBOX_W = 16
+ct Int WHEELBROKEN_HITBOX_H = 24
+ct Int WHEELBROKEN_HITBOX_OFF_X = -8
+ct Int WHEELBROKEN_HITBOX_OFF_Y = -24
+
+ct Int WHEELBROKEN_WHEEL_W = 32
+ct Int WHEELBROKEN_WHEEL_H = 24
+ct Int WHEELBROKEN_WHEEL_OFF_X_RIGHT = 0
+ct Int WHEELBROKEN_WHEEL_OFF_X_LEFT = -32
+ct Int WHEELBROKEN_WHEEL_OFF_Y = -32
 
 vars /enemies
     AnimState[4] wheelbroken_anim_state
@@ -168,10 +189,10 @@ fn wheelbroken_update(U ix) Bool
         SS sx = player_sword_x
         SS sy = player_sword_y
         // Body bounds: (ex-8, ey-24) to (ex+8, ey)
-        if sx < (ex + 8) && (sx + player_sword_w) > (ex - 8) && sy < ey && (sy + player_sword_h) > (ey - 24)
+        if sx < (ex + (WHEELBROKEN_HITBOX_OFF_X + WHEELBROKEN_HITBOX_W)) && (sx + player_sword_w) > (ex + WHEELBROKEN_HITBOX_OFF_X) && sy < ey && (sy + player_sword_h) > (ey + WHEELBROKEN_HITBOX_OFF_Y)
              Bool is_combo = register_sword_hit()
              if wheelbrokens[ix].hurt_timer == 0
-                 wheelbrokens[ix].hurt_timer = 30 // I-frames
+                 wheelbrokens[ix].hurt_timer = WHEELBROKEN_HURT_DURATION // I-frames
                  player_pogo()
                  U power = p.attack_power
                  if is_combo
@@ -187,7 +208,7 @@ fn wheelbroken_update(U ix) Bool
                       U byte_ix = global_ix >> 3
                       U bit_ix = global_ix & 7
                       dead_wheelbrokens[byte_ix] |= (U(1) << bit_ix)
-                      total_tears_collected += 13
+                      total_tears_collected += UU(WHEELBROKEN_TEARS_REWARD)
                       wheelbroken_delete_with_patrol(ix)
                       return false
 
@@ -197,11 +218,11 @@ fn wheelbroken_update(U ix) Bool
     else
         // Attack logic: Trigger when player is close
         if wheelbrokens[ix].attack_timer == 0
-            if dist_x < 64 && dist_y < 32
+            if dist_x < WHEELBROKEN_ATTACK_RANGE_X && dist_y < WHEELBROKEN_ATTACK_RANGE_Y
                 wheelbrokens[ix].attack_timer = 1
         else
             wheelbrokens[ix].attack_timer += 1
-            if wheelbrokens[ix].attack_timer >= 120 // 2s total cycle
+            if wheelbrokens[ix].attack_timer >= WHEELBROKEN_ATTACK_TOTAL_CYCLE 
                 wheelbrokens[ix].attack_timer = 0
 
     // Determine current state based on attack_timer
@@ -210,25 +231,25 @@ fn wheelbroken_update(U ix) Bool
     // 31-60: Active Attack (Attack Animation + Hitbox)
     // 61-120: Recovery (Standing)
     
-    Bool is_attacking = wheelbrokens[ix].attack_timer >= 31 && wheelbrokens[ix].attack_timer <= 60
+    Bool is_attacking = wheelbrokens[ix].attack_timer >= WHEELBROKEN_ATTACK_START && wheelbrokens[ix].attack_timer <= WHEELBROKEN_ATTACK_END
 
     // Wheel Hitbox (Enemy attacks Player)
     if is_attacking
         SS whx
         if wheelbrokens[ix].facing_left
-            whx = ex - 32
+            whx = ex + WHEELBROKEN_WHEEL_OFF_X_LEFT
         else
-            whx = ex + 0
-        SS why = ey - 32
-        SS whw = 32
-        SS whh = 24
+            whx = ex + WHEELBROKEN_WHEEL_OFF_X_RIGHT
+        SS why = ey + WHEELBROKEN_WHEEL_OFF_Y
+        SS whw = WHEELBROKEN_WHEEL_W
+        SS whh = WHEELBROKEN_WHEEL_H
         
         // Collision with player
         if p.hitbox_x < (whx + whw) && (p.hitbox_x + p.w) > whx && SS(p.y) < (why + whh) && (SS(p.y) + p.h) > why
             if hurt_player(ATTACK_PILGRIM, ex)
                 // If parried, end attack phase early
-                wheelbrokens[ix].attack_timer = 61
-                wheelbrokens[ix].blocked_timer = 120 // Turn red for 2 seconds
+                wheelbrokens[ix].attack_timer = WHEELBROKEN_ATTACK_END + 1
+                wheelbrokens[ix].blocked_timer = WHEELBROKEN_BLOCKED_DURATION 
     
     // Animation selection
     // Only update if it's different from the current animation to avoid resetting frames
@@ -250,10 +271,10 @@ fn wheelbroken_update(U ix) Bool
 
 
     // Basic collision with player (contact damage)
-    if p.hitbox_x < (ex + 8) && (p.hitbox_x + p.w) > (ex - 8) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey - 24)
+    if p.hitbox_x < (ex + (WHEELBROKEN_HITBOX_OFF_X + WHEELBROKEN_HITBOX_W)) && (p.hitbox_x + p.w) > (ex + WHEELBROKEN_HITBOX_OFF_X) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey + WHEELBROKEN_HITBOX_OFF_Y)
         if hurt_player(ATTACK_PILGRIM, ex)
             // Parried the body!
-            wheelbrokens[ix].blocked_timer = 120
+            wheelbrokens[ix].blocked_timer = WHEELBROKEN_BLOCKED_DURATION
             wheelbrokens[ix].attack_timer = 0
 
 

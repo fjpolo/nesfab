@@ -145,7 +145,7 @@ fn warden_init(SS wx, SS wy)
 fn level1_init()
     // Initialize Warden
     if !warden_defeated
-        warden_init(436, 120)
+        warden_init(420, 120) // Moved 16px (1 tile) left from 436
     else
         warden_active = false
 
@@ -232,7 +232,7 @@ fn warden_fire_projectile()
         if !warden_projectile_active[i]
             warden_projectile_active[i] = true
             warden_projectile_ground_timer[i] = 0
-            warden_projectile_x[i] = 384
+            warden_projectile_x[i] = 368 // Moved 16px left from 384
             warden_projectile_y[i] = 72
             
             // Aim at player
@@ -380,7 +380,7 @@ fn draw_level1_sprites(U o) U
             anim = make_anim_state(@projectile_animation_ball_red)
         else
             anim = make_anim_state(@projectile_animation_ball)
-        o = push_oam_anim(o, 384 - p.camera_x, 72, anim)
+        o = push_oam_anim(o, 368 - p.camera_x, 72, anim) // Moved 16px left from 384
 
     return o
 

@@ -11,6 +11,26 @@ struct EnragedPilgrim
     Bool patrol_dir
 
 
+ct Int PILGRIM_HP = 30
+ct Int PILGRIM_DETECTION_RANGE = 100
+ct Int PILGRIM_ATTACK_RANGE_X = 64
+ct Int PILGRIM_ATTACK_RANGE_Y = 40
+ct Int PILGRIM_ATTACK_DURATION = 30
+ct Int PILGRIM_ATTACK_COOLDOWN = 180
+ct Int PILGRIM_BLOCKED_DURATION = 120
+ct Int PILGRIM_HURT_DURATION = 30
+
+ct Int PILGRIM_HITBOX_W = 16
+ct Int PILGRIM_HITBOX_H = 16
+ct Int PILGRIM_HITBOX_OFF_X = -12
+ct Int PILGRIM_HITBOX_OFF_Y = -16
+
+ct Int PILGRIM_SWORD_W = 24
+ct Int PILGRIM_SWORD_H = 16
+ct Int PILGRIM_SWORD_OFF_X_RIGHT = 0
+ct Int PILGRIM_SWORD_OFF_X_LEFT = -24
+ct Int PILGRIM_SWORD_OFF_Y = -16
+
 vars /enemies
     AnimState[4] enraged_pilgrim_anim_state
 
@@ -156,10 +176,10 @@ fn enraged_pilgrim_update(U ix) Bool
         SS sx = player_sword_x
         SS sy = player_sword_y
         // Body bounds: (ex-12, ey-16) to (ex+4, ey)
-        if sx < (ex + 4) && (sx + player_sword_w) > (ex - 12) && sy < ey && (sy + player_sword_h) > (ey - 16)
+        if sx < (ex + (PILGRIM_HITBOX_OFF_X + PILGRIM_HITBOX_W)) && (sx + player_sword_w) > (ex + PILGRIM_HITBOX_OFF_X) && sy < ey && (sy + player_sword_h) > (ey + PILGRIM_HITBOX_OFF_Y)
              Bool is_combo = register_sword_hit()
              if enraged_pilgrims[ix].hurt_timer == 0
-                 enraged_pilgrims[ix].hurt_timer = 30 // I-frames
+                 enraged_pilgrims[ix].hurt_timer = PILGRIM_HURT_DURATION // I-frames
                  player_pogo()
                  U power = p.attack_power
                  if is_combo
@@ -175,38 +195,38 @@ fn enraged_pilgrim_update(U ix) Bool
                       U byte_ix = global_ix >> 3
                       U bit_ix = global_ix & 7
                       dead_pilgrims[byte_ix] |= (U(1) << bit_ix)
-                      total_tears_collected += 3
+                      total_tears_collected += UU(PILGRIM_TEARS_REWARD)
                       enraged_pilgrims_delete(ix)
                       return false
 
     if enraged_pilgrims[ix].blocked_timer == 0
         if enraged_pilgrims[ix].attack_timer == 0
-            if dist_x < 64 && dist_y < 40
+            if dist_x < PILGRIM_ATTACK_RANGE_X && dist_y < PILGRIM_ATTACK_RANGE_Y
                 enraged_pilgrims[ix].attack_timer = 1
         else
             enraged_pilgrims[ix].attack_timer += 1
-            if enraged_pilgrims[ix].attack_timer >= 180
+            if enraged_pilgrims[ix].attack_timer >= PILGRIM_ATTACK_COOLDOWN
                 enraged_pilgrims[ix].attack_timer = 0
 
             // Only check sword collision when the sword is visually out (attack_timer < 30)
-            if enraged_pilgrims[ix].attack_timer < 30
+            if enraged_pilgrims[ix].attack_timer < PILGRIM_ATTACK_DURATION
                 SS swx
                 if enraged_pilgrims[ix].facing_left
-                    swx = ex - 24
+                    swx = ex + PILGRIM_SWORD_OFF_X_LEFT
                 else
-                    swx = ex + 0
-                SS swy = ey - 16
-                SS sww = 24
-                SS swh = 16
+                    swx = ex + PILGRIM_SWORD_OFF_X_RIGHT
+                SS swy = ey + PILGRIM_SWORD_OFF_Y
+                SS sww = PILGRIM_SWORD_W
+                SS swh = PILGRIM_SWORD_H
                 
                 // Check collision with player using a more precise area
                 if p.hitbox_x < (swx + sww) && (p.hitbox_x + p.w) > swx && SS(p.y) < (swy + swh) && (SS(p.y) + p.h) > swy
                     if hurt_player(ATTACK_PILGRIM, ex)
-                        enraged_pilgrims[ix].blocked_timer = 120
+                        enraged_pilgrims[ix].blocked_timer = PILGRIM_BLOCKED_DURATION
                         enraged_pilgrims[ix].attack_timer = 0
 
     // Animation selection
-    if enraged_pilgrims[ix].attack_timer < 30 // Show attack frame for 0.5s
+    if enraged_pilgrims[ix].attack_timer < PILGRIM_ATTACK_DURATION // Show attack frame for 0.5s
         if enraged_pilgrims[ix].facing_left
             enraged_pilgrim_anim_state[ix] = make_anim_state(@enraged_pilgrim_animation_attack_left)
         else
@@ -218,9 +238,9 @@ fn enraged_pilgrim_update(U ix) Bool
             enraged_pilgrim_anim_state[ix] = make_anim_state(@enraged_pilgrim_animation_standing)
 
     // Basic collision with player (contact damage)
-    if p.hitbox_x < (ex + 4) && (p.hitbox_x + p.w) > (ex - 12) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey - 16)
+    if p.hitbox_x < (ex + (PILGRIM_HITBOX_OFF_X + PILGRIM_HITBOX_W)) && (p.hitbox_x + p.w) > (ex + PILGRIM_HITBOX_OFF_X) && SS(p.y) < SS(ey) && (SS(p.y) + p.h) > (ey + PILGRIM_HITBOX_OFF_Y)
         if hurt_player(ATTACK_PILGRIM, ex)
-            enraged_pilgrims[ix].blocked_timer = 120
+            enraged_pilgrims[ix].blocked_timer = PILGRIM_BLOCKED_DURATION
             enraged_pilgrims[ix].attack_timer = 0
     
     return true

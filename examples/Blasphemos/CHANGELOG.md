@@ -1,5 +1,53 @@
 # Changes
 
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
+## [26.05.2026] - v886
+- Fix body hitbox facing left
+
+
 ## [26.05.2026] - v885
 - Fix crucifieds not respawning
 

@@ -18,8 +18,11 @@ end
 function get_var_address(var_name, fallback)
     local paths = {
         "analysis/ram_variables.txt",
-        "C:\\Workspace\\nesfab\\nesfab\\examples\\Blasphemos\\analysis\\ram_variables.txt",
-        "c:\\Workspace\\nesfab\\nesfab\\examples\\Blasphemos\\analysis\\ram_variables.txt"
+        "scripts/analysis/ram_variables.txt",
+        "../analysis/ram_variables.txt",
+        "analysis\\ram_variables.txt",
+        "C:\\Workspace\\nesfab\\examples\\Blasphemos\\analysis\\ram_variables.txt",
+        "c:\\Workspace\\nesfab\\examples\\Blasphemos\\analysis\\ram_variables.txt"
     }
     for _, path in ipairs(paths) do
         local file = io.open(path, "r")
@@ -42,7 +45,9 @@ end
 
 -- Resolve addresses dynamically
 local ADDR_NMI_COUNTER = get_var_address("runtime_nmi_counter", 0x000A)
-local ADDR_FPS_TICKS = get_var_address("fps_ticks", 0x02C7)
+local ADDR_FPS_TICKS = get_var_address("fps_ticks", 0x02CD)
+
+emu.log(string.format("[FPS] Using NMI: 0x%04X, TICKS: 0x%04X", ADDR_NMI_COUNTER, ADDR_FPS_TICKS))
 
 -- State variables
 local last_game_frame = nil
@@ -56,9 +61,9 @@ for i = 1, window_size do
 end
 local history_index = 1
 
--- Rolling history for the visual graph (100 columns wide)
+-- Rolling history for the visual graph (80 columns wide)
 local graph_history = {}
-local graph_width = 100
+local graph_width = 80
 for i = 1, graph_width do
     graph_history[i] = 60.0
 end
@@ -120,26 +125,26 @@ function draw_fps_graph()
     ----------------------------------------------------
     -- RENDER ROLLING PERFORMANCE GRAPH (Bottom Screen)
     ----------------------------------------------------
-    local graph_x = 28
-    local graph_y = 175
-    local graph_h = 55
-    local bottom_y = graph_y + graph_h -- 230
+    local graph_x = 8
+    local graph_y = 20
+    local graph_h = 30
+    local bottom_y = graph_y + graph_h -- 50
     
     -- 1. Draw Background Glass Panel
-    if emu.drawRectangle then
+    if emu and emu.drawRectangle then
         -- Mesen API (semi-transparent black card, drawing horizontal width x=24 to x=232)
-        -- Explicitly pass frameCount = 1 as the 7th parameter
         emu.drawRectangle(graph_x - 4, graph_y - 4, (graph_width * 2) + 8, graph_h + 8, 0x60000000, true, 1)
-        emu.drawString(graph_x + 4, graph_y + 4, string.format("FPS: %.1f", fps), 0xFFFFFF)
-    elseif gui.box then
+        emu.drawString(graph_x + 4, graph_y + 4, string.format("FPS: %.1f", fps), 0xFFFFFF, 0xFF000000)
+    elseif gui and gui.box then
         -- Fceux API
         gui.box(graph_x - 4, graph_y - 4, graph_x + (graph_width * 2) + 4, bottom_y + 4, "#000000aa")
         gui.text(graph_x + 4, graph_y + 4, string.format("FPS: %.1f", fps))
     end
     
     -- 2. Draw Reference Line (30 FPS & 60 FPS)
-    local y_60 = bottom_y - math.floor((60.0 / 60.0) * 45) -- Y = 185
-    local y_30 = bottom_y - math.floor((30.0 / 60.0) * 45) -- Y = 207
+    local dy = 25
+    local y_60 = bottom_y - math.floor((60.0 / 60.0) * dy)
+    local y_30 = bottom_y - math.floor((30.0 / 60.0) * dy)
     
     if emu.drawLine then
         -- 60 FPS Guideline (Green, with frameCount = 1)
@@ -167,8 +172,8 @@ function draw_fps_graph()
         if fps_val > 60.0 then fps_val = 60.0 end
         if fps_val < 0.0 then fps_val = 0.0 end
         
-        -- Map FPS (0..60) to Y heights (0..45 pixels tall)
-        local bar_h = math.floor((fps_val / 60.0) * 45)
+        -- Map FPS (0..60) to Y heights (0..25 pixels tall)
+        local bar_h = math.floor((fps_val / 60.0) * 25)
         local curr_y = bottom_y - bar_h
         local curr_x = graph_x + (i - 1) * 2
         

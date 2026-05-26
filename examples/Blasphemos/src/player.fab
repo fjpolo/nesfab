@@ -15,6 +15,10 @@ ct Int PLAYER_MOVING_DASH = 7
 ct Int PLAYER_MOVING_PARRY = 8
 ct Int PLAYER_MOVING_LEDGE = 9
 
+ct Int HURT_RECOIL_WINDOW = 15
+ct Int HURT_TOTAL_DURATION = 120
+ct Int HURT_RECOIL_THRESHOLD = HURT_TOTAL_DURATION - HURT_RECOIL_WINDOW
+
 ct Int DASH_SPEED = 4
 ct Int DASH_DURATION = 15
 ct Int DASH_COOLDOWN = 60
@@ -26,6 +30,27 @@ ct U ATTACK_NORMAL = 0
 ct U ATTACK_BOSS = 1
 ct U ATTACK_PILGRIM = 2
 ct U ATTACK_CRUCIFIED = 3
+
+ct Int CHARGE_HOLD_THRESHOLD = 20
+ct Int CHARGE_RELEASE_THRESHOLD = 45
+ct Int CHARGE_ATTACK_DURATION = 35
+ct Int CHARGE_HEAL_FLASH_DURATION = 20
+ct Int CHARGE_SWORD_WIDTH = 56
+
+ct Int PRAYER_FERVOUR_COST = 25
+ct Int PRAYER_TIMER_DURATION = 45
+
+ct Int SWORD_WIDTH_NORMAL = 32
+ct Int SWORD_HEIGHT_NORMAL = 29
+ct Int SWORD_X_OFFSET_LEFT = 40
+ct Int SWORD_X_OFFSET_RIGHT = 8
+
+ct Int WARDEN_TEARS_REWARD = 300
+ct Int PILGRIM_TEARS_REWARD = 3
+ct Int WHEELBROKEN_TEARS_REWARD = 13
+ct Int CRUCIFIED_TEARS_REWARD = 15
+
+ct Int BILE_VESSEL_HEAL_DURATION = 30
 
 
 // Player speeds
@@ -43,7 +68,7 @@ ct Int pw = 24 // Collision width (matched to 24px character body)
 ct Int ph = 30 // Collision height
 ct Int rw = pw - 1
 ct Int rh = ph - 1
-ct Int _PLAYER_BODY_HITBOX_OFFSET = 0 // Hitbox Offset (shifted 2 tiles left)
+ct Int _PLAYER_BODY_HITBOX_OFFSET = 0
 
 ct Int PLAYER_INITIAL_ATTACK_POWER = 8
 ct Int PLAYER_PARRY_BOSS_PUSH = 24
@@ -637,7 +662,7 @@ fn update_player()
                     p.charge_timer += 1
                 
                 // If held past normal swing (20 frames), start charging/flashing in place!
-                if p.charge_timer >= 20
+                if p.charge_timer >= CHARGE_HOLD_THRESHOLD
                     p.heal_timer = 2 // Intense color flashing
                     p.movement = PLAYER_MOVING_REST
                     if p.facing_left
@@ -646,12 +671,12 @@ fn update_player()
                         p.anim_state = make_anim_state(@penitent_animation_parry_right)
         else
             // B was released!
-            if p.charge_timer >= 45
+            if p.charge_timer >= CHARGE_RELEASE_THRESHOLD
                 // Big charge sword hit! Wide arc, purple flash.
-                player_sword_w = 56 // Wider hitbox for charge hit
+                player_sword_w = CHARGE_SWORD_WIDTH // Wider hitbox for charge hit
                 start_player_attack()
-                p.attack_timer = 35 // Longer active window
-                p.heal_timer = 20  // Trigger sprite palette XOR (palette 2)
+                p.attack_timer = CHARGE_ATTACK_DURATION // Longer active window
+                p.heal_timer = CHARGE_HEAL_FLASH_DURATION  // Trigger sprite palette XOR (palette 2)
                 palette[17] = $14  // NES purple — set AFTER start_player_attack() to avoid overwrite
                 palette_dirty = true
                 if p.facing_left
@@ -674,9 +699,9 @@ fn update_player()
         player_sword_active = true
         player_sword_y = SS(p.y) - 2
         if p.facing_left
-            player_sword_x = p.hitbox_center_x - 40
+            player_sword_x = p.hitbox_center_x - SWORD_X_OFFSET_LEFT
         else
-            player_sword_x = p.hitbox_center_x + 8
+            player_sword_x = p.hitbox_center_x + SWORD_X_OFFSET_RIGHT
             
 
 
@@ -700,7 +725,7 @@ fn update_player()
                     if warden_health == 0 && warden_state != WARDEN_STATE_DEAD
                         warden_state = WARDEN_STATE_DEAD
                         warden_defeated = true
-                        total_tears_collected += 300
+                        total_tears_collected += UU(WARDEN_TEARS_REWARD)
                         warden_hurt_timer = 0 // Stop shaking immediately
                         for U i = 0; i < 3; i += 1
                             warden_projectile_active[i] = false
@@ -773,7 +798,7 @@ fn handle_input()
     // Handle hurt timer
     if p.hurt_timer > 0
         p.hurt_timer -= 1
-        if p.hurt_timer == 105 // End of 15-frame recoil
+        if p.hurt_timer == HURT_RECOIL_THRESHOLD // End of 15-frame recoil
             if p.movement == PLAYER_MOVING_HURT
                 p.movement = PLAYER_MOVING_REST
                 if p.facing_left
@@ -781,7 +806,7 @@ fn handle_input()
                 else
                     p.anim_state = make_anim_state(@penitent_animation_standing)
         
-        if p.hurt_timer > 105
+        if p.hurt_timer > HURT_RECOIL_THRESHOLD
             return // Prevent input ONLY during hit recoil (first 15 frames)
 
     // Handle attack timer
@@ -790,7 +815,7 @@ fn handle_input()
         if p.attack_timer == 0
             if p.movement == PLAYER_MOVING_ATTACK
                 p.movement = PLAYER_MOVING_REST
-                player_sword_w = 32 // Reset to normal sword width
+                player_sword_w = SWORD_WIDTH_NORMAL // Reset to normal sword width
                 if p.facing_left
                     p.anim_state = make_anim_state(@penitent_animation_standing_left)
                 else
@@ -865,8 +890,8 @@ fn handle_input()
 
     // Prayer casting (Down + B)
     if p.has_fervour_attack && (pads[0].held & BUTTON_DOWN) && (pads[0].pressed & BUTTON_B) && is_on_ground() && p.movement != PLAYER_MOVING_ATTACK && p.movement != PLAYER_MOVING_HURT
-        if p.fervour >= 25 && !prayer_active
-            p.fervour -= 25
+        if p.fervour >= PRAYER_FERVOUR_COST && !prayer_active
+            p.fervour -= PRAYER_FERVOUR_COST
             p.movement = PLAYER_MOVING_REST
             p.charge_timer = 0 // cancel physical charge
             
@@ -880,7 +905,7 @@ fn handle_input()
             else
                 prayer_vx = 5
                 p.anim_state = make_anim_state(@penitent_animation_parry_right)
-            prayer_timer = 45 // active for 45 frames
+            prayer_timer = PRAYER_TIMER_DURATION // active for 45 frames
             return
 
     // Altar Interaction (Prie Dieu and Mea Culpa)
@@ -941,7 +966,7 @@ fn handle_input()
             if p.current_bile_vessels > 0
                 p.current_bile_vessels -= 1
                 p.health += bile_vessel_hp
-                p.heal_timer = 30
+                p.heal_timer = BILE_VESSEL_HEAL_DURATION
                 if p.health > U(PLAYER_MAX_HEALTH)
                     p.health = U(PLAYER_MAX_HEALTH)
         p.last_input_timer = 15
