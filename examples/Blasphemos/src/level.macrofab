@@ -19,6 +19,10 @@ data /levels
         (wheelbroken_vec(_wheelbroken_x, _wheelbroken_y))
         U(_item_bone_num)                 // Number of "item_bone" objects
         (item_bones_vec(_item_bone_x, _item_bone_y))
+        U(_jail_num)
+        (jails_vec(_jail_x, _jail_y))
+        U(_item_key_num)
+        (item_keys_vec(_item_key_x, _item_key_y))
 
 
     [] tiles_#name#

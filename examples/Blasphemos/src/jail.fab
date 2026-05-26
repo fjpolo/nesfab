@@ -1,0 +1,45 @@
+struct Jail
+    SS x
+    SS y
+
+vars /game
+    U jails_num = 0
+    Jail[2] jails
+
+fn is_jail_at(UU px, UU py) Bool
+    if jails_num == 0
+        return false
+    if keys[current_level_index]
+        return false
+        
+    for U i = 0; i < jails_num; i += 1
+        // Jail is 16x32 (2 tiles wide, 2 tiles high?) 
+        // Or maybe just 16x16? Let's assume 16x32 based on "jail"
+        if px >= UU(jails[i].x) && px < UU(jails[i].x + 16)
+            if py >= UU(jails[i].y - 64) && py < UU(jails[i].y)
+                return true
+    return false
+
+fn draw_jails(U o) U
+    if jails_num == 0 || keys[current_level_index]
+        return o
+    
+    for U i = 0; i < jails_num; i += 1
+        SS x = jails[i].x - p.camera_x
+        SS y = jails[i].y
+        // Draw 2 tiles of jail
+        o = push_oam_metasprite(o, x, y, @sprite_jail)
+    return o
+
+data /sprites
+    [] sprite_jail
+        (make_metasprite(0, Ms{}(
+            Ms(0, -64, $FB, $00),
+            Ms(0, -56, $FB, $00),
+            Ms(0, -48, $FB, $00),
+            Ms(0, -40, $FB, $00),
+            Ms(0, -32, $FB, $00),
+            Ms(0, -24, $FB, $00),
+            Ms(0, -16, $FB, $00),
+            Ms(0, -8, $FB, $00)
+        )))

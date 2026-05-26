@@ -1,0 +1,40 @@
+struct ItemKey
+    SS x
+    SS y
+
+vars /game
+    U item_keys_num = 0
+    ItemKey[2] item_keys
+
+fn item_key_update(U ix) Bool
+    if keys[current_level_index]
+        return false
+
+    SS ex = item_keys[ix].x
+    SS ey = item_keys[ix].y
+    
+    // Sword collision
+    if player_sword_active
+        if player_sword_x < (ex + 16) && (player_sword_x + player_sword_w) > (ex)
+            if player_sword_y < (ey) && (player_sword_y + player_sword_h) > (ey - 16)
+                keys[current_level_index] = true
+                return false
+
+    return true
+
+fn draw_item_keys(U o) U
+    if item_keys_num == 0 || keys[current_level_index]
+        return o
+    
+    for U i = 0; i < item_keys_num; i += 1
+        if item_key_update(i)
+            SS x = item_keys[i].x - p.camera_x
+            SS y = item_keys[i].y
+            o = push_oam_metasprite(o, x, y, @sprite_item_key)
+    return o
+
+data /sprites
+    [] sprite_item_key
+        (make_metasprite(0, Ms{}(
+            Ms(0, -8, $EB, $03) // Key sprite
+        )))

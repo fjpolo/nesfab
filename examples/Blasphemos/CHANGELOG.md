@@ -1,5 +1,73 @@
 # Changes
 
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
+## [26.05.2026] - v887
+- Fix some debug scripts
+
+
 ## [26.05.2026] - v886
 - Fix body hitbox facing left
 

@@ -32,6 +32,20 @@ ct fn item_bones_vec(Int{} x, Int{} y) ItemBone{}
         push(out, ItemBone(SS(x{i}), SS(y{i}), false))
     return out
 
+// Used in level.macrofab to format the jails:
+ct fn jails_vec(Int{} x, Int{} y) Jail{}
+    Jail{} out = Jail{}()
+    for UU i = 0; i < len(x); i += 1
+        push(out, Jail(SS(x{i}), SS(y{i})))
+    return out
+
+// Used in level.macrofab to format the item keys:
+ct fn item_keys_vec(Int{} x, Int{} y) ItemKey{}
+    ItemKey{} out = ItemKey{}()
+    for UU i = 0; i < len(x); i += 1
+        push(out, ItemKey(SS(x{i}), SS(y{i})))
+    return out
+
 // Tile collision values:
 ct U C_OPEN             = 0
 ct U C_WALL             = 1
@@ -86,7 +100,12 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l9over2,       // 18
                                         @lev_l10sub1,       // 19
                                         @lev_l8over1,       // 20
-                                        @lev_game_over,     // 21
+                                        @lev_l11,           // 21
+                                        @lev_l11sub1,       // 22
+                                        @lev_l12,           // 23
+                                        @lev_l1sub1left1,   // 24
+                                        @lev_l11sub2,       // 25
+                                        @lev_game_over,     // 26
                                     )
 ct U LEVEL_TITLE = 0
 ct U LEVEL_L1 = 1
@@ -109,7 +128,12 @@ ct U LEVEL_L9OVER1 = 17
 ct U LEVEL_L9OVER2 = 18
 ct U LEVEL_L10SUB1 = 19
 ct U LEVEL_L8OVER1 = 20
-ct U LEVEL_GAME_OVER = 21
+ct U LEVEL_L11 = 21
+ct U LEVEL_L11SUB1 = 22
+ct U LEVEL_L12 = 23
+ct U LEVEL_L11SUB1LEFT1 = 24
+ct U LEVEL_L11SUB2 = 25
+ct U LEVEL_GAME_OVER = 26
 
 ct U FIRST_LEVEL_INDEX = LEVEL_L1
 ct U LAST_LEVEL_INDEX = LEVEL_GAME_OVER
@@ -200,6 +224,8 @@ fn load_level(CCC/levels level)
     crucifieds_clear()
     wheelbrokens_clear()
     item_bones_clear()
+    jails_num = 0
+    item_keys_num = 0
 
     // Check if key was grabbed
     if current_level_index != 255
@@ -255,6 +281,18 @@ fn load_level(CCC/levels level)
                 item_bones[i].collected = true
             item_bone_anim_state[i] = make_anim_state(@item_bone_animation)
 
+        // Jails
+        U jail_num = read U(level)
+        jails_num = jail_num
+        for U i = 0; i < jail_num; i += 1
+            jails[i] = read Jail(level)
+
+        // Item Keys
+        U item_key_num = read U(level)
+        item_keys_num = item_key_num
+        for U i = 0; i < item_key_num; i += 1
+            item_keys[i] = read ItemKey(level)
+
         if !show_key[current_level_index]
             if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
                 destroy(key_x[current_level_index], key_y[current_level_index])
@@ -272,6 +310,12 @@ fn load_level(CCC/levels level)
         U bone_num = read U(level)
         for U i = 0; i < bone_num; i += 1
             read ItemBone(level)
+        U jail_num = read U(level)
+        for U i = 0; i < jail_num; i += 1
+            read Jail(level)
+        U item_key_num = read U(level)
+        for U i = 0; i < item_key_num; i += 1
+            read ItemKey(level)
     if current_level_index == LEVEL_L1
         level1_init()
     else if current_level_index == LEVEL_L2 || current_level_index == LEVEL_L2B
@@ -302,6 +346,16 @@ fn load_level(CCC/levels level)
         level10sub1_init()
     else if current_level_index == LEVEL_L8OVER1
         level8over1_init()
+    else if current_level_index == LEVEL_L11
+        level11_init()
+    else if current_level_index == LEVEL_L11SUB1
+        level11sub1_init()
+    else if current_level_index == LEVEL_L12
+        level12_init()
+    else if current_level_index == LEVEL_L11SUB1LEFT1
+        level11sub1left1_init()
+    else if current_level_index == LEVEL_L11SUB2
+        level11sub2_init()
     else if current_level_index == LEVEL_GAME_OVER
         game_over_init()
 
@@ -382,6 +436,8 @@ fn tile_at(UU pixel_x, UU pixel_y) U
 // Returns the collision at a pixel position:
 fn collision_at(UU pixel_x, UU pixel_y) U
     U c = mt_ca[tile_at(pixel_x, pixel_y)] >> 2
+    if is_jail_at(pixel_x, pixel_y)
+        return C_WALL
     if c == C_WALL && current_level_index == 1 && warden_defeated
         // In Warden's arena, make walls walkable after defeat.
         // Arena is roughly from X=352 to X=768.
@@ -456,6 +512,16 @@ fn level_update()
         level10sub1_main()
     else if current_level_index == LEVEL_L8OVER1
         level8over1_main()
+    else if current_level_index == LEVEL_L11
+        level11_main()
+    else if current_level_index == LEVEL_L11SUB1
+        level11sub1_main()
+    else if current_level_index == LEVEL_L12
+        level12_main()
+    else if current_level_index == LEVEL_L11SUB1LEFT1
+        level11sub1left1_main()
+    else if current_level_index == LEVEL_L11SUB2
+        level11sub2_main()
     else if current_level_index == LEVEL_GAME_OVER
         game_over_main()
 
@@ -490,9 +556,22 @@ fn level_draw_sprites(U o) U
         o = draw_level10sub1_sprites(o)
     else if current_level_index == LEVEL_L8OVER1
         o = draw_level8over1_sprites(o)
+    else if current_level_index == LEVEL_L11
+        o = draw_level11_sprites(o)
+    else if current_level_index == LEVEL_L11SUB1
+        o = draw_level11sub1_sprites(o)
+    else if current_level_index == LEVEL_L12
+        o = draw_level12_sprites(o)
+    else if current_level_index == LEVEL_L11SUB1LEFT1
+        o = draw_level11sub1left1_sprites(o)
+    else if current_level_index == LEVEL_L11SUB2
+        o = draw_level11sub2_sprites(o)
     else if current_level_index == LEVEL_GAME_OVER
         o = game_over_sprites(o)
     
+    o = draw_jails(o)
+    o = draw_item_keys(o)
+
     // o = draw_item_bones(o) // Moved to main.fab for higher priority
     return o
 

@@ -1200,6 +1200,20 @@ fn handle_physics()
                 spawn_from_top = true
                 goto mode play_level(current_level_index)
                 : preserves /game
+            else if current_level_index == LEVEL_L11
+                current_level_index = LEVEL_L11SUB1
+                p.level_index = current_level_index
+                player_prepare_level_transition()
+                spawn_from_top = true
+                goto mode play_level(current_level_index)
+                : preserves /game
+            else if current_level_index == LEVEL_L11SUB1
+                current_level_index = LEVEL_L11SUB2
+                p.level_index = current_level_index
+                player_prepare_level_transition()
+                spawn_from_top = true
+                goto mode play_level(current_level_index)
+                : preserves /game
             else
                 p.health = 0
                 goto mode dead_screen(current_level_index)
@@ -1214,6 +1228,20 @@ fn handle_physics()
                 : preserves /game
             else if current_level_index == LEVEL_L10SUB1
                 current_level_index = LEVEL_L10
+                p.level_index = current_level_index
+                player_prepare_level_transition()
+                spawn_from_bottom = true
+                goto mode play_level(current_level_index)
+                : preserves /game
+            else if current_level_index == LEVEL_L11SUB1
+                current_level_index = LEVEL_L11
+                p.level_index = current_level_index
+                player_prepare_level_transition()
+                spawn_from_bottom = true
+                goto mode play_level(current_level_index)
+                : preserves /game
+            else if current_level_index == LEVEL_L11SUB2
+                current_level_index = LEVEL_L11SUB1
                 p.level_index = current_level_index
                 player_prepare_level_transition()
                 spawn_from_bottom = true
@@ -1484,13 +1512,84 @@ fn handle_collisions()
         goto mode play_level(current_level_index)
         : preserves /game
     else if player_right > level_right_bound && current_level_index == LEVEL_L10
-        current_level_index = LEVEL_GAME_OVER
+        current_level_index = LEVEL_L11
         p.level_index = current_level_index
         player_prepare_level_transition()
         p.camera_x = 0
         p.x = 16
+        p.y = SSF(16)
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if player_right > level_right_bound && current_level_index == LEVEL_L11
+        current_level_index = LEVEL_L12
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        p.y = SSF(16)
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if player_right > level_right_bound && current_level_index == LEVEL_L11SUB1
+        current_level_index = LEVEL_L12
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        p.y = SSF(16)
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if player_right > level_right_bound && current_level_index == LEVEL_L11SUB2 && SS(p.y) < 120
+        // Transition to L12 (lower part)
+        current_level_index = LEVEL_L12
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        p.y = SSF(178) // Lower part of L12
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L12
+        // If in lower part, go to L11SUB2 (top part)
+        if SS(p.y) > 120
+            current_level_index = LEVEL_L11SUB2
+            p.level_index = current_level_index
+            player_prepare_level_transition()
+            spawn_from_right = true
+            p.y = SSF(16) // Top part of L11SUB2
+            goto mode play_level(current_level_index)
+            : preserves /game
+        else
+            current_level_index = LEVEL_L11SUB1
+            p.level_index = current_level_index
+            player_prepare_level_transition()
+            spawn_from_right = true
+            p.y = SSF(16)
+            goto mode play_level(current_level_index)
+            : preserves /game
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L11SUB1
+        current_level_index = LEVEL_L11SUB1LEFT1
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        spawn_from_right = true
+        p.y = SSF(16)
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if player_right > level_right_bound && current_level_index == LEVEL_L11SUB1LEFT1
+        current_level_index = LEVEL_L11SUB1
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        p.camera_x = 0
+        p.x = 16
+        p.y = SSF(16)
+        goto mode play_level(current_level_index)
+        : preserves /game
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L11
+        current_level_index = LEVEL_L10
+        p.level_index = current_level_index
+        player_prepare_level_transition()
+        spawn_from_right = true
         p.y = SSF(PLAYER_INITIAL_Y)
-        goto mode game_over(current_level_index)
+        goto mode play_level(current_level_index)
         : preserves /game
     else if p.y < 0 && current_level_index == LEVEL_L8
         U old_movement = p.movement

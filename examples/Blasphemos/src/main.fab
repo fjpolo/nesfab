@@ -81,10 +81,10 @@ vars /game
     Bool spawn_from_right = false
     Bool spawn_from_top = false
     Bool spawn_from_bottom = false
-    U[22] dead_pilgrims = U[22](0)
-    U[22] dead_wheelbrokens = U[22](0)
+    U[26] dead_pilgrims = U[26](0)
+    U[26] dead_wheelbrokens = U[26](0)
     U[4] explored_rooms = U[4](0, 0, 0, 0)
-    U[22] dead_crucifieds = U[22](0)
+    U[26] dead_crucifieds = U[26](0)
     Bool warden_defeated = false
     Bool warden_arrow_dismissed = false
     Bool mea_culpa_upgraded = false
@@ -131,7 +131,11 @@ ct MapCoord[] level_map_coords = MapCoord[](
     MapCoord(16, 8, true),   // 18: Level 9over2
     MapCoord(17, 11, true),  // 19: Level 10sub1
     MapCoord(15, 9, true),   // 20: Level 8over1
-    MapCoord(0, 0, false)    // 21: Game Over
+    MapCoord(18, 10, false), // 21: Level 11
+    MapCoord(18, 11, true),  // 22: Level 11sub1
+    MapCoord(19, 10, false), // 23: Level 12
+    MapCoord(17, 12, true),  // 24: Level 11sub1left1 (Avoiding 17, 11 overlap)
+    MapCoord(0, 0, false)    // 25: Game Over
 )
 
 // IRQ
