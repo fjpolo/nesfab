@@ -1,5 +1,109 @@
 # Changes
 
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
+## [26.05.2026] - v879
+- Update title screen
+
+
 ## [26.05.2026] - v878
 - Cleanup
 

@@ -1,0 +1,5 @@
+// Scratch file to test NESFab features
+mode main()
+    ct U[240] test_nam = file(nam, "../assets/silent_sorrow_8.png")
+    while true
+        nmi
