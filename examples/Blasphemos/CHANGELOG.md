@@ -1,5 +1,9 @@
 # Changes
 
+## [26.05.2026] - v883
+- Music starts when game starts
+
+
 ## [26.05.2026] - v882
 - Create dev and release versions of .nes
 
