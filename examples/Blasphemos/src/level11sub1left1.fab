@@ -1,12 +1,41 @@
 /*
- * BlasNESmous - level 11sub1left1
+ * BlasNESmous - Level 11Sub1Left1
+ * Prie Dieu Altar Logic
  */
 
 fn level11sub1left1_init()
-    // Initialization logic
+    // SPR1 palette: ($2D, $17, $32)
+    palette[15] = $2D
+    palette[16] = $17
+    palette[17] = $32
+    ppu_upload_palette()
+    log(@"Init 11Sub1Left1"l)
 
 fn level11sub1left1_main()
-    // Main logic
+    // Altar hit detection
+    if current_level_index == 24 && p.movement == PLAYER_MOVING_ATTACK && !attack_has_hit
+        if player_sword_x < 144 && (player_sword_x + player_sword_w) > 110
+             attack_has_hit = true
+             if !prie_dieu_lit || last_prie_dieu_level != 24
+                 prie_dieu_lit = true
+                 last_prie_dieu_level = current_level_index
+                 last_prie_dieu_x = p.x
+                 last_prie_dieu_y = SS(p.y)
+                 log(@"Prie Dieu Level 11Sub1Left1 lit!"l)
+             
+             p.health = U(PLAYER_MAX_HEALTH)
+             p.current_bile_vessels = p.max_bile_vessels
+             force_hud_update()
+             respawn_all_enemies()
 
 fn draw_level11sub1left1_sprites(U o) U
+    if current_level_index == 24 && prie_dieu_lit && last_prie_dieu_level == 24
+        SS ax = 124 - p.camera_x
+        if ax > -16 && ax < 256
+            // Draw candles using tiles $0E, $0F with palette 1 (SPR1)
+            // Positioned at middle of the level (X=124, Y=215)
+            set_oam(o, U(ax - 4), 215, $0E, 1)
+            o += 4
+            set_oam(o, U(ax + 4), 215, $0F, 1)
+            o += 4
     return o

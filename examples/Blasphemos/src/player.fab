@@ -910,9 +910,9 @@ fn handle_input()
 
     // Altar Interaction (Prie Dieu and Mea Culpa)
     if (pads[0].pressed & BUTTON_UP)
-        if (current_level_index == LEVEL_L2 || current_level_index == LEVEL_L4 || current_level_index == LEVEL_L4SUB1 || current_level_index == LEVEL_L11SUB1LEFT1) && p.x >= 90 && p.x <= 160
-            if current_level_index == LEVEL_L2 || current_level_index == LEVEL_L4 || current_level_index == LEVEL_L11SUB1LEFT1
-                // Prie Dieu (Level 2 & 4): Rest, refill, and save checkpoint (no menu!)
+        if (current_level_index == 2 || current_level_index == 6 || current_level_index == 7 || current_level_index == 24) && p.x >= 90 && p.x <= 160
+            if current_level_index == 2 || current_level_index == 6 || current_level_index == 24
+                // Prie Dieu (Level 2, 4, 11Sub1Left1): Rest, refill, and save checkpoint (no menu!)
                 prie_dieu_lit = true
                 last_prie_dieu_level = current_level_index
                 last_prie_dieu_x = p.x

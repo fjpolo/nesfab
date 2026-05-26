@@ -4,7 +4,7 @@
 
 local hitbox_data = {}
 local current_packet = nil
-local PACKET_SIZE = 161
+local PACKET_SIZE = 165
 local frames_since_data = 0
 local data_index = 0
 local total_writes = 0
@@ -140,6 +140,21 @@ function on_frame()
                 draw_health_bar(ex - cam_x - 12, ey - 36, 24, hp, max_hp, 0xFF00FF)
                 emu.drawString(ex - cam_x + 6, ey - 10, string.format("(%d,%d)", ex, ey), 0xFF00FF, 0x000000)
             end
+        end
+
+        -- 7. Interactive Objects (Altars)
+        local obj_type = d[159]
+        if obj_type and obj_type > 0 then
+            local x1 = to_signed(d[160], d[161])
+            local x2 = to_signed(d[162], d[163])
+            local ox = x1
+            local ow = x2 - x1
+            local color = (obj_type == 1) and 0x8087CEFA or 0x80FFD700 -- SkyBlue or Gold
+            local label = (obj_type == 1) and "Prie Dieu" or "Mea Culpa"
+            
+            -- Draw a tall box representing the interaction zone
+            draw_rect(ox - cam_x, 120, ow, 100, color, true)
+            emu.drawString(ox - cam_x + ow/2 - 20, 110, label, color, 0x000000)
         end
     end
 
