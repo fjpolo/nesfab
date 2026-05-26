@@ -1,5 +1,17 @@
 # Changes
 
+## [26.05.2026] - v884
+- Export hitboxes only only in dev mode
+
+
+## [26.05.2026] - v884
+- Export hitboxes only only in dev mode
+
+
+## [26.05.2026] - v884
+- Export hitboxes only only in dev mode
+
+
 ## [26.05.2026] - v883
 - Music starts when game starts
 

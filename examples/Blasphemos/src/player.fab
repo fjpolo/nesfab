@@ -559,9 +559,10 @@ fn player_respawn()
         p.y = SSF(PLAYER_INITIAL_Y)
         p.camera_x = 0
     
-    for U i = 0; i < 20; i += 1
+    for U i = 0; i < 22; i += 1
         dead_pilgrims[i] = 0
         dead_wheelbrokens[i] = 0
+        dead_crucifieds[i] = 0
 
     p.current_bile_vessels = p.max_bile_vessels
 
