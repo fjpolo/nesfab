@@ -1,5 +1,29 @@
 # Changes
 
+## [26.05.2026] - v892
+- add level name script
+
+
+## [26.05.2026] - v892
+- add level name script
+
+
+## [26.05.2026] - v892
+- add level name script
+
+
+## [26.05.2026] - v892
+- add level name script
+
+
+## [26.05.2026] - v892
+- add level name script
+
+
+## [26.05.2026] - v892
+- add level name script
+
+
 ## [26.05.2026] - v891
 - Add map done in paint
 

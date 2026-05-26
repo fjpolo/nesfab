@@ -204,10 +204,10 @@ fn crucified_update(U ix) Bool
                      crucifieds[ix].health -= power
                  else
                       crucifieds[ix].health = 0
-                      U global_ix = (current_level_index << 3) + crucifieds[ix].local_index
+                      U global_ix = (current_level_index << 4) + crucifieds[ix].local_index + 4
                       U byte_ix = global_ix >> 3
                       U bit_ix = global_ix & 7
-                      dead_crucifieds[byte_ix] |= (U(1) << bit_ix)
+                      dead_enemies[byte_ix] |= (U(1) << bit_ix)
                       total_tears_collected += 15
                       crucified_delete_with_patrol(ix)
                       return false

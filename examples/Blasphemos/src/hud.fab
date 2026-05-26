@@ -94,8 +94,8 @@ fn update_hud_tiles()
             {PPUDATA}(get_digit_tile(b_tens))
             {PPUDATA}(get_digit_tile(b_ones))
             {PPUDATA}($4A) // '/'
-            {PPUDATA}(get_digit_tile(0))
-            {PPUDATA}(get_digit_tile(7))
+            {PPUDATA}(get_digit_tile(1))
+            {PPUDATA}(get_digit_tile(2))
 
     if total_tears_collected != last_hud_tears
         last_hud_tears = total_tears_collected

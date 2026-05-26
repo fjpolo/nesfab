@@ -9,7 +9,7 @@ mapfab(raw, "../blasnesmous.json", "chr", "palette", "metatiles", "level")
 
 macro("pool_contiguous", "EnragedPilgrim", "4", "enraged_pilgrims", "/game")
 macro("pool_contiguous", "Crucified", "4", "crucifieds", "/game")
-macro("pool_contiguous", "ItemBone", "8", "item_bones", "/game")
+macro("pool_contiguous", "ItemBone", "16", "item_bones", "/game")
 
 // Used in level.macrofab to format the enemies:
 ct fn enraged_pilgrims_vec(Int{} x, Int{} y) EnragedPilgrim{}
@@ -239,10 +239,10 @@ fn load_level(CCC/levels level)
         for U i = 0; i < pilgrim_num; i += 1
             EnragedPilgrim ep = read EnragedPilgrim(level)
             ep.local_index = i
-            U global_ix = (current_level_index << 3) + i
+            U global_ix = (current_level_index << 4) + i
             U byte_ix = global_ix >> 3
             U bit_ix = global_ix & 7
-            if (dead_pilgrims[byte_ix] & (U(1) << bit_ix)) == 0
+            if (dead_enemies[byte_ix] & (U(1) << bit_ix)) == 0
                 enraged_pilgrims_new(ep)
                 enraged_pilgrim_anim_state[enraged_pilgrims_num - 1] = make_anim_state(@enraged_pilgrim_animation_standing)
 
@@ -251,10 +251,10 @@ fn load_level(CCC/levels level)
         for U i = 0; i < crucified_num; i += 1
             Crucified c = read Crucified(level)
             c.local_index = i
-            U global_ix = (current_level_index << 3) + i
+            U global_ix = (current_level_index << 4) + i + 4
             U byte_ix = global_ix >> 3
             U bit_ix = global_ix & 7
-            if (dead_crucifieds[byte_ix] & (U(1) << bit_ix)) == 0
+            if (dead_enemies[byte_ix] & (U(1) << bit_ix)) == 0
                 crucifieds_new(c)
                 crucified_anim_state[crucifieds_num - 1] = make_anim_state(@crucified_animation_standing)
                 crucified_patrol_center[crucifieds_num - 1] = c.x
@@ -265,10 +265,10 @@ fn load_level(CCC/levels level)
         for U i = 0; i < wheel_num; i += 1
             Wheelbroken wb = read Wheelbroken(level)
             wb.local_index = i
-            U global_ix = (current_level_index << 3) + i
+            U global_ix = (current_level_index << 4) + i + 8
             U byte_ix = global_ix >> 3
             U bit_ix = global_ix & 7
-            if (dead_wheelbrokens[byte_ix] & (U(1) << bit_ix)) == 0
+            if (dead_enemies[byte_ix] & (U(1) << bit_ix)) == 0
                 wheelbrokens_new(wb)
                 wheelbroken_anim_state[wheelbrokens_num - 1] = make_anim_state(@wheelbroken_animation_standing)
                 wheelbroken_patrol_center[wheelbrokens_num - 1] = wb.x
@@ -278,10 +278,10 @@ fn load_level(CCC/levels level)
         U bone_num = read U(level)
         for U i = 0; i < bone_num; i += 1
             item_bones_new(read ItemBone(level))
-            U global_ix = (U(current_level_index) << 3) + i
+            U global_ix = (U(current_level_index) << 4) + i
             U byte_ix = global_ix >> 3
             U bit_ix = global_ix & 7
-            if byte_ix < 20 && (item_bones_collected_flags[byte_ix] & (U(1) << bit_ix)) != 0
+            if byte_ix < 60 && (item_bones_collected_flags[byte_ix] & (U(1) << bit_ix)) != 0
                 item_bones[i].collected = true
             item_bone_anim_state[i] = make_anim_state(@item_bone_animation)
 
@@ -592,10 +592,8 @@ fn level_draw_sprites(U o) U
     return o
 
 fn respawn_all_enemies()
-    for U i = 0; i < 22; i += 1
-        dead_pilgrims[i] = 0
-        dead_wheelbrokens[i] = 0
-        dead_crucifieds[i] = 0
+    for U i = 0; i < 60; i += 1
+        dead_enemies[i] = 0
     
     // Disable NMI & rendering safely to prevent graphic corruption!
     {PPUCTRL}(0)
