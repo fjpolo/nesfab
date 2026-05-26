@@ -583,7 +583,7 @@ fn check_cheats()
                     level_cheat_index = 0
 
         // "Shift" shortcuts (SELECT + Left/Right/Start)
-        if (pads[0].held & BUTTON_SELECT)
+        if IS_DEV_MODE && (pads[0].held & BUTTON_SELECT)
             if pressed == BUTTON_START || pressed == BUTTON_RIGHT
                 select_counter = 0 // Prevent map screen opening
                 cheat_shake_timer = 30

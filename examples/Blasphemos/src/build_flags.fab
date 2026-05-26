@@ -1,0 +1,2 @@
+// Auto-generated build flag
+ct Bool IS_DEV_MODE = true

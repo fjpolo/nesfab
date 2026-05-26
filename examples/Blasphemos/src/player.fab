@@ -826,7 +826,7 @@ fn handle_input()
             return
         return
 
-    if (pads[0].pressed & BUTTON_UP) && (pads[0].held & BUTTON_SELECT)
+    if IS_DEV_MODE && (pads[0].pressed & BUTTON_UP) && (pads[0].held & BUTTON_SELECT)
         p.is_invincible = !p.is_invincible
         cheat_shake_timer = 20
         invincibility_text_timer = 90
