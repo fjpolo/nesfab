@@ -43,6 +43,7 @@ ct Int pw = 24 // Collision width (matched to 24px character body)
 ct Int ph = 30 // Collision height
 ct Int rw = pw - 1
 ct Int rh = ph - 1
+ct Int _PLAYER_BODY_HITBOX_OFFSET = 0 // Hitbox Offset (shifted 2 tiles left)
 
 ct Int PLAYER_INITIAL_ATTACK_POWER = 8
 ct Int PLAYER_PARRY_BOSS_PUSH = 24
@@ -618,13 +619,10 @@ fn update_player()
         mea_culpa_level = 2
     p.attack_power = U(U(PLAYER_INITIAL_ATTACK_POWER) * mea_culpa_level)
 
-    p.center_x = p.x + (p.w >> 1)
+    p.center_x = p.x + _PLAYER_BODY_HITBOX_OFFSET + (p.w >> 1)
     p.center_y = SS(p.y) + (p.h >> 1)
 
-    if p.facing_left
-        p.hitbox_x = p.x - 16
-    else
-        p.hitbox_x = p.x
+    p.hitbox_x = p.x + _PLAYER_BODY_HITBOX_OFFSET
     p.hitbox_center_x = p.hitbox_x + (p.w >> 1)
 
     if p.heal_timer > 0
@@ -978,21 +976,21 @@ fn handle_input()
         // Limited horizontal movement on ladder
         if pads[0].held & BUTTON_LEFT
             SS nx = p.x - 1
-            if collision_at(UU(nx), UU(SS(p.y) + 4)) != C_WALL
+            if collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET), UU(SS(p.y) + 4)) != C_WALL
                 p.x = nx
             p.facing_left = true
         else if pads[0].held & BUTTON_RIGHT
             SS nx = p.x + 1
-            if collision_at(UU(nx + p.rw), UU(SS(p.y) + 4)) != C_WALL
+            if collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET + p.rw), UU(SS(p.y) + 4)) != C_WALL
                 p.x = nx
             p.facing_left = false
 
     if p.movement != PLAYER_MOVING_CLIMB
         if pads[0].held & BUTTON_LEFT
             SS nx = p.x - speed
-            U t1 = collision_at(UU(nx), UU(SS(p.y)))
-            U t2 = collision_at(UU(nx), UU(SS(p.y) + (p.h >> 1)))
-            U t3 = collision_at(UU(nx), UU(SS(p.y) + p.h - 1))
+            U t1 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET), UU(SS(p.y)))
+            U t2 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET), UU(SS(p.y) + (p.h >> 1)))
+            U t3 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET), UU(SS(p.y) + p.h - 1))
             if t1 != C_WALL && t2 != C_WALL && t3 != C_WALL
                 p.x = nx
             
@@ -1002,9 +1000,9 @@ fn handle_input()
                 p.anim_state = make_anim_state(@penitent_animation_walk_left)
         else if pads[0].held & BUTTON_RIGHT
             SS nx = p.x + speed
-            U t1 = collision_at(UU(nx + p.rw), UU(SS(p.y)))
-            U t2 = collision_at(UU(nx + p.rw), UU(SS(p.y) + (p.h >> 1)))
-            U t3 = collision_at(UU(nx + p.rw), UU(SS(p.y) + p.h - 1))
+            U t1 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET + p.rw), UU(SS(p.y)))
+            U t2 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET + p.rw), UU(SS(p.y) + (p.h >> 1)))
+            U t3 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET + p.rw), UU(SS(p.y) + p.h - 1))
             if t1 != C_WALL && t2 != C_WALL && t3 != C_WALL
                 p.x = nx
 
@@ -1047,15 +1045,15 @@ fn handle_input()
 
 fn query_floor_collisions()
     UU y = UU(SS(p.y) + p.h)
-    UU x1 = UU(p.x)
-    UU x2 = UU(p.x + p.rw)
+    UU x1 = UU(p.x + _PLAYER_BODY_HITBOX_OFFSET)
+    UU x2 = UU(p.x + _PLAYER_BODY_HITBOX_OFFSET + p.rw)
     t_floor_left = collision_at(x1, y)
     t_floor_right = collision_at(x2, y)
 
 fn is_on_ground() Bool
     UU y = UU(SS(p.y) + p.h)
-    UU x1 = UU(p.x)
-    UU x2 = UU(p.x + p.rw)
+    UU x1 = UU(p.x + _PLAYER_BODY_HITBOX_OFFSET)
+    UU x2 = UU(p.x + _PLAYER_BODY_HITBOX_OFFSET + p.rw)
     
     if t_floor_left == C_WALL
         if collision_at(x1, y - 16) != C_WALL
@@ -1084,18 +1082,18 @@ fn handle_physics()
     if p.movement == PLAYER_MOVING_DASH
         if p.facing_left
             SS nx = p.x - DASH_SPEED
-            U t1 = collision_at(UU(nx), UU(SS(p.y)))
-            U t2 = collision_at(UU(nx), UU(SS(p.y) + (p.h >> 1)))
-            U t3 = collision_at(UU(nx), UU(SS(p.y) + p.h - 1))
+            U t1 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET), UU(SS(p.y)))
+            U t2 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET), UU(SS(p.y) + (p.h >> 1)))
+            U t3 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET), UU(SS(p.y) + p.h - 1))
             if t1 != C_WALL && t2 != C_WALL && t3 != C_WALL
                 p.x = nx
             else
                 p.dash_timer = 0 // Stop dash on impact
         else
             SS nx = p.x + DASH_SPEED
-            U t1 = collision_at(UU(nx + p.rw), UU(SS(p.y)))
-            U t2 = collision_at(UU(nx + p.rw), UU(SS(p.y) + (p.h >> 1)))
-            U t3 = collision_at(UU(nx + p.rw), UU(SS(p.y) + p.h - 1))
+            U t1 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET + p.rw), UU(SS(p.y)))
+            U t2 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET + p.rw), UU(SS(p.y) + (p.h >> 1)))
+            U t3 = collision_at(UU(nx + _PLAYER_BODY_HITBOX_OFFSET + p.rw), UU(SS(p.y) + p.h - 1))
             if t1 != C_WALL && t2 != C_WALL && t3 != C_WALL
                 p.x = nx
             else
@@ -1115,8 +1113,8 @@ fn handle_physics()
         // player's bounding box and push back to the tile boundary below the wall.
         if p.yspeed < 0
             SS head_y = SS(p.y)
-            U cl = collision_at(UU(p.x + 2),        UU(head_y))
-            U cr = collision_at(UU(p.x + p.rw - 2), UU(head_y))
+            U cl = collision_at(UU(p.x + _PLAYER_BODY_HITBOX_OFFSET + 2),        UU(head_y))
+            U cr = collision_at(UU(p.x + _PLAYER_BODY_HITBOX_OFFSET + p.rw - 2), UU(head_y))
             if cl == C_WALL || cr == C_WALL
                 // Snap head to the bottom edge of the blocking tile
                 p.y = SSF((head_y & $F0) + 16)
@@ -1226,7 +1224,7 @@ fn handle_collisions()
     
     // Level 1 -> Level 2 transition via right bound
     SS level_right_bound = (SS(current_level_width) << 4) - 20
-    SS player_right = p.x + p.rw
+    SS player_right = p.x + _PLAYER_BODY_HITBOX_OFFSET + p.rw
     if player_right > level_right_bound && current_level_index == LEVEL_L1 && warden_defeated
         current_level_index = LEVEL_L2
         p.level_index = current_level_index
@@ -1283,7 +1281,7 @@ fn handle_collisions()
         : preserves /game
     
     // Level 3a -> Level 2b transition via left bound
-    else if p.x < 8 && current_level_index == LEVEL_L3
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L3
         current_level_index = LEVEL_L2B
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1293,7 +1291,7 @@ fn handle_collisions()
         : preserves /game
 
     // Level 2b -> Level 2a transition via left bound
-    else if p.x < 8 && current_level_index == LEVEL_L2B
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L2B
         current_level_index = LEVEL_L2
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1303,7 +1301,7 @@ fn handle_collisions()
         : preserves /game
 
     // Level 4 -> Level 3b transition via left bound
-    else if p.x < 8 && current_level_index == LEVEL_L4
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L4
         current_level_index = LEVEL_L3B
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1313,7 +1311,7 @@ fn handle_collisions()
         : preserves /game
 
     // Level 3b -> Level 3a transition via left bound
-    else if p.x < 8 && current_level_index == LEVEL_L3B
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L3B
         current_level_index = LEVEL_L3
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1330,7 +1328,7 @@ fn handle_collisions()
         p.y = SSF(16) // Spawn near top of screen; player falls onto L5 floor
         goto mode play_level(current_level_index)
         : preserves /game
-    else if p.x < 8 && current_level_index == LEVEL_L5
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L5
         current_level_index = LEVEL_L4
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1370,7 +1368,7 @@ fn handle_collisions()
             p.y = SSF(194)
         goto mode play_level(current_level_index)
         : preserves /game
-    else if p.x < 8 && current_level_index == LEVEL_L6
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L6
         current_level_index = LEVEL_L5
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1380,7 +1378,7 @@ fn handle_collisions()
         : preserves /game
     
     // Level 7 -> Level 6b transition via left bound
-    else if p.x < 8 && current_level_index == LEVEL_L7
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L7
         current_level_index = LEVEL_L6B
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1393,7 +1391,7 @@ fn handle_collisions()
         : preserves /game
 
     // Level 6b -> Level 6a transition via left bound
-    else if p.x < 8 && current_level_index == LEVEL_L6B
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L6B
         current_level_index = LEVEL_L6
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1427,7 +1425,7 @@ fn handle_collisions()
         spawn_from_top = true
         goto mode play_level(current_level_index)
         : preserves /game
-    else if p.x < 8 && current_level_index == LEVEL_L8
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L8
         current_level_index = LEVEL_L7
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1444,7 +1442,7 @@ fn handle_collisions()
         p.y = SSF(PLAYER_INITIAL_Y)
         goto mode play_level(current_level_index)
         : preserves /game
-    else if p.x < 8 && current_level_index == LEVEL_L9
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L9
         current_level_index = LEVEL_L8
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1452,7 +1450,7 @@ fn handle_collisions()
         p.y = SSF(PLAYER_INITIAL_Y)
         goto mode play_level(current_level_index)
         : preserves /game
-    else if p.x < 8 && current_level_index == LEVEL_L10
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L10
         current_level_index = LEVEL_L9SUB1
         p.level_index = current_level_index
         player_prepare_level_transition()
@@ -1496,7 +1494,7 @@ fn handle_collisions()
         p.y = SSF(PLAYER_INITIAL_Y)
         goto mode play_level(current_level_index)
         : preserves /game
-    else if p.x < 8 && current_level_index == LEVEL_L9OVER1
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L9OVER1
         current_level_index = LEVEL_L8OVER1
         p.level_index = current_level_index
         player_prepare_level_transition()

@@ -1,5 +1,41 @@
 # Changes
 
+## [26.05.2026] - v885
+- Fix crucifieds not respawning
+
+
+## [26.05.2026] - v885
+- Fix crucifieds not respawning
+
+
+## [26.05.2026] - v885
+- Fix crucifieds not respawning
+
+
+## [26.05.2026] - v885
+- Fix crucifieds not respawning
+
+
+## [26.05.2026] - v885
+- Fix crucifieds not respawning
+
+
+## [26.05.2026] - v885
+- Fix crucifieds not respawning
+
+
+## [26.05.2026] - v885
+- Fix crucifieds not respawning
+
+
+## [26.05.2026] - v885
+- Fix crucifieds not respawning
+
+
+## [26.05.2026] - v885
+- Fix crucifieds not respawning
+
+
 ## [26.05.2026] - v884
 - Export hitboxes only only in dev mode
 
