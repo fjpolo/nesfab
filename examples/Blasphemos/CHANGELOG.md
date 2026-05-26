@@ -1,5 +1,41 @@
 # Changes
 
+## [26.05.2026] - v880
+- Improve intro a bit
+
+
+## [26.05.2026] - v880
+- Improve intro a bit
+
+
+## [26.05.2026] - v880
+- Improve intro a bit
+
+
+## [26.05.2026] - v880
+- Improve intro a bit
+
+
+## [26.05.2026] - v880
+- Improve intro a bit
+
+
+## [26.05.2026] - v880
+- Improve intro a bit
+
+
+## [26.05.2026] - v880
+- Improve intro a bit
+
+
+## [26.05.2026] - v880
+- Improve intro a bit
+
+
+## [26.05.2026] - v880
+- Improve intro a bit
+
+
 ## [26.05.2026] - v879
 - Update title screen
 
