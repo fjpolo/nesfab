@@ -81,10 +81,10 @@ vars /game
     Bool spawn_from_right = false
     Bool spawn_from_top = false
     Bool spawn_from_bottom = false
-    U[26] dead_pilgrims = U[26](0)
-    U[26] dead_wheelbrokens = U[26](0)
+    U[32] dead_pilgrims = U[32](0)
+    U[32] dead_wheelbrokens = U[32](0)
     U[4] explored_rooms = U[4](0, 0, 0, 0)
-    U[26] dead_crucifieds = U[26](0)
+    U[32] dead_crucifieds = U[32](0)
     Bool warden_defeated = false
     Bool warden_arrow_dismissed = false
     Bool mea_culpa_upgraded = false

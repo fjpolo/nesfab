@@ -1,0 +1,12 @@
+/*
+ * BlasNESmous - level 11sub3left1
+ */
+
+fn level11sub3left1_init()
+    // Initialization logic
+
+fn level11sub3left1_main()
+    // Main logic
+
+fn draw_level11sub3left1_sprites(U o) U
+    return o

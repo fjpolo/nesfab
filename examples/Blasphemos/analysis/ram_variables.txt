@@ -154,8 +154,8 @@ warden_projectile_y                      3        $0709, $070C, $0718
 warden_projectile_x                      3        $070F, $0712, $0724
 warden_projectile_vx                     2        $0715, $071B
 warden_projectile_vy                     2        $071E, $0721
-item_keys                                4        $0727, $0729, $072B, $072D
-jails                                    4        $072F, $0731, $0733, $0735
+jails                                    4        $0727, $0731, $0733, $0735
+item_keys                                4        $0729, $072B, $072D, $072F
 current_level_height                     1        $0737
 warden_spike_wave_origin_y               3        $0738-$073A
 warden_spike_wave_origin_x               3        $073B-$073D

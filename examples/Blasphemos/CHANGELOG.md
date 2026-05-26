@@ -1,5 +1,13 @@
 # Changes
 
+## [26.05.2026] - v888
+- Start working on Mercy Dreams and add key-jail hash and mechanics
+
+
+## [26.05.2026] - v888
+- Start working on Mercy Dreams and add key-jail hash and mechanics
+
+
 ## [26.05.2026] - v887
 - Fix some debug scripts
 

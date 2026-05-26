@@ -105,7 +105,9 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l12,           // 23
                                         @lev_l1sub1left1,   // 24
                                         @lev_l11sub2,       // 25
-                                        @lev_game_over,     // 26
+                                        @lev_l11sub3,       // 26
+                                        @lev_l11sub3left1,  // 27
+                                        @lev_game_over,     // 28
                                     )
 ct U LEVEL_TITLE = 0
 ct U LEVEL_L1 = 1
@@ -133,7 +135,9 @@ ct U LEVEL_L11SUB1 = 22
 ct U LEVEL_L12 = 23
 ct U LEVEL_L11SUB1LEFT1 = 24
 ct U LEVEL_L11SUB2 = 25
-ct U LEVEL_GAME_OVER = 26
+ct U LEVEL_L11SUB3 = 26
+ct U LEVEL_L11SUB3LEFT1 = 27
+ct U LEVEL_GAME_OVER = 28
 
 ct U FIRST_LEVEL_INDEX = LEVEL_L1
 ct U LAST_LEVEL_INDEX = LEVEL_GAME_OVER
@@ -356,6 +360,10 @@ fn load_level(CCC/levels level)
         level11sub1left1_init()
     else if current_level_index == LEVEL_L11SUB2
         level11sub2_init()
+    else if current_level_index == LEVEL_L11SUB3
+        level11sub3_init()
+    else if current_level_index == LEVEL_L11SUB3LEFT1
+        level11sub3left1_init()
     else if current_level_index == LEVEL_GAME_OVER
         game_over_init()
 
@@ -522,6 +530,10 @@ fn level_update()
         level11sub1left1_main()
     else if current_level_index == LEVEL_L11SUB2
         level11sub2_main()
+    else if current_level_index == LEVEL_L11SUB3
+        level11sub3_main()
+    else if current_level_index == LEVEL_L11SUB3LEFT1
+        level11sub3left1_main()
     else if current_level_index == LEVEL_GAME_OVER
         game_over_main()
 
@@ -566,6 +578,10 @@ fn level_draw_sprites(U o) U
         o = draw_level11sub1left1_sprites(o)
     else if current_level_index == LEVEL_L11SUB2
         o = draw_level11sub2_sprites(o)
+    else if current_level_index == LEVEL_L11SUB3
+        o = draw_level11sub3_sprites(o)
+    else if current_level_index == LEVEL_L11SUB3LEFT1
+        o = draw_level11sub3left1_sprites(o)
     else if current_level_index == LEVEL_GAME_OVER
         o = game_over_sprites(o)
     

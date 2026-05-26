@@ -7,7 +7,7 @@ vars /game
     AnimState[8] item_bone_anim_state
 
 vars /game
-    U[20] item_bones_collected_flags = U[20](0)
+    U[32] item_bones_collected_flags = U[32](0)
 
 data /sprites
     [] sprite_item_bone
@@ -36,7 +36,7 @@ fn item_bone_update(U ix) Bool
                 U global_ix = (U(current_level_index) << 3) + ix
                 U byte_ix = global_ix >> 3
                 U bit_ix = global_ix & 7
-                if byte_ix < 20
+                if byte_ix < 32
                     item_bones_collected_flags[byte_ix] |= (U(1) << bit_ix)
                 return false
 
