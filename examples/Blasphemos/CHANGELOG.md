@@ -1,5 +1,21 @@
 # Changes
 
+## [27.05.2026] - v897
+- Fix sprite rotation for pinchos
+
+
+## [27.05.2026] - v897
+- Fix sprite rotation for pinchos
+
+
+## [27.05.2026] - v897
+- Fix sprite rotation for pinchos
+
+
+## [27.05.2026] - v897
+- Fix sprite rotation for pinchos
+
+
 ## [27.05.2026] - v896
 - Fix sprites palette
 
