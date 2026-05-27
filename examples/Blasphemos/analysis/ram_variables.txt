@@ -129,8 +129,8 @@ current_level_chr                        1        $035A
 keys                                     1        $035B
 key_y                                    1        $037B
 key_x                                    1        $039B
-item_bones                               5        $03BB, $0610, $0620, $0630, $0640
-item_bone_anim_state                     5        $03CB, $03DB, $03EB, $0600, $0650
+item_bones                               5        $03BB, $0620, $0630, $0640, $0650
+item_bone_anim_state                     5        $03CB, $03DB, $03EB, $0600, $0610
 enraged_pilgrims                         13       $03FB, $06D2, $06D6, $06DA, $06DE, $06E2, $06E6, $06EA, $0710, $072C, $0740, $0750, $0754
 current_level_width                      1        $03FF
 destroyed                                1        $0400
@@ -147,10 +147,10 @@ item_keys                                4        $06FE, $07DF, $07E1, $07E3
 enraged_pilgrim_anim_state               5        $0758, $075C, $0760, $0764, $0768
 wheelbroken_patrol_dir                   1        $076C
 crucified_patrol_dir                     1        $0770
-wheelbroken_anim_state                   5        $0774, $0778, $077C, $0798, $079C
-crucified_anim_state                     5        $0780, $0784, $0788, $0790, $0794
-crucified_patrol_center                  2        $078C, $07A8
-wheelbroken_patrol_center                2        $07A0, $07A4
+wheelbroken_anim_state                   5        $0774, $0778, $077C, $0780, $0798
+crucified_anim_state                     5        $0784, $0788, $078C, $0790, $07A8
+crucified_patrol_center                  2        $0794, $07A4
+wheelbroken_patrol_center                2        $079C, $07A0
 warden_projectile_active                 1        $07AC
 warden_projectile_anim                   5        $07AF, $07B2, $07B5, $07B8, $07BB
 warden_projectile_ground_timer           1        $07BE

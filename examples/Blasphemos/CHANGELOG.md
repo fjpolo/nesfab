@@ -1,5 +1,49 @@
 # Changes
 
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
+## [27.05.2026] - v898
+- Improve a bit
+
+
 ## [27.05.2026] - v897
 - Fix sprite rotation for pinchos
 

@@ -684,7 +684,6 @@ fn level_draw_sprites(U o) U
     
     o = draw_jails(o)
     o = draw_item_keys(o)
-    o = draw_pinchos(o)
 
     // o = draw_item_bones(o) // Moved to main.fab for higher priority
     return o

@@ -45,6 +45,8 @@ ct Int MAP_TILE_VERTICAL = $3A
 ct Int MAP_TILE_PLAYER = $3E
 ct U[14] INVINC_CHARS = U[14]($F8, $F9, $FA, $F8, $F9, $FB, $F8, $FC, $F8, $FD, $F8, $FE, $FF, $F2)
 
+ct U SPRITE_CYCLE_SHIFT_BITS = 4
+
 // Controller data
 vars /controller
     Bool is_start_pressed = false
@@ -469,7 +471,7 @@ fn export_hitboxes()
         {HITBOX_EXPORT_ADDR}(0)
 
 fn draw_enemies(U o) U
-    U type_cycle = (frame_counter >> 3) & 3 // Rotate every 8 frames
+    U type_cycle = (frame_counter >> SPRITE_CYCLE_SHIFT_BITS) & 3 // Rotate every (1 << SPRITE_CYCLE_SHIFT_BITS) frames
 
     if type_cycle == 0
         o = draw_enraged_pilgrims(o)
@@ -479,18 +481,18 @@ fn draw_enemies(U o) U
     else if type_cycle == 1
         o = draw_wheelbrokens(o)
         o = draw_crucifieds(o)
-        o = draw_enraged_pilgrims(o)
         o = draw_pinchos(o)
+        o = draw_enraged_pilgrims(o)
     else if type_cycle == 2
         o = draw_crucifieds(o)
+        o = draw_pinchos(o)
         o = draw_enraged_pilgrims(o)
         o = draw_wheelbrokens(o)
-        o = draw_pinchos(o)
     else
+        o = draw_pinchos(o)
         o = draw_enraged_pilgrims(o)
         o = draw_crucifieds(o)
         o = draw_wheelbrokens(o)
-        o = draw_pinchos(o)
 
     return o
 
@@ -596,14 +598,31 @@ fn update_sprites()
         // Pause climb animation when not moving
     else
         p.anim_state = tick_anim(p.anim_state, true)
+        
+    // Tick enemy and item animations only when frame_duration is about to hit 0 to eliminate constant bank switches
     for U i = 0; i < enraged_pilgrims_num; i += 1
-        enraged_pilgrim_anim_state[i] = tick_anim(enraged_pilgrim_anim_state[i], true)
+        if enraged_pilgrim_anim_state[i].frame_duration == 1
+            enraged_pilgrim_anim_state[i] = tick_anim(enraged_pilgrim_anim_state[i], true)
+        else
+            enraged_pilgrim_anim_state[i].frame_duration -= 1
+            
     for U i = 0; i < wheelbrokens_num; i += 1
-        wheelbroken_anim_state[i] = tick_anim(wheelbroken_anim_state[i], true)
+        if wheelbroken_anim_state[i].frame_duration == 1
+            wheelbroken_anim_state[i] = tick_anim(wheelbroken_anim_state[i], true)
+        else
+            wheelbroken_anim_state[i].frame_duration -= 1
+            
     for U i = 0; i < crucifieds_num; i += 1
-        crucified_anim_state[i] = tick_anim(crucified_anim_state[i], true)
+        if crucified_anim_state[i].frame_duration == 1
+            crucified_anim_state[i] = tick_anim(crucified_anim_state[i], true)
+        else
+            crucified_anim_state[i].frame_duration -= 1
+            
     for U i = 0; i < item_bones_num; i += 1
-        item_bone_anim_state[i] = tick_anim(item_bone_anim_state[i], true)
+        if item_bone_anim_state[i].frame_duration == 1
+            item_bone_anim_state[i] = tick_anim(item_bone_anim_state[i], true)
+        else
+            item_bone_anim_state[i].frame_duration -= 1
 
 fn update_pause_sprites()
     {PPUMASK}(PPUMASK_GRAYSCALE | PPUMASK_ON | PPUMASK_NO_CLIP)
