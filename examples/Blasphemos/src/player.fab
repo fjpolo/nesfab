@@ -1550,16 +1550,27 @@ fn handle_collisions()
         p.y = SSF(16)
         goto mode play_level(current_level_index)
         : preserves /game
-    else if player_right > level_right_bound && current_level_index == LEVEL_L11SUB2 && SS(p.y) < 120
-        // Transition to L12 (lower part)
-        current_level_index = LEVEL_L12
-        p.level_index = current_level_index
-        player_prepare_level_transition()
-        p.camera_x = 0
-        p.x = 16
-        p.y = SSF(178) // Lower part of L12
-        goto mode play_level(current_level_index)
-        : preserves /game
+    else if player_right > level_right_bound && current_level_index == LEVEL_L11SUB2
+        if SS(p.y) < 120
+            // Transition to L12 (lower part)
+            current_level_index = LEVEL_L12
+            p.level_index = current_level_index
+            player_prepare_level_transition()
+            p.camera_x = 0
+            p.x = 16
+            p.y = SSF(178) // Lower part of L12
+            goto mode play_level(current_level_index)
+            : preserves /game
+        else
+            // Transition to L13 (top left)
+            current_level_index = LEVEL_L13
+            p.level_index = current_level_index
+            player_prepare_level_transition()
+            p.camera_x = 0
+            p.x = 16
+            p.y = SSF(16) // Spawn at top left of L13
+            goto mode play_level(current_level_index)
+            : preserves /game
     else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L12
         // If in lower part, go to L11SUB2 (top part)
         if SS(p.y) > 120
@@ -1583,7 +1594,6 @@ fn handle_collisions()
         p.level_index = current_level_index
         player_prepare_level_transition()
         spawn_from_right = true
-        p.y = SSF(16)
         goto mode play_level(current_level_index)
         : preserves /game
     else if player_right > level_right_bound && current_level_index == LEVEL_L11SUB1LEFT1
@@ -1592,7 +1602,6 @@ fn handle_collisions()
         player_prepare_level_transition()
         p.camera_x = 0
         p.x = 16
-        p.y = SSF(16)
         goto mode play_level(current_level_index)
         : preserves /game
     else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L11
@@ -1710,6 +1719,17 @@ fn handle_collisions()
         p.y = SSF(16) // Spawn at top part of L11SUB3
         goto mode play_level(current_level_index)
         : preserves /game
+    else if player_right > level_right_bound && current_level_index == LEVEL_L11SUB3
+        if SS(p.y) < 120
+            // Transition to L13 (bottom left)
+            current_level_index = LEVEL_L13
+            p.level_index = current_level_index
+            player_prepare_level_transition()
+            p.camera_x = 0
+            p.x = 16
+            p.y = SSF(208) // Spawn on the bottom floor of L13
+            goto mode play_level(current_level_index)
+            : preserves /game
     else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L11SUB3
         if SS(p.y) < 120
             current_level_index = LEVEL_L11SUB3LEFT1
@@ -1717,6 +1737,25 @@ fn handle_collisions()
             player_prepare_level_transition()
             spawn_from_right = true
             p.y = SSF(16)
+            goto mode play_level(current_level_index)
+            : preserves /game
+    else if (p.x + _PLAYER_BODY_HITBOX_OFFSET) < 8 && current_level_index == LEVEL_L13
+        if SS(p.y) < 120
+            // Transition back to L11SUB2 (bottom right)
+            current_level_index = LEVEL_L11SUB2
+            p.level_index = current_level_index
+            player_prepare_level_transition()
+            spawn_from_right = true
+            p.y = SSF(178) // Spawn on the bottom right platform of L11SUB2
+            goto mode play_level(current_level_index)
+            : preserves /game
+        else
+            // Transition back to L11SUB3 (top right)
+            current_level_index = LEVEL_L11SUB3
+            p.level_index = current_level_index
+            player_prepare_level_transition()
+            spawn_from_right = true
+            p.y = SSF(16) // Spawn at top right of L11SUB3
             goto mode play_level(current_level_index)
             : preserves /game
 

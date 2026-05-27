@@ -46,6 +46,18 @@ ct fn item_keys_vec(Int{} x, Int{} y) ItemKey{}
         push(out, ItemKey(SS(x{i}), SS(y{i})))
     return out
 
+struct Pinchos
+    SS x
+    SS y
+
+ct fn pinchos_vec(Int{} x, Int{} y, Bool inverted) Pinchos{}
+    Pinchos{} out = Pinchos{}()
+    for UU i = 0; i < len(x); i += 1
+        push(out, Pinchos(SS(x{i}), SS(y{i})))
+    return out
+
+
+
 // Tile collision values:
 ct U C_OPEN             = 0
 ct U C_WALL             = 1
@@ -69,6 +81,14 @@ vars /metatiles
 
 vars /game
     U current_level_index = FIRST_LEVEL_INDEX
+    U pinchos_num = 0
+    Pinchos[9] pinchos
+    U pinchos_invertidos_num = 0
+    Pinchos[1] pinchos_invertidos
+    U pinchos_timer = 0
+    U pinchos_state = 0 // 0=SAFE, 1=WARNING, 2=DANGER
+
+
 
 
 vars /levels
@@ -107,7 +127,8 @@ ct CCC/levels[] levels = CCC/levels[](
                                         @lev_l11sub2,       // 25
                                         @lev_l11sub3,       // 26
                                         @lev_l11sub3left1,  // 27
-                                        @lev_game_over,     // 28
+                                        @lev_l13,           // 28
+                                        @lev_game_over,     // 29
                                     )
 ct U LEVEL_TITLE = 0
 ct U LEVEL_L1 = 1
@@ -137,7 +158,8 @@ ct U LEVEL_L11SUB1LEFT1 = 24
 ct U LEVEL_L11SUB2 = 25
 ct U LEVEL_L11SUB3 = 26
 ct U LEVEL_L11SUB3LEFT1 = 27
-ct U LEVEL_GAME_OVER = 28
+ct U LEVEL_L13 = 28
+ct U LEVEL_GAME_OVER = 29
 
 ct U FIRST_LEVEL_INDEX = LEVEL_L1
 ct U LAST_LEVEL_INDEX = LEVEL_GAME_OVER
@@ -192,8 +214,11 @@ fn load_level(CCC/levels level)
     U chr_bank = read U(level)
     if current_level_index == LEVEL_L6 || current_level_index == LEVEL_L6B || current_level_index == LEVEL_L10 || current_level_index == LEVEL_L10SUB1
         chr_bank += 16
+    else if current_level_index == LEVEL_L12 || current_level_index == LEVEL_L13
+        chr_bank = 26
     select_chr_8kb(chr_bank)
     current_level_chr = chr_bank
+
 
     // Palette:
     load_palette(read CCC/palettes(level))
@@ -230,10 +255,14 @@ fn load_level(CCC/levels level)
     item_bones_clear()
     jails_num = 0
     item_keys_num = 0
-
+    pinchos_num = 0
+    pinchos_invertidos_num = 0
+    pinchos_timer = 0
+    pinchos_state = 0
+    
     // Check if key was grabbed
     if current_level_index != 255
-
+ 
         // Enemies: Enraged Pilgrim
         U pilgrim_num = read U(level)
         for U i = 0; i < pilgrim_num; i += 1
@@ -256,7 +285,7 @@ fn load_level(CCC/levels level)
             U bit_ix = global_ix & 7
             if (dead_enemies[byte_ix] & (U(1) << bit_ix)) == 0
                 crucifieds_new(c)
-                crucified_anim_state[crucifieds_num - 1] = make_anim_state(@crucified_animation_standing)
+                crucified_anim_state[crucified_num - 1] = make_anim_state(@crucified_animation_standing)
                 crucified_patrol_center[crucifieds_num - 1] = c.x
                 crucified_patrol_dir[crucifieds_num - 1] = 0
 
@@ -297,6 +326,22 @@ fn load_level(CCC/levels level)
         for U i = 0; i < item_key_num; i += 1
             item_keys[i] = read ItemKey(level)
 
+        // Pinchos (Normal)
+        U pinchos_n = read U(level)
+        for U i = 0; i < pinchos_n; i += 1
+            Pinchos pin = read Pinchos(level)
+            if pinchos_num < 9
+                pinchos[pinchos_num] = pin
+                pinchos_num += 1
+
+        // Pinchos Invertidos (Y-mirrored)
+        U pinchos_inv = read U(level)
+        for U i = 0; i < pinchos_inv; i += 1
+            Pinchos pin = read Pinchos(level)
+            if pinchos_invertidos_num < 1
+                pinchos_invertidos[pinchos_invertidos_num] = pin
+                pinchos_invertidos_num += 1
+
         if !show_key[current_level_index]
             if collision_at(key_x[current_level_index], key_y[current_level_index]) == C_KEY
                 destroy(key_x[current_level_index], key_y[current_level_index])
@@ -320,6 +365,12 @@ fn load_level(CCC/levels level)
         U item_key_num = read U(level)
         for U i = 0; i < item_key_num; i += 1
             read ItemKey(level)
+        U pinchos_n = read U(level)
+        for U i = 0; i < pinchos_n; i += 1
+            read Pinchos(level)
+        U pinchos_inv = read U(level)
+        for U i = 0; i < pinchos_inv; i += 1
+            read Pinchos(level)
     if current_level_index == LEVEL_L1
         level1_init()
     else if current_level_index == LEVEL_L2 || current_level_index == LEVEL_L2B
@@ -364,6 +415,8 @@ fn load_level(CCC/levels level)
         level11sub3_init()
     else if current_level_index == LEVEL_L11SUB3LEFT1
         level11sub3left1_init()
+    else if current_level_index == LEVEL_L13
+        level13_init()
     else if current_level_index == LEVEL_GAME_OVER
         game_over_init()
 
@@ -436,10 +489,8 @@ fn tile_at(UU pixel_x, UU pixel_y) U
     U col = (pixel_x.a >> 4) | (pixel_x.b << 4)
     UU offset = UU(col) << 4
     CCC/levels far_ptr = current_level + offset
-    CC/levels near_ptr
-    near_ptr.a = far_ptr.a
-    near_ptr.b = far_ptr.b
-    return near_ptr[pixel_y.a >> 4]
+    far_ptr += (pixel_y.a >> 4)
+    return read U(far_ptr)
 
 // Returns the collision at a pixel position:
 fn collision_at(UU pixel_x, UU pixel_y) U
@@ -490,6 +541,48 @@ fn door_collision_at(UU level_index, UU pixel_x, UU pixel_y) Bool
         return false
 
 fn level_update()
+    if pinchos_num > 0 || pinchos_invertidos_num > 0
+        pinchos_timer += 1
+        if pinchos_timer >= 210
+            pinchos_timer = 0
+            
+        if pinchos_timer < 90
+            pinchos_state = 0
+        else if pinchos_timer < 120
+            pinchos_state = 1
+        else
+            pinchos_state = 2
+
+        if pinchos_state == 2
+            // Collision check: Normal Spikes
+            for U i = 0; i < pinchos_num; i += 1
+                SS sx = pinchos[i].x
+                SS sy = pinchos[i].y
+                SS sl = sx - 8
+                SS sr = sx + 8
+                SS st = sy - 16
+                SS sb = sy
+                
+                if p.hitbox_x < sr && (p.hitbox_x + p.w) > sl && SS(p.y) < sb && (SS(p.y) + p.h) > st
+                    p.health = 0
+                    goto mode dead_screen(current_level_index)
+                    : preserves /game
+
+            // Collision check: Inverted Spikes
+            for U i = 0; i < pinchos_invertidos_num; i += 1
+                SS sx = pinchos_invertidos[i].x
+                SS sy = pinchos_invertidos[i].y
+                SS sl = sx - 8
+                SS sr = sx + 8
+                SS st = sy
+                SS sb = sy + 16
+                
+                if p.hitbox_x < sr && (p.hitbox_x + p.w) > sl && SS(p.y) < sb && (SS(p.y) + p.h) > st
+                    p.health = 0
+                    goto mode dead_screen(current_level_index)
+                    : preserves /game
+
+
     if current_level_index == LEVEL_L1
         level1_main()
     else if current_level_index == LEVEL_L2
@@ -534,6 +627,8 @@ fn level_update()
         level11sub3_main()
     else if current_level_index == LEVEL_L11SUB3LEFT1
         level11sub3left1_main()
+    else if current_level_index == LEVEL_L13
+        level13_main()
     else if current_level_index == LEVEL_GAME_OVER
         game_over_main()
 
@@ -582,14 +677,42 @@ fn level_draw_sprites(U o) U
         o = draw_level11sub3_sprites(o)
     else if current_level_index == LEVEL_L11SUB3LEFT1
         o = draw_level11sub3left1_sprites(o)
+    else if current_level_index == LEVEL_L13
+        o = draw_level13_sprites(o)
     else if current_level_index == LEVEL_GAME_OVER
         o = game_over_sprites(o)
     
     o = draw_jails(o)
     o = draw_item_keys(o)
+    o = draw_pinchos(o)
 
     // o = draw_item_bones(o) // Moved to main.fab for higher priority
     return o
+
+fn draw_pinchos(U o) U
+    if pinchos_state == 0
+        return o
+        
+    // Draw Normal Spikes
+    for U i = 0; i < pinchos_num; i += 1
+        SS sx = pinchos[i].x - p.camera_x
+        SS sy = pinchos[i].y
+        if pinchos_state == 1
+            o = push_oam_metasprite_a(o, sx, sy, @sprite_pinchos_warning, 0)
+        else
+            o = push_oam_metasprite_a(o, sx, sy, @sprite_pinchos_danger, 0)
+
+    // Draw Inverted Spikes
+    for U i = 0; i < pinchos_invertidos_num; i += 1
+        SS sx = pinchos_invertidos[i].x - p.camera_x
+        SS sy = pinchos_invertidos[i].y
+        if pinchos_state == 1
+            o = push_oam_metasprite_a(o, sx, sy, @sprite_pinchos_warning, ATTR_V_FLIP)
+        else
+            o = push_oam_metasprite_a(o, sx, sy, @sprite_pinchos_danger, ATTR_V_FLIP)
+            
+    return o
+
 
 fn respawn_all_enemies()
     for U i = 0; i < 60; i += 1
@@ -613,3 +736,31 @@ chrrom (25 * $2000)
     file(fmt, "../assets/bg2.png")
 chrrom (25 * $2000 + $1000)
     file(fmt, "../assets/sprite2.png")
+
+// Manually compile alternate Bank 26 for chr_2 with sprite3.png
+chrrom (26 * $2000)
+    file(fmt, "../assets/bg2.png")
+chrrom (26 * $2000 + $1000)
+    file(fmt, "../assets/sprite3.png")
+
+
+fn level13_init()
+    // Stubs for level 13 init
+
+fn level13_main()
+    // Stubs for level 13 main
+
+fn draw_level13_sprites(U o) U
+    return o
+
+data /sprites
+    [] sprite_pinchos_warning
+        (make_metasprite(0, Ms{}(
+            Ms(-8, -8, $F0, $01), Ms( 0, -8, $F1, $01)
+        )))
+
+    [] sprite_pinchos_danger
+        (make_metasprite(0, Ms{}(
+            Ms(-8, -16, $E0, $01), Ms( 0, -16, $E1, $01),
+            Ms(-8, -8, $F0, $01), Ms( 0, -8, $F1, $01)
+        )))

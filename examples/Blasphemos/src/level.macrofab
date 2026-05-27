@@ -23,6 +23,11 @@ data /levels
         (jails_vec(_jail_x, _jail_y))
         U(_item_key_num)
         (item_keys_vec(_item_key_x, _item_key_y))
+        U(_pinchos_num)
+        (pinchos_vec(_pinchos_x, _pinchos_y, false))
+        U(_pinchos_invertidos_num)
+        (pinchos_vec(_pinchos_invertidos_x, _pinchos_invertidos_y, true))
+
 
 
     [] tiles_#name#

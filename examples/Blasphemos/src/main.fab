@@ -63,7 +63,7 @@ vars /game
     U game_state = GAME_STATE_TITLE
     U frame_counter = 0
     Bool[NUMBER_OF_KEYS] keys
-    Bool[NUMBER_OF_KEYS] show_key = Bool[NUMBER_OF_KEYS](true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true)
+    Bool[NUMBER_OF_KEYS] show_key = Bool[NUMBER_OF_KEYS](true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true)
     U[NUMBER_OF_KEYS] key_x
     U[NUMBER_OF_KEYS] key_y
     Bool is_game_paused = false
@@ -133,7 +133,11 @@ ct MapCoord[] level_map_coords = MapCoord[](
     MapCoord(18, 11, true),  // 22: Level 11sub1
     MapCoord(19, 10, false), // 23: Level 12
     MapCoord(17, 12, true),  // 24: Level 11sub1left1 (Avoiding 17, 11 overlap)
-    MapCoord(0, 0, false)    // 25: Game Over
+    MapCoord(0, 0, false),   // 25: Level 11sub2
+    MapCoord(0, 0, false),   // 26: Level 11sub3
+    MapCoord(0, 0, false),   // 27: Level 11sub3left1
+    MapCoord(0, 0, false),   // 28: Level 13
+    MapCoord(0, 0, false)    // 29: Game Over
 )
 
 // IRQ
