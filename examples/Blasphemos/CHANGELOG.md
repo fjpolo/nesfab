@@ -1,5 +1,25 @@
 # Changes
 
+## [27.05.2026] - v894
+- Add pinchos!
+
+
+## [27.05.2026] - v894
+- Add pinchos!
+
+
+## [27.05.2026] - v894
+- Add pinchos!
+
+
+## [27.05.2026] - v894
+- Add pinchos!
+
+
+## [27.05.2026] - v894
+- Add pinchos!
+
+
 ## [27.05.2026] - v893
 - Some updates
 

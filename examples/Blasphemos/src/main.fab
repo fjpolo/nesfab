@@ -411,6 +411,33 @@ fn export_hitboxes()
             for U j = 0; j < 5; j += 1
                 {HITBOX_EXPORT_ADDR}(0)
     
+    // Export Pinchos State & Pools
+    {HITBOX_EXPORT_ADDR}(pinchos_state)
+    
+    // Normal Pinchos (max 9)
+    {HITBOX_EXPORT_ADDR}(pinchos_num)
+    for U i = 0; i < 9; i += 1
+        if i < pinchos_num
+            {HITBOX_EXPORT_ADDR}(pinchos[i].x.a)
+            {HITBOX_EXPORT_ADDR}(pinchos[i].x.b)
+            {HITBOX_EXPORT_ADDR}(pinchos[i].y.a)
+            {HITBOX_EXPORT_ADDR}(pinchos[i].y.b)
+        else
+            for U j = 0; j < 4; j += 1
+                {HITBOX_EXPORT_ADDR}(0)
+
+    // Inverted Pinchos (max 1)
+    {HITBOX_EXPORT_ADDR}(pinchos_invertidos_num)
+    for U i = 0; i < 1; i += 1
+        if i < pinchos_invertidos_num
+            {HITBOX_EXPORT_ADDR}(pinchos_invertidos[i].x.a)
+            {HITBOX_EXPORT_ADDR}(pinchos_invertidos[i].x.b)
+            {HITBOX_EXPORT_ADDR}(pinchos_invertidos[i].y.a)
+            {HITBOX_EXPORT_ADDR}(pinchos_invertidos[i].y.b)
+        else
+            for U j = 0; j < 4; j += 1
+                {HITBOX_EXPORT_ADDR}(0)
+    
     // Export Interactive Object Hitbox (Prie Dieu / Mea Culpa)
     {HITBOX_EXPORT_ADDR}(game_mode)
     U obj_type = 0

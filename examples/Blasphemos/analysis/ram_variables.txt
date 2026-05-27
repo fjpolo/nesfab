@@ -23,7 +23,7 @@ scroll_attrs                             1        $003E
 mt_sw                                    2        $0046-$0047
 mt_se                                    2        $0048-$0049
 mt_ca                                    2        $004A-$004B
-current_level                            3        $004C-$004D, $07F7
+current_level                            3        $004C-$004D, $07F5
 mt_ne                                    2        $004E-$004F
 puf_triangle_pattern_ptr                 2        $0050-$0051
 puf_ptr_temp                             2        $0052-$0053
@@ -160,9 +160,9 @@ warden_projectile_vy                     2        $07CD, $07D9
 warden_projectile_vx                     2        $07D3, $07D6
 jails                                    4        $07E5, $07E7, $07E9, $07EB
 current_level_height                     1        $07ED
-warden_spike_wave_origin_y               3        $07EE-$07F0
-pinchos_invertidos                       4        $07F1, $07F3-$07F5
-warden_spike_wave_origin_x               3        $07F2, $07F6, $07F8
+warden_spike_wave_origin_y               3        $07EE-$07EF, $07F4
+pinchos_invertidos                       4        $07F0-$07F3
+warden_spike_wave_origin_x               3        $07F6-$07F8
 
 ================================================================================
 Variable Bytes: 345

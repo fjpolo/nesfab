@@ -4,7 +4,7 @@
 
 local hitbox_data = {}
 local current_packet = nil
-local PACKET_SIZE = 120
+local PACKET_SIZE = 207
 local data_index = 0
 local header_window = {0,0,0,0}
 
@@ -65,8 +65,8 @@ function process_packet()
             local b = 35 + (i * 5)
             local ex = to_signed(d[b], d[b+1])
             local ey = to_signed(d[b+2], d[b+3])
-            -- Enraged Pilgrims have a fixed 16x16 body hitbox in the engine
-            draw_hitbox(ex - cam_x, ey - 16, 16, 16, 0xFFA500)
+            -- Enraged Pilgrims have: off_x=-12, off_y=-16, w=16, h=16
+            draw_hitbox(ex - cam_x - 12, ey - 16, 16, 16, 0xFFA500)
         end
     end
     
@@ -77,11 +77,57 @@ function process_packet()
             local b = 76 + (i * 5)
             local ex = to_signed(d[b], d[b+1])
             local ey = to_signed(d[b+2], d[b+3])
-            -- Wheelbrokens also have a fixed hitbox
-            draw_hitbox(ex - cam_x, ey - 16, 16, 16, 0xFFFF00)
+            -- Wheelbrokens have: off_x=-8, off_y=-24, w=16, h=24
+            draw_hitbox(ex - cam_x - 8, ey - 24, 16, 24, 0xFFFF00)
+        end
+    end
+
+    -- Draw Crucifieds
+    local crucified_num = d[116] or 0
+    for i = 0, 7 do
+        if i < crucified_num then
+            local b = 117 + (i * 5)
+            local ex = to_signed(d[b], d[b+1])
+            local ey = to_signed(d[b+2], d[b+3])
+            -- Crucifieds have: off_x=-4, off_y=-16, w=16, h=16
+            draw_hitbox(ex - cam_x - 4, ey - 16, 16, 16, 0x9400D3)
+        end
+    end
+
+    -- Draw Spikes (Pinchos & Pinchos Invertidos)
+    local pinchos_state = d[157] or 0
+    if pinchos_state > 0 then
+        local color = 0x808080 -- Dim grey default
+        if pinchos_state == 1 then
+            color = 0xFFA500 -- Orange for Warning state
+        elseif pinchos_state == 2 then
+            color = 0xFF00FF -- Fuchsia/Magenta for Danger state
+        end
+        
+        -- Normal Pinchos
+        local pinchos_num = d[158] or 0
+        for i = 0, 8 do
+            if i < pinchos_num then
+                local b = 159 + (i * 4)
+                local ex = to_signed(d[b], d[b+1])
+                local ey = to_signed(d[b+2], d[b+3])
+                draw_hitbox(ex - cam_x - 8, ey - 16, 16, 16, color)
+            end
+        end
+
+        -- Inverted Pinchos
+        local pinchos_inv_num = d[195] or 0
+        for i = 0, 0 do
+            if i < pinchos_inv_num then
+                local b = 196 + (i * 4)
+                local ex = to_signed(d[b], d[b+1])
+                local ey = to_signed(d[b+2], d[b+3])
+                draw_hitbox(ex - cam_x - 8, ey, 16, 16, color)
+            end
         end
     end
 end
+
 
 function on_write(address, value)
     header_window[1] = header_window[2]

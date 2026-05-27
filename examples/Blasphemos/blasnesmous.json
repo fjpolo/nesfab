@@ -25337,63 +25337,63 @@
           "name": "",
           "object_class": "pinchos",
           "x": 94,
-          "y": 106
+          "y": 111
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
-          "x": 445,
-          "y": 235
+          "x": 446,
+          "y": 239
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
-          "x": 414,
-          "y": 234
+          "x": 416,
+          "y": 240
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
-          "x": 399,
-          "y": 196
+          "x": 400,
+          "y": 191
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
-          "x": 366,
-          "y": 194
+          "x": 368,
+          "y": 192
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
           "x": 335,
-          "y": 233
+          "y": 240
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
-          "x": 303,
-          "y": 233
+          "x": 304,
+          "y": 240
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
           "x": 78,
-          "y": 185
+          "y": 192
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
-          "x": 207,
-          "y": 186
+          "x": 208,
+          "y": 191
         }
       ],
       "palette": 3,
@@ -25796,7 +25796,7 @@
         2,
         2,
         2,
-        2,
+        41,
         0,
         0,
         0,
@@ -25828,7 +25828,7 @@
         0,
         0,
         0,
-        0,
+        40,
         0,
         0,
         0,
@@ -25860,7 +25860,7 @@
         0,
         0,
         0,
-        0,
+        40,
         0,
         0,
         0,
@@ -25925,14 +25925,14 @@
           "name": "",
           "object_class": "pinchos_invertidos",
           "x": 64,
-          "y": 39
+          "y": 32
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
           "x": 63,
-          "y": 105
+          "y": 111
         },
         {
           "fields": {},
@@ -25945,8 +25945,8 @@
           "fields": {},
           "name": "",
           "object_class": "pinchos",
-          "x": 302,
-          "y": 233
+          "x": 304,
+          "y": 240
         },
         {
           "fields": {},
@@ -25967,14 +25967,14 @@
           "name": "",
           "object_class": "pinchos",
           "x": 64,
-          "y": 234
+          "y": 240
         },
         {
           "fields": {},
           "name": "",
           "object_class": "pinchos",
           "x": 94,
-          "y": 236
+          "y": 239
         },
         {
           "fields": {},
