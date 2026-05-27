@@ -25357,20 +25357,6 @@
           "fields": {},
           "name": "",
           "object_class": "pinchos",
-          "x": 400,
-          "y": 191
-        },
-        {
-          "fields": {},
-          "name": "",
-          "object_class": "pinchos",
-          "x": 368,
-          "y": 192
-        },
-        {
-          "fields": {},
-          "name": "",
-          "object_class": "pinchos",
           "x": 335,
           "y": 240
         },
@@ -25393,6 +25379,20 @@
           "name": "",
           "object_class": "pinchos",
           "x": 208,
+          "y": 191
+        },
+        {
+          "fields": {},
+          "name": "",
+          "object_class": "pinchos_invertidos",
+          "x": 359,
+          "y": 192
+        },
+        {
+          "fields": {},
+          "name": "",
+          "object_class": "pinchos_invertidos",
+          "x": 385,
           "y": 191
         }
       ],

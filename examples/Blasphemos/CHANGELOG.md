@@ -1,5 +1,9 @@
 # Changes
 
+## [27.05.2026] - v896
+- Fix sprites palette
+
+
 ## [27.05.2026] - v894
 - Add pinchos!
 

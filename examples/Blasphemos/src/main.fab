@@ -470,23 +470,27 @@ fn export_hitboxes()
 
 fn draw_enemies(U o) U
     U type_cycle = (frame_counter >> 3) & 3 // Rotate every 8 frames
-    
+
     if type_cycle == 0
         o = draw_enraged_pilgrims(o)
         o = draw_wheelbrokens(o)
         o = draw_crucifieds(o)
+        o = draw_pinchos(o)
     else if type_cycle == 1
         o = draw_wheelbrokens(o)
         o = draw_crucifieds(o)
         o = draw_enraged_pilgrims(o)
+        o = draw_pinchos(o)
     else if type_cycle == 2
         o = draw_crucifieds(o)
         o = draw_enraged_pilgrims(o)
         o = draw_wheelbrokens(o)
+        o = draw_pinchos(o)
     else
         o = draw_enraged_pilgrims(o)
         o = draw_crucifieds(o)
         o = draw_wheelbrokens(o)
+        o = draw_pinchos(o)
 
     return o
 
