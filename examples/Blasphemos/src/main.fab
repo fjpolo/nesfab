@@ -551,8 +551,7 @@ fn update_sprites()
         o = draw_player_secondary(o, draw_x, attr_xor)
         o = level_draw_sprites(o)
     else
-        // Items and everything else
-        o = draw_item_bones(o)
+        // Everything else
         o = draw_enemies(o)
         o = level_draw_sprites(o)
         o = draw_player_secondary(o, draw_x, attr_xor)

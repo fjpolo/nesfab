@@ -17102,14 +17102,7 @@
           "fields": {},
           "name": "",
           "object_class": "enraged_pilgrim",
-          "x": 382,
-          "y": 221
-        },
-        {
-          "fields": {},
-          "name": "",
-          "object_class": "enraged_pilgrim",
-          "x": 487,
+          "x": 425,
           "y": 221
         }
       ],
@@ -17647,23 +17640,9 @@
         {
           "fields": {},
           "name": "",
-          "object_class": "enraged_pilgrim",
-          "x": 264,
-          "y": 184
-        },
-        {
-          "fields": {},
-          "name": "",
           "object_class": "wheelbroken",
-          "x": 422,
-          "y": 221
-        },
-        {
-          "fields": {},
-          "name": "",
-          "object_class": "enraged_pilgrim",
-          "x": 344,
-          "y": 221
+          "x": 377,
+          "y": 219
         },
         {
           "fields": {},
@@ -22854,22 +22833,8 @@
           "fields": {},
           "name": "",
           "object_class": "crucified",
-          "x": 40,
-          "y": 189
-        },
-        {
-          "fields": {},
-          "name": "",
-          "object_class": "crucified",
           "x": 119,
           "y": 189
-        },
-        {
-          "fields": {},
-          "name": "",
-          "object_class": "crucified",
-          "x": 216,
-          "y": 190
         }
       ],
       "palette": 2,
@@ -26514,13 +26479,6 @@
           "object_class": "wheelbroken",
           "x": 435,
           "y": 504
-        },
-        {
-          "fields": {},
-          "name": "",
-          "object_class": "enraged_pilgrim",
-          "x": 237,
-          "y": 239
         },
         {
           "fields": {},
